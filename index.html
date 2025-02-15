@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outils et Bloc-Notes</title>
+  
+  <!-- Icône pour l'onglet -->
+  <link rel="icon" href="https://ssl.gstatic.com/docs/documents/images/kix-favicon6.ico" type="image/x-icon">
+  
+  <!-- FontAwesome pour les icônes -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background-color: #f9f9f9; }
+    .container { display: flex; flex-wrap: wrap; }
+    .menu { width: 200px; margin-right: 20px; }
+    .menu button { display: flex; align-items: center; padding: 10px; width: 100%; margin-bottom: 10px; font-size: 1.1em; border: none; background: #f0f0f0; cursor: pointer; transition: background 0.3s; }
+    .menu button:hover { background: #ddd; }
+    .menu button.active { background: #007BFF; color: white; }
+    .menu button i { margin-right: 10px; }
+    .tools { flex-grow: 1; }
+    .section { display: none; padding: 10px; border: 1px solid #ccc; margin-bottom: 20px; background: white; }
+    .section.active { display: block; }
+    .section h2 { font-size: 1.5em; }
+    input, textarea, select { width: 100%; padding: 10px; margin-top: 10px; border: 1px solid #ccc; border-radius: 4px; }
+    button { font-size: 1em; padding: 8px 12px; border: none; background: #007BFF; color: white; cursor: pointer; border-radius: 4px; }
+    button:hover { background: #0056b3; }
+    .color-picker { margin-top: 10px; }
+    .color-display { padding: 10px; background-color: #000000; }
+    .timer-display { font-size: 1.2em; margin-top: 10px; }
+    .history { margin-top: 20px; }
+    .history ul { list-style-type: none; padding: 0; }
+    .history li { margin: 5px 0; }
+    .error { color: red; }
+    .success { color: green; }
+  </style>
+</head>
+<body>
+  <h1>Outils Pratiques</h1>
+  
+  <div class="container">
+    <!-- Menu -->
+    <div class="menu" role="navigation" aria-label="Menu des outils">
+      <button onclick="showTool('convertTool')" id="btnConvert" aria-pressed="false"><i class="fas fa-random"></i> Convertisseur</button>
+      <button onclick="showTool('passwordTool')" id="btnPassword" aria-pressed="false"><i class="fas fa-key"></i> Générateur de mot de passe</button>
+      <button onclick="showTool('noteTool')" id="btnNote" aria-pressed="false"><i class="fas fa-sticky-note"></i> Bloc-notes</button>
+      <button onclick="showTool('percentageTool')" id="btnPercentage" aria-pressed="false"><i class="fas fa-percent"></i> Calculateur de pourcentage</button>
+      <button onclick="showTool('translatorTool')" id="btnTranslator" aria-pressed="false"><i class="fas fa-language"></i> Traducteur</button>
+      <button onclick="showTool('wordCounterTool')" id="btnWordCounter" aria-pressed="false"><i class="fas fa-file-alt"></i> Compteur de mots</button>
+      <button onclick="showTool('timerTool')" id="btnTimer" aria-pressed="false"><i class="fas fa-clock"></i> Chronomètre / Minuteur</button>
+      <button onclick="showTool('colorPickerTool')" id="btnColorPicker" aria-pressed="false"><i class="fas fa-palette"></i> Sélecteur de couleur</button>
+    </div>
+
+    <!-- Outils -->
+    <div class="tools">
+      <div class="section" id="convertTool" aria-labelledby="btnConvert">
+        <h2>Convertisseur</h2>
+        <label for="convertInput">Valeur à convertir :</label>
+        <input type="number" id="convertInput" placeholder="Entrez une valeur" aria-required="true">
+        <label for="convertFrom">Convertir de :</label>
+        <select id="convertFrom" aria-required="true">
+          <option value="kmToMiles">Kilomètres en Miles</option>
+          <option value="milesToKm">Miles en Kilomètres</option>
+          <option value="celsiusToFahrenheit">Celsius en Fahrenheit</option>
+          <option value="fahrenheitToCelsius">Fahrenheit en Celsius</option>
+          <option value="kgToLb">Kilogrammes en Livres</option>
+          <option value="lbToKg">Livres en Kilogrammes</option>
+        </select>
+        <button onclick="convert()">Convertir</button>
+        <p id="convertResult"></p>
+      </div>
+
+      <div class="section" id="passwordTool" aria-labelledby="btnPassword">
+        <h2>Générateur de mot de passe</h2>
+        <label for="passwordLength">Longueur du mot de passe :</label>
+        <input type="number" id="passwordLength" min="4" max="20" value="8" aria-required="true">
+        <button onclick="generatePassword()">Générer</button>
+        <p id="passwordResult"></p>
+      </div>
+
+      <div class="section" id="noteTool" aria-labelledby="btnNote">
+        <h2>Bloc-notes</h2>
+        <textarea id="noteArea" placeholder="Écrivez vos notes ici..." rows="10"></textarea>
+        <button onclick="saveNotes()">Sauvegarder les notes</button>
+        <p id="noteStatus" class="success"></p>
+      </div>
+
+      <div class="section" id="percentageTool" aria-labelledby="btnPercentage">
+        <h2>Calculateur de pourcentage</h2>
+        <label for="originalAmount">Montant original :</label>
+        <input type="number" id="originalAmount" placeholder="Montant original" aria-required="true">
+        <label for="percentage">Pourcentage :</label>
+        <input type="number" id="percentage" placeholder="Pourcentage" aria-required="true">
+        <button onclick="calculatePercentage()">Calculer</button>
+        <p id="percentageResult"></p>
+      </div>
+
+      <div class="section" id="translatorTool" aria-labelledby="btnTranslator">
+        <h2>Traducteur de phrases</h2>
+        <label for="phraseInput">Phrase à traduire :</label>
+        <input type="text" id="phraseInput" placeholder="Entrez une phrase" aria-required="true">
+        <label for="languageSelect">Langue cible :</label>
+        <select id="languageSelect" aria-required="true">
+          <option value="es">Espagnol</option>
+          <option value="en">Anglais</option>
+          <option value="de">Allemand</option>
+          <option value="it">Italien</option>
+        </select>
+        <button onclick="translatePhrase()">Traduire</button>
+        <p id="translationResult"></p>
+        <h3>Historique des traductions</h3>
+        <div class="history">
+          <ul id="translationHistory"></ul>
+        </div>
+      </div>
+
+      <div class="section" id="wordCounterTool" aria-labelledby="btnWordCounter">
+        <h2>Compteur de mots et de caractères</h2>
+        <label for="wordCounterText">Texte :</label>
+        <textarea id="wordCounterText" placeholder="Entrez votre texte ici..." rows="6"></textarea>
+        <button onclick="countWords()">Compter les mots</button>
+        <p id="wordCountResult"></p>
+        <p id="charCountResult"></p>
+      </div>
+
+      <div class="section" id="timerTool" aria-labelledby="btnTimer">
+        <h2>Chronomètre / Minuteur</h2>
+        <label for="timerInput">Temps (en secondes) :</label>
+        <input type="number" id="timerInput" placeholder="Entrez un temps" aria-required="true">
+        <button onclick="startTimer()">Démarrer le Minuteur</button>
+        <button onclick="pauseTimer()">Pause</button>
+        <button onclick="resetTimer()">Réinitialiser</button>
+        <p class="timer-display" id="timerDisplay"></p>
+        <p id="timerResult"></p>
+      </div>
+
+      <div class="section" id="colorPickerTool" aria-labelledby="btnColorPicker">
+        <h2>Sélecteur de couleur</h2>
+        <label for="colorPicker">Choisissez une couleur :</label>
+        <input type="color" id="colorPicker" class="color-picker">
+        <p id="colorResult">Couleur sélectionnée : <span id="colorValue">#000000</span></p>
+        <div class="color-display" id="colorDisplay">Exemple de couleur</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let timer; // Variable pour le minuteur
+    let timeRemaining; // Temps restant pour le minuteur
+    let isPaused = false; // État de pause du minuteur
+
+    function showTool(toolId) {
+      const sections = document.querySelectorAll('.section');
+      sections.forEach(section => section.classList.remove('active'));
+
+      const buttons = document.querySelectorAll('.menu button');
+      buttons.forEach(button => {
+        button.classList.remove('active');
+        button.setAttribute('aria-pressed', 'false');
+      });
+
+      document.getElementById(toolId).classList.add('active');
+      const activeButton = document.getElementById(`btn${toolId.charAt(0).toUpperCase() + toolId.slice(1)}`);
+      activeButton.classList.add('active');
+      activeButton.setAttribute('aria-pressed', 'true');
+    }
+
+    function convert() {
+      const input = parseFloat(document.getElementById("convertInput").value);
+      const from = document.getElementById("convertFrom").value;
+      let result;
+
+      if (isNaN(input)) {
+        document.getElementById("convertResult").innerText = "Veuillez entrer une valeur valide.";
+        return;
+      }
+
+      switch (from) {
+        case "kmToMiles":
+          result = (input * 0.621371).toFixed(2) + " Miles";
+          break;
+        case "milesToKm":
+          result = (input * 1.60934).toFixed(2) + " Kilomètres";
+          break;
+        case "celsiusToFahrenheit":
+          result = ((input * 9/5) + 32).toFixed(2) + " °F";
+          break;
+        case "fahrenheitToCelsius":
+          result = ((input - 32) * 5/9).toFixed(2) + " °C";
+          break;
+        case "kgToLb":
+          result = (input * 2.20462).toFixed(2) + " lb";
+          break;
+        case "lbToKg":
+          result = (input * 0.453592).toFixed(2) + " kg";
+          break;
+        default:
+          result = "Conversion non reconnue.";
+      }
+
+      document.getElementById("convertResult").innerText = result;
+    }
+
+    function generatePassword() {
+      const length = document.getElementById("passwordLength").value;
+      const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
+      let password = "";
+      for (let i = 0; i < length; i++) {
+        password += charset.charAt(Math.floor(Math.random() * charset.length));
+      }
+      document.getElementById("passwordResult").innerText = password;
+    }
+
+    function saveNotes() {
+      const notes = document.getElementById("noteArea").value;
+      localStorage.setItem("userNotes", notes);
+      document.getElementById("noteStatus").innerText = "Notes sauvegardées avec succès!";
+    }
+
+    function calculatePercentage() {
+      const originalAmount = parseFloat(document.getElementById("originalAmount").value);
+      const percentage = parseFloat(document.getElementById("percentage").value);
+      if (isNaN(originalAmount) || isNaN(percentage)) {
+        document.getElementById("percentageResult").innerText = "Veuillez entrer des valeurs valides.";
+        return;
+      }
+      const result = (originalAmount * percentage) / 100;
+      document.getElementById("percentageResult").innerText = `Le pourcentage est : ${result.toFixed(2)}`;
+    }
+
+    function translatePhrase() {
+      const phrase = document.getElementById("phraseInput").value;
+      const lang = document.getElementById("languageSelect").value;
+      // Simulate translation
+      const translations = {
+        "es": "español",
+        "en": "english",
+        "de": "deutsch",
+        "it": "italiano"
+      };
+      const translatedText = `Traduction: "${phrase}" en ${translations[lang]}`;
+      document.getElementById("translationResult").innerText = translatedText;
+
+      // Ajouter à l'historique des traductions
+      const historyItem = document.createElement("li");
+      historyItem.textContent = translatedText;
+      document.getElementById("translationHistory").appendChild(historyItem);
+    }
+
+    function countWords() {
+      const text = document.getElementById("wordCounterText").value;
+      const words = text.split(/\s+/).filter(word => word.length > 0);
+      const chars = text.length;
+      document.getElementById("wordCountResult").innerText = `Nombre de mots: ${words.length}`;
+      document.getElementById("charCountResult").innerText = `Nombre de caractères: ${chars}`;
+    }
+
+    function startTimer() {
+      const time = parseInt(document.getElementById("timerInput").value);
+      if (isNaN(time) || time <= 0) {
+        document.getElementById("timerResult").innerText = "Veuillez entrer un temps valide.";
+        return;
+      }
+      timeRemaining = time;
+      isPaused = false;
+      document.getElementById("timerResult").innerText = `Minuteur démarré pour ${time} secondes.`;
+      timer = setInterval(updateTimer, 1000);
+    }
+
+    function updateTimer() {
+      if (isPaused) return;
+      if (timeRemaining > 0) {
+        timeRemaining--;
+        document.getElementById("timerDisplay").innerText = `Temps restant : ${timeRemaining} secondes`;
+      } else {
+        clearInterval(timer);
+        document.getElementById("timerResult").innerText = "Le temps est écoulé !";
+        document.getElementById("timerDisplay").innerText = "";
+      }
+    }
+
+    function pauseTimer() {
+      isPaused = true;
+      document.getElementById("timerResult").innerText = "Minuteur en pause.";
+    }
+
+    function resetTimer() {
+      clearInterval(timer);
+      timeRemaining = 0;
+      isPaused = false;
+      document.getElementById("timerResult").innerText = "Minuteur réinitialisé.";
+      document.getElementById("timerDisplay").innerText = "";
+    }
+
+    document.getElementById('colorPicker').addEventListener('input', function(event) {
+      const color = event.target.value;
+      document.getElement
