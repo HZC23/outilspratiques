@@ -1,0 +1,72 @@
+{
+    "name": "Outils Pratiques",
+    "short_name": "Outils",
+    "description": "Collection d'outils pratiques pour le calcul, la gestion du temps, l'organisation et plus encore",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#4a90e2",
+    "icons": [
+        {
+            "src": "/icons/icon-72x72.png",
+            "sizes": "72x72",
+            "type": "image/png"
+        },
+        {
+            "src": "/icons/icon-96x96.png",
+            "sizes": "96x96",
+            "type": "image/png"
+        },
+        {
+            "src": "/icons/icon-128x128.png",
+            "sizes": "128x128",
+            "type": "image/png"
+        },
+        {
+            "src": "/icons/icon-144x144.png",
+            "sizes": "144x144",
+            "type": "image/png"
+        },
+        {
+            "src": "/icons/icon-152x152.png",
+            "sizes": "152x152",
+            "type": "image/png"
+        },
+        {
+            "src": "/icons/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/icons/icon-384x384.png",
+            "sizes": "384x384",
+            "type": "image/png"
+        },
+        {
+            "src": "/icons/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "categories": ["utilities", "productivity"],
+    "orientation": "any",
+    "lang": "fr-FR",
+    "dir": "ltr",
+    "prefer_related_applications": false,
+    "shortcuts": [
+        {
+            "name": "Calculatrice",
+            "short_name": "Calc",
+            "description": "Ouvrir la calculatrice",
+            "url": "/#calculatorTool",
+            "icons": [{ "src": "/icons/calc-96x96.png", "sizes": "96x96" }]
+        },
+        {
+            "name": "Liste de tâches",
+            "short_name": "Tâches",
+            "description": "Ouvrir la liste de tâches",
+            "url": "/#todoTool",
+            "icons": [{ "src": "/icons/todo-96x96.png", "sizes": "96x96" }]
+        }
+    ]
+} 

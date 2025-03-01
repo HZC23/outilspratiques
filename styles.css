@@ -1,0 +1,924 @@
+/* Variables CSS globales */
+:root {
+    /* Couleurs - Mode clair */
+    --primary-color: #4a90e2;
+    --primary-color-rgb: 74, 144, 226;
+    --secondary-color: #2c3e50;
+    --success-color: #2ecc71;
+    --success-color-rgb: 46, 204, 113;
+    --danger-color: #e74c3c;
+    --danger-color-rgb: 231, 76, 60;
+    --warning-color: #f1c40f;
+    --warning-color-rgb: 241, 196, 15;
+    --info-color: #3498db;
+    --info-color-rgb: 52, 152, 219;
+    --light-color: #f8f9fa;
+    --dark-color: #2c3e50;
+    
+    /* Arrière-plans et texte */
+    --background-color: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    --text-color: #2c3e50;
+    --card-bg: rgba(255, 255, 255, 0.95);
+    --border-color: rgba(0, 0, 0, 0.1);
+    --input-bg: white;
+    --input-text: #2c3e50;
+    
+    /* Effets */
+    --hover-color: #357abd;
+    --border-radius: 12px;
+    --box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --card-border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Mode sombre */
+[data-theme="dark"] {
+    --primary-color: #60a5fa;
+    --secondary-color: #94a3b8;
+    --success-color: #4ade80;
+    --danger-color: #f87171;
+    --warning-color: #fbbf24;
+    --info-color: #38bdf8;
+    --light-color: #1e293b;
+    --dark-color: #0f172a;
+    --background-color: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    --text-color: #e2e8f0;
+    --card-bg: rgba(30, 41, 59, 0.95);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --input-bg: #1e293b;
+    --input-text: #e2e8f0;
+    --hover-color: #3b82f6;
+}
+
+/* Styles de base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background: var(--background-color);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Layout principal */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    gap: 30px;
+    padding: 20px;
+    position: relative;
+}
+
+/* En-tête */
+header {
+    text-align: center;
+    padding: 20px 0;
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+h1 {
+    font-size: 2.5em;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    letter-spacing: -0.5px;
+}
+
+/* Horloge en haut à droite */
+.top-clock {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
+    color: white;
+    padding: 15px 20px;
+    border-radius: var(--border-radius);
+    text-align: center;
+    box-shadow: var(--box-shadow);
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    border: var(--card-border);
+}
+
+.top-clock .time {
+    font-size: 2em;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    letter-spacing: -0.5px;
+}
+
+.top-clock .date {
+    font-size: 1em;
+    opacity: 0.9;
+    margin-top: 4px;
+}
+
+/* Bouton thème */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--card-bg);
+    border: var(--card-border);
+    box-shadow: var(--box-shadow);
+    cursor: pointer;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    backdrop-filter: blur(10px);
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1) rotate(10deg);
+}
+
+.theme-toggle i {
+    font-size: 1.5em;
+    color: var(--text-color);
+    transition: var(--transition);
+}
+
+/* Conteneur principal des outils */
+.tools {
+    flex-grow: 1;
+    max-width: 1000px;
+}
+
+/* Sections d'outils */
+.section {
+    display: none;
+    padding: 30px;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    margin-bottom: 20px;
+    animation: fadeIn 0.3s ease;
+    backdrop-filter: blur(10px);
+    border: var(--card-border);
+}
+
+.section.active {
+    display: block;
+}
+
+.section h2 {
+    font-size: 1.8em;
+    color: var(--primary-color);
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border-color);
+    letter-spacing: -0.5px;
+}
+
+/* Boutons et contrôles */
+button, .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: var(--border-radius);
+    background: var(--primary-color);
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+button:hover, .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+input, select, textarea {
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: var(--input-bg);
+    color: var(--input-text);
+    transition: var(--transition);
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.2);
+}
+
+/* Animations améliorées */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Loading spinner amélioré */
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border-color);
+    border-top: 3px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Notifications */
+.notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 24px;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    color: var(--text-color);
+    animation: slideIn 0.3s ease;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    border: var(--card-border);
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive Design amélioré */
+@media (max-width: 1024px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .tools {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    .section {
+        padding: 20px;
+    }
+
+    .top-clock {
+        position: static;
+        margin-bottom: 20px;
+        width: 100%;
+    }
+
+    .theme-toggle {
+        position: static;
+        margin: 10px auto;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+}
+
+/* Mode impression */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    body {
+        background: white;
+        color: black;
+    }
+    
+    .section {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+}
+
+/* Utilitaires */
+.success {
+    color: var(--success-color);
+    background: rgba(var(--success-color-rgb), 0.1);
+    padding: 10px;
+    border-radius: var(--border-radius);
+    margin: 10px 0;
+}
+
+.error {
+    color: var(--danger-color);
+    background: rgba(var(--danger-color-rgb), 0.1);
+    padding: 10px;
+    border-radius: var(--border-radius);
+    margin: 10px 0;
+}
+
+.info {
+    color: var(--info-color);
+    background: rgba(var(--info-color-rgb), 0.1);
+    padding: 10px;
+    border-radius: var(--border-radius);
+    margin: 10px 0;
+}
+
+/* Accessibilité */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Focus styles */
+:focus {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Skip to main content */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--primary-color);
+    color: white;
+    padding: 8px;
+    z-index: 100;
+    transition: top 0.3s;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* Tooltips */
+[data-tooltip] {
+    position: relative;
+}
+
+[data-tooltip]:before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px 10px;
+    background: var(--dark-color);
+    color: white;
+    border-radius: var(--border-radius);
+    font-size: 0.8em;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition);
+}
+
+[data-tooltip]:hover:before {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Lazy loading */
+.lazy-load {
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.lazy-load.loaded {
+    opacity: 1;
+}
+
+/* Styles du bloc-notes */
+.notepad-container {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    border: var(--card-border);
+    overflow: hidden;
+}
+
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: var(--light-color);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    backdrop-filter: blur(10px);
+}
+
+.toolbar-group {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 0.25rem;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+}
+
+.toolbar button {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: none;
+    border-radius: var(--border-radius);
+    background: transparent;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toolbar button:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.toolbar button.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+.toolbar select {
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: var(--input-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    min-width: 120px;
+}
+
+.toolbar input[type="color"] {
+    width: 36px;
+    height: 36px;
+    padding: 2px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: var(--input-bg);
+    cursor: pointer;
+}
+
+.editor-container {
+    position: relative;
+    height: 600px;
+    overflow: auto;
+    padding: 2rem;
+    background: var(--card-bg);
+}
+
+.notepad-editor {
+    width: 100%;
+    height: 100%;
+    outline: none;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--text-color);
+    background: transparent;
+    resize: none;
+}
+
+.notepad-editor:focus {
+    outline: none;
+}
+
+.notepad-editor h1 { font-size: 2em; margin: 0.5em 0; }
+.notepad-editor h2 { font-size: 1.5em; margin: 0.5em 0; }
+.notepad-editor h3 { font-size: 1.17em; margin: 0.5em 0; }
+.notepad-editor p { margin: 1em 0; }
+.notepad-editor ul, .notepad-editor ol { margin: 1em 0; padding-left: 2em; }
+.notepad-editor blockquote {
+    margin: 1em 0;
+    padding: 1em;
+    border-left: 4px solid var(--primary-color);
+    background: rgba(var(--primary-color-rgb), 0.1);
+}
+
+.notepad-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: var(--light-color);
+    border-top: 1px solid var(--border-color);
+    position: sticky;
+    bottom: 0;
+    backdrop-filter: blur(10px);
+}
+
+.word-count {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+.word-count span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.word-count i {
+    color: var(--primary-color);
+}
+
+.notepad-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.notepad-actions button {
+    padding: 0.75rem 1.25rem;
+    border: none;
+    border-radius: var(--border-radius);
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.save-btn {
+    background: var(--success-color);
+}
+
+.clear-btn {
+    background: var(--danger-color);
+}
+
+.download-btn {
+    background: var(--info-color);
+}
+
+.notepad-actions button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.note-status {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    padding: 1rem 2rem;
+    border-radius: var(--border-radius);
+    background: var(--success-color);
+    color: white;
+    font-weight: 500;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: var(--transition);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.note-status.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Support du mode sombre pour le bloc-notes */
+[data-theme="dark"] .toolbar,
+[data-theme="dark"] .notepad-footer {
+    background: var(--dark-color);
+}
+
+[data-theme="dark"] .toolbar button {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .toolbar button:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* Responsive design pour le bloc-notes */
+@media (max-width: 768px) {
+    .toolbar {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .toolbar-group {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .notepad-footer {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .word-count {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .notepad-actions {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .notepad-actions button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .editor-container {
+        height: 400px;
+        padding: 1rem;
+    }
+}
+
+/* Styles du planificateur */
+.scheduler-container {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    border: var(--card-border);
+    overflow: hidden;
+}
+
+.scheduler-mode {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--light-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.mode-btn {
+    flex: 1;
+    padding: 1rem;
+    border: none;
+    border-radius: var(--border-radius);
+    background: var(--card-bg);
+    color: var(--text-color);
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.mode-btn.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+.task-form {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.duration-input {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.duration-input input {
+    width: 80px;
+}
+
+.add-task-btn {
+    width: 100%;
+    padding: 1rem;
+    margin-top: 1rem;
+    background: var(--success-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.add-task-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.availability-section {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.availability-slots {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.availability-day {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.time-slots {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.schedule-view {
+    padding: 1.5rem;
+}
+
+.schedule-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.nav-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: var(--card-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-btn:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: scale(1.1);
+}
+
+.schedule-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.time-slot {
+    display: flex;
+    gap: 1rem;
+    padding: 0.5rem;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.time-slot:hover {
+    background: rgba(var(--primary-color-rgb), 0.1);
+}
+
+.time-label {
+    width: 60px;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.slot-tasks {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.scheduled-task {
+    padding: 0.5rem;
+    border-radius: var(--border-radius);
+    background: var(--primary-color);
+    color: white;
+    font-size: 0.9rem;
+}
+
+.scheduled-task.priority-high {
+    background: var(--danger-color);
+}
+
+.scheduled-task.priority-medium {
+    background: var(--warning-color);
+}
+
+.scheduled-task.priority-low {
+    background: var(--success-color);
+}
+
+.task-duration {
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+.pending-tasks {
+    padding: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.tasks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+/* Support du mode sombre pour le planificateur */
+[data-theme="dark"] .scheduler-mode,
+[data-theme="dark"] .nav-btn {
+    background: var(--dark-color);
+}
+
+/* Responsive design pour le planificateur */
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+    }
+
+    .availability-day {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .time-slot {
+        flex-direction: column;
+    }
+
+    .time-label {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+} 

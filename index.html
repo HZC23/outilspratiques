@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Collection d'outils pratiques pour le calcul, la gestion du temps, l'organisation et plus encore">
+    <meta name="theme-color" content="#4a90e2">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta property="og:title" content="Outils Pratiques">
+    <meta property="og:description" content="Collection d'outils pratiques pour le calcul, la gestion du temps, l'organisation et plus encore">
+    <meta property="og:image" content="/icons/icon-512x512.png">
+    <meta property="og:url" content="https://hzc23.github.io/outilspratiques.github.io/">
+    <title>Outils Pratiques</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" media="print" onload="this.media='all'">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    
+    <!-- Noscript fallback -->
+    <noscript>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    </noscript>
+</head>
+<body>
+    <!-- Skip to main content -->
+    <a href="#main" class="skip-link">Aller au contenu principal</a>
+
+    <!-- Horloge en haut à droite -->
+    <div class="top-clock" role="complementary" aria-label="Horloge">
+        <div class="time" id="topTime">00:00:00</div>
+        <div class="date" id="topDate">01 Janvier 2024</div>
+    </div>
+
+    <!-- Bouton thème -->
+    <button class="theme-toggle" 
+            onclick="toggleTheme()" 
+            title="Changer de thème"
+            aria-label="Basculer entre le thème clair et sombre">
+        <i class="fas fa-moon" aria-hidden="true"></i>
+    </button>
+
+    <header>
+        <h1>Outils Pratiques</h1>
+    </header>
+
+    <main id="main" class="container">
+        <!-- Menu de navigation -->
+        <nav class="menu" role="navigation" aria-label="Menu principal">
+            <!-- Contenu du menu existant -->
+        </nav>
+
+        <!-- Conteneur des outils -->
+        <div class="tools">
+            <!-- Contenu des outils existant -->
+        </div>
+
+        <!-- Bloc-notes -->
+        <section id="noteTool" class="section" aria-labelledby="noteTitle">
+            <h2 id="noteTitle">Bloc-notes</h2>
+            <div class="notepad-container">
+                <div class="toolbar">
+                    <div class="toolbar-group">
+                        <button type="button" onclick="execCommand('bold')" title="Gras (Ctrl+B)">
+                            <i class="fas fa-bold"></i>
+                        </button>
+                        <button type="button" onclick="execCommand('italic')" title="Italique (Ctrl+I)">
+                            <i class="fas fa-italic"></i>
+                        </button>
+                        <button type="button" onclick="execCommand('underline')" title="Souligné (Ctrl+U)">
+                            <i class="fas fa-underline"></i>
+                        </button>
+                        <button type="button" onclick="execCommand('strikeThrough')" title="Barré">
+                            <i class="fas fa-strikethrough"></i>
+                        </button>
+                    </div>
+
+                    <div class="toolbar-group">
+                        <button type="button" onclick="execCommand('justifyLeft')" title="Aligner à gauche">
+                            <i class="fas fa-align-left"></i>
+                        </button>
+                        <button type="button" onclick="execCommand('justifyCenter')" title="Centrer">
+                            <i class="fas fa-align-center"></i>
+                        </button>
+                        <button type="button" onclick="execCommand('justifyRight')" title="Aligner à droite">
+                            <i class="fas fa-align-right"></i>
+                        </button>
+                        <button type="button" onclick="execCommand('justifyFull')" title="Justifier">
+                            <i class="fas fa-align-justify"></i>
+                        </button>
+                    </div>
+
+                    <div class="toolbar-group">
+                        <button type="button" onclick="execCommand('insertUnorderedList')" title="Liste à puces">
+                            <i class="fas fa-list-ul"></i>
+                        </button>
+                        <button type="button" onclick="execCommand('insertOrderedList')" title="Liste numérotée">
+                            <i class="fas fa-list-ol"></i>
+                        </button>
+                        <button type="button" onclick="execCommand('indent')" title="Augmenter le retrait">
+                            <i class="fas fa-indent"></i>
+                        </button>
+                        <button type="button" onclick="execCommand('outdent')" title="Diminuer le retrait">
+                            <i class="fas fa-outdent"></i>
+                        </button>
+                    </div>
+
+                    <div class="toolbar-group">
+                        <button type="button" onclick="execCommand('insertHorizontalRule')" title="Ligne horizontale">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" onclick="execCommand('removeFormat')" title="Effacer le formatage">
+                            <i class="fas fa-remove-format"></i>
+                        </button>
+                        <button type="button" onclick="execCommand('undo')" title="Annuler (Ctrl+Z)">
+                            <i class="fas fa-undo"></i>
+                        </button>
+                        <button type="button" onclick="execCommand('redo')" title="Rétablir (Ctrl+Y)">
+                            <i class="fas fa-redo"></i>
+                        </button>
+                    </div>
+
+                    <div class="toolbar-group">
+                        <select onchange="execCommand('formatBlock', this.value)" title="Style de paragraphe">
+                            <option value="p">Paragraphe</option>
+                            <option value="h1">Titre 1</option>
+                            <option value="h2">Titre 2</option>
+                            <option value="h3">Titre 3</option>
+                            <option value="blockquote">Citation</option>
+                            <option value="pre">Code</option>
+                        </select>
+                        <select onchange="execCommand('fontSize', this.value)" title="Taille de police">
+                            <option value="1">Très petit</option>
+                            <option value="2">Petit</option>
+                            <option value="3" selected>Normal</option>
+                            <option value="4">Grand</option>
+                            <option value="5">Très grand</option>
+                            <option value="6">Énorme</option>
+                            <option value="7">Maximum</option>
+                        </select>
+                    </div>
+
+                    <div class="toolbar-group">
+                        <input type="color" onchange="execCommand('foreColor', this.value)" title="Couleur du texte">
+                        <input type="color" onchange="execCommand('hiliteColor', this.value)" title="Couleur de surbrillance">
+                    </div>
+                </div>
+
+                <div class="editor-container">
+                    <div id="editor" contenteditable="true" class="notepad-editor" aria-label="Zone d'édition de texte"></div>
+                </div>
+
+                <div class="notepad-footer">
+                    <div class="word-count">
+                        <span><i class="fas fa-font"></i> <span id="wordCount">0</span> mots</span>
+                        <span><i class="fas fa-text-width"></i> <span id="charCount">0</span> caractères</span>
+                        <span><i class="fas fa-align-left"></i> <span id="lineCount">0</span> lignes</span>
+                        <span><i class="fas fa-paragraph"></i> <span id="paragraphCount">0</span> paragraphes</span>
+                    </div>
+                    <div class="notepad-actions">
+                        <button type="button" onclick="saveNotes()" class="save-btn" title="Sauvegarder (Ctrl+S)">
+                            <i class="fas fa-save"></i> Sauvegarder
+                        </button>
+                        <button type="button" onclick="clearNotes()" class="clear-btn" title="Effacer tout">
+                            <i class="fas fa-trash"></i> Effacer
+                        </button>
+                        <button type="button" onclick="downloadNotes()" class="download-btn" title="Télécharger">
+                            <i class="fas fa-download"></i> Télécharger
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Loading spinner -->
+    <div class="loading-spinner" id="loadingSpinner" role="status" aria-hidden="true"></div>
+
+    <!-- Scripts -->
+    <script src="/scripts.js" defer></script>
+    <script>
+        // Vérification du support du Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+
+        // Gestion du mode hors ligne
+        window.addEventListener('online', () => {
+            document.body.classList.remove('offline');
+            showNotification('Connexion rétablie', 'success');
+        });
+
+        window.addEventListener('offline', () => {
+            document.body.classList.add('offline');
+            showNotification('Vous êtes hors ligne', 'warning');
+        });
+
+        // Gestion de l'installation PWA
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            showInstallPromotion();
+        });
+
+        function showInstallPromotion() {
+            const installButton = document.createElement('button');
+            installButton.textContent = 'Installer l\'application';
+            installButton.classList.add('install-button');
+            installButton.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    if (outcome === 'accepted') {
+                        console.log('User accepted the install prompt');
+                    }
+                    deferredPrompt = null;
+                    installButton.remove();
+                }
+            });
+            document.body.appendChild(installButton);
+        }
+    </script>
+</body>
+</html> 
