@@ -291,14 +291,7 @@ function updateScheduleView() {
         slot.className = 'time-slot';
         
         const time = `${hour.toString().padStart(2, '0')}:00`;
-        const filteredTasks = scheduledTasks.filter(task => {
-            if (!task.scheduledTime) return false;
-            const taskDate = new Date(task.scheduledTime.date);
-            return taskDate.getDate() === dayStart.getDate() &&
-                   taskDate.getMonth() === dayStart.getMonth() &&
-                   taskDate.getFullYear() === dayStart.getFullYear() &&
-                   taskDate.getHours() === hour;
-        });
+        const filteredTasks = getTasksForTimeSlot(dayStart, hour);
         
         slot.innerHTML = `
             <div class="time-label">${time}</div>
@@ -523,31 +516,77 @@ function showNoteStatus(message, type = 'success') {
 }
 
 function loadTranslationHistory() {
-    const savedHistory = localStorage.getItem('translationHistory');
-    if (savedHistory) {
-        try {
+    try {
+        const savedHistory = localStorage.getItem('translationHistory');
+        if (savedHistory) {
             translationHistory = JSON.parse(savedHistory);
-        } catch (error) {
-            console.error('Erreur lors du chargement de l\'historique des traductions:', error);
+        } else {
             translationHistory = [];
         }
-    }
-}
-
-function saveTranslationHistory() {
-    try {
-        localStorage.setItem('translationHistory', JSON.stringify(translationHistory));
+        displayTranslationHistory();
     } catch (error) {
-        console.error('Erreur lors de la sauvegarde de l\'historique des traductions:', error);
+        console.error('Erreur lors du chargement de l\'historique des traductions:', error);
+        translationHistory = [];
     }
 }
 
-function addToTranslationHistory(translation) {
-    translationHistory.unshift(translation);
-    if (translationHistory.length > 10) {
-        translationHistory.pop();
-    }
-    saveTranslationHistory();
+function displayTranslationHistory() {
+    const historyContainer = document.getElementById('translationHistory');
+    if (!historyContainer) return;
+
+    historyContainer.innerHTML = '';
+    
+    translationHistory.forEach((item, index) => {
+        const historyItem = document.createElement('div');
+        historyItem.className = 'history-item';
+        historyItem.innerHTML = `
+            <div class="history-content">
+                <div class="source-text">
+                    <span class="lang-label">${item.sourceLang.toUpperCase()}</span>
+                    <p>${item.sourceText}</p>
+                </div>
+                <div class="translation-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+                <div class="translated-text">
+                    <span class="lang-label">${item.targetLang.toUpperCase()}</span>
+                    <p>${item.translatedText}</p>
+                </div>
+            </div>
+            <div class="history-actions">
+                <button onclick="useHistoryItem(${index})" title="Réutiliser">
+                    <i class="fas fa-redo"></i>
+                </button>
+                <button onclick="copyHistoryItem(${index})" title="Copier">
+                    <i class="fas fa-copy"></i>
+                </button>
+                <span class="timestamp">${new Date(item.timestamp).toLocaleString()}</span>
+            </div>
+        `;
+        historyContainer.appendChild(historyItem);
+    });
+}
+
+function useHistoryItem(index) {
+    const item = translationHistory[index];
+    if (!item) return;
+
+    const sourceText = document.getElementById('sourceText');
+    const targetLang = document.getElementById('targetLanguage');
+    const sourceLang = document.getElementById('sourceLanguage');
+
+    if (sourceText) sourceText.value = item.sourceText;
+    if (sourceLang) sourceLang.value = item.sourceLang;
+    if (targetLang) targetLang.value = item.targetLang;
+}
+
+function copyHistoryItem(index) {
+    const item = translationHistory[index];
+    if (!item) return;
+
+    navigator.clipboard.writeText(item.translatedText)
+        .then(() => showNotification('Texte copié !', 'success'))
+        .catch(() => showNotification('Erreur lors de la copie', 'error'));
 }
 
 // Initialisation
