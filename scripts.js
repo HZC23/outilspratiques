@@ -199,24 +199,28 @@ window.addEventListener('popstate', (event) => {
     }
 });
 
-// Gestion des raccourcis clavier
+// Support du pavé numérique
 document.addEventListener('keydown', (event) => {
-    // Échap pour fermer les sous-menus
-    if (event.key === 'Escape') {
-        document.querySelectorAll('.submenu.active').forEach(submenu => {
-            submenu.classList.remove('active');
-            submenu.previousElementSibling.setAttribute('aria-expanded', 'false');
-        });
-    }
+    if (!document.getElementById('calculatorTool').classList.contains('active')) return;
     
-    // Alt + chiffre pour accéder rapidement aux outils
-    if (event.altKey && !isNaN(event.key)) {
-        const tools = document.querySelectorAll('.section');
-        const index = parseInt(event.key) - 1;
-        if (tools[index]) {
-            event.preventDefault();
-            showTool(tools[index].id);
-        }
+    // Ignorer les touches de fonction (F1-F12)
+    if (event.key.startsWith('F')) return;
+    
+    if (event.key.match(/[0-9.]/)) {
+        event.preventDefault();
+        addToCalc(event.key);
+    } else if (event.key.match(/[+\-*\/]/)) {
+        event.preventDefault();
+        addToCalc(event.key);
+    } else if (event.key === 'Enter') {
+        event.preventDefault();
+        calculate();
+    } else if (event.key === 'Backspace') {
+        event.preventDefault();
+        backspace();
+    } else if (event.key === 'Escape') {
+        event.preventDefault();
+        clearCalc();
     }
 });
 
@@ -302,6 +306,92 @@ let currentDate = new Date();
 // Variables et fonctions du traducteur
 let translationHistory = [];
 const LIBRETRANSLATE_API_URL = 'https://libretranslate.de/';
+
+// Fonction pour la traduction automatique avec délai
+let translationTimeout;
+
+function autoTranslate() {
+    clearTimeout(translationTimeout);
+    updateCharCount();
+    
+    const sourceText = document.getElementById('sourceText').value.trim();
+    if (!sourceText) {
+        document.getElementById('translatedText').value = '';
+        return;
+    }
+    
+    translationTimeout = setTimeout(() => {
+        translate(sourceText);
+    }, 500);
+}
+
+function swapLanguages() {
+    const sourceSelect = document.getElementById('sourceLanguage');
+    const targetSelect = document.getElementById('targetLanguage');
+    const temp = sourceSelect.value;
+    
+    sourceSelect.value = targetSelect.value;
+    targetSelect.value = temp;
+    
+    autoTranslate();
+}
+
+function updateCharCount() {
+    const sourceText = document.getElementById('sourceText').value;
+    const translatedText = document.getElementById('translatedText').value;
+    
+    document.getElementById('sourceCharCount').textContent = 
+        `${sourceText.length} caractères`;
+    document.getElementById('translatedCharCount').textContent = 
+        `${translatedText.length} caractères`;
+}
+
+function clearSourceText() {
+    document.getElementById('sourceText').value = '';
+    document.getElementById('translatedText').value = '';
+    updateCharCount();
+}
+
+function copySourceText() {
+    const sourceText = document.getElementById('sourceText');
+    sourceText.select();
+    document.execCommand('copy');
+    showNotification('Texte source copié !');
+}
+
+function copyTranslation() {
+    const translatedText = document.getElementById('translatedText');
+    translatedText.select();
+    document.execCommand('copy');
+    showNotification('Traduction copiée !');
+}
+
+function listenSourceText() {
+    const text = document.getElementById('sourceText').value;
+    const lang = document.getElementById('sourceLanguage').value;
+    speak(text, lang);
+}
+
+function listenTranslation() {
+    const text = document.getElementById('translatedText').value;
+    const lang = document.getElementById('targetLanguage').value;
+    speak(text, lang);
+}
+
+function speak(text, lang) {
+    if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = lang;
+        speechSynthesis.speak(utterance);
+    } else {
+        showNotification('La synthèse vocale n\'est pas supportée par votre navigateur');
+    }
+}
+
+// Initialisation au chargement de la page
+document.addEventListener('DOMContentLoaded', () => {
+    initializeLanguageSelectors();
+});
 
 // Mappings des caractères pour chaque style
 const styleMap = {
@@ -707,80 +797,6 @@ function showNoteStatus(message, type = 'success') {
     }, 3000);
 }
 
-function loadTranslationHistory() {
-    try {
-        const savedHistory = localStorage.getItem('translationHistory');
-        if (savedHistory) {
-            translationHistory = JSON.parse(savedHistory);
-        } else {
-            translationHistory = [];
-        }
-        displayTranslationHistory();
-    } catch (error) {
-        console.error('Erreur lors du chargement de l\'historique des traductions:', error);
-        translationHistory = [];
-    }
-}
-
-function displayTranslationHistory() {
-    const historyContainer = document.getElementById('translationHistory');
-    if (!historyContainer) return;
-
-    historyContainer.innerHTML = '';
-    
-    translationHistory.forEach((item, index) => {
-        const historyItem = document.createElement('div');
-        historyItem.className = 'history-item';
-        historyItem.innerHTML = `
-            <div class="history-content">
-                <div class="source-text">
-                    <span class="lang-label">${item.sourceLang.toUpperCase()}</span>
-                    <p>${item.sourceText}</p>
-                </div>
-                <div class="translation-arrow">
-                    <i class="fas fa-arrow-right"></i>
-                </div>
-                <div class="translated-text">
-                    <span class="lang-label">${item.targetLang.toUpperCase()}</span>
-                    <p>${item.translatedText}</p>
-                </div>
-            </div>
-            <div class="history-actions">
-                <button onclick="useHistoryItem(${index})" title="Réutiliser">
-                    <i class="fas fa-redo"></i>
-                </button>
-                <button onclick="copyHistoryItem(${index})" title="Copier">
-                    <i class="fas fa-copy"></i>
-                </button>
-                <span class="timestamp">${new Date(item.timestamp).toLocaleString()}</span>
-            </div>
-        `;
-        historyContainer.appendChild(historyItem);
-    });
-}
-
-function useHistoryItem(index) {
-    const item = translationHistory[index];
-    if (!item) return;
-
-    const sourceText = document.getElementById('sourceText');
-    const targetLang = document.getElementById('targetLanguage');
-    const sourceLang = document.getElementById('sourceLanguage');
-
-    if (sourceText) sourceText.value = item.sourceText;
-    if (sourceLang) sourceLang.value = item.sourceLang;
-    if (targetLang) targetLang.value = item.targetLang;
-}
-
-function copyHistoryItem(index) {
-    const item = translationHistory[index];
-    if (!item) return;
-
-    navigator.clipboard.writeText(item.translatedText)
-        .then(() => showNotification('Texte copié !', 'success'))
-        .catch(() => showNotification('Erreur lors de la copie', 'error'));
-}
-
 // Fonctions pour l'outil de style d'écriture
 const styleHistory = [];
 
@@ -963,48 +979,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialiser le planificateur
     initScheduler();
     
-    // Initialiser le traducteur
-    initializeLanguageSelectors();
-    
     // Initialiser le bloc-notes
     loadNotes();
     
-    // Initialiser l'historique des traductions
-    loadTranslationHistory();
-    
-    // Mettre à jour le compteur de mots lors de la saisie
-    const editor = document.getElementById('editor');
-    if (editor) {
-        editor.addEventListener('input', () => {
-            updateWordCount();
-            autoSave();
-        });
-    }
-    
-    // Support des raccourcis clavier
-    document.addEventListener('keydown', (e) => {
-        if (e.ctrlKey) {
-            switch(e.key.toLowerCase()) {
-                case 's':
-                    e.preventDefault();
-                    saveNotes();
-                    break;
-                case 'b':
-                    e.preventDefault();
-                    execCommand('bold');
-                    break;
-                case 'i':
-                    e.preventDefault();
-                    execCommand('italic');
-                    break;
-                case 'u':
-                    e.preventDefault();
-                    execCommand('underline');
-                    break;
-            }
-        }
-    });
-
     // Charger l'historique
     loadStyleHistory();
 
