@@ -42,14 +42,41 @@ document.addEventListener('DOMContentLoaded', () => {
     lazyImages.forEach(img => imageObserver.observe(img));
 });
 
-// Gestion du thème
+// Optimisation des performances
+const debounce = (func, wait) => {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+};
+
+// Gestion du thème améliorée
 function toggleTheme() {
     const checkbox = document.querySelector('.theme-switch__checkbox');
     if (!checkbox) return;
     
     const isDark = checkbox.checked;
-    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    const theme = isDark ? 'dark' : 'light';
+    
+    // Transition fluide
+    document.body.style.opacity = '0';
+    setTimeout(() => {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        document.body.style.opacity = '1';
+    }, 200);
+    
+    // Animation du switch
+    const switchContainer = checkbox.closest('.theme-switch');
+    if (switchContainer) {
+        switchContainer.classList.add('switching');
+        setTimeout(() => switchContainer.classList.remove('switching'), 500);
+    }
 }
 
 // Initialisation du thème
@@ -65,18 +92,26 @@ function initTheme() {
 // Appeler initTheme immédiatement
 initTheme();
 
-// Gestion de l'horloge
+// Gestion de l'horloge améliorée
 function updateClock() {
     const now = new Date();
     const timeString = now.toLocaleTimeString('fr-FR');
     const dateString = now.toLocaleDateString('fr-FR', {
-        day: '2-digit',
+        weekday: 'long',
+        day: 'numeric',
         month: 'long',
         year: 'numeric'
     });
     
-    document.getElementById('topTime').textContent = timeString;
-    document.getElementById('topDate').textContent = dateString;
+    const timeElement = document.getElementById('topTime');
+    const dateElement = document.getElementById('topDate');
+    
+    if (timeElement && timeElement.textContent !== timeString) {
+        timeElement.textContent = timeString;
+    }
+    if (dateElement && dateElement.textContent !== dateString) {
+        dateElement.textContent = dateString;
+    }
 }
 
 // Mise à jour de l'horloge toutes les secondes
@@ -89,39 +124,71 @@ function toggleSubmenu(menuId) {
     const trigger = submenu.previousElementSibling;
     const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
     
-    // Fermer les autres sous-menus
+    // Animation de fermeture des autres sous-menus
     document.querySelectorAll('.submenu.active').forEach(menu => {
         if (menu.id !== menuId) {
+            menu.style.height = '0';
             menu.classList.remove('active');
             menu.previousElementSibling.setAttribute('aria-expanded', 'false');
         }
     });
     
-    // Basculer le sous-menu actuel
-    submenu.classList.toggle('active');
+    // Animation d'ouverture/fermeture du sous-menu actuel
+    if (!isExpanded) {
+        submenu.classList.add('active');
+        submenu.style.height = submenu.scrollHeight + 'px';
+    } else {
+        submenu.style.height = '0';
+        setTimeout(() => submenu.classList.remove('active'), 300);
+    }
+    
     trigger.setAttribute('aria-expanded', !isExpanded);
 }
 
 // Gestion des outils
 function showTool(toolId) {
-    // Masquer tous les outils
-    document.querySelectorAll('.section').forEach(section => {
-        section.classList.remove('active');
-    });
-    
-    // Afficher l'outil sélectionné
-    const tool = document.getElementById(toolId);
-    if (tool) {
-        tool.classList.add('active');
-        // Mettre à jour l'URL sans recharger la page
-        history.pushState({tool: toolId}, '', `#${toolId}`);
+    // Animation de sortie pour l'outil actuel
+    const currentTool = document.querySelector('.section.active');
+    if (currentTool) {
+        currentTool.style.opacity = '0';
+        currentTool.style.transform = 'translateY(20px)';
     }
     
-    // Mettre à jour l'état actif des boutons du menu
+    // Masquer tous les outils après l'animation
+    setTimeout(() => {
+        document.querySelectorAll('.section').forEach(section => {
+            section.classList.remove('active');
+        });
+        
+        // Afficher le nouvel outil avec animation
+        const tool = document.getElementById(toolId);
+        if (tool) {
+            tool.classList.add('active');
+            requestAnimationFrame(() => {
+                tool.style.opacity = '1';
+                tool.style.transform = 'translateY(0)';
+            });
+            
+            // Mettre à jour l'URL et l'historique
+            history.pushState({tool: toolId}, '', `#${toolId}`);
+            
+            // Mettre à jour le menu
+            updateMenuState(toolId);
+        }
+    }, 300);
+}
+
+function updateMenuState(toolId) {
     document.querySelectorAll('.submenu-item').forEach(item => {
         item.classList.remove('active');
         if (item.getAttribute('onclick').includes(toolId)) {
             item.classList.add('active');
+            // Ouvrir le sous-menu parent si nécessaire
+            const parentSubmenu = item.closest('.submenu');
+            if (parentSubmenu) {
+                parentSubmenu.classList.add('active');
+                parentSubmenu.previousElementSibling.setAttribute('aria-expanded', 'true');
+            }
         }
     });
 }
@@ -154,17 +221,41 @@ document.addEventListener('keydown', (event) => {
     }
 });
 
-// Gestion des notifications
+// Amélioration des notifications
 function showNotification(message, type = 'info', duration = 3000) {
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
-    notification.textContent = message;
+    notification.innerHTML = `
+        <i class="fas fa-${getNotificationIcon(type)}"></i>
+        <span>${message}</span>
+        <button onclick="this.parentElement.remove()" class="close-btn">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+    
     document.body.appendChild(notification);
     
+    // Animation d'entrée
+    requestAnimationFrame(() => {
+        notification.style.transform = 'translateX(0)';
+        notification.style.opacity = '1';
+    });
+    
+    // Auto-suppression
     setTimeout(() => {
-        notification.classList.add('fade-out');
+        notification.style.transform = 'translateX(100%)';
+        notification.style.opacity = '0';
         setTimeout(() => notification.remove(), 300);
     }, duration);
+}
+
+function getNotificationIcon(type) {
+    switch(type) {
+        case 'success': return 'check-circle';
+        case 'error': return 'exclamation-circle';
+        case 'warning': return 'exclamation-triangle';
+        default: return 'info-circle';
+    }
 }
 
 // Gestion du cache
@@ -212,6 +303,109 @@ let currentDate = new Date();
 // Variables et fonctions du traducteur
 let translationHistory = [];
 const LIBRETRANSLATE_API_URL = 'https://libretranslate.de/';
+
+// Mappings des caractères pour chaque style
+const styleMap = {
+    serif: {
+        'A': '𝔸', 'B': '𝔹', 'C': 'ℂ', 'D': '𝔻', 'E': '𝔼', 'F': '𝔽', 'G': '𝔾', 'H': 'ℍ', 'I': '𝕀', 'J': '𝕁',
+        'K': '𝕂', 'L': '𝕃', 'M': '𝕄', 'N': 'ℕ', 'O': '𝕆', 'P': 'ℙ', 'Q': 'ℚ', 'R': 'ℝ', 'S': '𝕊', 'T': '𝕋',
+        'U': '𝕌', 'V': '𝕍', 'W': '𝕎', 'X': '𝕏', 'Y': '𝕐', 'Z': 'ℤ',
+        'a': '𝕒', 'b': '𝕓', 'c': '𝕔', 'd': '𝕕', 'e': '𝕖', 'f': '𝕗', 'g': '𝕘', 'h': '𝕙', 'i': '𝕚', 'j': '𝕛',
+        'k': '𝕜', 'l': '𝕝', 'm': '𝕞', 'n': '𝕟', 'o': '𝕠', 'p': '𝕡', 'q': '𝕢', 'r': '𝕣', 's': '𝕤', 't': '𝕥',
+        'u': '𝕦', 'v': '𝕧', 'w': '𝕨', 'x': '𝕩', 'y': '𝕪', 'z': '𝕫'
+    },
+    script: {
+        'A': '𝓐', 'B': '𝓑', 'C': '𝓒', 'D': '𝓓', 'E': '𝓔', 'F': '𝓕', 'G': '𝓖', 'H': '𝓗', 'I': '𝓘', 'J': '𝓙',
+        'K': '𝓚', 'L': '𝓛', 'M': '𝓜', 'N': '𝓝', 'O': '𝓞', 'P': '𝓟', 'Q': '𝓠', 'R': '𝓡', 'S': '𝓢', 'T': '𝓣',
+        'U': '𝓤', 'V': '𝓥', 'W': '𝓦', 'X': '𝓧', 'Y': '𝓨', 'Z': '𝓩',
+        'a': '𝓪', 'b': '𝓫', 'c': '𝓬', 'd': '𝓭', 'e': '𝓮', 'f': '𝓯', 'g': '𝓰', 'h': '𝓱', 'i': '𝓲', 'j': '𝓳',
+        'k': '𝓴', 'l': '𝓵', 'm': '𝓶', 'n': '𝓷', 'o': '𝓸', 'p': '𝓹', 'q': '𝓺', 'r': '𝓻', 's': '𝓼', 't': '𝓽',
+        'u': '𝓾', 'v': '𝓿', 'w': '𝔀', 'x': '𝔁', 'y': '𝔂', 'z': '𝔃'
+    },
+    bold: {
+        'A': '𝗔', 'B': '𝗕', 'C': '𝗖', 'D': '𝗗', 'E': '𝗘', 'F': '𝗙', 'G': '𝗚', 'H': '𝗛', 'I': '𝗜', 'J': '𝗝',
+        'K': '𝗞', 'L': '𝗟', 'M': '𝗠', 'N': '𝗡', 'O': '𝗢', 'P': '𝗣', 'Q': '𝗤', 'R': '𝗥', 'S': '𝗦', 'T': '𝗧',
+        'U': '𝗨', 'V': '𝗩', 'W': '𝗪', 'X': '𝗫', 'Y': '𝗬', 'Z': '𝗭',
+        'a': '𝗮', 'b': '𝗯', 'c': '𝗰', 'd': '𝗱', 'e': '𝗲', 'f': '𝗳', 'g': '𝗴', 'h': '𝗵', 'i': '𝗶', 'j': '𝗷',
+        'k': '𝗸', 'l': '𝗹', 'm': '𝗺', 'n': '𝗻', 'o': '𝗼', 'p': '𝗽', 'q': '𝗾', 'r': '𝗿', 's': '𝘀', 't': '𝘁',
+        'u': '𝘂', 'v': '𝘃', 'w': '𝘄', 'x': '𝘅', 'y': '𝘆', 'z': '𝘇'
+    },
+    italic: {
+        'A': '𝘈', 'B': '𝘉', 'C': '𝘊', 'D': '𝘋', 'E': '𝘌', 'F': '𝘍', 'G': '𝘎', 'H': '𝘏', 'I': '𝘐', 'J': '𝘑',
+        'K': '𝘒', 'L': '𝘓', 'M': '𝘔', 'N': '𝘕', 'O': '𝘖', 'P': '𝘗', 'Q': '𝘘', 'R': '𝘙', 'S': '𝘚', 'T': '𝘛',
+        'U': '𝘜', 'V': '𝘝', 'W': '𝘞', 'X': '𝘟', 'Y': '𝘠', 'Z': '𝘡',
+        'a': '𝘢', 'b': '𝘣', 'c': '𝘤', 'd': '𝘥', 'e': '𝘦', 'f': '𝘧', 'g': '𝘨', 'h': '𝘩', 'i': '𝘪', 'j': '𝘫',
+        'k': '𝘬', 'l': '𝘭', 'm': '𝘮', 'n': '𝘯', 'o': '𝘰', 'p': '𝘱', 'q': '𝘲', 'r': '𝘳', 's': '𝘴', 't': '𝘵',
+        'u': '𝘶', 'v': '𝘷', 'w': '𝘸', 'x': '𝘹', 'y': '𝘺', 'z': '𝘻'
+    },
+    gothic: {
+        'A': '𝔄', 'B': '𝔅', 'C': 'ℭ', 'D': '𝔇', 'E': '𝔈', 'F': '𝔉', 'G': '𝔊', 'H': 'ℌ', 'I': 'ℑ', 'J': '𝔍',
+        'K': '𝔎', 'L': '𝔏', 'M': '𝔐', 'N': '𝔑', 'O': '𝔒', 'P': '𝔓', 'Q': '𝔔', 'R': 'ℜ', 'S': '𝔖', 'T': '𝔗',
+        'U': '𝔘', 'V': '𝔙', 'W': '𝔚', 'X': '𝔛', 'Y': '𝔜', 'Z': 'ℨ',
+        'a': '𝔞', 'b': '𝔟', 'c': '𝔠', 'd': '𝔡', 'e': '𝔢', 'f': '𝔣', 'g': '𝔤', 'h': '𝔥', 'i': '𝔦', 'j': '𝔧',
+        'k': '𝔨', 'l': '𝔩', 'm': '𝔪', 'n': '𝔫', 'o': '𝔬', 'p': '𝔭', 'q': '𝔮', 'r': '𝔯', 's': '𝔰', 't': '𝔱',
+        'u': '𝔲', 'v': '𝔳', 'w': '𝔴', 'x': '𝔵', 'y': '𝔶', 'z': '𝔷'
+    },
+    double: {
+        'A': '𝔸', 'B': '𝔹', 'C': 'ℂ', 'D': '𝔻', 'E': '𝔼', 'F': '𝔽', 'G': '𝔾', 'H': 'ℍ', 'I': '𝕀', 'J': '𝕁',
+        'K': '𝕂', 'L': '𝕃', 'M': '𝕄', 'N': 'ℕ', 'O': '𝕆', 'P': 'ℙ', 'Q': 'ℚ', 'R': 'ℝ', 'S': '𝕊', 'T': '𝕋',
+        'U': '𝕌', 'V': '𝕍', 'W': '𝕎', 'X': '𝕏', 'Y': '𝕐', 'Z': 'ℤ',
+        'a': '𝕒', 'b': '𝕓', 'c': '𝕔', 'd': '𝕕', 'e': '𝕖', 'f': '𝕗', 'g': '𝕘', 'h': '𝕙', 'i': '𝕚', 'j': '𝕛',
+        'k': '𝕜', 'l': '𝕝', 'm': '𝕞', 'n': '𝕟', 'o': '𝕠', 'p': '𝕡', 'q': '𝕢', 'r': '𝕣', 's': '𝕤', 't': '𝕥',
+        'u': '𝕦', 'v': '𝕧', 'w': '𝕨', 'x': '𝕩', 'y': '𝕪', 'z': '𝕫'
+    }
+};
+
+// Fonction pour appliquer le style sélectionné
+function applyStyle(style) {
+    const input = document.getElementById('styleInput').value;
+    const output = document.getElementById('styleOutput');
+    const buttons = document.querySelectorAll('.style-btn');
+    
+    // Mettre à jour l'état actif des boutons
+    buttons.forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.style === style) {
+            btn.classList.add('active');
+        }
+    });
+    
+    // Convertir le texte
+    let result = '';
+    for (let char of input) {
+        result += styleMap[style][char] || char;
+    }
+    
+    output.value = result;
+}
+
+// Fonction pour copier le texte converti
+function copyStyleOutput() {
+    const output = document.getElementById('styleOutput');
+    const copyBtn = document.querySelector('.copy-btn');
+    
+    navigator.clipboard.writeText(output.value).then(() => {
+        // Feedback visuel
+        copyBtn.classList.add('copy-success');
+        copyBtn.innerHTML = '<i class="fas fa-check"></i> Copié !';
+        
+        setTimeout(() => {
+            copyBtn.classList.remove('copy-success');
+            copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copier';
+        }, 2000);
+    }).catch(err => {
+        console.error('Erreur lors de la copie :', err);
+        alert('Impossible de copier le texte');
+    });
+}
+
+// Écouteur d'événements pour la mise à jour en temps réel
+document.getElementById('styleInput')?.addEventListener('input', () => {
+    const activeStyle = document.querySelector('.style-btn.active')?.dataset.style;
+    if (activeStyle) {
+        applyStyle(activeStyle);
+    }
+});
 
 // Fonctions d'initialisation
 function initializeLanguageSelectors() {
@@ -589,6 +783,168 @@ function copyHistoryItem(index) {
         .catch(() => showNotification('Erreur lors de la copie', 'error'));
 }
 
+// Fonctions pour l'outil de style d'écriture
+const styleHistory = [];
+
+// Fonction pour changer de catégorie
+function switchStyleCategory(category) {
+    // Mettre à jour les onglets actifs
+    document.querySelectorAll('.category-tab').forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.category === category);
+    });
+
+    // Afficher les options de la catégorie sélectionnée
+    document.querySelectorAll('.style-options').forEach(options => {
+        options.classList.toggle('active', options.dataset.category === category);
+    });
+}
+
+// Fonction pour effacer le texte d'entrée
+function clearStyleInput() {
+    document.getElementById('styleInput').value = '';
+    document.getElementById('styleOutput').value = '';
+}
+
+// Fonction pour coller depuis le presse-papiers
+async function pasteFromClipboard() {
+    try {
+        const text = await navigator.clipboard.readText();
+        document.getElementById('styleInput').value = text;
+        const activeStyle = document.querySelector('.style-btn.active')?.dataset.style;
+        if (activeStyle) {
+            applyStyle(activeStyle);
+        }
+    } catch (err) {
+        showNotification('Impossible d\'accéder au presse-papiers', 'error');
+    }
+}
+
+// Fonction pour partager le texte
+async function shareOutput() {
+    const text = document.getElementById('styleOutput').value;
+    if (!text) return;
+
+    if (navigator.share) {
+        try {
+            await navigator.share({
+                title: 'Texte stylisé',
+                text: text
+            });
+        } catch (err) {
+            if (err.name !== 'AbortError') {
+                showNotification('Erreur lors du partage', 'error');
+            }
+        }
+    } else {
+        copyStyleOutput();
+    }
+}
+
+// Fonction pour télécharger le texte
+function downloadOutput() {
+    const text = document.getElementById('styleOutput').value;
+    if (!text) return;
+
+    const blob = new Blob([text], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'texte-stylise.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+// Fonction pour ajouter à l'historique
+function addToStyleHistory(input, output, style) {
+    const historyItem = {
+        input,
+        output,
+        style,
+        timestamp: new Date().toISOString()
+    };
+
+    styleHistory.unshift(historyItem);
+    if (styleHistory.length > 10) {
+        styleHistory.pop();
+    }
+
+    updateStyleHistory();
+    saveStyleHistory();
+}
+
+// Fonction pour mettre à jour l'affichage de l'historique
+function updateStyleHistory() {
+    const historyList = document.getElementById('styleHistory');
+    if (!historyList) return;
+
+    historyList.innerHTML = '';
+    styleHistory.forEach((item, index) => {
+        const historyItem = document.createElement('div');
+        historyItem.className = 'history-item';
+        historyItem.innerHTML = `
+            <div class="history-content">
+                <div class="original-text">${item.input}</div>
+                <div class="styled-text">${item.output}</div>
+            </div>
+            <div class="history-actions">
+                <button onclick="useHistoryStyle(${index})" title="Réutiliser">
+                    <i class="fas fa-redo"></i>
+                </button>
+                <button onclick="copyHistoryText(${index})" title="Copier">
+                    <i class="fas fa-copy"></i>
+                </button>
+                <span class="timestamp">${new Date(item.timestamp).toLocaleString()}</span>
+            </div>
+        `;
+        historyList.appendChild(historyItem);
+    });
+}
+
+// Fonction pour utiliser un style de l'historique
+function useHistoryStyle(index) {
+    const item = styleHistory[index];
+    if (!item) return;
+
+    document.getElementById('styleInput').value = item.input;
+    applyStyle(item.style);
+}
+
+// Fonction pour copier un texte de l'historique
+function copyHistoryText(index) {
+    const item = styleHistory[index];
+    if (!item) return;
+
+    navigator.clipboard.writeText(item.output)
+        .then(() => showNotification('Texte copié !', 'success'))
+        .catch(() => showNotification('Erreur lors de la copie', 'error'));
+}
+
+// Fonction pour effacer l'historique
+function clearStyleHistory() {
+    if (!confirm('Voulez-vous vraiment effacer tout l\'historique ?')) return;
+
+    styleHistory.length = 0;
+    updateStyleHistory();
+    localStorage.removeItem('styleHistory');
+    showNotification('Historique effacé', 'success');
+}
+
+// Fonction pour sauvegarder l'historique
+function saveStyleHistory() {
+    localStorage.setItem('styleHistory', JSON.stringify(styleHistory));
+}
+
+// Fonction pour charger l'historique
+function loadStyleHistory() {
+    const saved = localStorage.getItem('styleHistory');
+    if (saved) {
+        styleHistory.push(...JSON.parse(saved));
+        updateStyleHistory();
+    }
+}
+
 // Initialisation
 document.addEventListener('DOMContentLoaded', () => {
     // Charger l'outil depuis l'URL si présent
@@ -648,6 +1004,27 @@ document.addEventListener('DOMContentLoaded', () => {
                     execCommand('underline');
                     break;
             }
+        }
+    });
+
+    // Charger l'historique
+    loadStyleHistory();
+
+    // Ajouter les écouteurs d'événements pour les onglets de catégorie
+    document.querySelectorAll('.category-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            switchStyleCategory(tab.dataset.category);
+        });
+    });
+
+    // Activer la première catégorie par défaut
+    switchStyleCategory('basic');
+
+    // Mise à jour en temps réel
+    document.getElementById('styleInput')?.addEventListener('input', () => {
+        const activeStyle = document.querySelector('.style-btn.active')?.dataset.style;
+        if (activeStyle) {
+            applyStyle(activeStyle);
         }
     });
 }); 

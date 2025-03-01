@@ -1417,6 +1417,144 @@
                 aspect-ratio: auto;
             }
         }
+
+        /* Outil de style d'écriture */
+        #styleTool {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .style-tool-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .input-group label {
+            font-weight: bold;
+        }
+
+        .input-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background: var(--input-bg);
+            color: var(--input-text);
+            resize: vertical;
+        }
+
+        .text-controls {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+
+        .style-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .category-tab {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: var(--border-radius);
+            background: var(--light-color);
+            color: var(--text-color);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .category-tab.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .style-options {
+            display: none;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            background: var(--card-bg);
+            box-shadow: var(--box-shadow);
+        }
+
+        .style-options.active {
+            display: block;
+        }
+
+        .style-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: var(--border-radius);
+            background: var(--light-color);
+            color: var(--text-color);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .style-btn:hover {
+            background: var(--hover-color);
+            color: white;
+        }
+
+        .output-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .output-controls {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+
+        .style-history {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .clear-history-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .clear-history-btn:hover {
+            background: #c82333;
+        }
+
+        .style-history h3 {
+            color: var(--secondary-color);
+        }
+
+        .history-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .history-item {
+            padding: 0.5rem;
     </style>
 </head>
 <body>
@@ -1438,7 +1576,8 @@
         <h1>Outils Pratiques</h1>
     </header>
 
-    <main class="container">
+    <!-- Contenu principal -->
+    <main id="mainContent" role="main">
         <!-- Menu de navigation -->
         <nav class="menu" role="navigation" aria-label="Menu principal">
             <!-- Calculs et Mathématiques -->
@@ -1538,31 +1677,14 @@
                         <i class="fas fa-file-alt"></i>
                         <span>Compteur de mots</span>
                     </button>
+                    <button type="button" onclick="showTool('styleTool')" class="submenu-item">
+                        <i class="fas fa-text-width"></i>
+                        <span>Style d'écriture</span>
+                    </button>
                 </div>
             </div>
 
             <!-- Utilitaires -->
-            <div class="menu-category">
-                <button type="button"
-                        class="menu-trigger has-submenu"
-                        onclick="toggleSubmenu('utilsMenu')"
-                        aria-expanded="false"
-                        aria-controls="utilsMenu">
-                    <i class="fas fa-tools" aria-hidden="true"></i>
-                    <span>Utilitaires</span>
-                    <i class="fas fa-chevron-down submenu-icon" aria-hidden="true"></i>
-                </button>
-                <div id="utilsMenu" class="submenu" role="menu">
-                    <button type="button" onclick="showTool('passwordTool')" class="submenu-item">
-                        <i class="fas fa-key"></i>
-                        <span>Générateur de mot de passe</span>
-                    </button>
-                    <button type="button" onclick="showTool('colorTool')" class="submenu-item">
-                        <i class="fas fa-palette"></i>
-                        <span>Sélecteur de couleur</span>
-                    </button>
-                </div>
-            </div>
         </nav>
 
         <!-- Conteneur des outils -->
@@ -2343,6 +2465,32 @@
                 <!-- Autres outils seront ajoutés ici -->
             </div>
         </div>
+
+        <!-- Outil de style d'écriture -->
+        <section id="styleTool" class="tool-section" hidden>
+            <h2>Style d'écriture</h2>
+            <div class="style-tool-container">
+                <div class="input-group">
+                    <label for="styleInput">Texte à convertir :</label>
+                    <textarea id="styleInput" rows="4" placeholder="Entrez votre texte ici..." aria-label="Texte à convertir"></textarea>
+                </div>
+                <div class="style-options">
+                    <button onclick="applyStyle('serif')" class="style-btn" data-style="serif">𝔸𝔹ℂ</button>
+                    <button onclick="applyStyle('script')" class="style-btn" data-style="script">𝓐𝓑𝓒</button>
+                    <button onclick="applyStyle('bold')" class="style-btn" data-style="bold">𝗔𝗕𝗖</button>
+                    <button onclick="applyStyle('italic')" class="style-btn" data-style="italic">𝘈𝘉𝘊</button>
+                    <button onclick="applyStyle('gothic')" class="style-btn" data-style="gothic">𝔄𝔅ℭ</button>
+                    <button onclick="applyStyle('double')" class="style-btn" data-style="double">𝔸𝔹ℂ</button>
+                </div>
+                <div class="output-group">
+                    <label for="styleOutput">Résultat :</label>
+                    <textarea id="styleOutput" rows="4" readonly aria-label="Texte converti"></textarea>
+                    <button onclick="copyStyleOutput()" class="copy-btn">
+                        <i class="fas fa-copy"></i> Copier
+                    </button>
+                </div>
+            </div>
+        </section>
     </main>
 
     <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
