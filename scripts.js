@@ -43,25 +43,27 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Gestion du thème
-const themeToggle = document.querySelector('.theme-toggle');
-const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-
-function setTheme(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
-    themeToggle.querySelector('i').className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-}
-
 function toggleTheme() {
     const checkbox = document.querySelector('.theme-switch__checkbox');
+    if (!checkbox) return;
+    
     const isDark = checkbox.checked;
     document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
 }
 
 // Initialisation du thème
-const savedTheme = localStorage.getItem('theme') || (prefersDarkScheme.matches ? 'dark' : 'light');
-setTheme(savedTheme);
+function initTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    const checkbox = document.querySelector('.theme-switch__checkbox');
+    if (checkbox) {
+        checkbox.checked = savedTheme === 'dark';
+    }
+}
+
+// Appeler initTheme immédiatement
+initTheme();
 
 // Gestion de l'horloge
 function updateClock() {
@@ -609,12 +611,4 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
-
-    // Initialize theme on page load
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    const checkbox = document.querySelector('.theme-switch__checkbox');
-    if (checkbox) {
-        checkbox.checked = savedTheme === 'dark';
-    }
 }); 
