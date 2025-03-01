@@ -1565,12 +1565,26 @@
     </div>
 
     <!-- Bouton thème -->
-    <button class="theme-toggle" 
-            onclick="toggleTheme()" 
-            title="Changer de thème"
-            aria-label="Basculer entre le thème clair et sombre">
-        <i class="fas fa-moon" aria-hidden="true"></i>
-    </button>
+    <label class="theme-switch" for="theme-toggle">
+        <input type="checkbox" id="theme-toggle" class="theme-switch__checkbox">
+        <div class="theme-switch__container">
+            <div class="theme-switch__circle-container">
+                <div class="theme-switch__sun-moon-container">
+                    <div class="theme-switch__moon">
+                        <div class="theme-switch__spot"></div>
+                        <div class="theme-switch__spot"></div>
+                        <div class="theme-switch__spot"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="theme-switch__clouds"></div>
+            <div class="theme-switch__stars-container">
+                <svg viewBox="0 0 64 64" width="1em" height="1em">
+                    <path d="M32 0 L41.89 24.11 L67.28 24.11 L46.7 39.89 L56.57 64 L32 48.22 L7.43 64 L17.3 39.89 L-3.28 24.11 L22.11 24.11 Z" fill="currentColor"/>
+                </svg>
+            </div>
+        </div>
+    </label>
 
     <header>
         <h1>Outils Pratiques</h1>
@@ -4320,7 +4334,6 @@
             loadTranslationHistory();
         });
 
-        // Le reste du code JavaScript du traducteur reste inchangé...
     </script>
 </body>
 </html>

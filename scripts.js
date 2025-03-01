@@ -57,7 +57,7 @@ const debounce = (func, wait) => {
 
 // Gestion du thème améliorée
 function toggleTheme() {
-    const checkbox = document.querySelector('.theme-switch__checkbox');
+    const checkbox = document.getElementById('theme-toggle');
     if (!checkbox) return;
     
     const isDark = checkbox.checked;
@@ -70,27 +70,26 @@ function toggleTheme() {
         localStorage.setItem('theme', theme);
         document.body.style.opacity = '1';
     }, 200);
-    
-    // Animation du switch
-    const switchContainer = checkbox.closest('.theme-switch');
-    if (switchContainer) {
-        switchContainer.classList.add('switching');
-        setTimeout(() => switchContainer.classList.remove('switching'), 500);
-    }
 }
 
 // Initialisation du thème
 function initTheme() {
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
-    const checkbox = document.querySelector('.theme-switch__checkbox');
+    const checkbox = document.getElementById('theme-toggle');
     if (checkbox) {
         checkbox.checked = savedTheme === 'dark';
     }
 }
 
-// Appeler initTheme immédiatement
-initTheme();
+// Ajouter l'écouteur d'événements pour le thème switch
+document.addEventListener('DOMContentLoaded', () => {
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('change', toggleTheme);
+    }
+    initTheme();
+});
 
 // Gestion de l'horloge améliorée
 function updateClock() {
@@ -685,7 +684,6 @@ function downloadNotes() {
     document.body.appendChild(a);
     a.click();
     window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
     
     showNoteStatus('Notes téléchargées !', 'success');
 }
