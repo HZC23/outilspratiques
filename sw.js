@@ -1,10 +1,12 @@
 const CACHE_NAME = 'outils-pratiques-v1';
+const BASE_URL = 'https://hzc23.github.io/outilspratiques.github.io';
 const ASSETS = [
-    '/',
-    '/index.html',
-    '/styles.css',
-    '/scripts.js',
-    '/manifest.json',
+    `${BASE_URL}/`,
+    `${BASE_URL}/index.html`,
+    `${BASE_URL}/styles.css`,
+    `${BASE_URL}/scripts.js`,
+    `${BASE_URL}/manifest.json`,
+    `${BASE_URL}/offline.html`,
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css',
     'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap'
 ];
@@ -33,37 +35,40 @@ self.addEventListener('activate', event => {
 
 // Interception des requêtes
 self.addEventListener('fetch', event => {
-    event.respondWith(
-        caches.match(event.request)
-            .then(response => {
-                // Cache-first strategy
-                if (response) {
-                    return response;
-                }
-
-                // Si la ressource n'est pas en cache, on la récupère depuis le réseau
-                return fetch(event.request).then(response => {
-                    // On ne met en cache que les requêtes GET
-                    if (event.request.method !== 'GET') {
+    // Vérifier si la requête est pour notre domaine
+    if (event.request.url.startsWith(BASE_URL)) {
+        event.respondWith(
+            caches.match(event.request)
+                .then(response => {
+                    // Cache-first strategy
+                    if (response) {
                         return response;
                     }
 
-                    // On clone la réponse car elle ne peut être utilisée qu'une fois
-                    const responseToCache = response.clone();
+                    // Si la ressource n'est pas en cache, on la récupère depuis le réseau
+                    return fetch(event.request).then(response => {
+                        // On ne met en cache que les requêtes GET
+                        if (event.request.method !== 'GET') {
+                            return response;
+                        }
 
-                    caches.open(CACHE_NAME)
-                        .then(cache => {
-                            cache.put(event.request, responseToCache);
-                        });
+                        // On clone la réponse car elle ne peut être utilisée qu'une fois
+                        const responseToCache = response.clone();
 
-                    return response;
-                });
-            })
-            .catch(() => {
-                // Si la requête échoue (pas de connexion), on retourne une page d'erreur
-                if (event.request.mode === 'navigate') {
-                    return caches.match('/offline.html');
-                }
-            })
-    );
+                        caches.open(CACHE_NAME)
+                            .then(cache => {
+                                cache.put(event.request, responseToCache);
+                            });
+
+                        return response;
+                    });
+                })
+                .catch(() => {
+                    // Si la requête échoue (pas de connexion), on retourne la page offline
+                    if (event.request.mode === 'navigate') {
+                        return caches.match(`${BASE_URL}/offline.html`);
+                    }
+                })
+        );
+    }
 }); 
