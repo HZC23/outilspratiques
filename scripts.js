@@ -25,6 +25,42 @@ if ('serviceWorker' in navigator) {
     });
 }
 
+window.addEventListener('online', () => {
+    document.body.classList.remove('offline');
+    showNotification('Connexion rétablie', 'success');
+});
+
+window.addEventListener('offline', () => {
+    document.body.classList.add('offline');
+    showNotification('Vous êtes hors ligne', 'warning');
+});
+
+// Gestion de l'installation PWA
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    showInstallPromotion();
+});
+
+function showInstallPromotion() {
+    const installButton = document.createElement('button');
+    installButton.textContent = 'Installer l\'application';
+    installButton.classList.add('install-button');
+    installButton.addEventListener('click', async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                console.log('User accepted the install prompt');
+            }
+            deferredPrompt = null;
+            installButton.remove();
+        }
+    });
+    document.body.appendChild(installButton);
+}
+
 // Lazy loading des images
 document.addEventListener('DOMContentLoaded', () => {
     const lazyImages = document.querySelectorAll('img[data-src]');
