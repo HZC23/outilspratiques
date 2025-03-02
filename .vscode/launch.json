@@ -1,0 +1,13 @@
+{
+    "configurations": [
+    {
+        "name": "Launch Chrome",
+        "request": "launch",
+        "type": "chrome",
+        "preLaunchTask": "start-server",
+        "url": "http://localhost:8080",
+        "webRoot": "${workspaceFolder}"
+    }
+    ]
+
+}
