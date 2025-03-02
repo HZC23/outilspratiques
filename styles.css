@@ -1459,4 +1459,10 @@ input:focus, select:focus, textarea:focus {
         width: 100%;
         justify-content: center;
     }
-} 
+}
+
+/* Styles pour le mode sombre */
+[data-theme="dark"] .style-tool-container {
+    background: var(--dark-color);
+    border-color: var(--dark-border);
+}

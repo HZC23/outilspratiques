@@ -259,135 +259,112 @@
 
         /* Styles du menu */
         .menu {
-            width: 280px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 250px;
             background: var(--card-bg);
-            border-radius: var(--border-radius);
-            padding: 1rem;
             box-shadow: var(--box-shadow);
-            position: sticky;
-            top: 20px;
-            height: fit-content;
+            padding: 2rem 1rem;
+            overflow-y: auto;
+            z-index: 100;
+            transition: var(--transition);
         }
 
-        .menu-category {
+        .menu-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            margin-top: 4rem;
+        }
+
+        .menu-item {
             margin-bottom: 0.5rem;
         }
 
-        .menu-trigger {
+        .menu-link {
             display: flex;
             align-items: center;
-            width: 100%;
-            padding: 1rem;
-            border: none;
-            border-radius: var(--border-radius);
-            background: var(--light-color);
+            padding: 0.75rem 1rem;
             color: var(--text-color);
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
+            text-decoration: none;
+            border-radius: var(--border-radius);
             transition: var(--transition);
         }
 
-        .menu-trigger:hover,
-        .menu-trigger:focus {
-            background: var(--primary-color);
-            color: white;
-            outline: none;
+        .menu-link:hover {
+            background: rgba(var(--primary-color-rgb), 0.1);
+            color: var(--primary-color);
         }
 
-        .menu-trigger i {
-            width: 24px;
-            margin-right: 0.75rem;
-            font-size: 1.1em;
-        }
-
-        .submenu-icon {
-            margin-left: auto;
-            transition: transform 0.3s ease;
-        }
-
-        .has-submenu[aria-expanded="true"] .submenu-icon {
-            transform: rotate(180deg);
-        }
-
-        .submenu {
-            display: none;
-            padding-left: 1rem;
-            margin-top: 0.5rem;
-        }
-
-        .submenu.active {
-            display: block;
-            animation: slideDown 0.3s ease-out;
-        }
-
-        .submenu-item {
-            display: flex;
-            align-items: center;
-            width: 100%;
-            padding: 0.75rem;
-            margin-bottom: 0.25rem;
-            border: none;
-            border-radius: var(--border-radius);
-            background: transparent;
-            color: var(--text-color);
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .submenu-item:hover,
-        .submenu-item:focus {
-            background: var(--light-color);
-            transform: translateX(5px);
-            outline: none;
-        }
-
-        .submenu-item.active {
+        .menu-link.active {
             background: var(--primary-color);
             color: white;
         }
 
-        .submenu-item i {
-            width: 20px;
+        .menu-link i {
             margin-right: 0.75rem;
+            width: 1.5rem;
+            text-align: center;
         }
 
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* Ajustement du contenu principal */
+        main {
+            margin-left: 250px;
+            padding: 2rem;
+            min-height: 100vh;
+            background: var(--background-color);
+            transition: var(--transition);
         }
 
-        /* Support du mode sombre pour le menu */
-        [data-theme="dark"] .menu-trigger {
-            background: var(--dark-color);
-        }
-
-        [data-theme="dark"] .submenu-item:hover {
-            background: var(--dark-color);
-        }
-
-        /* Responsive design pour le menu */
+        /* Style pour le menu mobile */
         @media (max-width: 768px) {
             .menu {
+                transform: translateX(-100%);
                 width: 100%;
-                position: static;
-                margin-bottom: 1rem;
             }
 
-            .submenu {
-                padding-left: 0.5rem;
+            .menu.active {
+                transform: translateX(0);
             }
 
-            .menu-trigger,
-            .submenu-item {
-                padding: 0.875rem;
+            main {
+                margin-left: 0;
+            }
+
+            .menu-toggle {
+                display: block;
+                position: fixed;
+                top: 1rem;
+                right: 1rem;
+                z-index: 1000;
+                background: var(--primary-color);
+                color: white;
+                border: none;
+                padding: 0.5rem;
+                border-radius: var(--border-radius);
+                cursor: pointer;
+                transition: var(--transition);
+            }
+
+            .menu-toggle:hover {
+                background: var(--hover-color);
+            }
+        }
+
+        /* Ajustement pour le thème switch avec le menu */
+        .theme-switch {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+        }
+
+        @media (max-width: 768px) {
+            .theme-switch {
+                left: auto;
+                right: 4rem;
             }
         }
 
@@ -1590,911 +1567,68 @@
         <h1>Outils Pratiques</h1>
     </header>
 
-    <!-- Contenu principal -->
-    <main id="mainContent" role="main">
-        <!-- Menu de navigation -->
-        <nav class="menu" role="navigation" aria-label="Menu principal">
-            <!-- Calculs et Mathématiques -->
-            <div class="menu-category">
-                <button type="button"
-                        class="menu-trigger has-submenu"
-                        onclick="toggleSubmenu('mathMenu')"
-                        aria-expanded="false"
-                        aria-controls="mathMenu">
-                    <i class="fas fa-calculator" aria-hidden="true"></i>
-                    <span>Calculs</span>
-                    <i class="fas fa-chevron-down submenu-icon" aria-hidden="true"></i>
-                </button>
-                <div id="mathMenu" class="submenu" role="menu">
-                    <button type="button" onclick="showTool('calculatorTool')" class="submenu-item">
-                        <i class="fas fa-square-root-alt"></i>
-                        <span>Calculatrice scientifique</span>
-                    </button>
-                    <button type="button" onclick="showTool('percentageTool')" class="submenu-item">
-                        <i class="fas fa-percent"></i>
-                        <span>Pourcentages</span>
-                    </button>
-                    <button type="button" onclick="showTool('unitTool')" class="submenu-item">
-                        <i class="fas fa-ruler"></i>
-                        <span>Unités de mesure</span>
-                    </button>
-                    <button type="button" onclick="showTool('currencyTool')" class="submenu-item">
-                        <i class="fas fa-money-bill-wave"></i>
-                        <span>Devises</span>
-                    </button>
-                </div>
+    <!-- Menu -->
+    <nav class="menu" id="menu">
+        <div class="menu-list">
+            <div class="menu-item">
+                <a href="#calculatorTool" class="menu-link" onclick="showTool('calculatorTool')">
+                    <i class="fas fa-calculator"></i>
+                    Calculatrice
+                </a>
             </div>
-
-            <!-- Temps -->
-            <div class="menu-category">
-                <button type="button"
-                        class="menu-trigger has-submenu"
-                        onclick="toggleSubmenu('timeMenu')"
-                        aria-expanded="false"
-                        aria-controls="timeMenu">
-                    <i class="fas fa-clock" aria-hidden="true"></i>
-                    <span>Temps</span>
-                    <i class="fas fa-chevron-down submenu-icon" aria-hidden="true"></i>
-                </button>
-                <div id="timeMenu" class="submenu" role="menu">
-                    <button type="button" onclick="showTool('timerTool')" class="submenu-item">
-                        <i class="fas fa-hourglass-start"></i>
-                        <span>Minuteur</span>
-                    </button>
-                    <button type="button" onclick="showTool('stopwatchTool')" class="submenu-item">
-                        <i class="fas fa-stopwatch"></i>
-                        <span>Chronomètre</span>
-                    </button>
-                </div>
+            <div class="menu-item">
+                <a href="#timerTool" class="menu-link" onclick="showTool('timerTool')">
+                    <i class="fas fa-hourglass-half"></i>
+                    Minuteur
+                </a>
             </div>
-
-            <!-- Organisation -->
-            <div class="menu-category">
-                <button type="button"
-                        class="menu-trigger has-submenu"
-                        onclick="toggleSubmenu('orgMenu')"
-                        aria-expanded="false"
-                        aria-controls="orgMenu">
-                    <i class="fas fa-tasks" aria-hidden="true"></i>
-                    <span>Organisation</span>
-                    <i class="fas fa-chevron-down submenu-icon" aria-hidden="true"></i>
-                </button>
-                <div id="orgMenu" class="submenu" role="menu">
-                    <button type="button" onclick="showTool('noteTool')" class="submenu-item">
-                        <i class="fas fa-sticky-note"></i>
-                        <span>Bloc-notes</span>
-                    </button>
-                    <button type="button" onclick="showTool('todoTool')" class="submenu-item">
-                        <i class="fas fa-list-check"></i>
-                        <span>Liste de tâches</span>
-                    </button>
-                </div>
+            <div class="menu-item">
+                <a href="#stopwatchTool" class="menu-link" onclick="showTool('stopwatchTool')">
+                    <i class="fas fa-stopwatch"></i>
+                    Chronomètre
+                </a>
             </div>
-
-            <!-- Texte -->
-            <div class="menu-category">
-                <button type="button"
-                        class="menu-trigger has-submenu"
-                        onclick="toggleSubmenu('textMenu')"
-                        aria-expanded="false"
-                        aria-controls="textMenu">
-                    <i class="fas fa-font" aria-hidden="true"></i>
-                    <span>Texte</span>
-                    <i class="fas fa-chevron-down submenu-icon" aria-hidden="true"></i>
-                </button>
-                <div id="textMenu" class="submenu" role="menu">
-                    <button type="button" onclick="showTool('translatorTool')" class="submenu-item">
-                        <i class="fas fa-language"></i>
-                        <span>Traducteur</span>
-                    </button>
-                    <button type="button" onclick="showTool('counterTool')" class="submenu-item">
-                        <i class="fas fa-file-alt"></i>
-                        <span>Compteur de mots</span>
-                    </button>
-                    <button type="button" onclick="showTool('styleTool')" class="submenu-item">
-                        <i class="fas fa-text-width"></i>
-                        <span>Style d'écriture</span>
-                    </button>
-                </div>
+            <div class="menu-item">
+                <a href="#notesTool" class="menu-link" onclick="showTool('notesTool')">
+                    <i class="fas fa-sticky-note"></i>
+                    Bloc-notes
+                </a>
             </div>
-
-            <!-- Utilitaires -->
-        </nav>
-
-        <!-- Conteneur des outils -->
-        <div class="tools">
-            <!-- Calculatrice scientifique -->
-            <section id="calculatorTool" class="section" aria-labelledby="calcTitle">
-                <h2 id="calcTitle">Calculatrice scientifique</h2>
-                <div class="calculator-container">
-                    <div class="calculator-display">
-                        <div class="previous-operation" id="previousCalc" aria-live="polite"></div>
-                        <div class="current-operation" id="currentCalc" aria-live="polite">0</div>
-                    </div>
-
-                    <div class="calculator-grid">
-                        <!-- Fonctions scientifiques -->
-                        <button type="button" onclick="calcFunction('sin')" class="operator">sin</button>
-                        <button type="button" onclick="calcFunction('cos')" class="operator">cos</button>
-                        <button type="button" onclick="calcFunction('tan')" class="operator">tan</button>
-                        <button type="button" onclick="calcFunction('log')" class="operator">log</button>
-
-                        <button type="button" onclick="calcFunction('sqrt')" class="operator">√</button>
-                        <button type="button" onclick="calcFunction('pow')" class="operator">x²</button>
-                        <button type="button" onclick="calcFunction('exp')" class="operator">exp</button>
-                        <button type="button" onclick="calcFunction('pi')" class="operator">π</button>
-
-                        <!-- Mémoire -->
-                        <button type="button" onclick="calcMemory('ms')" class="memory">MS</button>
-                        <button type="button" onclick="calcMemory('mr')" class="memory">MR</button>
-                        <button type="button" onclick="calcMemory('mc')" class="memory">MC</button>
-                        <button type="button" onclick="calcMemory('m+')" class="memory">M+</button>
-
-                        <!-- Opérations standard -->
-                        <button type="button" onclick="clearCalc()" class="clear">C</button>
-                        <button type="button" onclick="addToCalc('(')" class="operator">(</button>
-                        <button type="button" onclick="addToCalc(')')" class="operator">)</button>
-                        <button type="button" onclick="addToCalc('/')" class="operator">/</button>
-
-                        <button type="button" onclick="addToCalc('7')">7</button>
-                        <button type="button" onclick="addToCalc('8')">8</button>
-                        <button type="button" onclick="addToCalc('9')">9</button>
-                        <button type="button" onclick="addToCalc('*')" class="operator">×</button>
-
-                        <button type="button" onclick="addToCalc('4')">4</button>
-                        <button type="button" onclick="addToCalc('5')">5</button>
-                        <button type="button" onclick="addToCalc('6')">6</button>
-                        <button type="button" onclick="addToCalc('-')" class="operator">-</button>
-
-                        <button type="button" onclick="addToCalc('1')">1</button>
-                        <button type="button" onclick="addToCalc('2')">2</button>
-                        <button type="button" onclick="addToCalc('3')">3</button>
-                        <button type="button" onclick="addToCalc('+')" class="operator">+</button>
-
-                        <button type="button" onclick="addToCalc('0')">0</button>
-                        <button type="button" onclick="addToCalc('.')">.</button>
-                        <button type="button" onclick="backspace()" class="operator" aria-label="Effacer le dernier caractère">
-                            <i class="fas fa-backspace"></i>
-                        </button>
-                        <button type="button" onclick="calculate()" class="equals">=</button>
-                    </div>
-
-                    <div class="calculator-history">
-                        <h3>Historique</h3>
-                        <ul id="calcHistory" aria-label="Historique des calculs"></ul>
-                        <button type="button" onclick="clearHistory()" class="clear-history">
-                            <i class="fas fa-trash"></i> Effacer l'historique
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Minuteur -->
-            <section id="timerTool" class="section" aria-labelledby="timerTitle">
-                <h2 id="timerTitle">Minuteur</h2>
-                <div class="timer-container">
-                    <div class="timer-config">
-                        <div class="time-inputs">
-                            <div class="time-input-group">
-                                <label for="hoursInput">Heures</label>
-                                <input type="number" 
-                                       id="hoursInput" 
-                                       min="0" 
-                                       max="23" 
-                                       value="0"
-                                       aria-label="Heures">
-                            </div>
-                            <div class="time-input-group">
-                                <label for="minutesInput">Minutes</label>
-                                <input type="number" 
-                                       id="minutesInput" 
-                                       min="0" 
-                                       max="59" 
-                                       value="0"
-                                       aria-label="Minutes">
-                            </div>
-                            <div class="time-input-group">
-                                <label for="secondsInput">Secondes</label>
-                                <input type="number" 
-                                       id="secondsInput" 
-                                       min="0" 
-                                       max="59" 
-                                       value="0"
-                                       aria-label="Secondes">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="timer-display" id="timerDisplay" aria-live="polite">00:00:00</div>
-                    
-                    <div class="timer-progress">
-                        <div id="timerProgressBar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-
-                    <div class="timer-controls">
-                        <button type="button" onclick="startTimer()" class="start-btn" id="timerStartBtn">
-                            <i class="fas fa-play"></i> Démarrer
-                        </button>
-                        <button type="button" onclick="pauseTimer()" class="pause-btn" id="timerPauseBtn">
-                            <i class="fas fa-pause"></i> Pause
-                        </button>
-                        <button type="button" onclick="resetTimer()" class="reset-btn">
-                            <i class="fas fa-undo"></i> Réinitialiser
-                        </button>
-                        <button type="button" onclick="toggleSound()" class="sound-btn" id="soundToggle">
-                            <i class="fas fa-volume-up"></i> Son activé
-                        </button>
-                    </div>
-
-                    <p id="timerStatus" class="timer-status" aria-live="polite"></p>
-                </div>
-
-                <audio id="timerAlarm">
-                    <source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" type="audio/mpeg">
-                </audio>
-            </section>
-
-            <!-- Chronomètre -->
-            <section id="stopwatchTool" class="section" aria-labelledby="stopwatchTitle">
-                <h2 id="stopwatchTitle">Chronomètre</h2>
-                <div class="stopwatch-container">
-                    <div class="timer-display" id="stopwatchDisplay" aria-live="polite">00:00:00.000</div>
-
-                    <div class="timer-controls">
-                        <button type="button" onclick="startStopwatch()" class="start-btn" id="stopwatchStartBtn">
-                            <i class="fas fa-play"></i> Démarrer
-                        </button>
-                        <button type="button" onclick="pauseStopwatch()" class="pause-btn" id="stopwatchPauseBtn">
-                            <i class="fas fa-pause"></i> Pause
-                        </button>
-                        <button type="button" onclick="resetStopwatch()" class="reset-btn">
-                            <i class="fas fa-undo"></i> Réinitialiser
-                        </button>
-                        <button type="button" onclick="lapStopwatch()" class="lap-btn">
-                            <i class="fas fa-flag"></i> Tour
-                        </button>
-                    </div>
-
-                    <div class="laps-container">
-                        <h3>Tours</h3>
-                        <div class="laps-list" id="lapsList" aria-live="polite"></div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Bloc-notes -->
-            <section id="noteTool" class="section" aria-labelledby="noteTitle">
-                <h2 id="noteTitle">Bloc-notes</h2>
-                <div class="notepad-container">
-                    <div class="toolbar">
-                        <div class="toolbar-group">
-                            <button type="button" onclick="execCommand('bold')" title="Gras (Ctrl+B)">
-                                <i class="fas fa-bold"></i>
-                            </button>
-                            <button type="button" onclick="execCommand('italic')" title="Italique (Ctrl+I)">
-                                <i class="fas fa-italic"></i>
-                            </button>
-                            <button type="button" onclick="execCommand('underline')" title="Souligné (Ctrl+U)">
-                                <i class="fas fa-underline"></i>
-                            </button>
-                            <button type="button" onclick="execCommand('strikeThrough')" title="Barré">
-                                <i class="fas fa-strikethrough"></i>
-                            </button>
-                        </div>
-
-                        <div class="toolbar-group">
-                            <button type="button" onclick="execCommand('justifyLeft')" title="Aligner à gauche">
-                                <i class="fas fa-align-left"></i>
-                            </button>
-                            <button type="button" onclick="execCommand('justifyCenter')" title="Centrer">
-                                <i class="fas fa-align-center"></i>
-                            </button>
-                            <button type="button" onclick="execCommand('justifyRight')" title="Aligner à droite">
-                                <i class="fas fa-align-right"></i>
-                            </button>
-                            <button type="button" onclick="execCommand('justifyFull')" title="Justifier">
-                                <i class="fas fa-align-justify"></i>
-                            </button>
-                        </div>
-
-                        <div class="toolbar-group">
-                            <button type="button" onclick="execCommand('insertUnorderedList')" title="Liste à puces">
-                                <i class="fas fa-list-ul"></i>
-                            </button>
-                            <button type="button" onclick="execCommand('insertOrderedList')" title="Liste numérotée">
-                                <i class="fas fa-list-ol"></i>
-                            </button>
-                            <button type="button" onclick="execCommand('indent')" title="Augmenter le retrait">
-                                <i class="fas fa-indent"></i>
-                            </button>
-                            <button type="button" onclick="execCommand('outdent')" title="Diminuer le retrait">
-                                <i class="fas fa-outdent"></i>
-                            </button>
-                        </div>
-
-                        <div class="toolbar-group">
-                            <select onchange="execCommand('fontSize', this.value)" title="Taille de police">
-                                <option value="1">Très petit</option>
-                                <option value="2">Petit</option>
-                                <option value="3" selected>Normal</option>
-                                <option value="4">Grand</option>
-                                <option value="5">Très grand</option>
-                                <option value="6">Énorme</option>
-                                <option value="7">Maximum</option>
-                            </select>
-                            <input type="color" onchange="execCommand('foreColor', this.value)" title="Couleur du texte">
-                            <input type="color" onchange="execCommand('hiliteColor', this.value)" title="Couleur de surbrillance">
-                        </div>
-                    </div>
-
-                    <div class="editor-container">
-                        <div id="editor" contenteditable="true" class="notepad-editor" aria-label="Zone d'édition de texte"></div>
-                    </div>
-
-                    <div class="notepad-footer">
-                        <div class="word-count">
-                            <span id="wordCount">0 mots</span>
-                            <span id="charCount">0 caractères</span>
-                            <span id="lineCount">0 lignes</span>
-                            <span id="paragraphCount">0 paragraphes</span>
-                        </div>
-                        <div class="notepad-actions">
-                            <button type="button" onclick="saveNotes()" class="save-btn" title="Sauvegarder (Ctrl+S)">
-                                <i class="fas fa-save"></i> Sauvegarder
-                            </button>
-                            <button type="button" onclick="clearNotes()" class="clear-btn" title="Effacer tout">
-                                <i class="fas fa-trash"></i> Effacer
-                            </button>
-                            <button type="button" onclick="downloadNotes()" class="download-btn" title="Télécharger">
-                                <i class="fas fa-download"></i> Télécharger
-                            </button>
-                        </div>
-                        <div id="noteStatus" class="note-status" aria-live="polite"></div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Liste de tâches -->
-            <section id="todoTool" class="section" aria-labelledby="todoTitle">
-                <h2 id="todoTitle">Liste de tâches</h2>
-                <div class="todo-container">
-                    <div class="todo-header">
-                        <div class="todo-input-group">
-                            <input type="text" 
-                                   id="todoInput" 
-                                   placeholder="Nouvelle tâche..."
-                                   aria-label="Ajouter une nouvelle tâche">
-                            <select id="todoCategory" aria-label="Catégorie de la tâche">
-                                <option value="general">🔄 Général</option>
-                                <option value="work">💼 Travail</option>
-                                <option value="personal">👤 Personnel</option>
-                                <option value="shopping">🛒 Courses</option>
-                                <option value="urgent">⚠️ Urgent</option>
-                                <option value="health">❤️ Santé</option>
-                                <option value="study">📚 Études</option>
-                                <option value="home">🏠 Maison</option>
-                                <option value="leisure">🎮 Loisirs</option>
-                                <option value="finance">💰 Finances</option>
-                            </select>
-                            <input type="time" 
-                                   id="todoTime" 
-                                   aria-label="Heure d'échéance">
-                            <button type="button" onclick="addTodo()" class="add-todo-btn">
-                                <i class="fas fa-plus"></i> Ajouter
-                            </button>
-                        </div>
-                        <div class="todo-filters">
-                            <select id="filterCategory" onchange="filterTodos()" aria-label="Filtrer par catégorie">
-                                <option value="all">🔍 Toutes les catégories</option>
-                                <option value="general">🔄 Général</option>
-                                <option value="work">💼 Travail</option>
-                                <option value="personal">👤 Personnel</option>
-                                <option value="shopping">🛒 Courses</option>
-                                <option value="urgent">⚠️ Urgent</option>
-                                <option value="health">❤️ Santé</option>
-                                <option value="study">📚 Études</option>
-                                <option value="home">🏠 Maison</option>
-                                <option value="leisure">🎮 Loisirs</option>
-                                <option value="finance">💰 Finances</option>
-                            </select>
-                            <select id="filterStatus" onchange="filterTodos()" aria-label="Filtrer par statut">
-                                <option value="all">Tous les statuts</option>
-                                <option value="active">À faire</option>
-                                <option value="completed">Terminées</option>
-                            </select>
-                            <button type="button" onclick="sortTodos('date')" class="sort-btn" title="Trier par date">
-                                <i class="fas fa-sort-amount-down"></i>
-                            </button>
-                            <button type="button" onclick="sortTodos('priority')" class="sort-btn" title="Trier par priorité">
-                                <i class="fas fa-sort-numeric-down"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="todo-list" id="todoList"></div>
-
-                    <div class="todo-footer">
-                        <div class="todo-stats">
-                            <span id="todoCount">0 tâches au total</span>
-                            <span id="todoCompleted">0 terminées</span>
-                            <span id="todoRemaining">0 restantes</span>
-                        </div>
-                        <div class="todo-actions">
-                            <button type="button" onclick="clearCompletedTodos()" class="clear-completed-btn">
-                                <i class="fas fa-trash"></i> Effacer les tâches terminées
-                            </button>
-                            <button type="button" onclick="exportTodos()" class="export-btn">
-                                <i class="fas fa-file-export"></i> Exporter
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Traducteur -->
-            <section id="translatorTool" class="section" aria-labelledby="translatorTitle">
-                <h2 id="translatorTitle">Traducteur</h2>
-                <div class="translator-container">
-                    <div class="translator-header">
-                        <div class="language-selector">
-                            <select id="sourceLanguage" aria-label="Langue source">
-                                <option value="auto">Détecter la langue</option>
-                                <option value="fr">Français</option>
-                                <option value="en">Anglais</option>
-                                <option value="es">Espagnol</option>
-                                <option value="de">Allemand</option>
-                                <option value="it">Italien</option>
-                                <option value="pt">Portugais</option>
-                                <option value="ru">Russe</option>
-                                <option value="ar">Arabe</option>
-                                <option value="zh">Chinois</option>
-                                <option value="ja">Japonais</option>
-                                <option value="ko">Coréen</option>
-                            </select>
-                            <button type="button" onclick="swapLanguages()" class="swap-btn" title="Inverser les langues">
-                                <i class="fas fa-exchange-alt"></i>
-                            </button>
-                            <select id="targetLanguage" aria-label="Langue cible">
-                                <option value="fr" selected>Français</option>
-                                <option value="en">Anglais</option>
-                                <option value="es">Espagnol</option>
-                                <option value="de">Allemand</option>
-                                <option value="it">Italien</option>
-                                <option value="pt">Portugais</option>
-                                <option value="ru">Russe</option>
-                                <option value="ar">Arabe</option>
-                                <option value="zh">Chinois</option>
-                                <option value="ja">Japonais</option>
-                                <option value="ko">Coréen</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="translation-area">
-                        <div class="text-input-container">
-                            <textarea id="sourceText" 
-                                    placeholder="Entrez le texte à traduire..."
-                                    aria-label="Texte source"
-                                    oninput="autoTranslate()"
-                                    rows="8"></textarea>
-                            <div class="text-controls">
-                                <span id="sourceCharCount">0/5000</span>
-                                <div class="buttons">
-                                    <button type="button" onclick="clearSourceText()" title="Effacer">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                    <button type="button" onclick="copySourceText()" title="Copier">
-                                        <i class="fas fa-copy"></i>
-                                    </button>
-                                    <button type="button" onclick="listenSourceText()" title="Écouter">
-                                        <i class="fas fa-volume-up"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="text-input-container">
-                            <textarea id="translatedText" 
-                                    readonly 
-                                    placeholder="Traduction..."
-                                    aria-label="Texte traduit"
-                                    rows="8"></textarea>
-                            <div class="text-controls">
-                                <span id="translatedCharCount">0/5000</span>
-                                <div class="buttons">
-                                    <button type="button" onclick="copyTranslation()" title="Copier">
-                                        <i class="fas fa-copy"></i>
-                                    </button>
-                                    <button type="button" onclick="listenTranslation()" title="Écouter">
-                                        <i class="fas fa-volume-up"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Planificateur de tâches -->
-            <section id="schedulerTool" class="section" aria-labelledby="schedulerTitle">
-                <h2 id="schedulerTitle">Planificateur intelligent</h2>
-                <div class="scheduler-container">
-                    <!-- En-tête avec mode de planification -->
-                    <div class="scheduler-mode">
-                        <button type="button" onclick="togglePlanningMode('auto')" class="mode-btn" id="autoModeBtn">
-                            <i class="fas fa-magic"></i> Mode automatique
-                        </button>
-                        <button type="button" onclick="togglePlanningMode('manual')" class="mode-btn" id="manualModeBtn">
-                            <i class="fas fa-hand-paper"></i> Mode manuel
-                        </button>
-                    </div>
-
-                    <!-- Formulaire d'ajout de tâche -->
-                    <div class="task-form">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="taskTitle">Titre de la tâche</label>
-                                <input type="text" id="taskTitle" placeholder="Nouvelle tâche...">
-                            </div>
-                            <div class="form-group">
-                                <label for="taskCategory">Catégorie</label>
-                                <select id="taskCategory">
-                                    <option value="work">💼 Travail</option>
-                                    <option value="personal">👤 Personnel</option>
-                                    <option value="urgent">⚠️ Urgent</option>
-                                    <option value="study">📚 Études</option>
-                                    <option value="health">❤️ Santé</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="taskDuration">Durée estimée</label>
-                                <div class="duration-input">
-                                    <input type="number" id="taskDurationHours" min="0" max="23" placeholder="Heures">
-                                    <input type="number" id="taskDurationMinutes" min="0" max="59" placeholder="Minutes">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="taskDeadline">Échéance</label>
-                                <input type="datetime-local" id="taskDeadline">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="taskPriority">Priorité</label>
-                                <select id="taskPriority">
-                                    <option value="high">🔴 Haute</option>
-                                    <option value="medium">🟡 Moyenne</option>
-                                    <option value="low">🟢 Basse</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="taskRecurrence">Récurrence</label>
-                                <select id="taskRecurrence">
-                                    <option value="none">Aucune</option>
-                                    <option value="daily">Quotidienne</option>
-                                    <option value="weekly">Hebdomadaire</option>
-                                    <option value="monthly">Mensuelle</option>
-                                </select>
-                            </div>
-                        </div>
-                        <button type="button" onclick="addScheduledTask()" class="add-task-btn">
-                            <i class="fas fa-plus"></i> Ajouter la tâche
-                        </button>
-                    </div>
-
-                    <!-- Disponibilités -->
-                    <div class="availability-section">
-                        <h3>Périodes de disponibilité</h3>
-                        <div class="availability-slots">
-                            <div class="availability-day">
-                                <label>
-                                    <input type="checkbox" checked onchange="updateAvailability('monday')"> Lundi
-                                </label>
-                                <div class="time-slots">
-                                    <input type="time" class="time-start" value="09:00">
-                                    <span>à</span>
-                                    <input type="time" class="time-end" value="18:00">
-                                </div>
-                            </div>
-                            <!-- Répéter pour chaque jour de la semaine -->
-                        </div>
-                        <button type="button" onclick="saveAvailability()" class="save-availability-btn">
-                            <i class="fas fa-save"></i> Enregistrer les disponibilités
-                        </button>
-                    </div>
-
-                    <!-- Planning -->
-                    <div class="schedule-view">
-                        <div class="schedule-header">
-                            <button type="button" onclick="previousDay()" class="nav-btn">
-                                <i class="fas fa-chevron-left"></i>
-                            </button>
-                            <h3 id="currentDate">Aujourd'hui</h3>
-                            <button type="button" onclick="nextDay()" class="nav-btn">
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
-                        </div>
-                        <div class="schedule-grid" id="scheduleGrid"></div>
-                    </div>
-
-                    <!-- Tâches en attente -->
-                    <div class="pending-tasks">
-                        <h3>Tâches en attente</h3>
-                        <div id="pendingTasksList" class="tasks-list"></div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Calculateur de pourcentages -->
-            <section id="percentageTool" class="section" aria-labelledby="percentageTitle">
-                <h2 id="percentageTitle">Calculateur de pourcentages</h2>
-                <div class="calculator-container">
-                    <div class="percentage-tools">
-                        <!-- Calcul de base -->
-                        <div class="calc-group">
-                            <h3>Calcul de base</h3>
-                            <div class="input-group">
-                                <input type="number" id="percentValue" placeholder="Pourcentage">
-                                <span>% de</span>
-                                <input type="number" id="baseValue" placeholder="Valeur">
-                                <button onclick="calculatePercentage()" class="calc-btn">
-                                    <i class="fas fa-equals"></i> Calculer
-                                </button>
-                            </div>
-                            <div class="result" id="percentResult">Résultat : 0</div>
-                        </div>
-
-                        <!-- Variation en pourcentage -->
-                        <div class="calc-group">
-                            <h3>Variation en pourcentage</h3>
-                            <div class="input-group">
-                                <span>De</span>
-                                <input type="number" id="initialValue" placeholder="Valeur initiale">
-                                <span>à</span>
-                                <input type="number" id="finalValue" placeholder="Valeur finale">
-                                <button onclick="calculateVariation()" class="calc-btn">
-                                    <i class="fas fa-percentage"></i> Calculer
-                                </button>
-                            </div>
-                            <div class="result" id="variationResult">Variation : 0%</div>
-                        </div>
-
-                        <!-- Calculer la valeur initiale -->
-                        <div class="calc-group">
-                            <h3>Valeur initiale</h3>
-                            <div class="input-group">
-                                <input type="number" id="finalAmount" placeholder="Valeur finale">
-                                <span>est</span>
-                                <input type="number" id="percentage" placeholder="Pourcentage">
-                                <span>% de x</span>
-                                <button onclick="calculateInitial()" class="calc-btn">
-                                    <i class="fas fa-calculator"></i> Calculer x
-                                </button>
-                            </div>
-                            <div class="result" id="initialResult">Valeur initiale : 0</div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Convertisseur d'unités -->
-            <section id="unitTool" class="section" aria-labelledby="unitTitle">
-                <h2 id="unitTitle">Convertisseur d'unités</h2>
-                <div class="converter-container">
-                    <div class="converter-controls">
-                        <select id="unitCategory" onchange="updateUnitOptions()">
-                            <option value="length">Longueur</option>
-                            <option value="mass">Masse</option>
-                            <option value="volume">Volume</option>
-                            <option value="temperature">Température</option>
-                            <option value="area">Surface</option>
-                            <option value="speed">Vitesse</option>
-                            <option value="time">Temps</option>
-                            <option value="digital">Données numériques</option>
-                        </select>
-                        
-                        <div class="conversion-inputs">
-                            <div class="input-group">
-                                <input type="number" id="fromValue" oninput="convert()">
-                                <select id="fromUnit" onchange="convert()"></select>
-                            </div>
-                            <button onclick="swapUnits()" class="swap-btn">
-                                <i class="fas fa-exchange-alt"></i>
-                            </button>
-                            <div class="input-group">
-                                <input type="number" id="toValue" readonly>
-                                <select id="toUnit" onchange="convert()"></select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="conversion-history">
-                        <h3>Historique des conversions</h3>
-                        <div id="unitHistory" class="history-list"></div>
-                        <button onclick="clearUnitHistory()" class="clear-btn">
-                            <i class="fas fa-trash"></i> Effacer l'historique
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Convertisseur de devises -->
-            <section id="currencyTool" class="section" aria-labelledby="currencyTitle">
-                <h2 id="currencyTitle">Convertisseur de devises</h2>
-                <div class="converter-container">
-                    <div class="exchange-rates">
-                        <div class="rates-header">
-                            <h3>Taux de change</h3>
-                            <span id="lastUpdate"></span>
-                            <button onclick="updateRates()" class="update-btn">
-                                <i class="fas fa-sync-alt"></i> Actualiser
-                            </button>
-                        </div>
-                        <div id="ratesList" class="rates-grid"></div>
-                    </div>
-
-                    <div class="currency-converter">
-                        <div class="conversion-inputs">
-                            <div class="input-group">
-                                <input type="number" id="fromAmount" oninput="convertCurrency()">
-                                <select id="fromCurrency" onchange="convertCurrency()"></select>
-                            </div>
-                            <button onclick="swapCurrencies()" class="swap-btn">
-                                <i class="fas fa-exchange-alt"></i>
-                            </button>
-                            <div class="input-group">
-                                <input type="number" id="toAmount" readonly>
-                                <select id="toCurrency" onchange="convertCurrency()"></select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="conversion-history">
-                        <h3>Historique des conversions</h3>
-                        <div id="currencyHistory" class="history-list"></div>
-                        <button onclick="clearCurrencyHistory()" class="clear-btn">
-                            <i class="fas fa-trash"></i> Effacer l'historique
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Générateur de mots de passe -->
-            <section id="passwordTool" class="section" aria-labelledby="passwordTitle">
-                <h2 id="passwordTitle">Générateur de mot de passe</h2>
-                <div class="password-container">
-                    <div class="password-generator">
-                        <div class="password-output">
-                            <input type="text" id="generatedPassword" readonly>
-                            <button onclick="copyPassword()" class="copy-btn">
-                                <i class="fas fa-copy"></i>
-                            </button>
-                            <button onclick="generatePassword()" class="generate-btn">
-                                <i class="fas fa-sync-alt"></i> Générer
-                            </button>
-                        </div>
-
-                        <div class="password-strength">
-                            <progress id="passwordStrength" max="100" value="0"></progress>
-                            <span id="strengthText">Force du mot de passe</span>
-                        </div>
-
-                        <div class="password-options">
-                            <div class="option-group">
-                                <label>
-                                    <input type="checkbox" id="useUppercase" checked>
-                                    Majuscules (A-Z)
-                                </label>
-                                <label>
-                                    <input type="checkbox" id="useLowercase" checked>
-                                    Minuscules (a-z)
-                                </label>
-                                <label>
-                                    <input type="checkbox" id="useNumbers" checked>
-                                    Chiffres (0-9)
-                                </label>
-                                <label>
-                                    <input type="checkbox" id="useSpecial" checked>
-                                    Caractères spéciaux (!@#$%...)
-                                </label>
-                            </div>
-                            <div class="length-group">
-                                <label for="passwordLength">Longueur :</label>
-                                <input type="range" id="passwordLength" min="8" max="32" value="16">
-                                <span id="lengthValue">16 caractères</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="password-history">
-                        <h3>Historique des mots de passe</h3>
-                        <div id="passwordHistory" class="history-list"></div>
-                        <button onclick="clearPasswordHistory()" class="clear-btn">
-                            <i class="fas fa-trash"></i> Effacer l'historique
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Sélecteur de couleurs -->
-            <section id="colorTool" class="section" aria-labelledby="colorTitle">
-                <h2 id="colorTitle">Sélecteur de couleurs</h2>
-                <div class="color-container">
-                    <div class="color-picker">
-                        <div class="color-preview" id="colorPreview"></div>
-                        <input type="color" id="colorPicker" onchange="updateColorPicker(this.value)">
-                    </div>
-
-                    <div class="color-values">
-                        <div class="value-group">
-                            <label for="colorHex">Hexadécimal</label>
-                            <div class="value-input">
-                                <input type="text" id="colorHex" readonly>
-                                <button onclick="copyColorValue('Hex')" class="copy-btn">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="value-group">
-                            <label for="colorRgb">RGB</label>
-                            <div class="value-input">
-                                <input type="text" id="colorRgb" readonly>
-                                <button onclick="copyColorValue('Rgb')" class="copy-btn">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="value-group">
-                            <label for="colorHsl">HSL</label>
-                            <div class="value-input">
-                                <input type="text" id="colorHsl" readonly>
-                                <button onclick="copyColorValue('Hsl')" class="copy-btn">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="color-history">
-                        <h3>Historique des couleurs</h3>
-                        <div id="colorHistory" class="color-grid"></div>
-                        <button onclick="clearColorHistory()" class="clear-btn">
-                            <i class="fas fa-trash"></i> Effacer l'historique
-                        </button>
-                    </div>
-                </div>
-            </section>
-                <!-- Autres outils seront ajoutés ici -->
+            <div class="menu-item">
+                <a href="#translatorTool" class="menu-link" onclick="showTool('translatorTool')">
+                    <i class="fas fa-language"></i>
+                    Traducteur
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="#converterTool" class="menu-link" onclick="showTool('converterTool')">
+                    <i class="fas fa-exchange-alt"></i>
+                    Convertisseur
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="#passwordTool" class="menu-link" onclick="showTool('passwordTool')">
+                    <i class="fas fa-key"></i>
+                    Générateur de mot de passe
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="#colorTool" class="menu-link" onclick="showTool('colorTool')">
+                    <i class="fas fa-palette"></i>
+                    Sélecteur de couleur
+                </a>
             </div>
         </div>
+    </nav>
 
-        <!-- Outil de style d'écriture -->
-        <section id="styleTool" class="tool-section" hidden>
-            <h2>Style d'écriture</h2>
-            <div class="style-tool-container">
-                <div class="input-group">
-                    <label for="styleInput">Texte à convertir :</label>
-                    <textarea id="styleInput" rows="4" placeholder="Entrez votre texte ici..." aria-label="Texte à convertir"></textarea>
-                </div>
-                <div class="style-options">
-                    <button onclick="applyStyle('serif')" class="style-btn" data-style="serif">𝔸𝔹ℂ</button>
-                    <button onclick="applyStyle('script')" class="style-btn" data-style="script">𝓐𝓑𝓒</button>
-                    <button onclick="applyStyle('bold')" class="style-btn" data-style="bold">𝗔𝗕𝗖</button>
-                    <button onclick="applyStyle('italic')" class="style-btn" data-style="italic">𝘈𝘉𝘊</button>
-                    <button onclick="applyStyle('gothic')" class="style-btn" data-style="gothic">𝔄𝔅ℭ</button>
-                    <button onclick="applyStyle('double')" class="style-btn" data-style="double">𝔸𝔹ℂ</button>
-                </div>
-                <div class="output-group">
-                    <label for="styleOutput">Résultat :</label>
-                    <textarea id="styleOutput" rows="4" readonly aria-label="Texte converti"></textarea>
-                    <button onclick="copyStyleOutput()" class="copy-btn">
-                        <i class="fas fa-copy"></i> Copier
-                    </button>
-                </div>
-            </div>
-        </section>
+    <!-- Bouton toggle menu mobile -->
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Contenu principal -->
+    <main>
+        <!-- ... rest of the content ... -->
     </main>
 
     <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
@@ -4323,6 +3457,47 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadTranslationHistory();
         });   
+
+        // Gestion du menu mobile
+        function toggleMenu() {
+            const menu = document.getElementById('menu');
+            const menuToggle = document.getElementById('menuToggle');
+            menu.classList.toggle('active');
+            
+            // Change l'icône du bouton
+            const icon = menuToggle.querySelector('i');
+            if (menu.classList.contains('active')) {
+                icon.className = 'fas fa-times';
+            } else {
+                icon.className = 'fas fa-bars';
+            }
+        }
+
+        // Ferme le menu si on clique en dehors
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('menu');
+            const menuToggle = document.getElementById('menuToggle');
+            
+            if (!menu.contains(e.target) && !menuToggle.contains(e.target) && menu.classList.contains('active')) {
+                toggleMenu();
+            }
+        });
+
+        // Initialisation du menu
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuToggle = document.getElementById('menuToggle');
+            menuToggle.addEventListener('click', toggleMenu);
+            
+            // Ferme le menu mobile lors du changement de section
+            const menuLinks = document.querySelectorAll('.menu-link');
+            menuLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth <= 768) {
+                        toggleMenu();
+                    }
+                });
+            });
+        })
     </script>
 </body>
 </html>
