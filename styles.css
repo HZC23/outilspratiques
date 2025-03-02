@@ -166,7 +166,6 @@ h1::after {
 .theme-toggle i {
     font-size: 1.5em;
     color: var(--text-color);
-    transition: var(--transition);
 }
 
 /* Conteneur principal des outils */
@@ -911,7 +910,6 @@ input:focus, select:focus, textarea:focus {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    margin-top: 1rem;
 }
 
 /* Support du mode sombre pour le planificateur */

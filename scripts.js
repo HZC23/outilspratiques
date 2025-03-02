@@ -57,20 +57,12 @@ const debounce = (func, wait) => {
 
 // Gestion du thème améliorée
 function toggleTheme() {
-    const checkbox = document.getElementById('theme-toggle');
-    if (!checkbox) return;
-    
+    const checkbox = document.querySelector('.theme-switch__checkbox');
     const isDark = checkbox.checked;
-    const theme = isDark ? 'dark' : 'light';
-    
-    // Transition fluide
-    document.body.style.opacity = '0';
-    setTimeout(() => {
-        document.documentElement.setAttribute('data-theme', theme);
-        localStorage.setItem('theme', theme);
-        document.body.style.opacity = '1';
-    }, 200);
+    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
 }
+
 
 // Initialisation du thème
 function initTheme() {
