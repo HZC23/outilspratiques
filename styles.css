@@ -1,4 +1,37 @@
 /* Variables CSS globales */
+body {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+.top-clock {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 5px;
+}
+
+main.container {
+    display: flex;
+    margin-top: 50px; /* Adjust for header height */
+}
+
+nav.menu {
+    flex: 1;
+    background-color: #f4f4f4;
+    padding: 10px;
+    border-right: 1px solid #ccc;
+}
+
+.tools {
+    flex: 3;
+    padding: 10px;
+}
+
 :root {
     /* Couleurs - Mode clair */
     --primary-color: #4a90e2;
@@ -953,6 +986,10 @@ input:focus, select:focus, textarea:focus {
     margin: 0;
     padding: 0;
     font-size: var(--toggle-size);
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 10px;
 }
 
 .theme-switch__container {
