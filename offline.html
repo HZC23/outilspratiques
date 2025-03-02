@@ -11,61 +11,160 @@
             --background-color: #f5f7fa;
         }
 
+        [data-theme="dark"] {
+            --primary-color: #60a5fa;
+            --text-color: #e2e8f0;
+            --background-color: #1a202c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
             background: var(--background-color);
+            color: var(--text-color);
             min-height: 100vh;
-            margin: 0;
-            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            padding: 20px;
             text-align: center;
         }
 
-        .offline-icon {
-            font-size: 64px;
-            color: var(--primary-color);
-            margin-bottom: 20px;
+        .offline-container {
+            max-width: 600px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         h1 {
             color: var(--primary-color);
+            font-size: 2.5em;
             margin-bottom: 20px;
         }
 
         p {
-            max-width: 600px;
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+
+        .icon {
+            font-size: 4em;
+            color: var(--primary-color);
             margin-bottom: 20px;
         }
 
-        .retry-button {
-            padding: 10px 20px;
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .feature {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature i {
+            font-size: 2em;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .retry-btn {
+            padding: 12px 24px;
             background: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
+            font-size: 1em;
             cursor: pointer;
-            font-size: 16px;
-            transition: background 0.3s;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-top: 20px;
         }
 
-        .retry-button:hover {
-            background: #357abd;
+        .retry-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        @media (max-width: 768px) {
+            .offline-container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
-    <div class="offline-icon">
-        <i class="fas fa-wifi"></i>
+    <div class="offline-container">
+        <i class="fas fa-wifi-slash icon"></i>
+        <h1>Vous êtes hors ligne</h1>
+        <p>Pas d'inquiétude ! Certaines fonctionnalités sont toujours disponibles en mode hors ligne.</p>
+        
+        <div class="features">
+            <div class="feature">
+                <i class="fas fa-calculator"></i>
+                <h3>Calculatrice</h3>
+                <p>Effectuez vos calculs même sans connexion</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-sticky-note"></i>
+                <h3>Bloc-notes</h3>
+                <p>Vos notes sont sauvegardées localement</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-tasks"></i>
+                <h3>Liste de tâches</h3>
+                <p>Gérez vos tâches en mode hors ligne</p>
+            </div>
+        </div>
+
+        <button onclick="window.location.reload()" class="retry-btn">
+            <i class="fas fa-sync-alt"></i> Réessayer la connexion
+        </button>
     </div>
-    <h1>Vous êtes hors ligne</h1>
-    <p>Il semble que vous n'ayez pas de connexion Internet. Certaines fonctionnalités peuvent ne pas être disponibles.</p>
-    <button class="retry-button" onclick="window.location.reload()">
-        Réessayer
-    </button>
+
+    <script>
+        // Vérifier périodiquement la connexion
+        setInterval(() => {
+            if (navigator.onLine) {
+                window.location.reload();
+            }
+        }, 5000);
+
+        // Détecter le thème
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+    </script>
 </body>
 </html> 
