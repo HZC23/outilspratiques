@@ -111,16 +111,18 @@
             max-width: 1400px;
             margin: 0 auto;
             display: flex;
-            gap: 30px;
+            gap: 10px;
             padding: 20px;
             position: relative;
+            display: flex;
+            justify-content: center;
             
         }
 
         /* En-tête */
         header {
             text-align: center;
-            padding: 20px 0;
+            padding: 0px 0;
             position: relative;
         }
 
@@ -571,6 +573,13 @@
         }
 
         [data-theme="dark"] .submenu-item:hover {
+            background: var(--dark-color);
+        }
+        [data-theme="dark"] .submenu-item.active {
+            background: var(--dark-color);
+        }
+
+        [data-theme="dark"] .submenu-icon {
             background: var(--dark-color);
         }
 
@@ -1623,6 +1632,7 @@
                 aspect-ratio: auto;
             }
         }
+        
     </style>
 </head>
 <body>
@@ -1733,7 +1743,7 @@
                         <span>Bloc-notes</span>
                     </button>
                     <button type="button" onclick="showTool('todoTool')" class="submenu-item">
-                        <i class="fas fa-list-check"></i>
+                        <i class="fas fa-clipboard-list"></i>
                         <span>Liste de tâches</span>
                     </button>
                 </div>
@@ -1754,6 +1764,10 @@
                     <button type="button" onclick="showTool('translatorTool')" class="submenu-item">
                         <i class="fas fa-language"></i>
                         <span>Traducteur</span>
+                    </button>
+                    <button type="button" onclick="showTool('styletext')" class="submenu-item">
+                        <i class="fas fa-feather-alt"></i>
+                        <span>Styliseur de texte</span>
                     </button>
                 </div>
             </div>
@@ -2109,6 +2123,30 @@
                             </button>
                         </div>
                     </div>
+                </div>
+            </section>
+
+            <section id="styletext" class="section" aria-labelledby="styletitle">
+                <h2 id="styletitle">Convertisseur de Styles de Texte</h2>
+                <textarea id="styleInput" placeholder="Ameliorer vos textes avec des styles de texte"></textarea>
+                <div class="buttons-container">
+                    <button class="style-btn" data-style="serif" onclick="applyStyle('serif')">Serif</button>
+                    <button class="style-btn" data-style="script" onclick="applyStyle('script')">Script</button>
+                    <button class="style-btn" data-style="bold" onclick="applyStyle('bold')">Gras</button>
+                    <button class="style-btn" data-style="italic" onclick="applyStyle('italic')">Italique</button>
+                    <button class="style-btn" data-style="gothic" onclick="applyStyle('gothic')">Gothique</button>
+                    <button class="style-btn" data-style="double" onclick="applyStyle('double')">Double</button>
+                </div>
+                <textarea id="styleOutput" readonly></textarea>
+                <button class="copy-btn" onclick="copyStyleOutput()"><i class="fas fa-copy"></i> Copier</button>
+                <div class="style-history">
+                    <div class="history-header">
+                        <h3>Historique récent</h3>
+                        <button type="button" onclick="clearHistory()" class="clear-btn">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    <div id="style-history" class="history-list"></div>
                 </div>
             </section>
 
@@ -2984,6 +3022,370 @@ function speak(text, lang) {
     }
 }
 
+
+// Fonctions du minuteur
+
+function startTimer() {
+
+if (timerInterval) return;
+
+
+
+if (!timerStartTime) {
+
+    const hours = parseInt(document.getElementById('hoursInput').value) || 0;
+
+    const minutes = parseInt(document.getElementById('minutesInput').value) || 0;
+
+    const seconds = parseInt(document.getElementById('secondsInput').value) || 0;
+
+
+
+    timerDuration = (hours * 3600 + minutes * 60 + seconds) * 1000;
+
+    if (timerDuration <= 0) return;
+
+
+
+    timerStartTime = Date.now();
+
+    timerRemainingTime = timerDuration;
+
+} else if (timerPaused) {
+
+    timerStartTime = Date.now() - (timerDuration - timerRemainingTime);
+
+}
+
+
+
+timerPaused = false;
+
+document.getElementById('timerStartBtn').style.display = 'none';
+
+document.getElementById('timerPauseBtn').style.display = 'inline-flex';
+
+
+
+timerInterval = setInterval(updateTimer, 100);
+
+updateTimer();
+
+}
+
+
+
+function updateTimer() {
+
+const now = Date.now();
+
+const elapsed = now - timerStartTime;
+
+timerRemainingTime = timerDuration - elapsed;
+
+
+
+if (timerRemainingTime <= 0) {
+
+    clearInterval(timerInterval);
+
+    timerInterval = null;
+
+    timerStartTime = null;
+
+    timerRemainingTime = 0;
+
+    if (soundEnabled) {
+
+        document.getElementById('timerAlarm').play();
+
+    }
+
+    document.getElementById('timerStatus').textContent = 'Temps écoulé !';
+
+    resetTimerDisplay();
+
+    return;
+
+}
+
+
+
+updateTimerDisplay();
+
+updateProgressBar();
+
+}
+
+
+
+function updateTimerDisplay() {
+
+const remaining = Math.ceil(timerRemainingTime / 1000);
+
+const hours = Math.floor(remaining / 3600);
+
+const minutes = Math.floor((remaining % 3600) / 60);
+
+const seconds = remaining % 60;
+
+
+
+document.getElementById('timerDisplay').textContent = 
+
+    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+}
+
+
+
+function updateProgressBar() {
+
+const progress = ((timerDuration - timerRemainingTime) / timerDuration) * 100;
+
+document.getElementById('timerProgressBar').style.width = `${progress}%`;
+
+document.getElementById('timerProgressBar').setAttribute('aria-valuenow', progress);
+
+}
+
+
+
+function pauseTimer() {
+
+if (!timerInterval) return;
+
+
+
+clearInterval(timerInterval);
+
+timerInterval = null;
+
+timerPaused = true;
+
+
+
+document.getElementById('timerStartBtn').style.display = 'inline-flex';
+
+document.getElementById('timerPauseBtn').style.display = 'none';
+
+document.getElementById('timerStatus').textContent = 'En pause';
+
+}
+
+
+
+function resetTimer() {
+
+clearInterval(timerInterval);
+
+timerInterval = null;
+
+timerStartTime = null;
+
+timerPaused = false;
+
+timerRemainingTime = 0;
+
+
+
+document.getElementById('timerStartBtn').style.display = 'inline-flex';
+
+document.getElementById('timerPauseBtn').style.display = 'none';
+
+document.getElementById('timerStatus').textContent = '';
+
+document.getElementById('timerProgressBar').style.width = '0%';
+
+document.getElementById('timerProgressBar').setAttribute('aria-valuenow', 0);
+
+
+
+resetTimerDisplay();
+
+}
+
+
+
+function resetTimerDisplay() {
+
+document.getElementById('hoursInput').value = '0';
+
+document.getElementById('minutesInput').value = '0';
+
+document.getElementById('secondsInput').value = '0';
+
+document.getElementById('timerDisplay').textContent = '00:00:00';
+
+}
+
+
+
+function toggleSound() {
+
+soundEnabled = !soundEnabled;
+
+const soundBtn = document.getElementById('soundToggle');
+
+soundBtn.innerHTML = soundEnabled ? 
+
+    '<i class="fas fa-volume-up"></i> Son activé' : 
+
+    '<i class="fas fa-volume-mute"></i> Son désactivé';
+
+}
+
+
+
+// Fonctions du chronomètre
+
+function startStopwatch() {
+
+if (stopwatchInterval) return;
+
+
+
+if (!stopwatchStartTime) {
+
+    stopwatchStartTime = Date.now() - stopwatchElapsed;
+
+} else if (stopwatchPaused) {
+
+    stopwatchStartTime = Date.now() - stopwatchElapsed;
+
+}
+
+
+
+stopwatchPaused = false;
+
+document.getElementById('stopwatchStartBtn').style.display = 'none';
+
+document.getElementById('stopwatchPauseBtn').style.display = 'inline-flex';
+
+
+
+stopwatchInterval = setInterval(updateStopwatch, 10);
+
+updateStopwatch();
+
+}
+
+
+
+function updateStopwatch() {
+
+const now = Date.now();
+
+stopwatchElapsed = now - stopwatchStartTime;
+
+
+
+const milliseconds = Math.floor((stopwatchElapsed % 1000) / 10);
+
+const seconds = Math.floor((stopwatchElapsed / 1000) % 60);
+
+const minutes = Math.floor((stopwatchElapsed / (1000 * 60)) % 60);
+
+const hours = Math.floor(stopwatchElapsed / (1000 * 60 * 60));
+
+
+
+document.getElementById('stopwatchDisplay').textContent = 
+
+    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(2, '0')}`;
+
+}
+
+
+
+function pauseStopwatch() {
+
+if (!stopwatchInterval) return;
+
+
+
+clearInterval(stopwatchInterval);
+
+stopwatchInterval = null;
+
+stopwatchPaused = true;
+
+
+
+document.getElementById('stopwatchStartBtn').style.display = 'inline-flex';
+
+document.getElementById('stopwatchPauseBtn').style.display = 'none';
+
+}
+
+
+
+function resetStopwatch() {
+
+clearInterval(stopwatchInterval);
+
+stopwatchInterval = null;
+
+stopwatchStartTime = null;
+
+stopwatchElapsed = 0;
+
+stopwatchPaused = false;
+
+lapCount = 0;
+
+
+
+document.getElementById('stopwatchStartBtn').style.display = 'inline-flex';
+
+document.getElementById('stopwatchPauseBtn').style.display = 'none';
+
+document.getElementById('stopwatchDisplay').textContent = '00:00:00.00';
+
+document.getElementById('lapsList').innerHTML = '';
+
+}
+
+
+
+function lapStopwatch() {
+
+if (!stopwatchInterval) return;
+
+
+
+lapCount++;
+
+const lapTime = document.getElementById('stopwatchDisplay').textContent;
+
+const lapItem = document.createElement('div');
+
+lapItem.className = 'lap-item';
+
+lapItem.innerHTML = `
+
+    <span>Tour ${lapCount}</span>
+
+    <span>${lapTime}</span>
+
+`;
+
+
+
+const lapsList = document.getElementById('lapsList');
+
+if (lapsList.firstChild) {
+
+    lapsList.insertBefore(lapItem, lapsList.firstChild);
+
+} else {
+
+    lapsList.appendChild(lapItem);
+
+}
+
+}
 // Initialisation au chargement de la page
 document.addEventListener('DOMContentLoaded', () => {
     initializeLanguageSelectors();
