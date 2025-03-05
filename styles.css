@@ -17,6 +17,8 @@ body {
 
 main.container {
     display: flex;
+    flex:2;
+    flex-direction: column;
     margin-top: 50px; /* Adjust for header height */
 }
 
@@ -1005,7 +1007,7 @@ input:focus, select:focus, textarea:focus {
     position: absolute;
     left: 0;
     top: 0;
-    padding: 10px;
+    padding: 20px;
 }
 
 .theme-switch__container {

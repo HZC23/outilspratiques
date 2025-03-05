@@ -116,7 +116,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (themeToggle) {
         themeToggle.addEventListener('change', toggleTheme);
     }
-    initTheme();
+document.addEventListener('DOMContentLoaded', initTheme);
+
 });
 
 // Gestion de l'horloge améliorée
@@ -1030,4 +1031,4 @@ document.addEventListener('DOMContentLoaded', () => {
             applyStyle(activeStyle);
         }
     });
-}); 
+});
