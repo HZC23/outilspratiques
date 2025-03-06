@@ -1,0 +1,273 @@
+.scheduler-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 20px;
+}
+
+.scheduler-mode {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.mode-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: var(--border-radius);
+    background: var(--input-bg);
+    color: var(--text-color);
+    font-size: 1em;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.mode-btn.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+.mode-btn:hover {
+    background: var(--hover-color);
+}
+
+.task-form {
+    background: var(--input-bg);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-group label {
+    color: var(--text-color);
+    font-size: 0.9em;
+}
+
+.form-group input,
+.form-group select {
+    padding: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: var(--bg-color);
+    color: var(--text-color);
+}
+
+.duration-input {
+    display: flex;
+    gap: 10px;
+}
+
+.duration-input input {
+    width: 100px;
+}
+
+.add-task-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: var(--border-radius);
+    background: var(--success-color);
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.add-task-btn:hover {
+    background: #27ae60;
+}
+
+.availability-section {
+    background: var(--input-bg);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.availability-section h3 {
+    color: var(--text-color);
+    margin-bottom: 15px;
+}
+
+.availability-slots {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.availability-day {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px;
+    background: var(--bg-color);
+    border-radius: var(--border-radius);
+}
+
+.time-slots {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.time-slots input {
+    width: 100px;
+}
+
+.save-availability-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: var(--border-radius);
+    background: var(--primary-color);
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.save-availability-btn:hover {
+    background: var(--hover-color);
+}
+
+.schedule-view {
+    background: var(--input-bg);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.schedule-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.schedule-header h3 {
+    color: var(--text-color);
+    margin: 0;
+}
+
+.nav-btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: var(--border-radius);
+    background: var(--bg-color);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.nav-btn:hover {
+    background: var(--hover-color);
+}
+
+.schedule-grid {
+    display: grid;
+    grid-template-columns: repeat(24, 1fr);
+    gap: 1px;
+    background: var(--border-color);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.time-slot {
+    background: var(--bg-color);
+    padding: 5px;
+    min-height: 60px;
+}
+
+.time-slot.has-task {
+    background: var(--primary-color);
+    color: white;
+}
+
+.pending-tasks {
+    background: var(--input-bg);
+    border-radius: var(--border-radius);
+    padding: 20px;
+}
+
+.pending-tasks h3 {
+    color: var(--text-color);
+    margin-bottom: 15px;
+}
+
+.tasks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: var(--bg-color);
+    border-radius: var(--border-radius);
+}
+
+.task-item .task-info {
+    flex: 1;
+}
+
+.task-item .task-title {
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.task-item .task-meta {
+    font-size: 0.9em;
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .availability-day {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .schedule-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .time-slot {
+        min-height: 40px;
+    }
+} 

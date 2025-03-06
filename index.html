@@ -34,7 +34,7 @@
     <title>Outils Pratiques - Collection d'outils en ligne gratuits</title>
     
     <!-- Base URL pour GitHub Pages -->
-    <base href="https://hzc23.github.io/outilspratiques.github.io/">
+    <!-- <base href="https://hzc23.github.io/outilspratiques.github.io/"> -->
     
     <!-- Favicon -->
     <link rel="icon" href="icons/favicon.ico" type="image/x-icon">
@@ -52,7 +52,17 @@
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
     
     <!-- CSS -->
-    <link rel="stylesheet" href="styles.css" as="style">
+    <link rel="stylesheet" href="./styles.css" as="style">
+    <link rel="stylesheet" href="css/menu.css" as="style">
+    <link rel="stylesheet" href="css/theme-switch.css" as="style">
+    <link rel="stylesheet" href="css/tools/color.css" as="style">
+    <link rel="stylesheet" href="css/tools/calculator.css" as="style">
+    <link rel="stylesheet" href="css/tools/converter.css" as="style">
+    <link rel="stylesheet" href="css/tools/text.css" as="style">
+    <link rel="stylesheet" href="css/tools/timer.css" as="style">
+    <link rel="stylesheet" href="css/tools/notes.css" as="style">
+    <link rel="stylesheet" href="css/tools/translator.css" as="style">
+    <link rel="stylesheet" href="css/tools/scheduler.css" as="style">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" 
           media="print" 
           onload="this.media='all'" 
@@ -77,6 +87,15 @@
 
     <!-- JavaScript Modules -->
     <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/tools/color.js"></script>
+    <script type="module" src="js/tools/calculator.js"></script>
+    <script type="module" src="js/tools/converter.js"></script>
+    <script type="module" src="js/tools/text.js"></script>
+    <script type="module" src="js/tools/timer.js"></script>
+    <script type="module" src="js/tools/notes.js"></script>
+    <script type="module" src="js/tools/translator.js"></script>
+    <script type="module" src="js/tools/scheduler.js"></script>
+    <script type="module" src="js/theme.js"></script>
 </head>
 <body>
     <!-- Audio pour le minuteur -->
@@ -123,7 +142,7 @@
             <div class="menu-category">
                 <button type="button"
                         class="menu-trigger has-submenu"
-                        onclick="toggleSubmenu('mathMenu')"
+                        data-menu-id="mathMenu"
                         aria-expanded="false"
                         aria-controls="mathMenu"
                         aria-haspopup="true">
@@ -132,20 +151,20 @@
                     <i class="fas fa-chevron-down submenu-icon" aria-hidden="true"></i>
                 </button>
                 <div id="mathMenu" class="submenu" role="menu" aria-hidden="true">
-                    <button type="button" onclick="showTool('calculatorTool')" class="submenu-item" role="menuitem">
+                    <button type="button" data-tool-id="calculatorTool" class="submenu-item" role="menuitem">
                         <i class="fas fa-square-root-alt" aria-hidden="true"></i>
                         <span>Calculatrice scientifique</span>
                     </button>
-                    <button type="button" onclick="showTool('percentageTool')" class="submenu-item">
-                        <i class="fas fa-percent"></i>
+                    <button type="button" data-tool-id="percentageTool" class="submenu-item" role="menuitem">
+                        <i class="fas fa-percent" aria-hidden="true"></i>
                         <span>Pourcentages</span>
                     </button>
-                    <button type="button" onclick="showTool('unitTool')" class="submenu-item">
-                        <i class="fas fa-ruler"></i>
+                    <button type="button" data-tool-id="unitTool" class="submenu-item" role="menuitem">
+                        <i class="fas fa-ruler" aria-hidden="true"></i>
                         <span>Unités de mesure</span>
                     </button>
-                    <button type="button" onclick="showTool('currencyTool')" class="submenu-item">
-                        <i class="fas fa-money-bill-wave"></i>
+                    <button type="button" data-tool-id="currencyTool" class="submenu-item" role="menuitem">
+                        <i class="fas fa-money-bill-wave" aria-hidden="true"></i>
                         <span>Devises</span>
                     </button>
                 </div>
@@ -155,20 +174,21 @@
             <div class="menu-category">
                 <button type="button"
                         class="menu-trigger has-submenu"
-                        onclick="toggleSubmenu('timeMenu')"
+                        data-menu-id="timeMenu"
                         aria-expanded="false"
-                        aria-controls="timeMenu">
+                        aria-controls="timeMenu"
+                        aria-haspopup="true">
                     <i class="fas fa-clock" aria-hidden="true"></i>
                     <span>Temps</span>
                     <i class="fas fa-chevron-down submenu-icon" aria-hidden="true"></i>
                 </button>
-                <div id="timeMenu" class="submenu" role="menu">
-                    <button type="button" onclick="showTool('timerTool')" class="submenu-item">
-                        <i class="fas fa-hourglass-start"></i>
+                <div id="timeMenu" class="submenu" role="menu" aria-hidden="true">
+                    <button type="button" data-tool-id="timerTool" class="submenu-item" role="menuitem">
+                        <i class="fas fa-hourglass-start" aria-hidden="true"></i>
                         <span>Minuteur</span>
                     </button>
-                    <button type="button" onclick="showTool('stopwatchTool')" class="submenu-item">
-                        <i class="fas fa-stopwatch"></i>
+                    <button type="button" data-tool-id="stopwatchTool" class="submenu-item" role="menuitem">
+                        <i class="fas fa-stopwatch" aria-hidden="true"></i>
                         <span>Chronomètre</span>
                     </button>
                 </div>
@@ -178,20 +198,21 @@
             <div class="menu-category">
                 <button type="button"
                         class="menu-trigger has-submenu"
-                        onclick="toggleSubmenu('orgMenu')"
+                        data-menu-id="orgMenu"
                         aria-expanded="false"
-                        aria-controls="orgMenu">
+                        aria-controls="orgMenu"
+                        aria-haspopup="true">
                     <i class="fas fa-tasks" aria-hidden="true"></i>
                     <span>Organisation</span>
                     <i class="fas fa-chevron-down submenu-icon" aria-hidden="true"></i>
                 </button>
-                <div id="orgMenu" class="submenu" role="menu">
-                    <button type="button" onclick="showTool('noteTool')" class="submenu-item">
-                        <i class="fas fa-sticky-note"></i>
+                <div id="orgMenu" class="submenu" role="menu" aria-hidden="true">
+                    <button type="button" data-tool-id="noteTool" class="submenu-item" role="menuitem">
+                        <i class="fas fa-sticky-note" aria-hidden="true"></i>
                         <span>Bloc-notes</span>
                     </button>
-                    <button type="button" onclick="showTool('todoTool')" class="submenu-item">
-                        <i class="fas fa-clipboard-list"></i>
+                    <button type="button" data-tool-id="todoTool" class="submenu-item" role="menuitem">
+                        <i class="fas fa-clipboard-list" aria-hidden="true"></i>
                         <span>Liste de tâches</span>
                     </button>
                 </div>
@@ -201,20 +222,21 @@
             <div class="menu-category">
                 <button type="button"
                         class="menu-trigger has-submenu"
-                        onclick="toggleSubmenu('textMenu')"
+                        data-menu-id="textMenu"
                         aria-expanded="false"
-                        aria-controls="textMenu">
+                        aria-controls="textMenu"
+                        aria-haspopup="true">
                     <i class="fas fa-font" aria-hidden="true"></i>
                     <span>Texte</span>
                     <i class="fas fa-chevron-down submenu-icon" aria-hidden="true"></i>
                 </button>
-                <div id="textMenu" class="submenu" role="menu">
-                    <button type="button" onclick="showTool('translatorTool')" class="submenu-item">
-                        <i class="fas fa-language"></i>
+                <div id="textMenu" class="submenu" role="menu" aria-hidden="true">
+                    <button type="button" data-tool-id="translatorTool" class="submenu-item" role="menuitem">
+                        <i class="fas fa-language" aria-hidden="true"></i>
                         <span>Traducteur</span>
                     </button>
-                    <button type="button" onclick="showTool('styletext')" class="submenu-item">
-                        <i class="fas fa-feather-alt"></i>
+                    <button type="button" data-tool-id="styletext" class="submenu-item" role="menuitem">
+                        <i class="fas fa-feather-alt" aria-hidden="true"></i>
                         <span>Styliseur de texte</span>
                     </button>
                 </div>
@@ -224,20 +246,21 @@
             <div class="menu-category">
                 <button type="button"
                         class="menu-trigger has-submenu"
-                        onclick="toggleSubmenu('utilsMenu')"
+                        data-menu-id="utilsMenu"
                         aria-expanded="false"
-                        aria-controls="utilsMenu">
+                        aria-controls="utilsMenu"
+                        aria-haspopup="true">
                     <i class="fas fa-tools" aria-hidden="true"></i>
                     <span>Utilitaires</span>
                     <i class="fas fa-chevron-down submenu-icon" aria-hidden="true"></i>
                 </button>
-                <div id="utilsMenu" class="submenu" role="menu">
-                    <button type="button" onclick="showTool('passwordTool')" class="submenu-item">
-                        <i class="fas fa-key"></i>
+                <div id="utilsMenu" class="submenu" role="menu" aria-hidden="true">
+                    <button type="button" data-tool-id="passwordTool" class="submenu-item" role="menuitem">
+                        <i class="fas fa-key" aria-hidden="true"></i>
                         <span>Générateur de mot de passe</span>
                     </button>
-                    <button type="button" onclick="showTool('colorTool')" class="submenu-item">
-                        <i class="fas fa-palette"></i>
+                    <button type="button" data-tool-id="colorTool" class="submenu-item" role="menuitem">
+                        <i class="fas fa-palette" aria-hidden="true"></i>
                         <span>Sélecteur de couleur</span>
                     </button>
                 </div>

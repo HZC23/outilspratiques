@@ -1,0 +1,303 @@
+.notepad-container,
+.todo-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 20px;
+}
+
+/* Styles du bloc-notes */
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px;
+    background: var(--input-bg);
+    border-radius: var(--border-radius);
+    margin-bottom: 20px;
+}
+
+.toolbar-group {
+    display: flex;
+    gap: 5px;
+    padding: 5px;
+    border-right: 1px solid var(--border-color);
+}
+
+.toolbar-group:last-child {
+    border-right: none;
+}
+
+.toolbar button {
+    padding: 8px;
+    border: none;
+    border-radius: var(--border-radius);
+    background: var(--bg-color);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.toolbar button:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+.toolbar select,
+.toolbar input[type="color"] {
+    padding: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: var(--bg-color);
+    color: var(--text-color);
+}
+
+.editor-container {
+    margin-bottom: 20px;
+}
+
+.notepad-editor {
+    width: 100%;
+    min-height: 400px;
+    padding: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: var(--input-bg);
+    color: var(--text-color);
+    font-size: 1em;
+    line-height: 1.6;
+    overflow-y: auto;
+}
+
+.notepad-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 15px;
+    background: var(--input-bg);
+    border-radius: var(--border-radius);
+}
+
+.word-count {
+    display: flex;
+    gap: 15px;
+    color: var(--text-color);
+}
+
+.notepad-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.notepad-actions button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: var(--border-radius);
+    background: var(--primary-color);
+    color: white;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.notepad-actions button:hover {
+    background: var(--hover-color);
+}
+
+.note-status {
+    color: var(--text-color);
+    font-style: italic;
+}
+
+/* Styles de la liste de tâches */
+.todo-header {
+    margin-bottom: 20px;
+}
+
+.todo-input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.todo-input-group input,
+.todo-input-group select {
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: var(--input-bg);
+    color: var(--text-color);
+}
+
+.todo-input-group input[type="text"] {
+    flex: 1;
+}
+
+.add-todo-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: var(--border-radius);
+    background: var(--success-color);
+    color: white;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.add-todo-btn:hover {
+    background: #27ae60;
+}
+
+.todo-filters {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.todo-filters select,
+.todo-filters button {
+    padding: 8px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: var(--input-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.todo-filters button:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+.todo-list {
+    margin: 20px 0;
+}
+
+.todo-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+    background: var(--input-bg);
+    border-radius: var(--border-radius);
+    margin-bottom: 10px;
+}
+
+.todo-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+}
+
+.todo-item .todo-content {
+    flex: 1;
+}
+
+.todo-item .todo-title {
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.todo-item .todo-category {
+    font-size: 0.9em;
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+.todo-item .todo-time {
+    font-size: 0.9em;
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+.todo-item.completed .todo-title {
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+.todo-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 15px;
+    background: var(--input-bg);
+    border-radius: var(--border-radius);
+}
+
+.todo-stats {
+    display: flex;
+    gap: 15px;
+    color: var(--text-color);
+}
+
+.todo-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.todo-actions button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: var(--border-radius);
+    background: var(--danger-color);
+    color: white;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.todo-actions button:hover {
+    background: #c0392b;
+}
+
+@media (max-width: 768px) {
+    .notepad-container,
+    .todo-container {
+        padding: 10px;
+    }
+
+    .toolbar {
+        flex-direction: column;
+    }
+
+    .toolbar-group {
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 10px;
+    }
+
+    .toolbar-group:last-child {
+        border-bottom: none;
+    }
+
+    .todo-input-group {
+        flex-direction: column;
+    }
+
+    .todo-filters {
+        flex-direction: column;
+    }
+
+    .todo-footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .todo-stats {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .todo-actions {
+        flex-direction: column;
+    }
+} 
