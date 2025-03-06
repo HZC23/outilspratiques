@@ -1,0 +1,297 @@
+:root {
+  --toggle-size: 1.5rem;
+  --container-width: 3.5rem;
+  --container-height: 1.75rem;
+  --container-radius: calc(var(--container-height) / 2);
+  --container-light-bg: #e9ecef;
+  --container-dark-bg: #1a1a2e;
+  --circle-container-diameter: 1.5rem;
+  --circle-container-padding: 0.125rem;
+  --circle-container-bg: #fff;
+  --circle-container-bg-dark: #485fc7;
+  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* From Uiverse.io by Galahhad */ 
+.theme-switch {
+  position: relative;
+  display: inline-block;
+  margin-right: 1rem;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.2s ease;
+}
+
+.theme-switch:hover {
+  transform: scale(1.05);
+}
+
+.theme-switch__checkbox {
+  opacity: 0;
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.theme-switch__container {
+  position: relative;
+  width: var(--container-width);
+  height: var(--container-height);
+  background-color: var(--container-light-bg);
+  border-radius: var(--container-radius);
+  overflow: hidden;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+}
+
+.theme-switch__clouds {
+  position: absolute;
+  top: 0.25rem;
+  left: 0.25rem;
+  width: 1rem;
+  height: 0.5rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  opacity: 0.8;
+  transition: transform 0.5s ease, opacity 0.3s ease;
+}
+
+.theme-switch__clouds::before,
+.theme-switch__clouds::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background-color: white;
+}
+
+.theme-switch__clouds::before {
+  width: 0.5rem;
+  height: 0.5rem;
+  top: -0.25rem;
+  left: 0.1rem;
+}
+
+.theme-switch__clouds::after {
+  width: 0.7rem;
+  height: 0.7rem;
+  top: -0.35rem;
+  left: 0.5rem;
+}
+
+.theme-switch__stars-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.theme-switch__circle-container {
+  position: absolute;
+  top: var(--circle-container-padding);
+  left: var(--circle-container-padding);
+  width: var(--circle-container-diameter);
+  height: var(--circle-container-diameter);
+  border-radius: 50%;
+  background-color: var(--circle-container-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.5s var(--ease-out-back), background-color 0.3s ease;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+}
+
+.theme-switch__sun-moon-container {
+  position: relative;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background-color: #ffb74d;
+  overflow: hidden;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.theme-switch__moon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: var(--circle-container-bg);
+  transform: translateX(100%);
+  transition: transform 0.5s ease;
+}
+
+.theme-switch__spot {
+  position: absolute;
+  background-color: #e0e0e0;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.theme-switch__spot:nth-child(1) {
+  width: 0.2rem;
+  height: 0.2rem;
+  top: 0.2rem;
+  left: 0.2rem;
+}
+
+.theme-switch__spot:nth-child(2) {
+  width: 0.15rem;
+  height: 0.15rem;
+  top: 0.5rem;
+  left: 0.35rem;
+}
+
+.theme-switch__spot:nth-child(3) {
+  width: 0.1rem;
+  height: 0.1rem;
+  top: 0.3rem;
+  left: 0.5rem;
+}
+
+/* État coché (thème sombre) */
+.theme-switch__checkbox:checked + .theme-switch__container {
+  background-color: var(--container-dark-bg);
+}
+
+.theme-switch__checkbox:checked + .theme-switch__container .theme-switch__clouds {
+  transform: translateX(2rem);
+  opacity: 0;
+}
+
+.theme-switch__checkbox:checked + .theme-switch__container .theme-switch__stars-container {
+  opacity: 1;
+}
+
+.theme-switch__checkbox:checked + .theme-switch__container .theme-switch__circle-container {
+  transform: translateX(calc(var(--container-width) - var(--circle-container-diameter) - var(--circle-container-padding) * 2));
+  background-color: var(--circle-container-bg-dark);
+}
+
+.theme-switch__checkbox:checked + .theme-switch__container .theme-switch__sun-moon-container {
+  background-color: transparent;
+  transform: scale(0.75);
+}
+
+.theme-switch__checkbox:checked + .theme-switch__container .theme-switch__moon {
+  transform: translateX(0);
+}
+
+/* Focus styles for accessibility */
+.theme-switch__checkbox:focus + .theme-switch__container {
+  box-shadow: 0 0 0 0.125rem rgba(74, 144, 226, 0.5);
+}
+
+/* Styles pour le mode sombre */
+[data-theme="dark"] .theme-switch__container {
+  background-color: var(--container-dark-bg);
+}
+
+[data-theme="dark"] .theme-switch__clouds {
+  transform: translateX(2rem);
+  opacity: 0;
+}
+
+[data-theme="dark"] .theme-switch__stars-container {
+  opacity: 1;
+}
+
+[data-theme="dark"] .theme-switch__circle-container {
+  transform: translateX(calc(var(--container-width) - var(--circle-container-diameter) - var(--circle-container-padding) * 2));
+  background-color: var(--circle-container-bg-dark);
+}
+
+[data-theme="dark"] .theme-switch__sun-moon-container {
+  background-color: transparent;
+  transform: scale(0.75);
+}
+
+[data-theme="dark"] .theme-switch__moon {
+  transform: translateX(0);
+}
+
+/* Styles pour la barre de titre */
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  :root {
+    --toggle-size: 1.25rem;
+    --container-width: 3rem;
+    --container-height: 1.5rem;
+    --circle-container-diameter: 1.25rem;
+  }
+  
+  .theme-switch {
+    margin-right: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --toggle-size: 1rem;
+    --container-width: 2.5rem;
+    --container-height: 1.25rem;
+    --circle-container-diameter: 1rem;
+  }
+  
+  .theme-switch {
+    margin-right: 0.25rem;
+  }
+  
+  .theme-switch__clouds {
+    top: 0.2rem;
+    left: 0.2rem;
+    width: 0.8rem;
+    height: 0.4rem;
+  }
+  
+  .theme-switch__clouds::before {
+    width: 0.4rem;
+    height: 0.4rem;
+    top: -0.2rem;
+    left: 0.1rem;
+  }
+  
+  .theme-switch__clouds::after {
+    width: 0.6rem;
+    height: 0.6rem;
+    top: -0.3rem;
+    left: 0.4rem;
+  }
+  
+  .theme-switch__sun-moon-container {
+    width: 0.6rem;
+    height: 0.6rem;
+  }
+  
+  .theme-switch__spot:nth-child(1) {
+    width: 0.15rem;
+    height: 0.15rem;
+    top: 0.15rem;
+    left: 0.15rem;
+  }
+  
+  .theme-switch__spot:nth-child(2) {
+    width: 0.12rem;
+    height: 0.12rem;
+    top: 0.4rem;
+    left: 0.3rem;
+  }
+  
+  .theme-switch__spot:nth-child(3) {
+    width: 0.08rem;
+    height: 0.08rem;
+    top: 0.25rem;
+    left: 0.4rem;
+  }
+}

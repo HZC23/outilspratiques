@@ -1,0 +1,502 @@
+.menu {
+    width: 250px;
+    height: calc(100vh - 70px);
+    background-color: var(--bg-color);
+    border-right: 1px solid var(--border-color);
+    padding: 1rem 0;
+    overflow-y: auto;
+    position: sticky;
+    top: 70px;
+    z-index: 100;
+    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Styles pour le conteneur principal */
+.container {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 0;
+    max-width: 100%;
+    margin: 0 auto;
+    position: relative;
+}
+
+/* Styles pour le conteneur des outils */
+.tools {
+    padding: 1rem;
+    overflow-y: auto;
+    min-height: calc(100vh - 70px);
+    background-color: var(--bg-color);
+    transition: background-color 0.3s ease;
+}
+
+/* Mode sombre pour le conteneur des outils */
+[data-theme="dark"] .tools {
+    background-color: var(--bg-color);
+}
+
+/* Responsive styles pour le conteneur principal */
+@media (max-width: 992px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+    
+    .menu {
+        position: fixed;
+        left: -250px;
+        top: 70px;
+        height: calc(100vh - 70px);
+        transition: left 0.3s ease, transform 0.3s ease;
+    }
+    
+    .menu.active {
+        left: 0;
+    }
+    
+    .tools {
+        width: 100%;
+    }
+}
+
+.menu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.menu::-webkit-scrollbar-track {
+    background: var(--bg-color);
+    border-radius: 10px;
+}
+
+.menu::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+.menu-category {
+    margin-bottom: 0.5rem;
+    animation: fadeIn 0.3s ease forwards;
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.menu-category:nth-child(1) { animation-delay: 0.05s; }
+.menu-category:nth-child(2) { animation-delay: 0.1s; }
+.menu-category:nth-child(3) { animation-delay: 0.15s; }
+.menu-category:nth-child(4) { animation-delay: 0.2s; }
+.menu-category:nth-child(5) { animation-delay: 0.25s; }
+
+.menu-trigger {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 1rem;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    position: relative;
+    font-weight: 500;
+}
+
+.menu-trigger::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.menu-trigger:hover::after {
+    width: 100%;
+}
+
+.menu-trigger:hover {
+    background-color: var(--hover-bg);
+    color: var(--primary-color);
+}
+
+.menu-trigger i {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.75rem;
+    font-size: 1rem;
+    color: var(--text-muted);
+    background-color: var(--bg-color);
+    border-radius: 0.25rem;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.menu-trigger:hover i {
+    color: var(--primary-color);
+    transform: scale(1.1);
+}
+
+.submenu-icon {
+    margin-left: auto;
+    margin-right: 0 !important;
+    font-size: 0.75rem !important;
+    transition: transform 0.3s ease !important;
+}
+
+.menu-trigger[aria-expanded="true"] .submenu-icon {
+    transform: rotate(180deg);
+}
+
+.menu-trigger[aria-expanded="true"] {
+    background-color: var(--hover-bg);
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.submenu {
+    display: none;
+    margin-left: 1.5rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.5rem;
+    border-left: 2px solid var(--border-color);
+    padding-left: 0.5rem;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.submenu.active {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    max-height: 500px;
+    opacity: 1;
+}
+
+.submenu-item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 0.9rem;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    position: relative;
+}
+
+.submenu-item::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.submenu-item:hover::after {
+    width: 100%;
+}
+
+.submenu-item:hover {
+    background-color: var(--hover-bg);
+    color: var(--primary-color);
+}
+
+.submenu-item i {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    background-color: var(--bg-color);
+    border-radius: 0.25rem;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.submenu-item:hover i {
+    color: var(--primary-color);
+    transform: scale(1.1);
+}
+
+.submenu-item.active {
+    background-color: rgba(var(--primary-color-rgb), 0.1);
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+/* Mode sombre pour le menu */
+[data-theme="dark"] .menu {
+    background-color: var(--bg-color);
+    border-right-color: var(--border-color);
+}
+
+[data-theme="dark"] .menu-trigger {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .menu-trigger:hover {
+    background-color: var(--hover-bg);
+    color: var(--primary-color);
+}
+
+[data-theme="dark"] .menu-trigger i {
+    color: var(--text-muted);
+    background-color: var(--card-bg);
+}
+
+[data-theme="dark"] .menu-trigger:hover i {
+    color: var(--primary-color);
+}
+
+[data-theme="dark"] .submenu {
+    border-left-color: var(--border-color);
+}
+
+[data-theme="dark"] .submenu-item {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .submenu-item:hover {
+    background-color: var(--hover-bg);
+    color: var(--primary-color);
+}
+
+[data-theme="dark"] .submenu-item i {
+    color: var(--text-muted);
+    background-color: var(--card-bg);
+}
+
+[data-theme="dark"] .submenu-item:hover i {
+    color: var(--primary-color);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+/* Styles pour le menu mobile */
+@media (max-width: 992px) {
+    .menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background: none;
+        color: var(--text-color);
+        border: none;
+        border-radius: 8px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .menu-toggle:hover {
+        background-color: var(--hover-bg);
+    }
+    
+    .menu-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+        z-index: 99;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .menu-overlay.active {
+        display: block;
+        animation: fadeIn 0.3s forwards;
+    }
+}
+
+/* Accessibilité */
+.menu-trigger:focus,
+.submenu-item:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Ajout d'un badge pour les nouveaux éléments */
+.menu-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin-left: var(--spacing-sm);
+}
+
+/* Ajout d'un indicateur pour les sous-menus actifs */
+.menu-category.has-active-item > .menu-trigger {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.menu-category.has-active-item > .menu-trigger i {
+    transform: scale(1.1);
+    background: rgba(var(--primary-color-rgb), 0.2);
+}
+
+/* Styles pour le header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: var(--bg-color);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+header h1 {
+    font-size: 1.5rem;
+    margin: 0;
+    color: var(--text-color);
+    transition: color 0.3s ease;
+    text-align: center;
+    flex: 1;
+}
+
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.left-controls {
+    margin-right: 1rem;
+}
+
+.right-controls {
+    margin-left: 1rem;
+}
+
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.menu-toggle:hover {
+    background-color: var(--hover-bg);
+}
+
+/* Mode sombre pour le header */
+[data-theme="dark"] header {
+    background-color: var(--bg-color);
+    border-bottom-color: var(--border-color);
+}
+
+[data-theme="dark"] header h1 {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .menu-toggle {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .menu-toggle:hover {
+    background-color: var(--hover-bg);
+}
+
+/* Responsive styles pour le header */
+@media (max-width: 992px) {
+    header h1 {
+        font-size: 1.25rem;
+    }
+    
+    .menu-toggle {
+        display: block;
+    }
+}
+
+@media (max-width: 768px) {
+    .left-controls, .right-controls {
+        min-width: 3rem;
+    }
+}
+
+@media (max-width: 576px) {
+    header {
+        padding: 0.75rem;
+    }
+    
+    header h1 {
+        font-size: 1.1rem;
+    }
+    
+    .left-controls {
+        margin-right: 0.5rem;
+    }
+    
+    .right-controls {
+        margin-left: 0.5rem;
+    }
+}

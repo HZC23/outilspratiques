@@ -1,91 +1,134 @@
-const CACHE_NAME = 'outils-pratiques-v2';
-const STATIC_CACHE = 'static-v2';
-const DYNAMIC_CACHE = 'dynamic-v2';
-const OFFLINE_PAGE = '/offline.html';
-
-const STATIC_ASSETS = [
+const CACHE_NAME = 'outils-pratiques-v1';
+const ASSETS_TO_CACHE = [
     '/',
     '/index.html',
     '/styles.css',
-    '/scripts.js',
-    '/manifest.json',
-    '/offline.html',
+    '/js/main.js',
+    '/js/config.js',
+    '/js/utils.js',
+    '/js/theme.js',
+    '/js/navigation.js',
+    '/js/clock.js',
     '/icons/favicon.ico',
     '/icons/icon-192x192.png',
     '/icons/icon-512x512.png',
-    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css',
-    'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap'
+    'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap',
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css'
 ];
 
+/*
+ Copyright 2014 Google Inc. All Rights Reserved.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
+
+// This polyfill provides Cache.add(), Cache.addAll(), and CacheStorage.match(),
+// which are not implemented in Chrome 40.
+importScripts('js/dependencies/cache-polyfill.js');
+
+// While overkill for this specific sample in which there is only one cache,
+// this is one best practice that can be followed in general to keep track of
+// multiple caches used by a given service worker, and keep them all versioned.
+// It maps a shorthand identifier for a cache to a specific, versioned cache name.
+
+// Note that since global state is discarded in between service worker restarts, these
+// variables will be reinitialized each time the service worker handles an event, and you
+// should not attempt to change their values inside an event handler. (Treat them as constants.)
+
+// If at any point you want to force pages that use this service worker to start using a fresh
+// cache, then increment the CACHE_VERSION value. It will kick off the service worker update
+// flow and the old cache(s) will be purged as part of the activate event handler when the
+// updated service worker is activated.
+
+var urlsToPrefetch = [
+  '/',
+  '/page',
+  '/styles/common.css',
+  '/js/dependencies/autolinker.js',
+  '/template.js',
+  '/images/icon.png',
+  '/images/icon.svg',
+];
+
+var version = '1.0.0'
+
 // Installation du Service Worker
-self.addEventListener('install', event => {
-    event.waitUntil(
-        Promise.all([
-            caches.open(STATIC_CACHE)
-                .then(cache => cache.addAll(STATIC_ASSETS)),
-            caches.open(DYNAMIC_CACHE)
-                .then(cache => cache.add(OFFLINE_PAGE))
-        ])
-        .then(() => self.skipWaiting())
-    );
-});
-
-// Activation et nettoyage des anciens caches
-self.addEventListener('activate', event => {
-    event.waitUntil(
-        caches.keys()
-            .then(cacheNames => {
-                return Promise.all(
-                    cacheNames
-                        .filter(name => name !== STATIC_CACHE && name !== DYNAMIC_CACHE)
-                        .map(name => caches.delete(name))
-                );
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+        caches.open(CACHE_NAME)
+            .then((cache) => {
+                console.log('Cache ouvert');
+                return cache.addAll(ASSETS_TO_CACHE);
             })
-            .then(() => self.clients.claim())
+            .catch((error) => {
+                console.error('Erreur lors du cache des ressources :', error);
+      })
+  );
+});
+
+// Activation du Service Worker
+self.addEventListener('activate', (event) => {
+    event.waitUntil(
+        caches.keys().then((cacheNames) => {
+            return Promise.all(
+                cacheNames.map((cacheName) => {
+                    if (cacheName !== CACHE_NAME) {
+                        console.log('Suppression de l\'ancien cache :', cacheName);
+                        return caches.delete(cacheName);
+                    }
+                })
+            );
+        })
     );
 });
 
-// Stratégie de cache : Network First avec fallback sur le cache
-self.addEventListener('fetch', event => {
-    // Ignorer les requêtes non GET
-    if (event.request.method !== 'GET') return;
-
-    // Ignorer les requêtes vers l'API
-    if (event.request.url.includes('/api/')) {
-        return;
-    }
-
+// Interception des requêtes
+self.addEventListener('fetch', (event) => {
     event.respondWith(
-        fetch(event.request)
-            .then(response => {
-                // Mettre en cache la nouvelle ressource
-                const responseClone = response.clone();
-                caches.open(DYNAMIC_CACHE)
-                    .then(cache => cache.put(event.request, responseClone));
-                return response;
-            })
-            .catch(() => {
-                return caches.match(event.request)
-                    .then(response => {
-                        if (response) {
-                            return response;
-                        }
-                        // Si la ressource n'est pas en cache et que c'est une page HTML
-                        if (event.request.headers.get('accept').includes('text/html')) {
-                            return caches.match(OFFLINE_PAGE);
-                        }
-                        // Pour les autres ressources, retourner une réponse vide
-                        return new Response('', {
-                            status: 408,
-                            statusText: 'Request timed out.'
-                        });
+        caches.match(event.request)
+            .then((response) => {
+                // Cache hit - retourner la réponse du cache
+                if (response) {
+                    return response;
+                }
+
+                // Cloner la requête
+                const fetchRequest = event.request.clone();
+
+                return fetch(fetchRequest)
+                    .then((response) => {
+                        // Vérifier si la réponse est valide
+                        if (!response || response.status !== 200 || response.type !== 'basic') {
+          return response;
+        }
+
+                        // Cloner la réponse
+                        const responseToCache = response.clone();
+
+                        caches.open(CACHE_NAME)
+                            .then((cache) => {
+                                cache.put(event.request, responseToCache);
+                            });
+
+                        return response;
+                    })
+                    .catch(() => {
+                        // Retourner une page d'erreur hors ligne si disponible
+                        return caches.match('/offline.html');
                     });
             })
     );
 });
 
 // Gestion des notifications push
-self.addEventListener('push', event => {
+self.addEventListener('push', (event) => {
     const options = {
         body: event.data.text(),
         icon: '/icons/icon-192x192.png',
@@ -94,38 +137,55 @@ self.addEventListener('push', event => {
         data: {
             dateOfArrival: Date.now(),
             primaryKey: 1
-        },
-        actions: [
-            {
-                action: 'explore',
-                title: 'Voir plus',
-                icon: '/icons/checkmark.png'
-            },
-            {
-                action: 'close',
-                title: 'Fermer',
-                icon: '/icons/xmark.png'
-            }
-        ]
+        }
     };
 
     event.waitUntil(
         self.registration.showNotification('Outils Pratiques', options)
-    );
+  );
 });
 
 // Gestion des clics sur les notifications
-self.addEventListener('notificationclick', event => {
+self.addEventListener('notificationclick', (event) => {
     event.notification.close();
 
-    if (event.action === 'explore') {
+  event.waitUntil(
+        clients.openWindow('/')
+    );
+});
+
+// Synchronisation en arrière-plan
+self.addEventListener('sync', (event) => {
+    if (event.tag === 'sync-data') {
         event.waitUntil(
-            clients.openWindow('/')
+            // Synchroniser les données
+            syncData()
         );
     }
 });
 
-// Synchronisation en arrière-plan
+// Fonction de synchronisation des données
+async function syncData() {
+    try {
+        const cache = await caches.open(CACHE_NAME);
+        const requests = await cache.keys();
+        
+        // Synchroniser chaque requête
+        await Promise.all(
+            requests.map(async (request) => {
+                try {
+                    const response = await fetch(request);
+                    await cache.put(request, response);
+                } catch (error) {
+                    console.error('Erreur de synchronisation :', error);
+                }
+            })
+        );
+    } catch (error) {
+        console.error('Erreur lors de la synchronisation :', error);
+    }
+}
+
 self.addEventListener('sync', event => {
     if (event.tag === 'sync-notes') {
         event.waitUntil(
