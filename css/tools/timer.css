@@ -1,0 +1,192 @@
+.timer-container,
+.stopwatch-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 20px;
+}
+
+.timer-config {
+    margin-bottom: 20px;
+}
+
+.time-inputs {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.time-input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.time-input-group label {
+    margin-bottom: 5px;
+    color: var(--text-color);
+}
+
+.time-input-group input {
+    width: 80px;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: var(--input-bg);
+    color: var(--text-color);
+    font-size: 1.2em;
+    text-align: center;
+}
+
+.timer-display {
+    font-size: 4em;
+    font-weight: bold;
+    text-align: center;
+    color: var(--text-color);
+    margin: 20px 0;
+    font-family: monospace;
+}
+
+.timer-progress {
+    width: 100%;
+    height: 10px;
+    background: var(--input-bg);
+    border-radius: 5px;
+    margin: 20px 0;
+    overflow: hidden;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 100%;
+    background: var(--primary-color);
+    transition: width 1s linear;
+}
+
+.timer-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.timer-controls button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.start-btn {
+    background: var(--success-color);
+    color: white;
+}
+
+.start-btn:hover {
+    background: #27ae60;
+}
+
+.pause-btn {
+    background: var(--warning-color);
+    color: white;
+}
+
+.pause-btn:hover {
+    background: #d35400;
+}
+
+.reset-btn {
+    background: var(--danger-color);
+    color: white;
+}
+
+.reset-btn:hover {
+    background: #c0392b;
+}
+
+.sound-btn {
+    background: var(--primary-color);
+    color: white;
+}
+
+.sound-btn:hover {
+    background: var(--hover-color);
+}
+
+.timer-status {
+    text-align: center;
+    color: var(--text-color);
+    margin-top: 10px;
+}
+
+/* Styles spécifiques au chronomètre */
+.laps-container {
+    margin-top: 20px;
+    padding: 20px;
+    background: var(--input-bg);
+    border-radius: var(--border-radius);
+}
+
+.laps-container h3 {
+    margin-bottom: 15px;
+    color: var(--text-color);
+}
+
+.laps-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.lap-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+.lap-item:last-child {
+    border-bottom: none;
+}
+
+.lap-number {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.lap-time {
+    font-family: monospace;
+}
+
+@media (max-width: 480px) {
+    .timer-container,
+    .stopwatch-container {
+        padding: 10px;
+    }
+
+    .time-inputs {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .timer-display {
+        font-size: 3em;
+    }
+
+    .timer-controls {
+        flex-wrap: wrap;
+    }
+
+    .timer-controls button {
+        flex: 1;
+        justify-content: center;
+    }
+} 
