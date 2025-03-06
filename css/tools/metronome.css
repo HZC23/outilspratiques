@@ -1,0 +1,158 @@
+.metronome-container {
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-lg);
+    box-shadow: var(--box-shadow);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.metronome-controls {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.tempo-control {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.tempo-slider {
+    width: 100%;
+    height: 8px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: var(--border-color);
+    border-radius: 4px;
+    outline: none;
+}
+
+.tempo-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.tempo-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.tempo-slider::-webkit-slider-thumb:hover {
+    background: var(--info-color);
+    transform: scale(1.1);
+}
+
+.tempo-slider::-moz-range-thumb:hover {
+    background: var(--info-color);
+    transform: scale(1.1);
+}
+
+.tempo-display {
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+    color: var(--text-color);
+    margin: var(--spacing-sm) 0;
+}
+
+.metronome-buttons {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-md);
+}
+
+.metronome-btn {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.metronome-btn:hover {
+    background-color: var(--info-color);
+    transform: translateY(-2px);
+}
+
+.metronome-btn.active {
+    background-color: var(--error-color);
+}
+
+.beat-indicator {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--border-color);
+    margin: var(--spacing-md) auto;
+    transition: background-color 0.1s ease;
+}
+
+.beat-indicator.active {
+    background-color: var(--primary-color);
+    box-shadow: 0 0 15px var(--primary-color);
+    animation: pulse 0.2s ease-out;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Mode sombre */
+[data-theme="dark"] .metronome-container {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .tempo-slider {
+    background: var(--border-color);
+}
+
+[data-theme="dark"] .tempo-slider::-webkit-slider-thumb {
+    background: var(--primary-color);
+}
+
+[data-theme="dark"] .tempo-slider::-moz-range-thumb {
+    background: var(--primary-color);
+}
+
+[data-theme="dark"] .tempo-display {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .beat-indicator {
+    background-color: var(--border-color);
+}
+
+[data-theme="dark"] .beat-indicator.active {
+    background-color: var(--primary-color);
+    box-shadow: 0 0 15px var(--primary-color);
+} 

@@ -37,11 +37,12 @@
     <!-- <base href="https://hzc23.github.io/outilspratiques.github.io/"> -->
     
     <!-- Favicon -->
-    <link rel="icon" href="icons/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    <link rel="icon" type="image/x-icon" href="/icons/favicon.ico">
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png">
     
     <!-- Manifest -->
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="/manifest.json">
 
     <!-- Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -51,18 +52,23 @@
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
     
+    <!-- Preload des ressources critiques -->
+    <link rel="preload" href="/icons/favicon.ico" as="image" type="image/x-icon">
+    <link rel="preload" href="/styles.css" as="style">
+    
     <!-- CSS -->
-    <link rel="stylesheet" href="./styles.css" as="style">
-    <link rel="stylesheet" href="css/menu.css" as="style">
-    <link rel="stylesheet" href="css/theme-switch.css" as="style">
-    <link rel="stylesheet" href="css/tools/color.css" as="style">
-    <link rel="stylesheet" href="css/tools/calculator.css" as="style">
-    <link rel="stylesheet" href="css/tools/converter.css" as="style">
-    <link rel="stylesheet" href="css/tools/text.css" as="style">
-    <link rel="stylesheet" href="css/tools/timer.css" as="style">
-    <link rel="stylesheet" href="css/tools/notes.css" as="style">
-    <link rel="stylesheet" href="css/tools/translator.css" as="style">
-    <link rel="stylesheet" href="css/tools/scheduler.css" as="style">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/css/menu.css">
+    <link rel="stylesheet" href="/css/theme-switch.css">
+    <link rel="stylesheet" href="/css/tools/color.css">
+    <link rel="stylesheet" href="/css/tools/calculator.css">
+    <link rel="stylesheet" href="/css/tools/converter.css">
+    <link rel="stylesheet" href="/css/tools/text.css">
+    <link rel="stylesheet" href="/css/tools/timer.css">
+    <link rel="stylesheet" href="/css/tools/notes.css">
+    <link rel="stylesheet" href="/css/tools/translator.css">
+    <link rel="stylesheet" href="/css/tools/scheduler.css">
+    <link rel="stylesheet" href="/css/tools/metronome.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" 
           media="print" 
           onload="this.media='all'" 
@@ -74,10 +80,6 @@
           media="print" 
           onload="this.media='all'"
           crossorigin="anonymous">
-    
-    <!-- Preload des ressources critiques -->
-    <link rel="preload" href="icons/favicon.ico" as="image" type="image/x-icon">
-    <link rel="preload" href="styles.css" as="style">
     
     <!-- Noscript fallback -->
     <noscript>
@@ -96,6 +98,7 @@
     <script type="module" src="js/tools/notes.js"></script>
     <script type="module" src="js/tools/translator.js"></script>
     <script type="module" src="js/tools/scheduler.js"></script>
+    <script type="module" src="js/tools/metronome.js"></script>
     <script type="module" src="js/theme.js"></script>
 </head>
 <body>
@@ -144,6 +147,7 @@
                 <button type="button"
                         class="menu-trigger has-submenu"
                         data-menu-id="mathMenu"
+                        data-tooltip="Outils de calcul et de mathématiques"
                         aria-expanded="false"
                         aria-controls="mathMenu"
                         aria-haspopup="true">
@@ -152,19 +156,19 @@
                     <i class="fas fa-chevron-down submenu-icon" aria-hidden="true"></i>
                 </button>
                 <div id="mathMenu" class="submenu" role="menu" aria-hidden="true">
-                    <button type="button" data-tool-id="calculatorTool" class="submenu-item" role="menuitem">
+                    <button type="button" data-tool-id="calculatorTool" data-tooltip="Calculatrice scientifique avec fonctions avancées" class="submenu-item" role="menuitem">
                         <i class="fas fa-square-root-alt" aria-hidden="true"></i>
                         <span>Calculatrice scientifique</span>
                     </button>
-                    <button type="button" data-tool-id="percentageTool" class="submenu-item" role="menuitem">
+                    <button type="button" data-tool-id="percentageTool" data-tooltip="Calculer des pourcentages et variations" class="submenu-item" role="menuitem">
                         <i class="fas fa-percent" aria-hidden="true"></i>
                         <span>Pourcentages</span>
                     </button>
-                    <button type="button" data-tool-id="unitTool" class="submenu-item" role="menuitem">
+                    <button type="button" data-tool-id="unitTool" data-tooltip="Convertir différentes unités de mesure" class="submenu-item" role="menuitem">
                         <i class="fas fa-ruler" aria-hidden="true"></i>
                         <span>Unités de mesure</span>
                     </button>
-                    <button type="button" data-tool-id="currencyTool" class="submenu-item" role="menuitem">
+                    <button type="button" data-tool-id="currencyTool" data-tooltip="Convertisseur de devises en temps réel" class="submenu-item" role="menuitem">
                         <i class="fas fa-money-bill-wave" aria-hidden="true"></i>
                         <span>Devises</span>
                     </button>
@@ -176,6 +180,7 @@
                 <button type="button"
                         class="menu-trigger has-submenu"
                         data-menu-id="timeMenu"
+                        data-tooltip="Outils de gestion du temps"
                         aria-expanded="false"
                         aria-controls="timeMenu"
                         aria-haspopup="true">
@@ -184,13 +189,13 @@
                     <i class="fas fa-chevron-down submenu-icon" aria-hidden="true"></i>
                 </button>
                 <div id="timeMenu" class="submenu" role="menu" aria-hidden="true">
-                    <button type="button" data-tool-id="timerTool" class="submenu-item" role="menuitem">
+                    <button type="button" data-tool-id="timerTool" data-tooltip="Minuteur avec alarme sonore" class="submenu-item" role="menuitem">
                         <i class="fas fa-hourglass-start" aria-hidden="true"></i>
                         <span>Minuteur</span>
                     </button>
-                    <button type="button" data-tool-id="stopwatchTool" class="submenu-item" role="menuitem">
-                        <i class="fas fa-stopwatch" aria-hidden="true"></i>
-                        <span>Chronomètre</span>
+                    <button type="button" data-tool-id="metronomeTool" data-tooltip="Métronome avec tempo ajustable" class="submenu-item" role="menuitem">
+                        <i class="fas fa-drum" aria-hidden="true"></i>
+                        <span>Métronome</span>
                     </button>
                 </div>
             </div>
@@ -200,6 +205,7 @@
                 <button type="button"
                         class="menu-trigger has-submenu"
                         data-menu-id="orgMenu"
+                        data-tooltip="Outils d'organisation et de productivité"
                         aria-expanded="false"
                         aria-controls="orgMenu"
                         aria-haspopup="true">
@@ -208,11 +214,11 @@
                     <i class="fas fa-chevron-down submenu-icon" aria-hidden="true"></i>
                 </button>
                 <div id="orgMenu" class="submenu" role="menu" aria-hidden="true">
-                    <button type="button" data-tool-id="noteTool" class="submenu-item" role="menuitem">
+                    <button type="button" data-tool-id="noteTool" data-tooltip="Bloc-notes avec formatage de texte" class="submenu-item" role="menuitem">
                         <i class="fas fa-sticky-note" aria-hidden="true"></i>
                         <span>Bloc-notes</span>
                     </button>
-                    <button type="button" data-tool-id="todoTool" class="submenu-item" role="menuitem">
+                    <button type="button" data-tool-id="todoTool" data-tooltip="Liste de tâches avec catégories" class="submenu-item" role="menuitem">
                         <i class="fas fa-clipboard-list" aria-hidden="true"></i>
                         <span>Liste de tâches</span>
                     </button>
@@ -224,6 +230,7 @@
                 <button type="button"
                         class="menu-trigger has-submenu"
                         data-menu-id="textMenu"
+                        data-tooltip="Outils de manipulation de texte"
                         aria-expanded="false"
                         aria-controls="textMenu"
                         aria-haspopup="true">
@@ -232,11 +239,11 @@
                     <i class="fas fa-chevron-down submenu-icon" aria-hidden="true"></i>
                 </button>
                 <div id="textMenu" class="submenu" role="menu" aria-hidden="true">
-                    <button type="button" data-tool-id="translatorTool" class="submenu-item" role="menuitem">
+                    <button type="button" data-tool-id="translatorTool" data-tooltip="Traducteur multilingue" class="submenu-item" role="menuitem">
                         <i class="fas fa-language" aria-hidden="true"></i>
                         <span>Traducteur</span>
                     </button>
-                    <button type="button" data-tool-id="styletext" class="submenu-item" role="menuitem">
+                    <button type="button" data-tool-id="styletext" data-tooltip="Styliseur de texte avec effets spéciaux" class="submenu-item" role="menuitem">
                         <i class="fas fa-feather-alt" aria-hidden="true"></i>
                         <span>Styliseur de texte</span>
                     </button>
@@ -248,6 +255,7 @@
                 <button type="button"
                         class="menu-trigger has-submenu"
                         data-menu-id="utilsMenu"
+                        data-tooltip="Outils utilitaires divers"
                         aria-expanded="false"
                         aria-controls="utilsMenu"
                         aria-haspopup="true">
@@ -256,11 +264,11 @@
                     <i class="fas fa-chevron-down submenu-icon" aria-hidden="true"></i>
                 </button>
                 <div id="utilsMenu" class="submenu" role="menu" aria-hidden="true">
-                    <button type="button" data-tool-id="passwordTool" class="submenu-item" role="menuitem">
+                    <button type="button" data-tool-id="passwordTool" data-tooltip="Générateur de mots de passe sécurisés" class="submenu-item" role="menuitem">
                         <i class="fas fa-key" aria-hidden="true"></i>
                         <span>Générateur de mot de passe</span>
                     </button>
-                    <button type="button" data-tool-id="colorTool" class="submenu-item" role="menuitem">
+                    <button type="button" data-tool-id="colorTool" data-tooltip="Sélecteur de couleurs avec codes" class="submenu-item" role="menuitem">
                         <i class="fas fa-palette" aria-hidden="true"></i>
                         <span>Sélecteur de couleur</span>
                     </button>
@@ -281,21 +289,21 @@
 
                     <div class="calculator-grid">
                         <!-- Fonctions scientifiques -->
-                        <button type="button" onclick="calcFunction('sin')" class="operator">sin</button>
-                        <button type="button" onclick="calcFunction('cos')" class="operator">cos</button>
-                        <button type="button" onclick="calcFunction('tan')" class="operator">tan</button>
-                        <button type="button" onclick="calcFunction('log')" class="operator">log</button>
+                        <button type="button" onclick="calcFunction('sin')" class="operator" aria-label="Sinus">sin</button>
+                        <button type="button" onclick="calcFunction('cos')" class="operator" aria-label="Cosinus">cos</button>
+                        <button type="button" onclick="calcFunction('tan')" class="operator" aria-label="Tangente">tan</button>
+                        <button type="button" onclick="calcFunction('log')" class="operator" aria-label="Logarithme">log</button>
 
-                        <button type="button" onclick="calcFunction('sqrt')" class="operator">√</button>
-                        <button type="button" onclick="calcFunction('pow')" class="operator">x²</button>
-                        <button type="button" onclick="calcFunction('exp')" class="operator">exp</button>
-                        <button type="button" onclick="calcFunction('pi')" class="operator">π</button>
+                        <button type="button" onclick="calcFunction('sqrt')" class="operator" aria-label="Racine carrée">√</button>
+                        <button type="button" onclick="calcFunction('pow')" class="operator" aria-label="Puissance">x²</button>
+                        <button type="button" onclick="calcFunction('exp')" class="operator" aria-label="Exponentielle">exp</button>
+                        <button type="button" onclick="calcFunction('pi')" class="operator" aria-label="Pi">π</button>
 
                         <!-- Mémoire -->
-                        <button type="button" onclick="calcMemory('ms')" class="memory">MS</button>
-                        <button type="button" onclick="calcMemory('mr')" class="memory">MR</button>
-                        <button type="button" onclick="calcMemory('mc')" class="memory">MC</button>
-                        <button type="button" onclick="calcMemory('m+')" class="memory">M+</button>
+                        <button type="button" onclick="calcMemory('ms')" class="memory" aria-label="Mémoire stocker">MS</button>
+                        <button type="button" onclick="calcMemory('mr')" class="memory" aria-label="Mémoire rappeler">MR</button>
+                        <button type="button" onclick="calcMemory('mc')" class="memory" aria-label="Mémoire effacer">MC</button>
+                        <button type="button" onclick="calcMemory('m+')" class="memory" aria-label="Mémoire additionner">M+</button>
 
                         <!-- Opérations standard -->
                         <button type="button" onclick="clearCalc()" class="clear">C</button>
@@ -379,16 +387,16 @@
                     </div>
 
                     <div class="timer-controls">
-                        <button type="button" onclick="startTimer()" class="start-btn" id="timerStartBtn">
+                        <button type="button" onclick="startTimer()" class="start-btn" id="timerStartBtn" aria-label="Démarrer le minuteur">
                             <i class="fas fa-play"></i> Démarrer
                         </button>
-                        <button type="button" onclick="pauseTimer()" class="pause-btn" id="timerPauseBtn">
+                        <button type="button" onclick="pauseTimer()" class="pause-btn" id="timerPauseBtn" aria-label="Mettre en pause le minuteur">
                             <i class="fas fa-pause"></i> Pause
                         </button>
-                        <button type="button" onclick="resetTimer()" class="reset-btn">
+                        <button type="button" onclick="resetTimer()" class="reset-btn" aria-label="Réinitialiser le minuteur">
                             <i class="fas fa-undo"></i> Réinitialiser
                         </button>
-                        <button type="button" onclick="toggleSound()" class="sound-btn" id="soundToggle">
+                        <button type="button" onclick="toggleSound()" class="sound-btn" id="soundToggle" aria-label="Activer/désactiver le son">
                             <i class="fas fa-volume-up"></i> Son activé
                         </button>
                     </div>
@@ -402,30 +410,32 @@
             </section>
 
             <!-- Chronomètre -->
-            <section id="stopwatchTool" class="section" aria-labelledby="stopwatchTitle">
-                <h2 id="stopwatchTitle">Chronomètre</h2>
-                <div class="stopwatch-container">
-                    <div class="timer-display" id="stopwatchDisplay" aria-live="polite">00:00:00.000</div>
-
-                    <div class="timer-controls">
-                        <button type="button" onclick="startStopwatch()" class="start-btn" id="stopwatchStartBtn">
-                            <i class="fas fa-play"></i> Démarrer
-                        </button>
-                        <button type="button" onclick="pauseStopwatch()" class="pause-btn" id="stopwatchPauseBtn">
-                            <i class="fas fa-pause"></i> Pause
-                        </button>
-                        <button type="button" onclick="resetStopwatch()" class="reset-btn">
-                            <i class="fas fa-undo"></i> Réinitialiser
-                        </button>
-                        <button type="button" onclick="lapStopwatch()" class="lap-btn">
-                            <i class="fas fa-flag"></i> Tour
-                        </button>
+            <section id="metronomeTool" class="section" aria-labelledby="metronomeTitle">
+                <h2 id="metronomeTitle">Métronome</h2>
+                <div class="metronome-container">
+                    <div class="metronome-controls">
+                        <div class="tempo-control">
+                            <label for="tempoSlider">Tempo (BPM)</label>
+                            <input type="range" 
+                                   id="tempoSlider" 
+                                   class="tempo-slider"
+                                   min="30" 
+                                   max="240" 
+                                   value="120"
+                                   step="1"
+                                   aria-label="Ajuster le tempo">
+                            <div class="tempo-display" id="tempoDisplay">120 BPM</div>
+                        </div>
+                        <div class="metronome-buttons">
+                            <button type="button" id="startMetronome" class="metronome-btn">
+                                <i class="fas fa-play"></i> Démarrer
+                            </button>
+                            <button type="button" id="tapTempo" class="metronome-btn">
+                                <i class="fas fa-hand-point-up"></i> Tap Tempo
+                            </button>
+                        </div>
                     </div>
-
-                    <div class="laps-container">
-                        <h3>Tours</h3>
-                        <div class="laps-list" id="lapsList" aria-live="polite"></div>
-                    </div>
+                    <div class="beat-indicator" id="beatIndicator"></div>
                 </div>
             </section>
 
