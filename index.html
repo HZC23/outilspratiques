@@ -53,6 +53,7 @@
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
     
     <!-- Preload des ressources critiques -->
+    <link rel="preload" href="/icons/favicon.ico" as="image" type="image/x-icon">
     <link rel="preload" href="/styles.css" as="style">
     
     <!-- CSS -->
@@ -70,7 +71,6 @@
     <link rel="stylesheet" href="/css/tools/translator.css">
     <link rel="stylesheet" href="/css/tools/scheduler.css">
     <link rel="stylesheet" href="/css/tools/metronome.css">
-    <link rel="stylesheet" href="/css/tools/currency.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" 
           media="print" 
           onload="this.media='all'" 
@@ -103,7 +103,6 @@
     <script type="module" src="js/tools/scheduler.js"></script>
     <script type="module" src="js/tools/metronome.js"></script>
     <script type="module" src="js/tools/password.js"></script>
-    <script type="module" src="js/tools/currency.js"></script>
     <script type="module" src="js/theme.js"></script>
     
     <!-- Scripts non-modules pour les fonctions globales -->
@@ -121,11 +120,9 @@
         <div class="date" id="topDate">01 Janvier 2024</div>
     </div>
 
-    <header>
-        <div class="header-controls left-controls">
     <!-- Bouton thème -->
 <label class="theme-switch">
-                <input type="checkbox" class="theme-switch__checkbox">
+        <input type="checkbox" class="theme-switch__checkbox">
     <div class="theme-switch__container">
       <div class="theme-switch__clouds"></div>
       <div class="theme-switch__stars-container">
@@ -144,17 +141,13 @@
       </div>
     </div>
   </label>
-        </div>
-        <h1>Outils Pratiques</h1>
-        <div class="header-controls right-controls">
-            <button id="menuToggle" class="menu-toggle" aria-label="Ouvrir le menu">
-                <i class="fas fa-bars"></i>
-            </button>
-        </div>
-    </header>
 
-    <!-- Overlay pour le menu mobile -->
-    <div class="menu-overlay"></div>
+    <header>
+        <h1>Outils Pratiques</h1>
+        <button id="menuToggle" class="menu-toggle" aria-label="Ouvrir le menu">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
 
     <main class="container">
         <!-- Menu de navigation -->
@@ -435,7 +428,7 @@
                 <h2 id="stopwatchTitle">Chronomètre</h2>
                 <div class="stopwatch-container">
                     <div class="stopwatch-display" id="stopwatchDisplay">00:00:00.00</div>
-
+                    
                     <div class="stopwatch-controls">
                         <button type="button" id="startStopwatch" class="stopwatch-btn start-btn">
                             <i class="fas fa-play"></i> Démarrer
@@ -447,11 +440,11 @@
                             <i class="fas fa-undo"></i> Réinitialiser
                         </button>
                     </div>
-
+                    
                     <div class="laps-container">
                         <div class="laps-header">
-                        <h3>Tours</h3>
-                    </div>
+                            <h3>Tours</h3>
+                        </div>
                         <div id="lapsList" class="laps-list">
                             <div class="empty-laps">Aucun tour enregistré</div>
                         </div>

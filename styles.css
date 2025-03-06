@@ -217,7 +217,7 @@ header h1 {
 
 .menu-category {
     position: relative;
-        width: 100%;
+    width: 100%;
     margin-bottom: var(--spacing-sm);
     animation: fadeIn 0.3s ease-in-out;
     animation-fill-mode: both;
@@ -514,7 +514,7 @@ header h1 {
         position: static;
         box-shadow: none;
         margin-top: 0;
-    border: none;
+        border: none;
         border-left: 2px solid var(--border-color);
         margin-left: 1rem;
         display: none;
@@ -533,7 +533,7 @@ header h1 {
 
 @media (max-width: 768px) {
     .container {
-    padding: 0.5rem;
+        padding: 0.5rem;
     }
 
     header h1 {
@@ -941,7 +941,7 @@ input:focus, select:focus, textarea:focus {
     margin: -1px;
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
+    white-space: nowrap;
     border: 0;
 }
 
