@@ -125,5 +125,23 @@ export const Utils = {
      */
     generateId() {
         return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    },
+
+    /**
+     * Annonce un message aux lecteurs d'écran pour l'accessibilité
+     * @param {string} message - Le message à annoncer
+     */
+    announceToScreenReader(message) {
+        const announcer = document.getElementById('screenReaderAnnouncer') || (() => {
+            const el = document.createElement('div');
+            el.id = 'screenReaderAnnouncer';
+            el.className = 'sr-only';
+            el.setAttribute('aria-live', 'polite');
+            el.setAttribute('aria-atomic', 'true');
+            document.body.appendChild(el);
+            return el;
+        })();
+        
+        announcer.textContent = message;
     }
 }; 

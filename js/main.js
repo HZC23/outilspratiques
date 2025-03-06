@@ -1,10 +1,9 @@
-import { CONFIG } from './config.js';
-import { Utils } from './utils.js';
 import { ThemeManager } from './theme.js';
-import { NavigationManager } from './navigation.js';
 import { ClockManager } from './clock.js';
-import { ColorManager } from './tools/color.js';
 import { MenuManager } from './menu.js';
+import { NotificationManager } from './notification.js';
+import { CacheManager } from './cache.js';
+import { PerformanceManager } from './performance.js';
 
 /**
  * Classe principale de l'application
@@ -18,42 +17,154 @@ class App {
      * Initialise l'application
      */
     init() {
-        // Initialiser le thème
+        // Initialiser les polyfills
+        this.initPolyfills();
+        
+        // Initialiser le service worker
+        this.initServiceWorker();
+        
+        // Initialiser le gestionnaire de thème
         ThemeManager.init();
-
+        
         // Initialiser l'horloge
         ClockManager.init();
-
+        
         // Initialiser le menu
         MenuManager.init();
-
-        // Initialiser la navigation
-        NavigationManager.init();
-
+        
         // Initialiser les outils
         this.initTools();
-
+        
         // Initialiser les gestionnaires d'événements
         this.initEventHandlers();
-
+        
         // Vérifier si une ancre est présente dans l'URL
         this.checkUrlHash();
+        
+        // Initialiser la gestion de l'installation PWA
+        this.initPWA();
+        
+        // Initialiser le lazy loading des images
+        this.initLazyLoading();
+        
+        console.log('Application initialisée');
     }
-
+    
+    /**
+     * Initialise les polyfills
+     */
+    initPolyfills() {
+        // Polyfill pour Element.prototype.matches
+        if (!Element.prototype.matches) {
+            Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
+        }
+        
+        // Polyfill pour Element.prototype.closest
+        if (!Element.prototype.closest) {
+            Element.prototype.closest = function(s) {
+                let el = this;
+                do {
+                    if (el.matches(s)) return el;
+                    el = el.parentElement || el.parentNode;
+                } while (el !== null && el.nodeType === 1);
+                return null;
+            };
+        }
+    }
+    
+    /**
+     * Initialise le service worker
+     */
+    initServiceWorker() {
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').then(registration => {
+                    console.log('ServiceWorker registration successful');
+                }).catch(err => {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+        
+        window.addEventListener('online', () => {
+            document.body.classList.remove('offline');
+            NotificationManager.show('Connexion rétablie', 'success');
+        });
+        
+        window.addEventListener('offline', () => {
+            document.body.classList.add('offline');
+            NotificationManager.show('Vous êtes hors ligne', 'warning');
+        });
+    }
+    
+    /**
+     * Initialise la gestion de l'installation PWA
+     */
+    initPWA() {
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            this.showInstallPromotion(deferredPrompt);
+        });
+    }
+    
+    /**
+     * Affiche la promotion d'installation
+     * @param {Event} deferredPrompt - L'événement beforeinstallprompt
+     */
+    showInstallPromotion(deferredPrompt) {
+        const installButton = document.createElement('button');
+        installButton.textContent = 'Installer l\'application';
+        installButton.classList.add('install-button');
+        installButton.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    console.log('User accepted the install prompt');
+                }
+                deferredPrompt = null;
+                installButton.remove();
+            }
+        });
+        document.body.appendChild(installButton);
+    }
+    
+    /**
+     * Initialise le lazy loading des images
+     */
+    initLazyLoading() {
+        if ('IntersectionObserver' in window) {
+            const lazyImages = document.querySelectorAll('img[data-src]');
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.classList.add('loaded');
+                        observer.unobserve(img);
+                    }
+                });
+            });
+            
+            lazyImages.forEach(img => imageObserver.observe(img));
+        } else {
+            // Fallback pour les navigateurs qui ne supportent pas IntersectionObserver
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                img.src = img.dataset.src;
+            });
+        }
+    }
+    
     /**
      * Initialise les outils
      */
     initTools() {
-        // Initialiser le gestionnaire de couleurs
-        ColorManager.init();
-        
-        // Afficher l'outil par défaut ou celui spécifié dans l'URL
-        const defaultTool = document.querySelector('.section');
-        if (defaultTool) {
-            defaultTool.style.display = 'block';
-        }
+        // Initialiser les outils spécifiques ici
+        // Chaque outil devrait avoir son propre module
     }
-
+    
     /**
      * Initialise les gestionnaires d'événements
      */
@@ -62,24 +173,28 @@ class App {
         const debouncedResize = PerformanceManager.debounce(() => {
             this.handleResize();
         }, 250);
-
+        
         window.addEventListener('resize', debouncedResize);
-
+        
         // Gestionnaire de navigation
-        window.addEventListener('popstate', () => {
-            const toolId = window.location.hash.slice(1);
-            if (toolId) {
-                this.showTool(toolId);
+        window.addEventListener('popstate', (event) => {
+            if (event.state && event.state.tool) {
+                this.showTool(event.state.tool);
+            } else {
+                const toolId = window.location.hash.slice(1);
+                if (toolId) {
+                    this.showTool(toolId);
+                }
             }
         });
-
+        
         // Gestionnaire de clic global pour fermer les menus
         document.addEventListener('click', (event) => {
             if (!event.target.closest('.menu') && !event.target.closest('.menu-toggle')) {
                 this.closeAllSubmenus();
             }
         });
-
+        
         // Gestionnaire de touche Escape
         document.addEventListener('keydown', (event) => {
             if (event.key === 'Escape') {
@@ -92,327 +207,188 @@ class App {
                 }
             }
         });
-
+        
         // Gestionnaire pour les éléments du menu
         document.querySelectorAll('.submenu-item').forEach(item => {
             item.addEventListener('click', (e) => {
                 const toolId = e.currentTarget.getAttribute('data-tool-id');
                 if (toolId) {
                     this.showTool(toolId);
-                    
-                    // Fermer le menu mobile si ouvert
-                    const mainMenu = document.getElementById('mainMenu');
-                    if (mainMenu && mainMenu.classList.contains('active')) {
-                        this.toggleMobileMenu();
-                    }
                 }
             });
         });
-
-        // Gestionnaire pour les déclencheurs de sous-menu
-        document.querySelectorAll('.menu-trigger').forEach(trigger => {
-            trigger.addEventListener('click', (e) => {
-                e.preventDefault();
-                const menuId = trigger.getAttribute('data-menu-id');
-                if (menuId) {
-                    this.toggleSubmenu(menuId);
+        
+        // Support du pavé numérique pour la calculatrice
+        document.addEventListener('keydown', (event) => {
+            if (!document.getElementById('calculatorTool')?.classList.contains('active')) return;
+            
+            // Empêcher l'action si l'utilisateur appuie sur un bouton de la calculatrice (évite les doublons)
+            if (event.target.closest('.calculator-grid button')) return;
+            
+            const keyMap = {
+                "0": "0", "1": "1", "2": "2", "3": "3", "4": "4", "5": "5", "6": "6", "7": "7", "8": "8", "9": "9",
+                ".": ".", "/": "÷", "*": "×", "-": "-", "+": "+",
+                "Enter": "=", "Backspace": "backspace", "Escape": "clear"
+            };
+            
+            if (keyMap[event.key] !== undefined) {
+                event.preventDefault();
+                
+                if (event.key === "Enter") {
+                    calculate();
+                } else if (event.key === "Backspace") {
+                    backspace();
+                } else if (event.key === "Escape") {
+                    clearCalc();
+                } else {
+                    addToCalc(keyMap[event.key]);
                 }
-            });
-        });
-    }
-
-    /**
-     * Vérifie si une ancre est présente dans l'URL
-     */
-    checkUrlHash() {
-        const hash = window.location.hash;
-        if (hash) {
-            const toolId = hash.slice(1);
-            this.showTool(toolId);
-        }
-    }
-
-    /**
-     * Ferme tous les sous-menus
-     */
-    closeAllSubmenus() {
-        document.querySelectorAll('.submenu').forEach(submenu => {
-            submenu.classList.remove('active');
-            const trigger = document.querySelector(`[data-menu-id="${submenu.id}"]`);
-            if (trigger) {
-                trigger.setAttribute('aria-expanded', 'false');
             }
         });
     }
-
+    
     /**
      * Gère le redimensionnement de la fenêtre
      */
     handleResize() {
-        // Fermer les sous-menus sur mobile
-        if (window.innerWidth <= 768) {
-            this.closeAllSubmenus();
-        }
+        // Mettre à jour l'état de l'application en fonction de la taille de la fenêtre
+        const isMobile = window.innerWidth <= 768;
         
-        // Fermer le menu mobile si la fenêtre est redimensionnée au-delà de 992px
-        if (window.innerWidth > 992) {
-            const mainMenu = document.getElementById('mainMenu');
-            if (mainMenu && mainMenu.classList.contains('active')) {
-                this.toggleMobileMenu();
+        // Mettre à jour l'état du menu
+        if (MenuManager.state.isMobile !== isMobile) {
+            MenuManager.state.isMobile = isMobile;
+            
+            if (!isMobile) {
+                // Passer du mobile au desktop
+                MenuManager.closeMobileMenu();
             }
         }
     }
-
+    
     /**
-     * Bascule l'état d'un sous-menu
-     * @param {string} menuId - L'identifiant du sous-menu
-     * @param {boolean} [forceState] - État forcé (optionnel)
+     * Ferme tous les sous-menus
      */
-    toggleSubmenu(menuId, forceState) {
-        const submenu = document.getElementById(menuId);
-        if (!submenu) return;
-
-        const trigger = document.querySelector(`[data-menu-id="${menuId}"]`);
-        if (!trigger) return;
-
-        const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
-        const newState = forceState !== undefined ? forceState : !isExpanded;
-
-        // Fermer les autres sous-menus
-        document.querySelectorAll('.submenu').forEach(menu => {
-            if (menu.id !== menuId) {
-                menu.classList.remove('active');
-                const otherTrigger = document.querySelector(`[data-menu-id="${menu.id}"]`);
-                if (otherTrigger) {
-                    otherTrigger.setAttribute('aria-expanded', 'false');
-                }
+    closeAllSubmenus() {
+        document.querySelectorAll('.submenu.active').forEach(submenu => {
+            const trigger = document.querySelector(`[data-menu-id="${submenu.id}"]`);
+            if (trigger) {
+                trigger.setAttribute('aria-expanded', 'false');
             }
+            submenu.classList.remove('active');
+            submenu.setAttribute('aria-hidden', 'true');
         });
-
-        // Basculer le sous-menu actuel
-        submenu.classList.toggle('active', newState);
-        trigger.setAttribute('aria-expanded', newState);
-
-        // Annoncer le changement d'état pour l'accessibilité
-        const message = newState ? 'Sous-menu ouvert' : 'Sous-menu fermé';
-        Utils.announceToScreenReader(message);
     }
-
+    
     /**
-     * Bascule l'état du menu mobile
+     * Bascule l'affichage du menu mobile
      */
     toggleMobileMenu() {
-        const mainMenu = document.getElementById('mainMenu');
-        const menuOverlay = document.querySelector('.menu-overlay');
+        const menu = document.getElementById('mainMenu');
+        const menuToggle = document.getElementById('menuToggle');
+        const overlay = document.querySelector('.menu-overlay');
         
-        if (mainMenu) {
-            mainMenu.classList.toggle('active');
-            
-            if (menuOverlay) {
-                menuOverlay.classList.toggle('active');
-            }
-            
-            // Empêcher le défilement du body quand le menu est ouvert
-            document.body.style.overflow = mainMenu.classList.contains('active') ? 'hidden' : '';
+        if (!menu || !menuToggle) return;
+        
+        const isActive = menu.classList.contains('active');
+        
+        menu.classList.toggle('active', !isActive);
+        menuToggle.setAttribute('aria-expanded', !isActive);
+        
+        if (overlay) {
+            overlay.classList.toggle('active', !isActive);
         }
+        
+        // Bloquer le défilement du body quand le menu est ouvert
+        document.body.style.overflow = !isActive ? 'hidden' : '';
     }
-
+    
     /**
      * Affiche un outil spécifique
      * @param {string} toolId - L'identifiant de l'outil à afficher
      */
     showTool(toolId) {
-        // Masquer tous les outils
-        document.querySelectorAll('.section').forEach(section => {
-            section.style.display = 'none';
-        });
-
-        // Afficher l'outil sélectionné
-        const tool = document.getElementById(toolId);
-        if (tool) {
-            tool.style.display = 'block';
-            
-            // Mettre à jour l'URL sans recharger la page
-            history.pushState({tool: toolId}, '', `#${toolId}`);
-            
-            // Mettre à jour l'état actif des boutons du menu
-            document.querySelectorAll('.submenu-item').forEach(item => {
-                item.classList.remove('active');
-                if (item.getAttribute('data-tool-id') === toolId) {
-                    item.classList.add('active');
-                }
+        // Animation de sortie pour l'outil actuel
+        const currentTool = document.querySelector('.section.active');
+        if (currentTool) {
+            currentTool.style.opacity = '0';
+            currentTool.style.transform = 'translateY(20px)';
+        }
+        
+        // Masquer tous les outils après l'animation
+        setTimeout(() => {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+                section.style.display = 'none';
             });
-
-            // Fermer tous les sous-menus
-            this.closeAllSubmenus();
-
-            // Annoncer le changement pour l'accessibilité
-            const toolTitle = tool.querySelector('h2');
-            if (toolTitle) {
-                Utils.announceToScreenReader(`Outil ${toolTitle.textContent} affiché`);
+            
+            // Afficher le nouvel outil avec animation
+            const tool = document.getElementById(toolId);
+            if (tool) {
+                tool.classList.add('active');
+                tool.style.display = 'block';
+                
+                requestAnimationFrame(() => {
+                    tool.style.opacity = '1';
+                    tool.style.transform = 'translateY(0)';
+                });
+                
+                // Mettre à jour l'URL
+                history.pushState({ tool: toolId }, '', `#${toolId}`);
+                
+                // Mettre à jour le menu
+                this.updateMenuState(toolId);
+            }
+        }, 300);
+    }
+    
+    /**
+     * Met à jour l'état du menu en fonction de l'outil actif
+     * @param {string} toolId - L'identifiant de l'outil actif
+     */
+    updateMenuState(toolId) {
+        document.querySelectorAll('.submenu-item').forEach(item => {
+            item.classList.remove('active');
+            if (item.getAttribute('data-tool-id') === toolId) {
+                item.classList.add('active');
+                
+                // Ouvrir le sous-menu parent si nécessaire
+                const parentSubmenu = item.closest('.submenu');
+                if (parentSubmenu) {
+                    parentSubmenu.classList.add('active');
+                    const trigger = document.querySelector(`[data-menu-id="${parentSubmenu.id}"]`);
+                    if (trigger) {
+                        trigger.setAttribute('aria-expanded', 'true');
+                    }
+                }
+            }
+        });
+    }
+    
+    /**
+     * Vérifie si une ancre est présente dans l'URL
+     */
+    checkUrlHash() {
+        const hash = window.location.hash.slice(1);
+        if (hash) {
+            this.showTool(hash);
+        } else {
+            // Afficher l'outil par défaut
+            const defaultTool = document.querySelector('.section');
+            if (defaultTool) {
+                defaultTool.style.display = 'block';
             }
         }
     }
 }
 
-// Gestionnaire d'erreurs global
-const ErrorManager = {
-    showError(message, duration = 5000) {
-        const errorElement = document.createElement('div');
-        errorElement.className = 'status-message status-error';
-        errorElement.setAttribute('role', 'alert');
-        errorElement.textContent = message;
-        
-        document.body.appendChild(errorElement);
-        
-        setTimeout(() => {
-            errorElement.remove();
-        }, duration);
-    },
-
-    showSuccess(message, duration = 3000) {
-        const successElement = document.createElement('div');
-        successElement.className = 'status-message status-success';
-        successElement.setAttribute('role', 'status');
-        successElement.textContent = message;
-        
-        document.body.appendChild(successElement);
-        
-        setTimeout(() => {
-            successElement.remove();
-        }, duration);
-    }
-};
-
-// Gestionnaire de chargement
-const LoadingManager = {
-    show(element) {
-        if (!element) return;
-        
-        const loadingOverlay = document.createElement('div');
-        loadingOverlay.className = 'loading-overlay';
-        loadingOverlay.setAttribute('aria-label', 'Chargement en cours');
-        
-        const spinner = document.createElement('div');
-        spinner.className = 'loading-spinner';
-        loadingOverlay.appendChild(spinner);
-        
-        element.appendChild(loadingOverlay);
-    },
-
-    hide(element) {
-        if (!element) return;
-        
-        const loadingOverlay = element.querySelector('.loading-overlay');
-        if (loadingOverlay) {
-            loadingOverlay.remove();
-        }
-    }
-};
-
-// Gestionnaire de performance
-const PerformanceManager = {
-    debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-        };
-    },
-
-    throttle(func, limit) {
-        let inThrottle;
-        return function executedFunction(...args) {
-            if (!inThrottle) {
-                func(...args);
-                inThrottle = true;
-                setTimeout(() => inThrottle = false, limit);
-            }
-        };
-    }
-};
-
-// Initialisation de l'application
+// Initialiser l'application lorsque le DOM est chargé
 document.addEventListener('DOMContentLoaded', () => {
-    // Gestion des erreurs globales
-    window.addEventListener('error', (event) => {
-        ErrorManager.showError('Une erreur est survenue. Veuillez réessayer.');
-        console.error('Erreur globale:', event.error);
-    });
-
-    // Gestion des promesses non gérées
-    window.addEventListener('unhandledrejection', (event) => {
-        ErrorManager.showError('Une erreur est survenue. Veuillez réessayer.');
-        console.error('Promesse non gérée:', event.reason);
-    });
-
-    // Récupération du thème stocké ou utilisation du thème par défaut
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-
-    // Gestion du switch de thème
-    const themeSwitch = document.querySelector('.theme-switch');
-    if (themeSwitch) {
-        themeSwitch.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-        });
-    }
-
-    // Gestion du menu toggle pour mobile
-    const menuToggle = document.getElementById('menuToggle');
-    const mainMenu = document.getElementById('mainMenu');
-    
-    if (menuToggle && mainMenu) {
-        // Créer l'overlay pour le menu mobile s'il n'existe pas déjà
-        let menuOverlay = document.querySelector('.menu-overlay');
-        if (!menuOverlay) {
-            menuOverlay = document.createElement('div');
-            menuOverlay.className = 'menu-overlay';
-            document.body.appendChild(menuOverlay);
-        }
-        
-        // Fonction pour basculer le menu
-        const toggleMenu = () => {
-            mainMenu.classList.toggle('active');
-            menuOverlay.classList.toggle('active');
-            document.body.style.overflow = mainMenu.classList.contains('active') ? 'hidden' : '';
-        };
-        
-        // Événement pour le bouton de menu
-        menuToggle.addEventListener('click', toggleMenu);
-        
-        // Fermer le menu en cliquant sur l'overlay
-        menuOverlay.addEventListener('click', toggleMenu);
-        
-        // Fermer le menu en cliquant sur un lien du menu
-        const menuLinks = mainMenu.querySelectorAll('a:not(.menu-trigger), .submenu-item');
-        menuLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                if (mainMenu.classList.contains('active')) {
-                    toggleMenu();
-                }
-            });
-        });
-        
-        // Fermer le menu lors du redimensionnement de la fenêtre
-        window.addEventListener('resize', () => {
-            if (window.innerWidth > 992 && mainMenu.classList.contains('active')) {
-                toggleMenu();
-            }
-        });
-    }
-
-    // Initialisation des gestionnaires
     window.app = new App();
-    window.errorManager = ErrorManager;
-    window.loadingManager = LoadingManager;
-    window.performanceManager = PerformanceManager;
-}); 
+});
+
+// Gestion des erreurs globales
+window.onerror = function(msg, url, lineNo, columnNo, error) {
+    console.error('Error: ' + msg + '\nURL: ' + url + '\nLine: ' + lineNo + '\nColumn: ' + columnNo + '\nError object: ' + JSON.stringify(error));
+    NotificationManager.show('Une erreur est survenue. Veuillez réessayer.', 'error');
+    return false;
+}; 

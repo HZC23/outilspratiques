@@ -5,6 +5,13 @@
     box-shadow: var(--box-shadow);
     max-width: 600px;
     margin: 0 auto;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    animation: fadeInUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.metronome-container:hover {
+    box-shadow: var(--hover-shadow);
+    transform: translateY(-2px);
 }
 
 .metronome-controls {
@@ -18,12 +25,14 @@
     display: flex;
     flex-direction: column;
     gap: var(--spacing-sm);
+    animation: fadeIn 0.5s ease-in-out;
 }
 
 .tempo-control label {
     font-weight: 500;
     color: var(--text-color);
     margin-bottom: var(--spacing-xs);
+    animation: slideInLeft 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .tempo-slider {
@@ -35,6 +44,13 @@
     border-radius: 4px;
     outline: none;
     margin: var(--spacing-sm) 0;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    animation: slideInRight 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.tempo-slider:hover {
+    background: linear-gradient(to right, var(--primary-color), var(--info-color));
 }
 
 .tempo-slider::-webkit-slider-thumb {
@@ -47,6 +63,12 @@
     cursor: pointer;
     border: 2px solid var(--card-bg);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.tempo-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    background: var(--info-color);
 }
 
 .tempo-slider::-moz-range-thumb {
@@ -57,6 +79,12 @@
     cursor: pointer;
     border: 2px solid var(--card-bg);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.tempo-slider::-moz-range-thumb:hover {
+    transform: scale(1.2);
+    background: var(--info-color);
 }
 
 .tempo-slider:focus {
@@ -77,6 +105,13 @@
     text-align: center;
     color: var(--text-color);
     margin: var(--spacing-sm) 0;
+    animation: fadeIn 0.5s ease-in-out;
+    transition: all 0.3s ease;
+}
+
+.tempo-display:hover {
+    color: var(--primary-color);
+    transform: scale(1.05);
 }
 
 .metronome-buttons {
@@ -84,6 +119,9 @@
     justify-content: center;
     gap: var(--spacing-md);
     margin-top: var(--spacing-md);
+    animation: fadeInUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation-delay: 0.2s;
+    animation-fill-mode: both;
 }
 
 .metronome-btn {
@@ -95,10 +133,45 @@
     font-size: 1rem;
     font-weight: 500;
     cursor: pointer;
-    transition: var(--transition);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
+    position: relative;
+    overflow: hidden;
+}
+
+.metronome-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
+}
+
+.metronome-btn:hover::after {
+    animation: ripple 0.6s ease-out;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+    }
+    20% {
+        transform: scale(25, 25);
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(40, 40);
+    }
 }
 
 .metronome-btn:hover {
@@ -109,10 +182,16 @@
 
 .metronome-btn.active {
     background-color: var(--error-color);
+    animation: pulse 2s infinite;
 }
 
 .metronome-btn i {
     font-size: 1rem;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.metronome-btn:hover i {
+    transform: scale(1.2);
 }
 
 .beat-indicator {
@@ -121,23 +200,113 @@
     border-radius: 50%;
     background-color: var(--border-color);
     margin: var(--spacing-md) auto;
-    transition: background-color 0.05s ease;
+    transition: background-color 0.05s ease, transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: fadeIn 0.5s ease-in-out;
+    animation-delay: 0.3s;
+    animation-fill-mode: both;
+    position: relative;
+}
+
+.beat-indicator::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border-radius: 50%;
+    background: transparent;
+    border: 2px solid transparent;
+    animation: pulseBorder 2s infinite;
+}
+
+@keyframes pulseBorder {
+    0% {
+        border-color: transparent;
+        transform: scale(1);
+    }
+    50% {
+        border-color: var(--primary-color);
+        transform: scale(1.1);
+    }
+    100% {
+        border-color: transparent;
+        transform: scale(1);
+    }
 }
 
 .beat-indicator.active {
     background-color: var(--primary-color);
-    animation: pulse 0.1s ease-out;
+    animation: beatPulse 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 0 20px var(--primary-color);
+}
+
+@keyframes beatPulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(74, 144, 226, 0.7);
+    }
+    50% {
+        transform: scale(1.2);
+        box-shadow: 0 0 10px 5px rgba(74, 144, 226, 0.5);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(74, 144, 226, 0);
+    }
 }
 
 @keyframes pulse {
     0% {
-        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
     }
-    50% {
-        transform: scale(1.1);
+    70% {
+        box-shadow: 0 0 0 10px rgba(220, 53, 69, 0);
     }
     100% {
-        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
     }
 }
 
@@ -149,6 +318,10 @@
 
 [data-theme="dark"] .tempo-slider {
     background: var(--border-color);
+}
+
+[data-theme="dark"] .tempo-slider:hover {
+    background: linear-gradient(to right, var(--primary-color), var(--info-color));
 }
 
 [data-theme="dark"] .tempo-slider::-webkit-slider-thumb {
@@ -171,6 +344,7 @@
 
 [data-theme="dark"] .beat-indicator.active {
     background-color: var(--primary-color);
+    box-shadow: 0 0 20px var(--primary-color);
 }
 
 /* Responsive */
@@ -191,5 +365,28 @@
     .beat-indicator {
         width: 40px;
         height: 40px;
+    }
+}
+
+/* Réduction des animations pour les utilisateurs qui le préfèrent */
+@media (prefers-reduced-motion: reduce) {
+    .metronome-container,
+    .tempo-control,
+    .tempo-control label,
+    .tempo-slider,
+    .tempo-display,
+    .metronome-buttons,
+    .beat-indicator {
+        animation: none !important;
+        transition: none !important;
+    }
+    
+    .beat-indicator.active {
+        animation: none !important;
+        background-color: var(--primary-color);
+    }
+    
+    .metronome-btn.active {
+        animation: none !important;
     }
 } 

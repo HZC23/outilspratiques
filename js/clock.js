@@ -1,158 +1,122 @@
 import { Utils } from './utils.js';
 
+/**
+ * Gestionnaire d'horloge
+ * Gère l'affichage de l'heure et de la date
+ */
 export const ClockManager = {
     /**
-     * État de l'horloge
+     * État du gestionnaire d'horloge
      */
     state: {
         intervalId: null,
-        is24Hour: true,
-        showSeconds: true
+        timeElement: null,
+        dateElement: null,
+        initialized: false
     },
-
+    
     /**
      * Initialise le gestionnaire d'horloge
      */
     init() {
-        this.loadPreferences();
-        this.updateClock();
-        this.setupInterval();
-        this.setupListeners();
-    },
-
-    /**
-     * Charge les préférences utilisateur
-     */
-    loadPreferences() {
-        const preferences = Utils.loadFromStorage('clockPreferences', {
-            is24Hour: true,
-            showSeconds: true
-        });
+        // Récupérer les éléments du DOM
+        this.state.timeElement = document.getElementById('topTime');
+        this.state.dateElement = document.getElementById('topDate');
         
-        this.state.is24Hour = preferences.is24Hour;
-        this.state.showSeconds = preferences.showSeconds;
-    },
-
-    /**
-     * Configure l'intervalle de mise à jour
-     */
-    setupInterval() {
-        // Nettoyer l'intervalle existant si présent
-        if (this.state.intervalId) {
-            clearInterval(this.state.intervalId);
+        // Vérifier si les éléments existent
+        if (!this.state.timeElement || !this.state.dateElement) {
+            console.warn('Éléments d\'horloge non trouvés dans le DOM');
+            return;
         }
-
-        // Synchroniser avec les secondes
-        const now = new Date();
-        const delay = 1000 - now.getMilliseconds();
         
-        setTimeout(() => {
-            this.updateClock();
-            this.state.intervalId = setInterval(() => this.updateClock(), 1000);
-        }, delay);
+        // Mettre à jour l'horloge immédiatement
+        this.updateClock();
+        
+        // Mettre à jour l'horloge toutes les secondes
+        this.state.intervalId = setInterval(() => this.updateClock(), 1000);
+        
+        this.state.initialized = true;
+        console.log('Gestionnaire d\'horloge initialisé');
     },
-
-    /**
-     * Configure les écouteurs d'événements
-     */
-    setupListeners() {
-        // Écouteur pour le format 12/24h
-        document.getElementById('toggleTimeFormat')?.addEventListener('click', () => {
-            this.toggleTimeFormat();
-        });
-
-        // Écouteur pour l'affichage des secondes
-        document.getElementById('toggleSeconds')?.addEventListener('click', () => {
-            this.toggleSeconds();
-        });
-    },
-
+    
     /**
      * Met à jour l'affichage de l'horloge
      */
     updateClock() {
         const now = new Date();
-        const timeElement = document.getElementById('topTime');
-        const dateElement = document.getElementById('topDate');
-
-        if (timeElement) {
-            timeElement.textContent = this.formatTime(now);
-            // Ajouter une animation de pulse
-            timeElement.classList.add('pulse');
-            setTimeout(() => timeElement.classList.remove('pulse'), 200);
-        }
-
-        if (dateElement) {
-            dateElement.textContent = Utils.formatDate(now);
-        }
-    },
-
-    /**
-     * Formate l'heure selon les préférences
-     * @param {Date} date - La date à formater
-     * @returns {string} L'heure formatée
-     */
-    formatTime(date) {
-        let hours = date.getHours();
-        const minutes = date.getMinutes().toString().padStart(2, '0');
-        const seconds = date.getSeconds().toString().padStart(2, '0');
-        let period = '';
-
-        if (!this.state.is24Hour) {
-            period = hours >= 12 ? ' PM' : ' AM';
-            hours = hours % 12 || 12;
-        }
-
-        hours = hours.toString().padStart(2, '0');
         
-        return `${hours}:${minutes}${this.state.showSeconds ? ':' + seconds : ''}${period}`;
-    },
-
-    /**
-     * Bascule entre les formats 12h et 24h
-     */
-    toggleTimeFormat() {
-        this.state.is24Hour = !this.state.is24Hour;
-        this.updateClock();
-        this.savePreferences();
+        // Formater l'heure
+        const timeString = now.toLocaleTimeString('fr-FR');
         
-        Utils.showNotification(
-            `Format ${this.state.is24Hour ? '24h' : '12h'} activé`,
-            'info'
-        );
-    },
-
-    /**
-     * Bascule l'affichage des secondes
-     */
-    toggleSeconds() {
-        this.state.showSeconds = !this.state.showSeconds;
-        this.updateClock();
-        this.savePreferences();
-        
-        Utils.showNotification(
-            `Secondes ${this.state.showSeconds ? 'affichées' : 'masquées'}`,
-            'info'
-        );
-    },
-
-    /**
-     * Sauvegarde les préférences utilisateur
-     */
-    savePreferences() {
-        Utils.saveToStorage('clockPreferences', {
-            is24Hour: this.state.is24Hour,
-            showSeconds: this.state.showSeconds
+        // Formater la date
+        const dateString = now.toLocaleDateString('fr-FR', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
         });
+        
+        // Mettre à jour les éléments du DOM seulement si nécessaire
+        if (this.state.timeElement && this.state.timeElement.textContent !== timeString) {
+            this.state.timeElement.textContent = timeString;
+        }
+        
+        if (this.state.dateElement && this.state.dateElement.textContent !== dateString) {
+            this.state.dateElement.textContent = dateString;
+        }
     },
-
+    
     /**
-     * Nettoie les ressources lors de la destruction
+     * Arrête le gestionnaire d'horloge
      */
-    destroy() {
+    stop() {
         if (this.state.intervalId) {
             clearInterval(this.state.intervalId);
             this.state.intervalId = null;
         }
+    },
+    
+    /**
+     * Redémarre le gestionnaire d'horloge
+     */
+    restart() {
+        this.stop();
+        this.state.intervalId = setInterval(() => this.updateClock(), 1000);
+        this.updateClock();
+    },
+    
+    /**
+     * Formate une date
+     * @param {Date} date - La date à formater
+     * @param {Object} options - Les options de formatage
+     * @returns {string} - La date formatée
+     */
+    formatDate(date, options = {}) {
+        const defaultOptions = {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        };
+        
+        const mergedOptions = { ...defaultOptions, ...options };
+        return date.toLocaleDateString('fr-FR', mergedOptions);
+    },
+    
+    /**
+     * Formate une heure
+     * @param {Date} date - La date à formater
+     * @param {Object} options - Les options de formatage
+     * @returns {string} - L'heure formatée
+     */
+    formatTime(date, options = {}) {
+        const defaultOptions = {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        };
+        
+        const mergedOptions = { ...defaultOptions, ...options };
+        return date.toLocaleTimeString('fr-FR', mergedOptions);
     }
 }; 

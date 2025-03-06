@@ -6,14 +6,23 @@ class Metronome {
         this.isPlaying = false;
         this.timerWorker = null;
         this.beatCount = 0;
+        this.useWorkerFallback = false;
+        this.fallbackTimerId = null;
 
-        this.initializeAudioContext();
         this.setupEventListeners();
         this.createWorker();
     }
 
     initializeAudioContext() {
-        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        if (!this.audioContext) {
+            try {
+                this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                console.log('AudioContext initialisé avec succès');
+            } catch (e) {
+                console.error('Erreur lors de l\'initialisation de l\'AudioContext:', e);
+            }
+        }
+        return this.audioContext;
     }
 
     setupEventListeners() {
@@ -28,6 +37,7 @@ class Metronome {
         });
 
         startButton.addEventListener('click', () => {
+            this.initializeAudioContext();
             if (!this.isPlaying) {
                 this.start();
                 startButton.innerHTML = '<i class="fas fa-pause"></i> Pause';
@@ -76,26 +86,20 @@ class Metronome {
     }
 
     createWorker() {
-        const blob = new Blob([`
-            let timerID = null;
-            let interval = 25;
-
-            self.onmessage = function(e) {
-                if (e.data === "start") {
-                    timerID = setInterval(function() { postMessage("tick"); }, interval);
-                } else if (e.data === "stop") {
-                    clearInterval(timerID);
-                    timerID = null;
+        try {
+            // Utiliser un fichier worker externe au lieu d'un Blob URL
+            this.timerWorker = new Worker('js/tools/metronome-worker.js');
+            this.timerWorker.onmessage = (e) => {
+                if (e.data === "tick") {
+                    this.scheduler();
                 }
             };
-        `], { type: 'text/javascript' });
-
-        this.timerWorker = new Worker(URL.createObjectURL(blob));
-        this.timerWorker.onmessage = (e) => {
-            if (e.data === "tick") {
-                this.scheduler();
-            }
-        };
+            console.log('Worker du métronome créé avec succès');
+        } catch (e) {
+            console.error('Erreur lors de la création du worker du métronome:', e);
+            // Fallback en cas d'erreur: utiliser setTimeout au lieu d'un worker
+            this.useWorkerFallback = true;
+        }
     }
 
     nextNote() {
@@ -134,19 +138,39 @@ class Metronome {
     start() {
         if (this.isPlaying) return;
 
-        if (this.audioContext.state === 'suspended') {
+        // S'assurer que l'AudioContext est initialisé
+        this.initializeAudioContext();
+
+        if (this.audioContext && this.audioContext.state === 'suspended') {
             this.audioContext.resume();
         }
 
         this.isPlaying = true;
         this.beatCount = 0;
         this.nextNoteTime = this.audioContext.currentTime + 0.05;
-        this.timerWorker.postMessage("start");
+        
+        if (this.useWorkerFallback) {
+            // Utiliser setTimeout comme fallback si le worker n'est pas disponible
+            this.fallbackTimerId = setInterval(() => this.scheduler(), 25);
+        } else if (this.timerWorker) {
+            // Utiliser le worker si disponible
+            this.timerWorker.postMessage("start");
+        }
     }
 
     stop() {
         this.isPlaying = false;
-        this.timerWorker.postMessage("stop");
+        
+        if (this.useWorkerFallback) {
+            // Arrêter le setTimeout si on utilise le fallback
+            if (this.fallbackTimerId) {
+                clearInterval(this.fallbackTimerId);
+                this.fallbackTimerId = null;
+            }
+        } else if (this.timerWorker) {
+            // Arrêter le worker si disponible
+            this.timerWorker.postMessage("stop");
+        }
     }
 }
 

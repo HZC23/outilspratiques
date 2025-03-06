@@ -1,108 +1,153 @@
 import { CONFIG } from './config.js';
 import { Utils } from './utils.js';
 
+/**
+ * Gestionnaire de thème
+ * Gère le thème clair/sombre de l'application
+ */
 export const ThemeManager = {
+    /**
+     * État du gestionnaire de thème
+     */
+    state: {
+        theme: 'light',
+        systemPreference: false,
+        initialized: false
+    },
+    
     /**
      * Initialise le gestionnaire de thème
      */
     init() {
-        this.loadTheme();
-        this.setupListeners();
-        this.setupMediaQueryListener();
-    },
-
-    /**
-     * Charge le thème sauvegardé ou utilise les préférences système
-     */
-    loadTheme() {
-        const savedTheme = Utils.loadFromStorage(CONFIG.STORAGE_KEYS.THEME);
+        // Récupérer le thème stocké ou utiliser le thème par défaut
+        const savedTheme = localStorage.getItem('theme');
+        
         if (savedTheme) {
-            this.applyTheme(savedTheme);
+            this.state.theme = savedTheme;
         } else {
-            this.applySystemTheme();
+            // Utiliser la préférence système si aucun thème n'est stocké
+            this.state.systemPreference = true;
+            this.state.theme = this.getSystemPreference();
         }
-    },
-
-    /**
-     * Configure les écouteurs d'événements
-     */
-    setupListeners() {
-        const themeSwitch = document.querySelector('.theme-switch__checkbox');
-        if (themeSwitch) {
-            themeSwitch.addEventListener('change', (e) => {
-                const theme = e.target.checked ? CONFIG.THEMES.DARK : CONFIG.THEMES.LIGHT;
-                this.applyTheme(theme, true);
+        
+        // Appliquer le thème
+        this.applyTheme(this.state.theme);
+        
+        // Initialiser le switch de thème
+        this.initThemeSwitch();
+        
+        // Écouter les changements de préférence système
+        if (window.matchMedia) {
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                if (this.state.systemPreference) {
+                    this.state.theme = e.matches ? 'dark' : 'light';
+                    this.applyTheme(this.state.theme);
+                    this.updateThemeSwitch();
+                }
             });
         }
-
-        // Raccourci clavier pour changer de thème (Ctrl+Shift+T)
-        document.addEventListener('keydown', (e) => {
-            if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 't') {
-                e.preventDefault();
-                this.toggleTheme();
-            }
-        });
+        
+        this.state.initialized = true;
+        console.log('Gestionnaire de thème initialisé');
     },
-
+    
     /**
-     * Configure l'écouteur pour les préférences système
+     * Initialise le switch de thème
      */
-    setupMediaQueryListener() {
-        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-        mediaQuery.addEventListener('change', (e) => {
-            if (!Utils.loadFromStorage(CONFIG.STORAGE_KEYS.THEME)) {
-                this.applyTheme(e.matches ? CONFIG.THEMES.DARK : CONFIG.THEMES.LIGHT);
-            }
-        });
-    },
-
-    /**
-     * Applique le thème système
-     */
-    applySystemTheme() {
-        const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        this.applyTheme(isDarkMode ? CONFIG.THEMES.DARK : CONFIG.THEMES.LIGHT);
-    },
-
-    /**
-     * Applique un thème spécifique
-     * @param {string} theme - Le thème à appliquer
-     * @param {boolean} save - Si le thème doit être sauvegardé
-     */
-    applyTheme(theme, save = false) {
-        document.documentElement.setAttribute('data-theme', theme);
+    initThemeSwitch() {
         const themeSwitch = document.querySelector('.theme-switch__checkbox');
-        if (themeSwitch) {
-            themeSwitch.checked = theme === CONFIG.THEMES.DARK;
-        }
-
-        // Mise à jour des méta-thèmes pour les navigateurs mobiles
-        const themeColor = theme === CONFIG.THEMES.DARK ? '#1D1F2C' : '#4a90e2';
-        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', themeColor);
-
-        if (save) {
-            Utils.saveToStorage(CONFIG.STORAGE_KEYS.THEME, theme);
-        }
-
-        // Événement personnalisé pour la mise à jour du thème
-        window.dispatchEvent(new CustomEvent('themechange', { detail: { theme } }));
+        if (!themeSwitch) return;
+        
+        // Mettre à jour l'état du switch en fonction du thème actuel
+        this.updateThemeSwitch();
+        
+        // Ajouter l'écouteur d'événements pour le changement de thème
+        themeSwitch.addEventListener('change', () => {
+            const newTheme = themeSwitch.checked ? 'dark' : 'light';
+            this.toggleTheme(newTheme);
+        });
     },
-
+    
     /**
-     * Bascule entre les thèmes clair et sombre
+     * Met à jour l'état du switch de thème
      */
-    toggleTheme() {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const newTheme = currentTheme === CONFIG.THEMES.DARK ? CONFIG.THEMES.LIGHT : CONFIG.THEMES.DARK;
-        this.applyTheme(newTheme, true);
+    updateThemeSwitch() {
+        const themeSwitch = document.querySelector('.theme-switch__checkbox');
+        if (!themeSwitch) return;
+        
+        themeSwitch.checked = this.state.theme === 'dark';
     },
-
+    
     /**
-     * Réinitialise le thème aux préférences système
+     * Récupère la préférence système pour le thème
+     * @returns {string} - Le thème préféré ('dark' ou 'light')
      */
-    resetToSystem() {
-        Utils.saveToStorage(CONFIG.STORAGE_KEYS.THEME, null);
-        this.applySystemTheme();
-        Utils.showNotification('Thème réinitialisé aux préférences système', 'info');
+    getSystemPreference() {
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            return 'dark';
+        }
+        return 'light';
+    },
+    
+    /**
+     * Applique un thème
+     * @param {string} theme - Le thème à appliquer ('dark' ou 'light')
+     */
+    applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        
+        // Mettre à jour les méta-tags pour le thème
+        const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+        if (metaThemeColor) {
+            metaThemeColor.setAttribute('content', theme === 'dark' ? '#0f172a' : '#4a90e2');
+        }
+        
+        // Émettre un événement personnalisé pour le changement de thème
+        const event = new CustomEvent('themechange', { detail: { theme } });
+        document.dispatchEvent(event);
+    },
+    
+    /**
+     * Bascule le thème
+     * @param {string} [newTheme] - Le nouveau thème ('dark' ou 'light'), si non spécifié, bascule entre les deux
+     */
+    toggleTheme(newTheme) {
+        // Si un thème est spécifié, l'utiliser, sinon basculer
+        const theme = newTheme || (this.state.theme === 'light' ? 'dark' : 'light');
+        
+        // Mettre à jour l'état
+        this.state.theme = theme;
+        this.state.systemPreference = false;
+        
+        // Appliquer le thème
+        this.applyTheme(theme);
+        
+        // Sauvegarder le thème
+        localStorage.setItem('theme', theme);
+        
+        // Mettre à jour le switch si nécessaire
+        if (!newTheme) {
+            this.updateThemeSwitch();
+        }
+    },
+    
+    /**
+     * Utilise la préférence système pour le thème
+     */
+    useSystemPreference() {
+        this.state.systemPreference = true;
+        const theme = this.getSystemPreference();
+        this.state.theme = theme;
+        this.applyTheme(theme);
+        this.updateThemeSwitch();
+        localStorage.removeItem('theme');
+    },
+    
+    /**
+     * Vérifie si le thème actuel est sombre
+     * @returns {boolean} - True si le thème est sombre
+     */
+    isDarkTheme() {
+        return this.state.theme === 'dark';
     }
 }; 
