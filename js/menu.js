@@ -15,11 +15,36 @@ export const MenuManager = {
      * Initialise le gestionnaire de menu
      */
     init() {
+        // Supprimer les écouteurs d'événements existants pour éviter les conflits
+        this.removeExistingListeners();
+        
+        // Configurer les différents aspects du menu
         this.setupMenuListeners();
         this.setupKeyboardShortcuts();
         this.setupResponsiveMenu();
         this.setupAccessibility();
         this.setupOverlay();
+        
+        // Vérifier si une ancre est présente dans l'URL
+        this.checkUrlHash();
+        
+        console.log('Gestionnaire de menu initialisé');
+    },
+    
+    /**
+     * Supprime les écouteurs d'événements existants
+     */
+    removeExistingListeners() {
+        // Cloner et remplacer les éléments pour supprimer tous les écouteurs d'événements
+        document.querySelectorAll('.menu-trigger').forEach(trigger => {
+            const clone = trigger.cloneNode(true);
+            trigger.parentNode.replaceChild(clone, trigger);
+        });
+        
+        document.querySelectorAll('.submenu-item').forEach(item => {
+            const clone = item.cloneNode(true);
+            item.parentNode.replaceChild(clone, item);
+        });
     },
 
     /**
@@ -29,16 +54,23 @@ export const MenuManager = {
         // Gestion des clics sur les déclencheurs de menu
         document.querySelectorAll('.menu-trigger').forEach(trigger => {
             trigger.addEventListener('click', (e) => {
-                const menuId = e.currentTarget.getAttribute('aria-controls');
-                this.toggleSubmenu(menuId);
+                e.preventDefault();
+                e.stopPropagation(); // Empêcher la propagation de l'événement
+                const menuId = trigger.getAttribute('data-menu-id');
+                if (menuId) {
+                    this.toggleSubmenu(menuId);
+                }
             });
         });
 
         // Gestion des clics sur les éléments du sous-menu
         document.querySelectorAll('.submenu-item').forEach(item => {
             item.addEventListener('click', (e) => {
-                const toolId = e.currentTarget.getAttribute('data-tool-id');
-                this.handleToolSelection(toolId);
+                e.stopPropagation(); // Empêcher la propagation de l'événement
+                const toolId = item.getAttribute('data-tool-id');
+                if (toolId) {
+                    this.handleToolSelection(toolId);
+                }
             });
         });
 
@@ -54,9 +86,15 @@ export const MenuManager = {
             this.handleResize();
         });
 
-        // Gestion du scroll
+        // Gestion du scroll avec throttling pour limiter la fréquence des appels
+        let scrollTimeout;
         window.addEventListener('scroll', () => {
-            this.handleScroll();
+            if (!scrollTimeout) {
+                scrollTimeout = setTimeout(() => {
+                    this.handleScroll();
+                    scrollTimeout = null;
+                }, 10); // Limite à 100 appels par seconde maximum
+            }
         });
     },
 
@@ -85,25 +123,36 @@ export const MenuManager = {
      * Configure le menu responsive
      */
     setupResponsiveMenu() {
-        const menuToggle = document.createElement('button');
-        menuToggle.className = 'menu-toggle';
-        menuToggle.setAttribute('aria-label', 'Menu principal');
-        menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
-        
-        document.querySelector('header').appendChild(menuToggle);
-
-        menuToggle.addEventListener('click', () => {
-            this.toggleMobileMenu();
-        });
+        const menuToggle = document.getElementById('menuToggle');
+        if (!menuToggle) {
+            const newMenuToggle = document.createElement('button');
+            newMenuToggle.id = 'menuToggle';
+            newMenuToggle.className = 'menu-toggle';
+            newMenuToggle.setAttribute('aria-label', 'Menu principal');
+            newMenuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+            
+            document.querySelector('header').appendChild(newMenuToggle);
+            
+            newMenuToggle.addEventListener('click', () => {
+                this.toggleMobileMenu();
+            });
+        } else {
+            menuToggle.addEventListener('click', () => {
+                this.toggleMobileMenu();
+            });
+        }
     },
 
     /**
      * Configure l'overlay pour le menu mobile
      */
     setupOverlay() {
-        const overlay = document.createElement('div');
-        overlay.className = 'menu-overlay';
-        document.body.appendChild(overlay);
+        let overlay = document.querySelector('.menu-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.className = 'menu-overlay';
+            document.body.appendChild(overlay);
+        }
 
         overlay.addEventListener('click', () => {
             this.closeMobileMenu();
@@ -136,40 +185,35 @@ export const MenuManager = {
      * @param {string} menuId - L'identifiant du menu
      */
     toggleSubmenu(menuId) {
-        const menu = document.getElementById(menuId);
-        const trigger = document.querySelector(`[aria-controls="${menuId}"]`);
-        
-        if (!menu || !trigger) return;
+        const submenu = document.getElementById(menuId);
+        if (!submenu) return;
+
+        const trigger = document.querySelector(`[data-menu-id="${menuId}"]`);
+        if (!trigger) return;
 
         const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
-        
+        const newState = !isExpanded;
+
         // Fermer les autres sous-menus
         this.closeAllSubmenus();
 
-        // Basculer l'état du menu actuel
-        menu.setAttribute('aria-hidden', !isExpanded);
-        trigger.setAttribute('aria-expanded', !isExpanded);
+        // Basculer le sous-menu actuel
+        submenu.classList.toggle('active', newState);
+        trigger.setAttribute('aria-expanded', newState);
+        submenu.setAttribute('aria-hidden', !newState);
         
-        if (!isExpanded) {
-            menu.style.display = 'block';
+        // Empêcher la fermeture automatique
+        if (newState) {
+            submenu.style.display = 'block';
             this.state.activeSubmenu = menuId;
-            
-            // Animation d'ouverture
-            menu.style.opacity = '0';
-            menu.style.transform = 'translateY(-10px)';
-            requestAnimationFrame(() => {
-                menu.style.transition = 'opacity 0.2s, transform 0.2s';
-                menu.style.opacity = '1';
-                menu.style.transform = 'translateY(0)';
-            });
         } else {
             this.state.activeSubmenu = null;
-            // Animation de fermeture
-            menu.style.opacity = '0';
-            menu.style.transform = 'translateY(-10px)';
-            setTimeout(() => {
-                menu.style.display = 'none';
-            }, 200);
+        }
+        
+        // Annoncer le changement d'état pour l'accessibilité
+        const message = newState ? 'Sous-menu ouvert' : 'Sous-menu fermé';
+        if (Utils && typeof Utils.announceToScreenReader === 'function') {
+            Utils.announceToScreenReader(message);
         }
     },
 
@@ -177,16 +221,61 @@ export const MenuManager = {
      * Ferme tous les sous-menus
      */
     closeAllSubmenus() {
-        document.querySelectorAll('.submenu').forEach(submenu => {
+        document.querySelectorAll('.submenu.active').forEach(submenu => {
+            submenu.classList.remove('active');
             submenu.style.display = 'none';
             submenu.setAttribute('aria-hidden', 'true');
-        });
-
-        document.querySelectorAll('.menu-trigger').forEach(trigger => {
-            trigger.setAttribute('aria-expanded', 'false');
+            
+            const trigger = document.querySelector(`[data-menu-id="${submenu.id}"]`);
+            if (trigger) {
+                trigger.setAttribute('aria-expanded', 'false');
+            }
         });
 
         this.state.activeSubmenu = null;
+    },
+    
+    /**
+     * Bascule l'état du menu mobile
+     */
+    toggleMobileMenu() {
+        const mainMenu = document.getElementById('mainMenu');
+        const menuOverlay = document.querySelector('.menu-overlay');
+        
+        if (!mainMenu) return;
+        
+        if (mainMenu.classList.contains('active')) {
+            // Fermer le menu
+            mainMenu.classList.remove('active');
+            if (menuOverlay) menuOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+            this.state.isMenuOpen = false;
+        } else {
+            // Ouvrir le menu
+            mainMenu.classList.add('active');
+            if (menuOverlay) menuOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            this.state.isMenuOpen = true;
+        }
+    },
+    
+    /**
+     * Ferme le menu mobile
+     */
+    closeMobileMenu() {
+        const mainMenu = document.getElementById('mainMenu');
+        const menuOverlay = document.querySelector('.menu-overlay');
+        
+        if (mainMenu) {
+            mainMenu.classList.remove('active');
+        }
+        
+        if (menuOverlay) {
+            menuOverlay.classList.remove('active');
+        }
+        
+        document.body.style.overflow = '';
+        this.state.isMenuOpen = false;
     },
 
     /**
@@ -194,6 +283,35 @@ export const MenuManager = {
      * @param {string} toolId - L'identifiant de l'outil
      */
     handleToolSelection(toolId) {
+        if (!toolId) return;
+        
+        // Afficher l'outil correspondant
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.display = 'none';
+        });
+        
+        const tool = document.getElementById(toolId);
+        if (tool) {
+            tool.style.display = 'block';
+            
+            // Mettre à jour l'URL
+            history.pushState({tool: toolId}, '', `#${toolId}`);
+            
+            // Mettre à jour l'état actif des boutons du menu
+            document.querySelectorAll('.submenu-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('data-tool-id') === toolId) {
+                    item.classList.add('active');
+                }
+            });
+            
+            // Annoncer le changement pour l'accessibilité
+            const toolTitle = tool.querySelector('h2');
+            if (toolTitle && Utils && typeof Utils.announceToScreenReader === 'function') {
+                Utils.announceToScreenReader(`Outil ${toolTitle.textContent} affiché`);
+            }
+        }
+        
         // Fermer tous les sous-menus
         this.closeAllSubmenus();
         
@@ -201,22 +319,6 @@ export const MenuManager = {
         if (this.state.isMobile) {
             this.closeMobileMenu();
         }
-
-        // Cacher tous les outils
-        document.querySelectorAll('.section').forEach(section => {
-            section.style.display = 'none';
-        });
-
-        // Afficher l'outil sélectionné
-        const selectedTool = document.getElementById(toolId);
-        if (selectedTool) {
-            selectedTool.style.display = 'block';
-        }
-
-        // Émettre un événement pour le changement d'outil
-        window.dispatchEvent(new CustomEvent('toolchange', {
-            detail: { toolId }
-        }));
     },
 
     /**
@@ -245,15 +347,7 @@ export const MenuManager = {
             case 'ArrowUp':
                 nextIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
                 break;
-            case 'ArrowRight':
-                const parentTrigger = menu.closest('.menu-category').querySelector('.menu-trigger');
-                this.closeAllSubmenus();
-                parentTrigger.nextElementSibling?.querySelector('.menu-trigger')?.focus();
-                return;
-            case 'ArrowLeft':
-                const prevTrigger = menu.closest('.menu-category').querySelector('.menu-trigger');
-                this.closeAllSubmenus();
-                prevTrigger.previousElementSibling?.querySelector('.menu-trigger')?.focus();
+            default:
                 return;
         }
 
@@ -265,58 +359,75 @@ export const MenuManager = {
      */
     handleResize() {
         const isMobile = window.innerWidth <= 768;
+        
         if (isMobile !== this.state.isMobile) {
             this.state.isMobile = isMobile;
+            
             if (!isMobile) {
+                // Passer du mobile au desktop
                 this.closeMobileMenu();
             }
         }
     },
 
     /**
-     * Gère le scroll de la page
+     * Gère le défilement de la page et ajuste la position du menu en conséquence
+     * Optimisé pour le défilement asynchrone avec requestAnimationFrame
      */
     handleScroll() {
-        if (this.state.isMobile && this.state.isMenuOpen) {
+        // Évite les appels multiples dans la même frame
+        if (this.scrollRAF) return;
+        
+        this.scrollRAF = window.requestAnimationFrame(() => {
             const header = document.querySelector('header');
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const menu = document.querySelector('.menu');
             
-            if (scrollTop > 0) {
-                header.classList.add('scrolled');
+            if (!header || !menu || this.state.isMobile) {
+                this.scrollRAF = null;
+                return;
+            }
+            
+            const headerHeight = header.offsetHeight;
+            const scrollPosition = window.scrollY;
+            const menuHeight = menu.offsetHeight;
+            const viewportHeight = window.innerHeight;
+            
+            // Si le menu est plus grand que la hauteur du viewport moins l'espace pour le header,
+            // on le laisse en position sticky (définie dans le CSS)
+            if (menuHeight > viewportHeight - headerHeight - 2 * parseInt(getComputedStyle(document.documentElement).getPropertyValue('--spacing-md'))) {
+                menu.style.position = 'sticky';
+                menu.style.transform = 'none';
+                this.scrollRAF = null;
+                return;
+            }
+            
+            if (scrollPosition > headerHeight) {
+                // Utilise transform au lieu de top pour de meilleures performances
+                menu.style.position = 'fixed';
+                menu.style.transform = 'translateY(0)';
             } else {
-                header.classList.remove('scrolled');
+                menu.style.position = 'sticky';
+                menu.style.transform = 'none';
+            }
+            
+            this.scrollRAF = null;
+        });
+    },
+    
+    /**
+     * Vérifie si une ancre est présente dans l'URL
+     */
+    checkUrlHash() {
+        const hash = window.location.hash;
+        if (hash) {
+            const toolId = hash.slice(1);
+            this.handleToolSelection(toolId);
+        } else {
+            // Afficher le premier outil par défaut
+            const firstTool = document.querySelector('.section');
+            if (firstTool) {
+                firstTool.style.display = 'block';
             }
         }
-    },
-
-    /**
-     * Bascule l'état du menu mobile
-     */
-    toggleMobileMenu() {
-        const menu = document.querySelector('.menu');
-        const overlay = document.querySelector('.menu-overlay');
-        
-        if (!this.state.isMenuOpen) {
-            menu.classList.add('active');
-            overlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            this.state.isMenuOpen = true;
-        } else {
-            this.closeMobileMenu();
-        }
-    },
-
-    /**
-     * Ferme le menu mobile
-     */
-    closeMobileMenu() {
-        const menu = document.querySelector('.menu');
-        const overlay = document.querySelector('.menu-overlay');
-        
-        menu.classList.remove('active');
-        overlay.classList.remove('active');
-        document.body.style.overflow = '';
-        this.state.isMenuOpen = false;
-        this.closeAllSubmenus();
     }
 }; 
