@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const app = express();
-const port = 8080;
+const port = process.env.PORT || 8080;
 
 // Configuration des en-têtes de cache pour les fichiers statiques
 app.use(express.static(__dirname, {
@@ -25,7 +25,24 @@ app.use((req, res) => {
     res.status(404).sendFile(path.join(__dirname, '404.html'));
 });
 
+// Gestion des erreurs
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).sendFile(path.join(__dirname, '500.html'));
+});
+
 // Démarrage du serveur
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`Serveur démarré sur http://localhost:${port}`);
+});
+
+// Gestion des erreurs de démarrage du serveur
+server.on('error', (error) => {
+    if (error.code === 'EADDRINUSE') {
+        console.error(`Le port ${port} est déjà utilisé. Essayez de fermer l'application qui utilise ce port ou utilisez un port différent.`);
+        process.exit(1);
+    } else {
+        console.error('Erreur lors du démarrage du serveur:', error);
+        process.exit(1);
+    }
 }); 
