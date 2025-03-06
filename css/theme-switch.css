@@ -19,7 +19,7 @@
   --circle-transition: .3s cubic-bezier(0, -0.02, 0.35, 1.17);
   position: fixed;
   top: 20px;
-  right: 20px;
+  left: 20px;
   z-index: 1000;
 }
 

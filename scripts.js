@@ -16,15 +16,15 @@ const CONFIG = {
 // Utilitaires
 const Utils = {
     debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
             clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
+            func(...args);
         };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
     },
 
     async copyToClipboard(text) {
@@ -38,14 +38,14 @@ const Utils = {
     },
 
     showNotification(message, type = 'info') {
-        const notification = document.createElement('div');
-        notification.className = `notification ${type}`;
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
         notification.textContent = message;
-        document.body.appendChild(notification);
-
-        setTimeout(() => {
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
             notification.classList.add('fade-out');
-            setTimeout(() => notification.remove(), 300);
+        setTimeout(() => notification.remove(), 300);
         }, CONFIG.NOTIFICATION_DURATION);
     },
 

@@ -426,4 +426,14 @@ export const TimerManager = {
         clearInterval(this.state.stopwatch.intervalId);
         this.saveState();
     }
-}; 
+};
+
+// Exposer les fonctions globalement
+window.startTimer = () => TimerManager.startTimer();
+window.pauseTimer = () => TimerManager.pauseTimer();
+window.resetTimer = () => TimerManager.resetTimer();
+window.toggleSound = () => TimerManager.toggleSound();
+window.startStopwatch = () => TimerManager.toggleStopwatch();
+window.pauseStopwatch = () => TimerManager.toggleStopwatch();
+window.resetStopwatch = () => TimerManager.resetStopwatch();
+window.lapStopwatch = () => TimerManager.recordLap(); 

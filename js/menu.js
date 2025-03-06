@@ -37,14 +37,14 @@ export const MenuManager = {
         // Gestion des clics sur les éléments du sous-menu
         document.querySelectorAll('.submenu-item').forEach(item => {
             item.addEventListener('click', (e) => {
-                const toolId = e.currentTarget.getAttribute('onclick').match(/'([^']+)'/)[1];
+                const toolId = e.currentTarget.getAttribute('data-tool-id');
                 this.handleToolSelection(toolId);
             });
         });
 
         // Fermeture des sous-menus lors d'un clic à l'extérieur
         document.addEventListener('click', (e) => {
-            if (!e.target.closest('.menu-category')) {
+            if (!e.target.closest('.menu')) {
                 this.closeAllSubmenus();
             }
         });
@@ -77,11 +77,6 @@ export const MenuManager = {
             // Navigation avec les flèches
             if (e.key.startsWith('Arrow')) {
                 this.handleArrowNavigation(e.key);
-            }
-
-            // Raccourcis personnalisés
-            if (e.ctrlKey || e.metaKey) {
-                this.handleCustomShortcuts(e);
             }
         });
     },
@@ -133,13 +128,6 @@ export const MenuManager = {
             if (!submenu.hasAttribute('aria-hidden')) {
                 submenu.setAttribute('aria-hidden', 'true');
             }
-        });
-
-        // Gestion du focus
-        document.querySelectorAll('.menu-trigger, .submenu-item').forEach(element => {
-            element.addEventListener('focus', () => {
-                element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            });
         });
     },
 
@@ -214,6 +202,17 @@ export const MenuManager = {
             this.closeMobileMenu();
         }
 
+        // Cacher tous les outils
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.display = 'none';
+        });
+
+        // Afficher l'outil sélectionné
+        const selectedTool = document.getElementById(toolId);
+        if (selectedTool) {
+            selectedTool.style.display = 'block';
+        }
+
         // Émettre un événement pour le changement d'outil
         window.dispatchEvent(new CustomEvent('toolchange', {
             detail: { toolId }
@@ -259,26 +258,6 @@ export const MenuManager = {
         }
 
         items[nextIndex].focus();
-    },
-
-    /**
-     * Gère les raccourcis clavier personnalisés
-     * @param {KeyboardEvent} e - L'événement clavier
-     */
-    handleCustomShortcuts(e) {
-        // Exemple de raccourcis (à personnaliser selon les besoins)
-        const shortcuts = {
-            'c': 'calculatorTool',
-            't': 'timerTool',
-            'n': 'noteTool',
-            'p': 'passwordTool'
-        };
-
-        const key = e.key.toLowerCase();
-        if (shortcuts[key]) {
-            e.preventDefault();
-            this.handleToolSelection(shortcuts[key]);
-        }
     },
 
     /**
