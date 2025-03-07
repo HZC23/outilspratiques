@@ -1,67 +1,42 @@
 /* From Uiverse.io by Galahhad */ 
 .theme-switch {
-  --toggle-size: 20px;
-  /* the size is adjusted using font-size,
-     this is not transform scale,
-     so you can choose any size */
-  --container-width: 5.625em;
-  --container-height: 2.5em;
-  --container-radius: 6.25em;
-  /* radius 0 - minecraft mode :) */
-  --container-light-bg: #3D7EAE;
-  --container-night-bg: #1D1F2C;
-  --circle-container-diameter: 3.375em;
-  --sun-moon-diameter: 2.125em;
+  --toggle-size: 16px;
+  --container-width: 3rem;
+  --container-height: 3rem;
+  --container-radius: 50%;
+  --container-light-bg: var(--card-bg);
+  --container-night-bg: var(--card-bg);
+  --circle-container-diameter: 2.5rem;
+  --sun-moon-diameter: 2rem;
   --sun-bg: #ECCA2F;
   --moon-bg: #C4C9D1;
   --spot-color: #959DB1;
-  --circle-container-offset: calc((var(--circle-container-diameter) - var(--container-height)) / 2 * -1);
   --stars-color: #fff;
   --clouds-color: #F3FDFF;
   --back-clouds-color: #AACADF;
-  --transition: .5s cubic-bezier(0, -0.02, 0.4, 1.25);
-  --circle-transition: .3s cubic-bezier(0, -0.02, 0.35, 1.17);
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
+  --transition: .3s ease;
+  position: relative;
+  margin-right: 1rem;
   z-index: 10;
-  scale: 0.8;
-}
-
-@media (max-width: 768px) {
-  .theme-switch {
-    scale: 0.7;
-    left: 0.5rem;
-  }
-}
-
-.theme-switch, .theme-switch *, .theme-switch *::before, .theme-switch *::after {
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-size: var(--toggle-size);
 }
 
 .theme-switch__container {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
+  width: var(--container-width);
+  height: var(--container-height);
+  border-radius: var(--container-radius);
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  background: var(--bg-color);
+  background: var(--container-light-bg);
   border: 2px solid var(--border-color);
-  padding: 0.25rem;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
   transition: all 0.3s ease;
+  padding: 0.25rem;
 }
 
 .theme-switch__container:hover {
   transform: scale(1.05);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  border-color: var(--primary-color);
 }
 
 .theme-switch__checkbox {
@@ -69,44 +44,44 @@
 }
 
 .theme-switch__circle-container {
-  width: 100%;
-  height: 100%;
-  background: var(--primary-color);
+  width: var(--circle-container-diameter);
+  height: var(--circle-container-diameter);
+  position: relative;
   border-radius: 50%;
   overflow: hidden;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.5s ease;
+  transition: var(--transition);
 }
 
 .theme-switch__sun-moon-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
+  width: var(--sun-moon-diameter);
+  height: var(--sun-moon-diameter);
+  background: var(--sun-bg);
   border-radius: 50%;
-  background: #ffd700;
-  transition: all 0.5s ease;
-  transform: scale(0.8);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: var(--transition);
 }
 
 .theme-switch__moon {
-  position: absolute;
   width: 100%;
   height: 100%;
+  background: var(--moon-bg);
   border-radius: 50%;
-  background: var(--bg-color);
+  position: absolute;
+  top: 0;
+  left: 0;
   transform: translateX(100%);
-  transition: all 0.5s ease;
+  transition: var(--transition);
 }
 
 .theme-switch__spot {
   position: absolute;
+  background: var(--spot-color);
+  border-radius: 50%;
   width: 0.3rem;
   height: 0.3rem;
-  border-radius: 50%;
-  background: #777;
 }
 
 .theme-switch__spot:nth-child(1) {
@@ -154,25 +129,11 @@
 /* actions */
 
 .theme-switch__checkbox:checked + .theme-switch__container {
-  background-color: var(--container-night-bg);
-}
-
-.theme-switch__checkbox:checked + .theme-switch__container .theme-switch__circle-container {
-  left: calc(100% - var(--circle-container-offset) - var(--circle-container-diameter));
-}
-
-.theme-switch__checkbox:checked + .theme-switch__container .theme-switch__circle-container:hover {
-  left: calc(100% - var(--circle-container-offset) - var(--circle-container-diameter) - 0.187em)
-}
-
-.theme-switch__circle-container:hover {
-  left: calc(var(--circle-container-offset) + 0.187em);
+  background: var(--container-night-bg);
 }
 
 .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__moon {
-  -webkit-transform: translate(0);
-  -ms-transform: translate(0);
-  transform: translate(0);
+  transform: translateX(0);
 }
 
 .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__clouds {
@@ -188,10 +149,20 @@
 
 /* Styles pour le mode sombre */
 [data-theme="dark"] .theme-switch__container {
-  background: var(--dark-color);
+  background: var(--container-night-bg);
   border-color: var(--dark-border);
 }
 
-[data-theme="dark"] .theme-switch__moon {
-  background: var(--dark-color);
+[data-theme="dark"] .theme-switch__container:hover {
+  border-color: var(--primary-color);
+}
+
+@media (max-width: 768px) {
+  .theme-switch {
+    --toggle-size: 14px;
+    --container-width: 2.5rem;
+    --container-height: 2.5rem;
+    --circle-container-diameter: 2rem;
+    --sun-moon-diameter: 1.5rem;
+  }
 }
