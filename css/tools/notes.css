@@ -42,7 +42,7 @@
 
 .toolbar button:hover {
     background: var(--primary-color);
-    color: white;
+    color: rgb(5, 210, 251);
 }
 
 .toolbar select,

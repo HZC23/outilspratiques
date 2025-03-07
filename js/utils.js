@@ -43,23 +43,15 @@ export const Utils = {
      */
     showNotification(message, type = 'info') {
         const notification = document.createElement('div');
-        notification.className = `notification ${type} fade-in`;
-        notification.setAttribute('role', 'alert');
+        notification.className = `notification notification-${type}`;
         notification.textContent = message;
         
-        const container = document.querySelector('.notification-container') || (() => {
-            const cont = document.createElement('div');
-            cont.className = 'notification-container';
-            document.body.appendChild(cont);
-            return cont;
-        })();
+        document.body.appendChild(notification);
         
-        container.appendChild(notification);
-
         setTimeout(() => {
             notification.classList.add('fade-out');
-            setTimeout(() => notification.remove(), CONFIG.ANIMATION_DURATION);
-        }, CONFIG.NOTIFICATION_DURATION);
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
     },
 
     /**
@@ -89,32 +81,36 @@ export const Utils = {
     },
 
     /**
-     * Sauvegarde des données dans le localStorage
-     * @param {string} key - La clé de stockage
-     * @param {*} data - Les données à sauvegarder
+     * Sauvegarde des données dans le stockage local de manière sécurisée
+     * @param {string} key - Clé de stockage
+     * @param {any} value - Valeur à stocker
      */
-    saveToStorage(key, data) {
+    saveToStorage(key, value) {
         try {
-            localStorage.setItem(key, JSON.stringify(data));
-        } catch (err) {
-            console.error(`Erreur de sauvegarde pour ${key}:`, err);
-            this.showNotification('Erreur lors de la sauvegarde', 'error');
+            const data = JSON.stringify(value);
+            if (window.isSecureContext) {
+                localStorage.setItem(key, data);
+            } else {
+                sessionStorage.setItem(key, data);
+            }
+        } catch (error) {
+            console.warn(`Erreur lors de la sauvegarde de ${key}:`, error);
         }
     },
 
     /**
-     * Charge des données depuis le localStorage
-     * @param {string} key - La clé de stockage
-     * @param {*} defaultValue - Valeur par défaut si rien n'est trouvé
-     * @returns {*} Les données chargées ou la valeur par défaut
+     * Charge des données depuis le stockage local de manière sécurisée
+     * @param {string} key - Clé de stockage
+     * @param {any} defaultValue - Valeur par défaut si rien n'est trouvé
+     * @returns {any} - Données chargées ou valeur par défaut
      */
     loadFromStorage(key, defaultValue = null) {
         try {
-            const data = localStorage.getItem(key);
+            const storage = window.isSecureContext ? localStorage : sessionStorage;
+            const data = storage.getItem(key);
             return data ? JSON.parse(data) : defaultValue;
-        } catch (err) {
-            console.error(`Erreur de chargement pour ${key}:`, err);
-            this.showNotification('Erreur lors du chargement', 'error');
+        } catch (error) {
+            console.warn(`Erreur lors du chargement de ${key}:`, error);
             return defaultValue;
         }
     },
@@ -128,20 +124,17 @@ export const Utils = {
     },
 
     /**
-     * Annonce un message aux lecteurs d'écran pour l'accessibilité
-     * @param {string} message - Le message à annoncer
+     * Annonce un message aux lecteurs d'écran
+     * @param {string} message - Message à annoncer
      */
     announceToScreenReader(message) {
-        const announcer = document.getElementById('screenReaderAnnouncer') || (() => {
-            const el = document.createElement('div');
-            el.id = 'screenReaderAnnouncer';
-            el.className = 'sr-only';
-            el.setAttribute('aria-live', 'polite');
-            el.setAttribute('aria-atomic', 'true');
-            document.body.appendChild(el);
-            return el;
-        })();
+        const announcement = document.createElement('div');
+        announcement.setAttribute('role', 'status');
+        announcement.setAttribute('aria-live', 'polite');
+        announcement.className = 'sr-only';
+        announcement.textContent = message;
         
-        announcer.textContent = message;
+        document.body.appendChild(announcement);
+        setTimeout(() => announcement.remove(), 1000);
     }
 }; 
