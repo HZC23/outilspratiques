@@ -454,24 +454,49 @@ header h1 {
     .menu {
         position: fixed;
         top: 0;
-        left: -300px;
+        left: -100%;
         width: 280px;
         height: 100vh;
         margin: 0;
         z-index: 1000;
-        transition: left 0.3s var(--ease-in-out);
+        transition: transform 0.4s var(--ease-out-back);
         overflow-y: auto;
-        box-shadow: var(--box-shadow);
-        animation: none;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        transform: translateX(-100%);
+        background: var(--bg-color);
+        padding-top: 60px;
     }
 
     .menu.active {
-        left: 0;
-        animation: slideInLeft 0.4s var(--ease-out-back);
+        transform: translateX(100%);
     }
 
     .menu-toggle {
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        z-index: 1001;
+        transition: all 0.3s var(--ease-out-back);
+    }
+
+    .menu-toggle:hover {
+        transform: scale(1.1);
+        background: var(--primary-color-dark);
+    }
+
+    .menu-toggle i {
+        font-size: 1.2rem;
+        transition: transform 0.3s var(--ease-out-back);
+    }
+
+    .menu.active + .menu-toggle i {
+        transform: rotate(180deg);
     }
 
     .menu-overlay {
@@ -489,27 +514,54 @@ header h1 {
 
     .menu-overlay.active {
         display: block;
-        animation: fadeIn 0.3s forwards;
+        opacity: 1;
+        animation: fadeIn 0.3s ease forwards;
     }
 
-    .submenu {
-        position: static;
-        box-shadow: none;
-        margin-top: 0;
-        border: none;
-        border-left: 2px solid var(--border-color);
-        margin-left: 1rem;
-        display: none;
+    .submenu-item {
+        padding: 12px 15px;
+        margin: 4px 0;
+        border-radius: 8px;
+        background: var(--card-bg);
+        transition: all 0.3s var(--ease-out-back);
     }
 
-    .submenu.active {
-        display: block;
-        animation: fadeIn 0.3s forwards;
+    .submenu-item:hover {
+        background: var(--hover-color);
+        transform: translateX(5px);
     }
 
-    .theme-switch {
-        top: var(--spacing-md);
-        right: var(--spacing-md);
+    .menu-trigger {
+        border-radius: 12px;
+        padding: 15px;
+        margin: 5px 0;
+        background: var(--card-bg);
+        transition: all 0.3s var(--ease-out-back);
+    }
+
+    .menu-trigger:hover {
+        background: var(--hover-color);
+    }
+
+    /* Styles pour le mode sombre */
+    [data-theme="dark"] .menu {
+        background: var(--bg-color);
+    }
+
+    [data-theme="dark"] .submenu-item {
+        background: var(--card-bg);
+    }
+
+    [data-theme="dark"] .submenu-item:hover {
+        background: var(--hover-color);
+    }
+
+    [data-theme="dark"] .menu-trigger {
+        background: var(--card-bg);
+    }
+
+    [data-theme="dark"] .menu-trigger:hover {
+        background: var(--hover-color);
     }
 }
 
@@ -1106,4 +1158,20 @@ button:focus {
 [data-theme="dark"] .mode-btn:hover,
 [data-theme="dark"] .metronome-btn:hover {
     background-color: var(--primary-color-dark);
+}
+
+/* Ajustements supplémentaires pour les très petits écrans */
+@media (max-width: 480px) {
+    .menu {
+        width: 85%;
+    }
+
+    .menu-toggle {
+        width: 40px;
+        height: 40px;
+    }
+
+    .submenu-item {
+        padding: 10px 12px;
+    }
 }
