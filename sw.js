@@ -1,19 +1,45 @@
 const CACHE_NAME = 'outils-pratiques-v1';
 const ASSETS_TO_CACHE = [
-    '/',
-    '/index.html',
-    '/styles.css',
-    '/js/main.js',
-    '/js/config.js',
-    '/js/utils.js',
-    '/js/theme.js',
-    '/js/navigation.js',
-    '/js/clock.js',
-    '/icons/favicon.ico',
-    '/icons/icon-192x192.png',
-    '/icons/icon-512x512.png',
+    './',
+    'index.html',
+    'styles.css',
+    'js/main.js',
+    'js/config.js',
+    'js/utils.js',
+    'js/theme.js',
+    'js/navigation.js',
+    'js/clock.js',
+    'icons/favicon.ico',
+    'icons/icon-192x192.png',
+    'icons/icon-512x512.png',
     'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap',
-    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css'
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css',
+    'css/menu.css',
+    'css/theme-switch.css',
+    'css/notification.css',
+    'css/tools/color.css',
+    'css/tools/calculator.css',
+    'css/tools/converter.css',
+    'css/tools/text.css',
+    'css/tools/timer.css',
+    'css/tools/stopwatch.css',
+    'css/tools/notes.css',
+    'css/tools/translator.css',
+    'css/tools/scheduler.css',
+    'css/tools/metronome.css',
+    'css/tools/qrcode.css',
+    'js/tools/color.js',
+    'js/tools/calculator.js',
+    'js/tools/converter.js',
+    'js/tools/text.js',
+    'js/tools/timer.js',
+    'js/tools/stopwatch.js',
+    'js/tools/notes.js',
+    'js/tools/translator.js',
+    'js/tools/scheduler.js',
+    'js/tools/metronome.js',
+    'js/tools/password.js',
+    'js/tools/qrcode.js'
 ];
 
 /*
@@ -48,13 +74,13 @@ importScripts('js/dependencies/cache-polyfill.js');
 // updated service worker is activated.
 
 const urlsToPrefetch = [
-    '/',
-    '/page',
-    '/styles/common.css',
-    '/js/dependencies/autolinker.js',
-    '/template.js',
-    '/images/icon.png',
-    '/images/icon.svg'
+    './',
+    'styles/common.css',
+    'js/dependencies/autolinker.js',
+    'js/dependencies/cache-polyfill.js',
+    'template.js',
+    'images/icon.png',
+    'images/icon.svg'
 ];
 
 const version = '1.0.0';
@@ -121,7 +147,7 @@ self.addEventListener('fetch', (event) => {
                     })
                     .catch(() => {
                         // Retourner une page d'erreur hors ligne si disponible
-                        return caches.match('/offline.html');
+                        return caches.match('offline.html');
                     });
             })
     );
