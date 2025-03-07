@@ -71,6 +71,7 @@
     <link rel="stylesheet" href="/css/tools/translator.css">
     <link rel="stylesheet" href="/css/tools/scheduler.css">
     <link rel="stylesheet" href="/css/tools/metronome.css">
+    <link rel="stylesheet" href="/css/tools/qrcode.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" 
           media="print" 
           onload="this.media='all'" 
@@ -103,6 +104,7 @@
     <script type="module" src="js/tools/scheduler.js"></script>
     <script type="module" src="js/tools/metronome.js"></script>
     <script type="module" src="js/tools/password.js"></script>
+    <script type="module" src="js/tools/qrcode.js"></script>
     <script type="module" src="js/theme.js"></script>
     
     <!-- Scripts non-modules pour les fonctions globales -->
@@ -285,6 +287,10 @@
                     <button type="button" data-tool-id="colorTool" data-tooltip="Sélecteur de couleurs avec codes" class="submenu-item" role="menuitem">
                         <i class="fas fa-palette" aria-hidden="true"></i>
                         <span>Sélecteur de couleur</span>
+                    </button>
+                    <button type="button" data-tool-id="qrcodeTool" data-tooltip="Générateur de QR codes personnalisés" class="submenu-item" role="menuitem">
+                        <i class="fas fa-qrcode" aria-hidden="true"></i>
+                        <span>Générateur de QR code</span>
                     </button>
                 </div>
             </div>
@@ -1118,6 +1124,104 @@
                             <i class="fas fa-trash"></i> Effacer l'historique
                         </button>
                     </div>
+                </div>
+            </section>
+
+            <!-- Générateur de QR Code -->
+            <section id="qrcodeTool" class="section" aria-labelledby="qrcodeTitle">
+                <h2 id="qrcodeTitle">Générateur de QR Code</h2>
+                <div class="qrcode-container">
+                    <div class="qrcode-config">
+                        <div class="qrcode-form">
+                            <div class="form-group">
+                                <label for="qrcodeType">Type de contenu</label>
+                                <select id="qrcodeType">
+                                    <option value="text">Texte</option>
+                                    <option value="url">URL</option>
+                                    <option value="email">Email</option>
+                                    <option value="tel">Téléphone</option>
+                                    <option value="sms">SMS</option>
+                                    <option value="wifi">Wi-Fi</option>
+                                    <option value="vcard">Carte de visite</option>
+                                    <option value="geo">Géolocalisation</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="qrcodeText">Contenu</label>
+                                <textarea id="qrcodeText" placeholder="Entrez votre texte ici"></textarea>
+                            </div>
+                            
+                            <details class="advanced-options">
+                                <summary>Options avancées</summary>
+                                <div class="options-grid">
+                                    <div class="form-group">
+                                        <label for="qrcodeSize">Taille</label>
+                                        <input type="range" id="qrcodeSize" min="128" max="512" value="256" step="8">
+                                        <span id="qrcodeSizeValue">256 px</span>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="qrcodeMargin">Marge</label>
+                                        <input type="range" id="qrcodeMargin" min="0" max="10" value="4" step="1">
+                                        <span id="qrcodeMarginValue">4</span>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="qrcodeColor">Couleur</label>
+                                        <input type="color" id="qrcodeColor" value="#000000">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="qrcodeBackground">Arrière-plan</label>
+                                        <input type="color" id="qrcodeBackground" value="#FFFFFF">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="qrcodeErrorLevel">Correction d'erreur</label>
+                                        <select id="qrcodeErrorLevel">
+                                            <option value="L">Faible (7%)</option>
+                                            <option value="M" selected>Moyenne (15%)</option>
+                                            <option value="Q">Quartile (25%)</option>
+                                            <option value="H">Haute (30%)</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="qrcodeFormat">Format</label>
+                                        <select id="qrcodeFormat">
+                                            <option value="svg" selected>SVG</option>
+                                            <option value="png">PNG</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </details>
+                            
+                            <div class="qrcode-actions">
+                                <button type="button" id="generateQRCode" class="qrcode-btn generate-btn">
+                                    <i class="fas fa-sync-alt"></i> Générer
+                                </button>
+                                <button type="button" id="downloadQRCode" class="qrcode-btn download-btn">
+                                    <i class="fas fa-download"></i> Télécharger
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="qrcode-display">
+                        <div id="qrcodeOutput" class="qrcode-output"></div>
+                        <p class="qrcode-info">Scannez ce code avec votre appareil mobile</p>
+                    </div>
+                </div>
+                
+                <div class="qrcode-history">
+                    <div class="history-header">
+                        <h3>Historique récent</h3>
+                        <button type="button" onclick="clearQRCodeHistory()" class="clear-btn">
+                            <i class="fas fa-trash"></i> Effacer
+                        </button>
+                    </div>
+                    <div id="qrcodeHistory" class="history-list"></div>
                 </div>
             </section>
                 <!-- Autres outils seront ajoutés ici -->

@@ -1,0 +1,345 @@
+/* Styles pour le générateur de QR code */
+.qrcode-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1rem;
+    max-width: 100%;
+}
+
+@media (min-width: 768px) {
+    .qrcode-container {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+}
+
+/* Panneau de configuration */
+.qrcode-config {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background-color: var(--card-bg);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Panneau d'affichage du QR code */
+.qrcode-display {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    background-color: var(--card-bg);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.qrcode-output {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 280px;
+    background-color: var(--bg-color);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    overflow: hidden;
+}
+
+.qrcode-output img, 
+.qrcode-output svg {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.25rem;
+}
+
+/* Formulaire */
+.qrcode-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    border: 2px solid var(--border-color);
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.25);
+}
+
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* Options avancées */
+.advanced-options {
+    margin-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
+}
+
+.advanced-options summary {
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    color: var(--text-color);
+}
+
+.advanced-options .options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+/* Boutons */
+.qrcode-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.qrcode-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    font-size: 1rem;
+}
+
+.generate-btn {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.generate-btn:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.download-btn {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.download-btn:hover {
+    background-color: var(--secondary-dark);
+    transform: translateY(-2px);
+}
+
+/* Historique */
+.qrcode-history {
+    margin-top: 1.5rem;
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.history-header h3 {
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+.history-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    background-color: var(--card-bg);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.history-item:hover {
+    background-color: var(--hover-color);
+}
+
+.history-qrcode {
+    width: 50px;
+    height: 50px;
+    border-radius: 0.25rem;
+    overflow: hidden;
+}
+
+.history-qrcode img,
+.history-qrcode svg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.history-details {
+    flex: 1;
+    overflow: hidden;
+}
+
+.history-text {
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--text-color);
+}
+
+.history-type {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.clear-btn {
+    background-color: var(--danger-color);
+    color: white;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.clear-btn:hover {
+    background-color: var(--danger-dark);
+}
+
+/* Améliorations pour le contraste */
+.qrcode-btn, 
+.clear-btn {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+    border: 2px solid transparent;
+}
+
+.qrcode-btn:focus, 
+.clear-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.4);
+}
+
+/* Styles pour le mode sombre */
+[data-theme="dark"] .qrcode-output {
+    background-color: #1a2234;
+}
+
+[data-theme="dark"] .qrcode-btn,
+[data-theme="dark"] .clear-btn {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Styles pour améliorer le contraste des boutons */
+.qrcode-btn, 
+.clear-btn,
+button[type="button"] {
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    position: relative;
+    overflow: hidden;
+}
+
+.qrcode-btn::after, 
+.clear-btn::after,
+button[type="button"]::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.1);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.qrcode-btn:hover::after, 
+.clear-btn:hover::after,
+button[type="button"]:hover::after {
+    opacity: 1;
+}
+
+/* Amélioration globale du contraste des boutons */
+button, 
+.btn, 
+.button,
+input[type="button"],
+input[type="submit"] {
+    border: 2px solid transparent;
+    font-weight: 600;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+button:hover, 
+.btn:hover, 
+.button:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+button:active, 
+.btn:active, 
+.button:active,
+input[type="button"]:active,
+input[type="submit"]:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Amélioration du contraste pour les boutons sur fond sombre */
+[data-theme="dark"] button, 
+[data-theme="dark"] .btn, 
+[data-theme="dark"] .button,
+[data-theme="dark"] input[type="button"],
+[data-theme="dark"] input[type="submit"] {
+    border-color: rgba(255, 255, 255, 0.1);
+} 

@@ -15,6 +15,9 @@
     --success-color: #28a745;
     --warning-color: #ffc107;
     --info-color: #17a2b8;
+    --danger-color: #dc3545;
+    --danger-dark: #bd2130;
+    --secondary-dark: #e2e6ea;
 
     /* Couleurs de fond */
     --card-bg: #ffffff;
@@ -27,6 +30,7 @@
     /* Couleurs de texte */
     --text-muted: #6c757d;
     --text-light: #ffffff;
+    --text-secondary: #6c757d;
 
     /* Bordures et ombres */
     --border-radius: 8px;
@@ -562,74 +566,131 @@ header h1 {
 }
 
 /* Éléments de formulaire */
-button {
-    padding: var(--spacing-sm) var(--spacing-md);
-    background: var(--secondary-color);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    color: var(--text-color);
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: var(--transition);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-xs);
+button,
+.btn,
+input[type="button"],
+input[type="submit"] {
     position: relative;
+    border: 2px solid transparent;
+    font-weight: 600;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
     overflow: hidden;
 }
 
-button::after {
+button:hover,
+.btn:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+button:active,
+.btn:active,
+input[type="button"]:active,
+input[type="submit"]:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+button::after,
+.btn::after,
+input[type="button"]::after,
+input[type="submit"]::after {
     content: '';
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 5px;
-    height: 5px;
-    background: rgba(255, 255, 255, 0.5);
-    opacity: 0;
-    border-radius: 100%;
-    transform: scale(1, 1) translate(-50%);
-    transform-origin: 50% 50%;
-}
-
-button:hover::after {
-    animation: ripple 0.6s ease-out;
-}
-
-button:hover {
-    background: var(--hover-color);
-    transform: translateY(-1px);
-}
-
-button:active {
-    transform: translateY(1px);
-}
-
-button i {
-    font-size: 1rem;
-    transition: transform 0.3s var(--ease-out-back);
-}
-
-button:hover i {
-    transform: scale(1.2);
-}
-
-input, select, textarea {
-    padding: var(--spacing-sm) var(--spacing-md);
-    background: var(--input-bg);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    color: var(--input-text);
-    font-size: 0.95rem;
-    transition: var(--transition);
+    top: 0;
+    left: 0;
     width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.1);
+    opacity: 0;
+    transition: opacity 0.2s ease;
 }
 
-input:focus, select:focus, textarea:focus {
+button:hover::after,
+.btn:hover::after,
+input[type="button"]:hover::after,
+input[type="submit"]:hover::after {
+    opacity: 1;
+}
+
+button:focus,
+.btn:focus,
+input[type="button"]:focus,
+input[type="submit"]:focus {
     outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.4);
+}
+
+/* Amélioration du contraste pour les boutons sur fond sombre */
+[data-theme="dark"] button,
+[data-theme="dark"] .btn,
+[data-theme="dark"] input[type="button"],
+[data-theme="dark"] input[type="submit"] {
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Styles spécifiques pour les boutons d'action */
+.action-btn,
+.primary-btn,
+.submit-btn,
+button[type="submit"] {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 600;
+}
+
+.action-btn:hover,
+.primary-btn:hover,
+.submit-btn:hover,
+button[type="submit"]:hover {
+    background-color: var(--primary-color-dark);
+}
+
+.secondary-btn,
+.cancel-btn {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.secondary-btn:hover,
+.cancel-btn:hover {
+    background-color: var(--secondary-dark);
+}
+
+.danger-btn,
+.delete-btn,
+.remove-btn {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.danger-btn:hover,
+.delete-btn:hover,
+.remove-btn:hover {
+    background-color: var(--danger-dark);
+}
+
+/* Amélioration de la visibilité des boutons désactivés */
+button:disabled,
+.btn:disabled,
+input[type="button"]:disabled,
+input[type="submit"]:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+button:disabled::after,
+.btn:disabled::after,
+input[type="button"]:disabled::after,
+input[type="submit"]:disabled::after {
+    display: none;
 }
 
 /* Animations */
