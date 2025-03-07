@@ -1,21 +1,21 @@
 /* Variables CSS globales */
 :root {
     /* Couleurs basiques */
-    --primary-color: #000000;
-    --secondary-color: #666666;
-    --success-color: #008000;
-    --info-color: #0000ff;
-    --warning-color: #ffa500;
+    --primary-color: #0066cc;
+    --secondary-color: #87ceeb;
+    --success-color: #00cc00;
+    --info-color: #3399ff;
+    --warning-color: #ff9900;
     --danger-color: #ff0000;
     
     /* Thème clair basique */
     --bg-color: #ffffff;
-    --text-color: #000000;
+    --text-color: #0066cc;
     --header-bg: #ffffff;
-    --border-color: #cccccc;
+    --border-color: #87ceeb;
     --input-bg: #ffffff;
-    --input-text: #000000;
-    --box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    --input-text: #0066cc;
+    --box-shadow: 0 1px 2px rgba(0, 102, 204, 0.1);
     
     /* Espacement */
     --spacing-xs: 0.25rem;
@@ -36,17 +36,17 @@
     --ease-out-circ: cubic-bezier(0, 0.55, 0.45, 1);
 
     /* Couleurs du thème clair */
-    --primary-color-rgb: 0, 0, 0;
-    --primary-color-dark: #333333;
-    --secondary-dark: #eeeeee;
+    --primary-color-rgb: 0, 102, 204;
+    --primary-color-dark: #0052a3;
+    --secondary-dark: #b3e0ff;
     --card-bg: #ffffff;
     --light-color: #ffffff;
-    --dark-color: #000000;
-    --dark-border: #666666;
-    --text-muted: #666666;
+    --dark-color: #003366;
+    --dark-border: #0066cc;
+    --text-muted: #87ceeb;
     --text-light: #ffffff;
-    --text-secondary: #666666;
-    --hover-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    --text-secondary: #3399ff;
+    --hover-shadow: 0 1px 3px rgba(0, 102, 204, 0.1);
 
     /* Bordures et ombres */
     --border-radius: 8px;
@@ -65,29 +65,29 @@
 
 [data-theme="dark"] {
     /* Thème sombre basique */
-    --bg-color: #000000;
-    --text-color: #ffffff;
-    --header-bg: #111111;
-    --border-color: #333333;
-    --input-bg: #111111;
+    --bg-color: #003366;
+    --text-color: #87ceeb;
+    --header-bg: #004080;
+    --border-color: #0066cc;
+    --input-bg: #004080;
     --input-text: #ffffff;
-    --box-shadow: 0 1px 2px rgba(0,0,0,0.2);
-    --primary-color: #ffffff;
-    --primary-color-rgb: 255, 255, 255;
-    --primary-color-dark: #cccccc;
-    --secondary-color: #333333;
+    --box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    --primary-color: #3399ff;
+    --primary-color-rgb: 51, 153, 255;
+    --primary-color-dark: #0066cc;
+    --secondary-color: #87ceeb;
     --shadow-color: rgba(0, 0, 0, 0.2);
-    --hover-color: #111111;
-    --active-color: #222222;
-    --card-bg: #111111;
+    --hover-color: #004080;
+    --active-color: #004d99;
+    --card-bg: #004080;
     --error-color: #ff0000;
-    --success-color: #008000;
-    --warning-color: #ffa500;
-    --info-color: #0000ff;
+    --success-color: #00cc00;
+    --warning-color: #ff9900;
+    --info-color: #3399ff;
     --danger-color: #ff0000;
     --danger-dark: #cc0000;
-    --secondary-dark: #222222;
-    --dark-border: #444444;
+    --secondary-dark: #004d99;
+    --dark-border: #0066cc;
 }
 
 /* Reset et styles de base */
@@ -125,19 +125,23 @@ body {
 header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     padding: var(--spacing-md);
     background: var(--header-bg);
     box-shadow: var(--box-shadow);
+    position: relative;
 }
 
 header h1 {
     margin: 0;
     font-size: 2rem;
     color: var(--text-color);
+    text-align: center;
 }
 
 .menu-toggle {
+    position: absolute;
+    left: var(--spacing-md);
     display: none;
     background: none;
     border: none;
@@ -145,6 +149,11 @@ header h1 {
     font-size: 1.5rem;
     cursor: pointer;
     padding: 0.5rem;
+}
+
+.theme-switch {
+    position: absolute;
+    right: var(--spacing-md);
 }
 
 /* Menu de navigation */

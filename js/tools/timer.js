@@ -32,31 +32,15 @@ export const TimerManager = {
     },
 
     /**
-     * Charge l'état sauvegardé
-     */
-    loadState() {
-        const savedState = Utils.loadFromStorage('timerState', {
-            timer: { sound: true },
-            stopwatch: { laps: [] }
-        });
-
-        this.state = {
-            ...this.state,
-            timer: { ...this.state.timer, ...savedState.timer },
-            stopwatch: { ...this.state.stopwatch, ...savedState.stopwatch }
-        };
-    },
-
-    /**
      * Configure les écouteurs d'événements
      */
     setupListeners() {
         // Minuteur
-        document.getElementById('startTimer')?.addEventListener('click', () => {
+        document.getElementById('timerStartBtn')?.addEventListener('click', () => {
             this.startTimer();
         });
 
-        document.getElementById('pauseTimer')?.addEventListener('click', () => {
+        document.getElementById('timerPauseBtn')?.addEventListener('click', () => {
             this.pauseTimer();
         });
 
@@ -64,7 +48,7 @@ export const TimerManager = {
             this.resetTimer();
         });
 
-        document.getElementById('toggleSound')?.addEventListener('click', () => {
+        document.getElementById('soundToggle')?.addEventListener('click', () => {
             this.toggleSound();
         });
 
@@ -83,7 +67,7 @@ export const TimerManager = {
 
         // Entrées du minuteur
         ['hours', 'minutes', 'seconds'].forEach(field => {
-            document.getElementById(`timer${field.charAt(0).toUpperCase() + field.slice(1)}`)
+            document.getElementById(`${field}Input`)
                 ?.addEventListener('input', (e) => {
                     this.updateTimerValue(field, e.target.value);
                 });
@@ -132,6 +116,36 @@ export const TimerManager = {
         this.state.timer.intervalId = setInterval(() => this.updateTimer(), 1000);
 
         this.updateTimerControls();
+        this.updateProgressBar(totalSeconds);
+    },
+
+    /**
+     * Met à jour la barre de progression
+     */
+    updateProgressBar(totalSeconds) {
+        const progressBar = document.getElementById('timerProgressBar');
+        if (!progressBar) return;
+
+        const startTime = Date.now();
+        const endTime = this.state.timer.endTime;
+        const duration = endTime - startTime;
+
+        const updateProgress = () => {
+            if (!this.state.timer.isRunning) return;
+            
+            const now = Date.now();
+            const timeLeft = endTime - now;
+            const progress = ((duration - timeLeft) / duration) * 100;
+            
+            progressBar.style.width = `${progress}%`;
+            progressBar.setAttribute('aria-valuenow', progress);
+
+            if (timeLeft > 0) {
+                requestAnimationFrame(updateProgress);
+            }
+        };
+
+        requestAnimationFrame(updateProgress);
     },
 
     /**
@@ -151,6 +165,7 @@ export const TimerManager = {
         this.state.timer.seconds = remaining % 60;
 
         this.updateTimerControls();
+        this.updateDisplay();
     },
 
     /**
@@ -164,6 +179,13 @@ export const TimerManager = {
         this.state.timer.hours = 0;
         this.state.timer.minutes = 0;
         this.state.timer.seconds = 0;
+
+        // Réinitialiser la barre de progression
+        const progressBar = document.getElementById('timerProgressBar');
+        if (progressBar) {
+            progressBar.style.width = '0%';
+            progressBar.setAttribute('aria-valuenow', 0);
+        }
 
         this.updateDisplay();
         this.updateTimerControls();
@@ -212,8 +234,8 @@ export const TimerManager = {
         const alarm = document.getElementById('timerAlarm');
         if (alarm) {
             alarm.currentTime = 0;
-            alarm.play().catch(error => {
-                console.error('Erreur de lecture de l\'alarme:', error);
+            alarm.play().catch(() => {
+                console.warn('Impossible de jouer l\'alarme');
             });
         }
     },
@@ -223,8 +245,14 @@ export const TimerManager = {
      */
     toggleSound() {
         this.state.timer.sound = !this.state.timer.sound;
-        this.updateSoundButton();
-        this.saveState();
+        const soundBtn = document.getElementById('soundToggle');
+        if (soundBtn) {
+            const icon = soundBtn.querySelector('i');
+            if (icon) {
+                icon.className = this.state.timer.sound ? 'fas fa-volume-up' : 'fas fa-volume-mute';
+            }
+            soundBtn.innerHTML = this.state.timer.sound ? '<i class="fas fa-volume-up"></i> Son activé' : '<i class="fas fa-volume-mute"></i> Son désactivé';
+        }
     },
 
     /**
@@ -295,10 +323,17 @@ export const TimerManager = {
      * Met à jour l'affichage du minuteur
      */
     updateTimerDisplay() {
+        const display = document.getElementById('timerDisplay');
+        if (display) {
+            const { hours, minutes, seconds } = this.state.timer;
+            display.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Mettre à jour les champs d'entrée
         ['hours', 'minutes', 'seconds'].forEach(field => {
-            const element = document.getElementById(`timer${field.charAt(0).toUpperCase() + field.slice(1)}`);
-            if (element) {
-                element.value = this.state.timer[field].toString().padStart(2, '0');
+            const input = document.getElementById(`${field}Input`);
+            if (input) {
+                input.value = this.state.timer[field];
             }
         });
     },
@@ -335,12 +370,12 @@ export const TimerManager = {
      * Met à jour les contrôles du minuteur
      */
     updateTimerControls() {
-        const startButton = document.getElementById('startTimer');
-        const pauseButton = document.getElementById('pauseTimer');
+        const startButton = document.getElementById('timerStartBtn');
+        const pauseButton = document.getElementById('timerPauseBtn');
         
         if (startButton && pauseButton) {
-            startButton.style.display = this.state.timer.isRunning ? 'none' : 'block';
-            pauseButton.style.display = this.state.timer.isRunning ? 'block' : 'none';
+            startButton.style.display = this.state.timer.isRunning ? 'none' : 'inline-block';
+            pauseButton.style.display = this.state.timer.isRunning ? 'inline-block' : 'none';
         }
     },
 
@@ -357,17 +392,6 @@ export const TimerManager = {
         
         if (lapButton) {
             lapButton.disabled = !this.state.stopwatch.isRunning;
-        }
-    },
-
-    /**
-     * Met à jour le bouton de son
-     */
-    updateSoundButton() {
-        const soundButton = document.getElementById('toggleSound');
-        if (soundButton) {
-            soundButton.innerHTML = `<i class="fas fa-volume-${this.state.timer.sound ? 'up' : 'mute'}"></i>`;
-            soundButton.title = `Son ${this.state.timer.sound ? 'activé' : 'désactivé'}`;
         }
     },
 
@@ -408,14 +432,24 @@ export const TimerManager = {
      * Sauvegarde l'état
      */
     saveState() {
-        Utils.saveToStorage('timerState', {
-            timer: {
-                sound: this.state.timer.sound
-            },
-            stopwatch: {
-                laps: this.state.stopwatch.laps
+        localStorage.setItem('timerState', JSON.stringify(this.state));
+    },
+
+    /**
+     * Charge l'état
+     */
+    loadState() {
+        const savedState = localStorage.getItem('timerState');
+        if (savedState) {
+            try {
+                const parsedState = JSON.parse(savedState);
+                this.state = parsedState;
+                this.updateDisplay();
+                this.updateTimerControls();
+            } catch (e) {
+                console.error('Erreur lors du chargement de l\'état du minuteur:', e);
             }
-        });
+        }
     },
 
     /**
@@ -428,7 +462,7 @@ export const TimerManager = {
     }
 };
 
-// Exposer les fonctions globalement
+// Exposer les fonctions globalement pour le HTML
 window.startTimer = () => TimerManager.startTimer();
 window.pauseTimer = () => TimerManager.pauseTimer();
 window.resetTimer = () => TimerManager.resetTimer();
@@ -436,4 +470,9 @@ window.toggleSound = () => TimerManager.toggleSound();
 window.startStopwatch = () => TimerManager.toggleStopwatch();
 window.pauseStopwatch = () => TimerManager.toggleStopwatch();
 window.resetStopwatch = () => TimerManager.resetStopwatch();
-window.lapStopwatch = () => TimerManager.recordLap(); 
+window.lapStopwatch = () => TimerManager.recordLap();
+
+// Initialiser le minuteur au chargement
+document.addEventListener('DOMContentLoaded', () => {
+    TimerManager.init();
+}); 
