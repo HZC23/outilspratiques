@@ -4,6 +4,7 @@ import { MenuManager } from './menu.js';
 import { NotificationManager } from './notification.js';
 import { CacheManager } from './cache.js';
 import { PerformanceManager } from './performance.js';
+import { Utils } from './utils.js';
 
 /**
  * Classe principale de l'application
@@ -48,7 +49,7 @@ class App {
         this.initLazyLoading();
         
         // Vérifier si les animations sont réduites
-        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const prefersReducedMotion = window.innerWidth <= 768 && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (prefersReducedMotion) {
             console.log('Les animations sont désactivées car votre système est configuré pour réduire les animations');
             Utils.showNotification('Les animations sont désactivées dans vos préférences système', 'info');
