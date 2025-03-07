@@ -543,121 +543,146 @@ header h1 {
     }
 }
 
-/* Éléments de formulaire */
-button,
-.btn,
-input[type="button"],
-input[type="submit"] {
+/* Styles de base pour tous les boutons */
+button {
     position: relative;
-    border: 2px solid transparent;
-    font-weight: 600;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: all 0.2s ease;
     overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
 }
 
-button:hover,
-.btn:hover,
-input[type="button"]:hover,
-input[type="submit"]:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-}
-
-button:active,
-.btn:active,
-input[type="button"]:active,
-input[type="submit"]:active {
-    transform: translateY(1px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-button::after,
-.btn::after,
-input[type="button"]::after,
-input[type="submit"]::after {
+/* Effet de ripple */
+button::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.1);
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
     opacity: 0;
-    transition: opacity 0.2s ease;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
 }
 
-button:hover::after,
-.btn:hover::after,
-input[type="button"]:hover::after,
-input[type="submit"]:hover::after {
-    opacity: 1;
+button:hover::after {
+    animation: ripple 0.6s ease-out;
 }
 
-button:focus,
-.btn:focus,
-input[type="button"]:focus,
-input[type="submit"]:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.4);
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+    }
+    20% {
+        transform: scale(25, 25);
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(40, 40);
+    }
 }
 
-/* Amélioration du contraste pour les boutons sur fond sombre */
-[data-theme="dark"] button,
-[data-theme="dark"] .btn,
-[data-theme="dark"] input[type="button"],
-[data-theme="dark"] input[type="submit"] {
-    border-color: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+/* Effet de survol standard */
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* Styles spécifiques pour les boutons d'action */
-.action-btn,
+.action-btn, 
 .primary-btn,
 .submit-btn,
-button[type="submit"] {
-    background-color: var(--primary-color);
+.save-btn {
+    background: var(--primary-color);
     color: white;
-    font-weight: 600;
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .action-btn:hover,
 .primary-btn:hover,
 .submit-btn:hover,
-button[type="submit"]:hover {
-    background-color: var(--primary-color-dark);
+.save-btn:hover {
+    background: var(--primary-color-dark);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 5px 15px rgba(var(--primary-color-rgb), 0.3);
 }
 
-.secondary-btn,
-.cancel-btn {
-    background-color: var(--secondary-color);
-    color: var(--text-color);
-    border: 1px solid var(--border-color);
-}
-
-.secondary-btn:hover,
-.cancel-btn:hover {
-    background-color: var(--secondary-dark);
-}
-
+/* Styles pour les boutons de danger/suppression */
 .danger-btn,
 .delete-btn,
-.remove-btn {
-    background-color: var(--danger-color);
+.clear-btn {
+    background: var(--danger-color);
     color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .danger-btn:hover,
 .delete-btn:hover,
-.remove-btn:hover {
-    background-color: var(--danger-dark);
+.clear-btn:hover {
+    background: var(--danger-color-dark);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 5px 15px rgba(var(--danger-color-rgb), 0.3);
 }
 
-/* Amélioration de la visibilité des boutons désactivés */
+/* Styles pour les boutons de succès/validation */
+.success-btn,
+.validate-btn,
+.confirm-btn {
+    background: var(--success-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.success-btn:hover,
+.validate-btn:hover,
+.confirm-btn:hover {
+    background: var(--success-color-dark);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 5px 15px rgba(var(--success-color-rgb), 0.3);
+}
+
+/* Styles pour les boutons d'information/secondaires */
+.info-btn,
+.secondary-btn {
+    background: var(--info-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.info-btn:hover,
+.secondary-btn:hover {
+    background: var(--info-color-dark);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 5px 15px rgba(var(--info-color-rgb), 0.3);
+}
+
+/* Styles pour les boutons désactivés */
 button:disabled,
-.btn:disabled,
-input[type="button"]:disabled,
-input[type="submit"]:disabled {
+button[disabled] {
     opacity: 0.6;
     cursor: not-allowed;
     transform: none !important;
@@ -665,10 +690,80 @@ input[type="submit"]:disabled {
 }
 
 button:disabled::after,
-.btn:disabled::after,
-input[type="button"]:disabled::after,
-input[type="submit"]:disabled::after {
+button[disabled]::after {
     display: none;
+}
+
+/* Effet de focus */
+button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.3);
+}
+
+/* Animation de chargement pour les boutons */
+@keyframes buttonLoading {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.loading::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: buttonLoading 0.8s linear infinite;
+}
+
+/* Effet de pulsation pour les boutons importants */
+.pulse {
+    animation: buttonPulse 1.5s infinite;
+}
+
+@keyframes buttonPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(var(--primary-color-rgb), 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(var(--primary-color-rgb), 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(var(--primary-color-rgb), 0);
+    }
+}
+
+/* Réduction des animations si préféré */
+@media (prefers-reduced-motion: reduce) {
+    button {
+        transition: none !important;
+    }
+    
+    button::after {
+        display: none !important;
+    }
+    
+    .pulse {
+        animation: none !important;
+    }
+    
+    .loading::before {
+        animation: none !important;
+    }
 }
 
 /* Animations */
@@ -728,21 +823,6 @@ input[type="submit"]:disabled::after {
 @keyframes spin {
     to {
         transform: rotate(360deg);
-    }
-}
-
-@keyframes ripple {
-    0% {
-        transform: scale(0, 0);
-        opacity: 0.5;
-    }
-    20% {
-        transform: scale(25, 25);
-        opacity: 0.5;
-    }
-    100% {
-        opacity: 0;
-        transform: scale(40, 40);
     }
 }
 

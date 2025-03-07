@@ -176,9 +176,19 @@ export const TimerManager = {
         this.state.timer.isRunning = false;
         this.state.timer.intervalId = null;
         this.state.timer.endTime = null;
+
+        // Réinitialiser à 0
         this.state.timer.hours = 0;
         this.state.timer.minutes = 0;
         this.state.timer.seconds = 0;
+
+        // Réinitialiser les champs d'entrée
+        ['hours', 'minutes', 'seconds'].forEach(field => {
+            const input = document.getElementById(`${field}Input`);
+            if (input) {
+                input.value = '0';
+            }
+        });
 
         // Réinitialiser la barre de progression
         const progressBar = document.getElementById('timerProgressBar');
@@ -216,6 +226,19 @@ export const TimerManager = {
         clearInterval(this.state.timer.intervalId);
         this.state.timer.isRunning = false;
         this.state.timer.intervalId = null;
+        this.state.timer.endTime = null;
+
+        // Réinitialiser à 0 au lieu de garder le temps initial
+        this.state.timer.hours = 0;
+        this.state.timer.minutes = 0;
+        this.state.timer.seconds = 0;
+
+        // Réinitialiser la barre de progression
+        const progressBar = document.getElementById('timerProgressBar');
+        if (progressBar) {
+            progressBar.style.width = '0%';
+            progressBar.setAttribute('aria-valuenow', 0);
+        }
 
         this.updateDisplay();
         this.updateTimerControls();

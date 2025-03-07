@@ -175,7 +175,10 @@ export const CalculatorManager = {
      * Calcule le résultat
      */
     calculate() {
-        if (!this.state.currentExpression) return;
+        if (!this.state.currentExpression) {
+            Utils.showNotification('Veuillez entrer une expression', 'warning');
+            return;
+        }
 
         try {
             const result = this.evaluateExpression(this.state.currentExpression);
@@ -192,7 +195,21 @@ export const CalculatorManager = {
             this.updateDisplay();
             this.saveState();
         } catch (error) {
-            Utils.showNotification('Expression invalide', 'error');
+            let message = 'Expression invalide';
+            
+            if (error.message.includes('se termine par un opérateur')) {
+                message = 'L\'expression ne peut pas se terminer par un opérateur';
+            } else if (error.message.includes('parenthèses non équilibrées')) {
+                message = 'Les parenthèses ne sont pas équilibrées';
+            } else if (error.message.includes('non sécurisée')) {
+                message = 'Expression contient des caractères non autorisés';
+            } else if (error.message.includes('Résultat invalide')) {
+                message = 'Le calcul a produit un résultat invalide';
+            } else if (error.message.includes('Erreur de calcul')) {
+                message = error.message;
+            }
+
+            Utils.showNotification(message, 'error');
         }
     },
 
@@ -200,6 +217,18 @@ export const CalculatorManager = {
      * Évalue une expression mathématique
      */
     evaluateExpression(expression) {
+        // Vérifie si l'expression se termine par un opérateur
+        if (this.isOperator(expression.slice(-1))) {
+            throw new Error('Expression invalide : se termine par un opérateur');
+        }
+
+        // Vérifie les parenthèses
+        const openParens = (expression.match(/\(/g) || []).length;
+        const closeParens = (expression.match(/\)/g) || []).length;
+        if (openParens !== closeParens) {
+            throw new Error('Expression invalide : parenthèses non équilibrées');
+        }
+
         // Remplace les fonctions scientifiques par leurs équivalents JavaScript
         expression = expression
             .replace(/sin\(/g, `Math.sin(${this.getAngleConversion()}`)
@@ -215,16 +244,27 @@ export const CalculatorManager = {
             .replace(/ln\(/g, 'Math.log(')
             .replace(/\^/g, '**');
 
-        // Vérifie la sécurité de l'expression
-        if (!/^[0-9+\-*/().√πe\s^]*$/.test(expression.replace(/Math\.[a-z]+/g, ''))) {
+        // Vérifie la sécurité de l'expression avec une regex plus précise
+        const safeExpressionRegex = /^[\d\s+\-*/()\^.√πe]+$/;
+        const sanitizedExpression = expression.replace(/Math\.[a-z]+/g, '');
+        if (!safeExpressionRegex.test(sanitizedExpression)) {
             throw new Error('Expression non sécurisée');
         }
 
-        // Évalue l'expression
-        const result = Function(`'use strict'; return ${expression}`)();
-        
-        // Arrondi le résultat selon la précision définie
-        return Number(result.toFixed(this.state.precision));
+        try {
+            // Évalue l'expression
+            const result = Function(`'use strict'; return ${expression}`)();
+            
+            // Vérifie si le résultat est un nombre valide
+            if (typeof result !== 'number' || !isFinite(result)) {
+                throw new Error('Résultat invalide');
+            }
+
+            // Arrondi le résultat selon la précision définie
+            return Number(result.toFixed(this.state.precision));
+        } catch (error) {
+            throw new Error('Erreur de calcul : ' + error.message);
+        }
     },
 
     /**
