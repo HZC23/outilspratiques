@@ -1,21 +1,21 @@
 /* Variables CSS globales */
 :root {
-    /* Couleurs minimalistes */
-    --primary-color: #6b7280;
-    --secondary-color: #9ca3af;
-    --success-color: #84cc16;
-    --info-color: #60a5fa;
-    --warning-color: #facc15;
-    --danger-color: #ef4444;
+    /* Couleurs basiques */
+    --primary-color: #000000;
+    --secondary-color: #666666;
+    --success-color: #008000;
+    --info-color: #0000ff;
+    --warning-color: #ffa500;
+    --danger-color: #ff0000;
     
-    /* Thème clair minimaliste */
-    --bg-color: #f8fafc;
-    --text-color: #1f2937;
+    /* Thème clair basique */
+    --bg-color: #ffffff;
+    --text-color: #000000;
     --header-bg: #ffffff;
-    --border-color: #e5e7eb;
+    --border-color: #cccccc;
     --input-bg: #ffffff;
-    --input-text: #374151;
-    --box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    --input-text: #000000;
+    --box-shadow: 0 1px 2px rgba(0,0,0,0.1);
     
     /* Espacement */
     --spacing-xs: 0.25rem;
@@ -36,17 +36,17 @@
     --ease-out-circ: cubic-bezier(0, 0.55, 0.45, 1);
 
     /* Couleurs du thème clair */
-    --primary-color-rgb: 107, 114, 128;
-    --primary-color-dark: #4b5563;
-    --secondary-dark: #f1f5f9;
+    --primary-color-rgb: 0, 0, 0;
+    --primary-color-dark: #333333;
+    --secondary-dark: #eeeeee;
     --card-bg: #ffffff;
     --light-color: #ffffff;
-    --dark-color: #111827;
-    --dark-border: #374151;
-    --text-muted: #9ca3af;
-    --text-light: #f9fafb;
-    --text-secondary: #6b7280;
-    --hover-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    --dark-color: #000000;
+    --dark-border: #666666;
+    --text-muted: #666666;
+    --text-light: #ffffff;
+    --text-secondary: #666666;
+    --hover-shadow: 0 1px 3px rgba(0,0,0,0.1);
 
     /* Bordures et ombres */
     --border-radius: 8px;
@@ -64,30 +64,30 @@
 }
 
 [data-theme="dark"] {
-    /* Thème sombre minimaliste */
-    --bg-color: #111827;
-    --text-color: #f9fafb;
-    --header-bg: #1f2937;
-    --border-color: #374151;
-    --input-bg: #1f2937;
-    --input-text: #f3f4f6;
-    --box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-    --primary-color: #9ca3af;
-    --primary-color-rgb: 156, 163, 175;
-    --primary-color-dark: #6b7280;
-    --secondary-color: #374151;
-    --shadow-color: rgba(0, 0, 0, 0.3);
-    --hover-color: #1f2937;
-    --active-color: #374151;
-    --card-bg: #1f2937;
-    --error-color: #ef4444;
-    --success-color: #84cc16;
-    --warning-color: #facc15;
-    --info-color: #60a5fa;
-    --danger-color: #ef4444;
-    --danger-dark: #dc2626;
-    --secondary-dark: #1f2937;
-    --dark-border: #4b5563;
+    /* Thème sombre basique */
+    --bg-color: #000000;
+    --text-color: #ffffff;
+    --header-bg: #111111;
+    --border-color: #333333;
+    --input-bg: #111111;
+    --input-text: #ffffff;
+    --box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    --primary-color: #ffffff;
+    --primary-color-rgb: 255, 255, 255;
+    --primary-color-dark: #cccccc;
+    --secondary-color: #333333;
+    --shadow-color: rgba(0, 0, 0, 0.2);
+    --hover-color: #111111;
+    --active-color: #222222;
+    --card-bg: #111111;
+    --error-color: #ff0000;
+    --success-color: #008000;
+    --warning-color: #ffa500;
+    --info-color: #0000ff;
+    --danger-color: #ff0000;
+    --danger-dark: #cc0000;
+    --secondary-dark: #222222;
+    --dark-border: #444444;
 }
 
 /* Reset et styles de base */
