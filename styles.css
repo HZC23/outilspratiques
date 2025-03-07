@@ -1,21 +1,21 @@
 /* Variables CSS globales */
 :root {
-    /* Couleurs */
-    --primary-color: #4a90e2;
-    --secondary-color: #67b26f;
-    --success-color: #4caf50;
-    --info-color: #2196f3;
-    --warning-color: #ff9800;
-    --danger-color: #f44336;
+    /* Couleurs minimalistes */
+    --primary-color: #6b7280;
+    --secondary-color: #9ca3af;
+    --success-color: #84cc16;
+    --info-color: #60a5fa;
+    --warning-color: #facc15;
+    --danger-color: #ef4444;
     
-    /* Thème clair */
-    --bg-color: #ffffff;
-    --text-color: #333333;
+    /* Thème clair minimaliste */
+    --bg-color: #f8fafc;
+    --text-color: #1f2937;
     --header-bg: #ffffff;
-    --border-color: #e0e0e0;
-    --input-bg: #0cddf0;
-    --input-text: #333333;
-    --box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    --border-color: #e5e7eb;
+    --input-bg: #ffffff;
+    --input-text: #374151;
+    --box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     
     /* Espacement */
     --spacing-xs: 0.25rem;
@@ -25,29 +25,31 @@
     --spacing-xl: 2rem;
     
     /* Transitions */
-    --transition: all 0.3s ease;
+    --transition: all 0.3s var(--animation-timing);
+    --transition-slow: all 0.5s var(--animation-timing);
+    --transition-fast: all 0.2s var(--animation-timing);
+    
+    /* Easing */
     --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
-    --ease-out-back: cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-in-back: cubic-bezier(0.36, 0, 0.66, -0.56);
+    --ease-out-circ: cubic-bezier(0, 0.55, 0.45, 1);
 
     /* Couleurs du thème clair */
-    --primary-color-rgb: 74, 144, 226; /* Valeur RGB de la couleur primaire */
-    --primary-color-dark: #3a7bc8; /* Version plus foncée pour les hover */
-    --secondary-dark: #e2e6ea;
-
-    /* Couleurs de fond */
+    --primary-color-rgb: 107, 114, 128;
+    --primary-color-dark: #4b5563;
+    --secondary-dark: #f1f5f9;
     --card-bg: #ffffff;
     --light-color: #ffffff;
-    --dark-color: #1a1a1a;
-    --dark-border: #404040;
-
-    /* Couleurs de texte */
-    --text-muted: #6c757d;
-    --text-light: #ffffff;
-    --text-secondary: #6c757d;
+    --dark-color: #111827;
+    --dark-border: #374151;
+    --text-muted: #9ca3af;
+    --text-light: #f9fafb;
+    --text-secondary: #6b7280;
+    --hover-shadow: 0 2px 4px rgba(0,0,0,0.05);
 
     /* Bordures et ombres */
     --border-radius: 8px;
-    --hover-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 
     /* Transitions */
     --transition-duration: 0.3s;
@@ -55,37 +57,37 @@
     --will-change-properties: transform, opacity;
     
     /* Animations */
-    --ease-in-back: cubic-bezier(0.6, -0.28, 0.735, 0.045);
+    --animation-duration: 0.4s;
+    --animation-timing: cubic-bezier(0.4, 0, 0.2, 1);
+    --animation-delay: 0.1s;
+    --animation-iteration: 1;
 }
 
 [data-theme="dark"] {
-    --bg-color: #1a1a1a;
-    --text-color: #ffffff;
-    --header-bg: #2d2d2d;
-    --border-color: #404040;
-    --input-bg: #333333;
-    --input-text: #ffffff;
-    --box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    --primary-color: #64b5f6;
-    --primary-color-rgb: 100, 181, 246; /* Valeur RGB de la couleur primaire en mode sombre */
-    --primary-color-dark: #4a90e2; /* Version plus foncée pour les hover en mode sombre */
-    --secondary-color: #2d2d2d;
-    --shadow-color: rgba(0, 0, 0, 0.5);
-    --hover-color: #2a2a2a;
-    --active-color: #3a3a3a;
-    --card-bg: #222222;
-    --error-color: #f8526b;
-    --success-color: #43d16e;
-    --warning-color: #ffcc33;
-    --info-color: #33b5e5;
-    --danger-color: #f8526b;
-    --danger-dark: #bd2130;
-    --secondary-dark: #e2e6ea;
-    --dark-border: #404040;
-    --error-color: #f8526b;
-    --success-color: #43d16e;
-    --warning-color: #ffcc33;
-    --info-color: #33b5e5;
+    /* Thème sombre minimaliste */
+    --bg-color: #111827;
+    --text-color: #f9fafb;
+    --header-bg: #1f2937;
+    --border-color: #374151;
+    --input-bg: #1f2937;
+    --input-text: #f3f4f6;
+    --box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    --primary-color: #9ca3af;
+    --primary-color-rgb: 156, 163, 175;
+    --primary-color-dark: #6b7280;
+    --secondary-color: #374151;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --hover-color: #1f2937;
+    --active-color: #374151;
+    --card-bg: #1f2937;
+    --error-color: #ef4444;
+    --success-color: #84cc16;
+    --warning-color: #facc15;
+    --info-color: #60a5fa;
+    --danger-color: #ef4444;
+    --danger-dark: #dc2626;
+    --secondary-dark: #1f2937;
+    --dark-border: #4b5563;
 }
 
 /* Reset et styles de base */

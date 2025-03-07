@@ -80,6 +80,13 @@ export const NotesManager = {
         this.state.content = content;
         this.state.lastSaved = Date.now();
 
+        // Ajouter l'animation de sauvegarde
+        const saveBtn = document.querySelector('.save-btn');
+        if (saveBtn) {
+            saveBtn.classList.add('saving');
+            setTimeout(() => saveBtn.classList.remove('saving'), 500);
+        }
+
         if (!silent) {
             Utils.showNotification('Notes sauvegardées !', 'success');
         }

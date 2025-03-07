@@ -47,6 +47,13 @@ class App {
         // Initialiser le lazy loading des images
         this.initLazyLoading();
         
+        // Vérifier si les animations sont réduites
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (prefersReducedMotion) {
+            console.log('Les animations sont désactivées car votre système est configuré pour réduire les animations');
+            Utils.showNotification('Les animations sont désactivées dans vos préférences système', 'info');
+        }
+        
         console.log('Application initialisée');
     }
     

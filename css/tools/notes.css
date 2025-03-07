@@ -300,4 +300,130 @@
     .todo-actions {
         flex-direction: column;
     }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.95);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Application des animations */
+.notepad-container {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.toolbar {
+    animation: slideIn 0.5s ease-out 0.2s forwards;
+    opacity: 0;
+}
+
+.toolbar-group {
+    animation: slideIn 0.5s ease-out 0.3s forwards;
+    opacity: 0;
+}
+
+.editor-container {
+    animation: scaleIn 0.5s ease-out 0.4s forwards;
+    opacity: 0;
+}
+
+.notepad-footer {
+    animation: slideIn 0.5s ease-out 0.5s forwards;
+    opacity: 0;
+}
+
+/* Améliorations des transitions */
+.toolbar button {
+    transform-origin: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.toolbar button:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.toolbar button:active {
+    transform: translateY(1px) scale(0.95);
+}
+
+.notepad-editor {
+    transition: all 0.3s ease;
+}
+
+.notepad-editor:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.notepad-actions button {
+    transform-origin: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.notepad-actions button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.notepad-actions button:active {
+    transform: translateY(1px) scale(0.95);
+}
+
+/* Animation pour les compteurs */
+.word-count span {
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.word-count span:hover {
+    transform: scale(1.1);
+    color: var(--primary-color);
+}
+
+/* Animation de sauvegarde */
+@keyframes saveSuccess {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+        color: var(--success-color);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.save-btn.saving {
+    animation: saveSuccess 0.5s ease-out;
 } 
