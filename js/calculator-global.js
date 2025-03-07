@@ -15,10 +15,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Ajouter un caractère à l'expression
 function addToCalc(value) {
-    if (currentCalc === '0' && value !== '.') {
+    // Si c'est un chiffre et qu'il y a eu un calcul précédent
+    if (/[0-9]/.test(value) && previousCalc !== '') {
         currentCalc = value;
-    } else {
+        previousCalc = '';
+    }
+    // Si c'est un opérateur
+    else if (/[+\-×÷*/()]/.test(value)) {
+        if (currentCalc === 'Erreur') {
+            currentCalc = '0';
+        }
         currentCalc += value;
+    }
+    // Si c'est un point décimal
+    else if (value === '.') {
+        // Vérifie si le dernier nombre contient déjà un point
+        const lastNumber = currentCalc.split(/[+\-×÷*/()]/).pop();
+        if (!lastNumber.includes('.')) {
+            currentCalc += value;
+        }
+    }
+    // Pour tous les autres cas (chiffres sans calcul précédent)
+    else {
+        if (currentCalc === '0' || currentCalc === 'Erreur') {
+            currentCalc = value;
+        } else {
+            currentCalc += value;
+        }
     }
     updateCalcDisplay();
 }
@@ -43,24 +66,56 @@ function backspace() {
 // Calculer le résultat
 function calculate() {
     try {
+        if (!currentCalc || currentCalc === '0') {
+            return;
+        }
+
+        // Vérifier si l'expression se termine par un opérateur
+        if (/[+\-×÷*\/]$/.test(currentCalc)) {
+            throw new Error('Expression invalide');
+        }
+
+        // Vérifier les parenthèses
+        const openParens = (currentCalc.match(/\(/g) || []).length;
+        const closeParens = (currentCalc.match(/\)/g) || []).length;
+        if (openParens !== closeParens) {
+            throw new Error('Parenthèses non équilibrées');
+        }
+
         // Remplacer les symboles pour l'évaluation
-        let expression = currentCalc.replace(/×/g, '*').replace(/÷/g, '/');
-        
-        // Évaluer l'expression
-        const result = eval(expression);
+        let expression = currentCalc
+            .replace(/×/g, '*')
+            .replace(/÷/g, '/')
+            .replace(/\s/g, '');
+
+        // Vérifier si l'expression est sûre
+        if (!/^[0-9+\-*\/().]*$/.test(expression)) {
+            throw new Error('Expression non valide');
+        }
+
+        // Évaluer l'expression de manière sécurisée
+        const result = Function(`'use strict'; return ${expression}`)();
+
+        // Vérifier si le résultat est valide
+        if (typeof result !== 'number' || !isFinite(result)) {
+            throw new Error('Résultat invalide');
+        }
+
+        // Arrondir le résultat à 8 décimales
+        const roundedResult = Number(result.toFixed(8));
         
         // Ajouter à l'historique
-        addToCalcHistory(currentCalc, result);
+        addToCalcHistory(currentCalc, roundedResult);
         
         // Mettre à jour l'affichage
         previousCalc = currentCalc;
-        currentCalc = result.toString();
+        currentCalc = roundedResult.toString();
         updateCalcDisplay();
     } catch (error) {
         currentCalc = 'Erreur';
         updateCalcDisplay();
         setTimeout(() => {
-            currentCalc = '0';
+            currentCalc = previousCalc || '0';
             updateCalcDisplay();
         }, 1500);
     }
