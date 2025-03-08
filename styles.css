@@ -70,6 +70,12 @@
     --animation-timing: cubic-bezier(0.4, 0, 0.2, 1);
     --animation-delay: 0.1s;
     --animation-iteration: 1;
+    
+    /* Variables pour l'adaptation de hauteur */
+    --header-height: 60px;
+    --content-padding: 20px;
+    --footer-height: 0px;
+    --available-height: calc(100vh - var(--header-height) - var(--content-padding) * 2 - var(--footer-height));
 }
 
 [data-theme="dark"] {
@@ -108,17 +114,23 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+html {
+    font-size: 16px; /* Base pour les calculs rem */
+    height: 100%;
+    overflow: hidden; /* Empêche le scroll sur html */
+}
+
 body {
     font-family: 'Poppins', sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
     line-height: 1.6;
     transition: background-color 0.3s ease, color 0.3s ease;
-    min-height: 100vh;
+    height: 100%;
     display: flex;
     flex-direction: column;
     scroll-behavior: smooth;
-    overflow-x: hidden;
+    overflow: hidden; /* Empêche le scroll sur body */
 }
 
 /* Style pour bloquer le scroll du body quand le menu est ouvert */
@@ -136,6 +148,8 @@ body.menu-open {
     gap: var(--spacing-lg);
     animation: fadeIn 0.5s ease;
     position: relative;
+    height: calc(100vh - var(--header-height));
+    overflow: hidden; /* Empêche le scroll du container */
 }
 
 /* Header styles */
@@ -149,6 +163,7 @@ header {
     position: relative;
     transition: all 0.3s ease;
     z-index: 100;
+    height: var(--header-height);
 }
 
 header h1 {
@@ -286,10 +301,27 @@ header:hover h1::after {
     transform: translateX(-50%) translateY(-10px);
 }
 
+/* Menu de navigation */
+.menu {
+    padding: var(--spacing-md);
+    height: 100%;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) transparent;
+    transition: all 0.3s ease;
+    max-height: calc(100vh - var(--header-height) - var(--spacing-md) * 2);
+}
+
 /* Tools area */
 .tools {
     width: 100%;
     animation: fadeIn 0.5s ease;
+    height: 100%;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) transparent;
+    padding-right: var(--spacing-sm);
+    max-height: calc(100vh - var(--header-height) - var(--spacing-md) * 2);
 }
 
 /* Add gradient border to main tools area */
@@ -312,6 +344,13 @@ header:hover h1::after {
     100% {
         background-position: 200% 0%;
     }
+}
+
+/* Sections dans les outils */
+.section {
+    height: auto;
+    max-height: calc(100vh - var(--header-height) - var(--spacing-md) * 3);
+    overflow-y: auto;
 }
 
 /* Scrollbar */
@@ -337,9 +376,15 @@ header:hover h1::after {
 
 /* Media Queries */
 @media (max-width: 992px) {
+    html, body {
+        overflow: auto; /* Réactive le scroll pour les tablettes/mobiles */
+    }
+    
     .container {
         grid-template-columns: 1fr;
         margin-top: 70px;
+        height: auto;
+        overflow: visible;
     }
     
     /* Ajustement du header pour le menu mobile */
@@ -370,6 +415,17 @@ header:hover h1::after {
     .top-clock .date {
         font-size: 0.7rem;
     }
+    
+    .menu, .tools {
+        max-height: none;
+        height: auto;
+        overflow: visible;
+    }
+    
+    .section {
+        max-height: none;
+        overflow: visible;
+    }
 }
 
 @media (max-width: 480px) {
@@ -383,6 +439,69 @@ header:hover h1::after {
     
     .container {
         padding: var(--spacing-sm);
+    }
+}
+
+/* Adaptations pour différentes hauteurs d'écran */
+@media (min-height: 900px) {
+    :root {
+        --header-height: 70px;
+    }
+    
+    html {
+        font-size: 18px;
+    }
+}
+
+@media (max-height: 768px) {
+    :root {
+        --header-height: 50px;
+        --content-padding: 15px;
+    }
+    
+    html {
+        font-size: 15px;
+    }
+    
+    .section {
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .section h2 {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+    }
+}
+
+@media (max-height: 600px) {
+    :root {
+        --header-height: 40px;
+        --content-padding: 10px;
+    }
+    
+    html {
+        font-size: 14px;
+    }
+    
+    .section {
+        padding: 12px;
+        margin-bottom: 15px;
+    }
+    
+    .section h2 {
+        font-size: 1.3rem;
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+    }
+    
+    input, select, textarea {
+        padding: 8px 12px;
+    }
+    
+    button {
+        padding: 8px 12px;
     }
 }
 

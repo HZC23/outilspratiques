@@ -7,6 +7,8 @@ import { PerformanceManager } from './performance.js';
 import { Utils } from './utils.js';
 import { SchedulerManager } from './tools/scheduler.js';
 import { StyleTextManager } from './tools/styletext.js';
+import { ColorManager } from './tools/color.js';
+import { QRCodeManager } from './tools/qrcode.js';
 
 /**
  * Classe principale de l'application
@@ -52,6 +54,9 @@ class App {
         
         // Initialiser le lazy loading des images
         this.initLazyLoading();
+        
+        // Initialiser l'adaptation responsive de la hauteur
+        this.initResponsiveHeight();
         
         // Vérifier si les animations sont réduites
         const prefersReducedMotion = window.innerWidth <= 768 && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -196,6 +201,16 @@ class App {
         if (document.getElementById('styletext')) {
             StyleTextManager.init();
         }
+        
+        // Initialisation de ColorManager
+        if (document.getElementById('colorTool')) {
+            ColorManager.init();
+        }
+        
+        // Initialisation de QRCodeManager
+        if (document.getElementById('qrcodeTool')) {
+            QRCodeManager.init();
+        }
     }
     
     /**
@@ -281,6 +296,77 @@ class App {
     }
     
     /**
+     * Initialise l'adaptation responsive de la hauteur
+     */
+    initResponsiveHeight() {
+        // Appliquer l'adaptation maintenant
+        this.adjustResponsiveHeight();
+        
+        // Réappliquer l'adaptation à chaque redimensionnement
+        window.addEventListener('resize', PerformanceManager.debounce(() => {
+            this.adjustResponsiveHeight();
+        }, 100));
+    }
+    
+    /**
+     * Ajuste la hauteur des éléments en fonction de la taille de la fenêtre
+     */
+    adjustResponsiveHeight() {
+        const isMobile = window.innerWidth <= 768;
+        const windowHeight = window.innerHeight;
+        
+        // Ne pas appliquer les ajustements sur mobile
+        if (isMobile) {
+            document.documentElement.style.setProperty('--available-height', 'auto');
+            document.body.style.overflow = 'auto';
+            return;
+        }
+        
+        // Calculer et appliquer la hauteur disponible
+        const headerHeight = document.querySelector('header')?.offsetHeight || 60;
+        document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
+        
+        const contentPadding = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--content-padding') || '20');
+        const footerHeight = document.querySelector('footer')?.offsetHeight || 0;
+        
+        const availableHeight = windowHeight - headerHeight - (contentPadding * 2) - footerHeight;
+        document.documentElement.style.setProperty('--available-height', `${availableHeight}px`);
+        
+        // Convertir les sections en conteneurs avec défilement interne
+        this.setupScrollableSections();
+    }
+    
+    /**
+     * Configure les sections pour avoir un défilement interne
+     */
+    setupScrollableSections() {
+        document.querySelectorAll('.section').forEach(section => {
+            // Vérifier si la section a déjà été configurée
+            if (!section.querySelector('.section-content')) {
+                // Obtenir le titre (h2) et tous les autres éléments
+                const title = section.querySelector('h2');
+                const otherElements = Array.from(section.children).filter(child => child !== title);
+                
+                // Créer un conteneur pour le contenu défilable
+                const contentContainer = document.createElement('div');
+                contentContainer.className = 'section-content';
+                
+                // Déplacer tous les éléments sauf le titre dans le conteneur
+                otherElements.forEach(element => {
+                    contentContainer.appendChild(element);
+                });
+                
+                // Ajouter le conteneur à la section après le titre
+                if (title) {
+                    title.after(contentContainer);
+                } else {
+                    section.appendChild(contentContainer);
+                }
+            }
+        });
+    }
+    
+    /**
      * Gère le redimensionnement de la fenêtre
      */
     handleResize() {
@@ -292,10 +378,17 @@ class App {
             MenuManager.state.isMobile = isMobile;
             
             if (!isMobile) {
-                // Passer du mobile au desktop
-                MenuManager.closeMobileMenu();
+                // Reset menu state when switching to desktop
+                MenuManager.closeAllSubmenus();
+                const mainMenu = document.getElementById('mainMenu');
+                if (mainMenu) {
+                    mainMenu.classList.remove('active');
+                }
             }
         }
+        
+        // Ajuster les hauteurs responsives
+        this.adjustResponsiveHeight();
     }
     
     /**

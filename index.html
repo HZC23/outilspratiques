@@ -1078,46 +1078,73 @@
                 <h2 id="colorTitle">Sélecteur de couleurs</h2>
                 <div class="color-container">
                     <div class="color-picker">
-                        <div class="color-preview" id="colorPreview"></div>
-                        <input type="color" id="colorPicker" onchange="updateColorPicker(this.value)">
+                        <div id="colorPreview" class="color-preview"></div>
+                        <input type="color" id="colorPicker" value="#0066cc">
+
+                        <div class="color-values">
+                            <div class="value-group">
+                                <label for="colorHex">Hexadécimal</label>
+                                <div class="value-input">
+                                    <input type="text" id="colorHex" readonly>
+                                    <button onclick="copyColorValue('Hex')" class="copy-btn">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="value-group">
+                                <label for="colorRgb">RGB</label>
+                                <div class="value-input">
+                                    <input type="text" id="colorRgb" readonly>
+                                    <button onclick="copyColorValue('Rgb')" class="copy-btn">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="value-group">
+                                <label for="colorHsl">HSL</label>
+                                <div class="value-input">
+                                    <input type="text" id="colorHsl" readonly>
+                                    <button onclick="copyColorValue('Hsl')" class="copy-btn">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="color-values">
-                        <div class="value-group">
-                            <label for="colorHex">Hexadécimal</label>
-                            <div class="value-input">
-                                <input type="text" id="colorHex" readonly>
-                                <button onclick="copyColorValue('Hex')" class="copy-btn">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="value-group">
-                            <label for="colorRgb">RGB</label>
-                            <div class="value-input">
-                                <input type="text" id="colorRgb" readonly>
-                                <button onclick="copyColorValue('Rgb')" class="copy-btn">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="value-group">
-                            <label for="colorHsl">HSL</label>
-                            <div class="value-input">
-                                <input type="text" id="colorHsl" readonly>
-                                <button onclick="copyColorValue('Hsl')" class="copy-btn">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                            </div>
-                        </div>
+                    <!-- Harmonies de couleurs -->
+                    <div class="color-harmonies">
+                        <h3>Harmonies de couleurs</h3>
+                        <div id="harmonySamples" class="harmony-samples"></div>
                     </div>
 
+                    <!-- Couleurs nommées -->
+                    <div class="color-harmonies">
+                        <h3>Couleurs standard</h3>
+                        <div id="namedColors" class="named-colors"></div>
+                    </div>
+
+                    <!-- Accessibilité des couleurs -->
+                    <div class="color-accessibility">
+                        <h3>Accessibilité (WCAG)</h3>
+                        <div id="contrastSamples" class="contrast-samples"></div>
+                    </div>
+
+                    <!-- Dégradés de couleurs -->
+                    <div class="color-gradients">
+                        <h3>Dégradés de couleurs</h3>
+                        <div id="gradientSamples" class="gradient-samples"></div>
+                    </div>
+
+                    <!-- Historique des couleurs -->
                     <div class="color-history">
-                        <h3>Historique des couleurs</h3>
+                        <h3>
+                            Historique des couleurs
+                            <button onclick="clearColorHistory()" title="Effacer l'historique">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </h3>
                         <div id="colorHistory" class="color-grid"></div>
-                        <button onclick="clearColorHistory()" class="clear-btn">
-                            <i class="fas fa-trash"></i> Effacer l'historique
-                        </button>
                     </div>
                 </div>
             </section>
