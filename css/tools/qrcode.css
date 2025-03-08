@@ -6,8 +6,6 @@
     padding: 1rem;
     max-width: 100%;
     animation: fadeIn 0.5s ease-out;
-    height: 100%;
-    overflow: hidden;
 }
 
 @keyframes fadeIn {
@@ -19,7 +17,6 @@
     .qrcode-container {
         flex-direction: row;
         align-items: flex-start;
-        height: calc(100% - 30px); /* Tenir compte du padding de section */
     }
 }
 
@@ -36,7 +33,6 @@
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    max-height: 100%;
 }
 
 .qrcode-config::before {
@@ -64,7 +60,6 @@
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    max-height: 100%;
 }
 
 .qrcode-display::before {
@@ -84,7 +79,6 @@
     align-items: center;
     width: 100%;
     min-height: 280px;
-    max-height: calc(100% - 40px); /* Espace pour le texte en dessous */
     background-color: var(--bg-color);
     border-radius: 0.5rem;
     padding: 1rem;
@@ -97,7 +91,6 @@
 .qrcode-output img, 
 .qrcode-output svg {
     max-width: 100%;
-    max-height: 100%;
     height: auto;
     border-radius: 0.25rem;
     transition: transform 0.3s ease;
@@ -158,9 +151,6 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    overflow-y: auto;
-    flex: 1;
-    padding-right: 0.25rem;
 }
 
 .form-group {
@@ -205,7 +195,6 @@
 
 .form-group textarea {
     min-height: 100px;
-    max-height: 150px;
     resize: vertical;
     line-height: 1.5;
 }
@@ -339,9 +328,6 @@
     padding: 1.5rem;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     animation: fadeIn 0.5s ease-out 0.3s backwards;
-    max-height: 300px;
-    display: flex;
-    flex-direction: column;
 }
 
 .history-header {
@@ -371,11 +357,11 @@
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+    max-height: 300px;
     overflow-y: auto;
     padding-right: 0.5rem;
     scrollbar-width: thin;
     scrollbar-color: var(--primary-color) var(--bg-color);
-    flex: 1;
 }
 
 .history-list::-webkit-scrollbar {
@@ -551,25 +537,10 @@
 @media (max-width: 992px) {
     .qrcode-container {
         flex-direction: column;
-        height: auto;
-        overflow: visible;
     }
     
     .qrcode-output {
         min-height: 250px;
-        max-height: none;
-    }
-    
-    .qrcode-form {
-        overflow: visible;
-    }
-    
-    .qrcode-history {
-        max-height: none;
-    }
-    
-    .history-list {
-        max-height: 300px;
     }
 }
 
@@ -594,24 +565,14 @@
 
 /* Adaptations pour différentes hauteurs d'écran */
 @media (min-height: 900px) {
-    .qrcode-form textarea {
+    .form-group textarea {
         min-height: 150px;
-        max-height: 200px;
-    }
-    
-    .qrcode-history {
-        max-height: 400px;
     }
 }
 
 @media (max-height: 768px) {
-    .qrcode-form textarea {
+    .form-group textarea {
         min-height: 80px;
-        max-height: 120px;
-    }
-    
-    .qrcode-history {
-        max-height: 250px;
     }
     
     .qrcode-btn {
@@ -620,13 +581,8 @@
 }
 
 @media (max-height: 600px) {
-    .qrcode-form textarea {
+    .form-group textarea {
         min-height: 60px;
-        max-height: 100px;
-    }
-    
-    .qrcode-history {
-        max-height: 200px;
     }
     
     .qrcode-output {

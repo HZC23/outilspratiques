@@ -75,7 +75,7 @@
     --header-height: 60px;
     --content-padding: 20px;
     --footer-height: 0px;
-    --available-height: calc(100vh - var(--header-height) - var(--content-padding) * 2 - var(--footer-height));
+    --available-height: calc(100vh - var(--header-height) - 40px);
 }
 
 [data-theme="dark"] {
@@ -117,7 +117,7 @@
 html {
     font-size: 16px; /* Base pour les calculs rem */
     height: 100%;
-    overflow: hidden; /* Empêche le scroll sur html */
+    scroll-behavior: smooth;
 }
 
 body {
@@ -126,11 +126,10 @@ body {
     color: var(--text-color);
     line-height: 1.6;
     transition: background-color 0.3s ease, color 0.3s ease;
-    height: 100%;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    scroll-behavior: smooth;
-    overflow: hidden; /* Empêche le scroll sur body */
+    overflow-x: hidden;
 }
 
 /* Style pour bloquer le scroll du body quand le menu est ouvert */
@@ -148,8 +147,6 @@ body.menu-open {
     gap: var(--spacing-lg);
     animation: fadeIn 0.5s ease;
     position: relative;
-    height: calc(100vh - var(--header-height));
-    overflow: hidden; /* Empêche le scroll du container */
 }
 
 /* Header styles */
@@ -304,24 +301,22 @@ header:hover h1::after {
 /* Menu de navigation */
 .menu {
     padding: var(--spacing-md);
-    height: 100%;
+    max-height: var(--available-height);
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: var(--primary-color) transparent;
     transition: all 0.3s ease;
-    max-height: calc(100vh - var(--header-height) - var(--spacing-md) * 2);
 }
 
 /* Tools area */
 .tools {
     width: 100%;
     animation: fadeIn 0.5s ease;
-    height: 100%;
+    max-height: var(--available-height);
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: var(--primary-color) transparent;
     padding-right: var(--spacing-sm);
-    max-height: calc(100vh - var(--header-height) - var(--spacing-md) * 2);
 }
 
 /* Add gradient border to main tools area */
@@ -346,11 +341,10 @@ header:hover h1::after {
     }
 }
 
-/* Sections dans les outils */
+/* Section principale */
 .section {
     height: auto;
-    max-height: calc(100vh - var(--header-height) - var(--spacing-md) * 3);
-    overflow-y: auto;
+    max-height: none;
 }
 
 /* Scrollbar */
@@ -376,15 +370,9 @@ header:hover h1::after {
 
 /* Media Queries */
 @media (max-width: 992px) {
-    html, body {
-        overflow: auto; /* Réactive le scroll pour les tablettes/mobiles */
-    }
-    
     .container {
         grid-template-columns: 1fr;
         margin-top: 70px;
-        height: auto;
-        overflow: visible;
     }
     
     /* Ajustement du header pour le menu mobile */
@@ -418,13 +406,6 @@ header:hover h1::after {
     
     .menu, .tools {
         max-height: none;
-        height: auto;
-        overflow: visible;
-    }
-    
-    .section {
-        max-height: none;
-        overflow: visible;
     }
 }
 
@@ -446,6 +427,7 @@ header:hover h1::after {
 @media (min-height: 900px) {
     :root {
         --header-height: 70px;
+        --available-height: calc(100vh - var(--header-height) - 40px);
     }
     
     html {
@@ -457,6 +439,7 @@ header:hover h1::after {
     :root {
         --header-height: 50px;
         --content-padding: 15px;
+        --available-height: calc(100vh - var(--header-height) - 30px);
     }
     
     html {
@@ -479,6 +462,7 @@ header:hover h1::after {
     :root {
         --header-height: 40px;
         --content-padding: 10px;
+        --available-height: calc(100vh - var(--header-height) - 20px);
     }
     
     html {

@@ -69,28 +69,6 @@
     width: 120px;
 }
 
-/* Content container for scrollable content */
-.section-content {
-    flex: 1; /* Prend tout l'espace disponible */
-    overflow-y: auto; /* Ajoute une barre de défilement si nécessaire */
-    padding-right: 5px; /* Espace pour la barre de défilement */
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary-color) transparent;
-}
-
-.section-content::-webkit-scrollbar {
-    width: 5px;
-}
-
-.section-content::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.section-content::-webkit-scrollbar-thumb {
-    background: var(--primary-color);
-    border-radius: 3px;
-}
-
 /* Style des conteneurs */
 .container-base {
     background: var(--bg-color);

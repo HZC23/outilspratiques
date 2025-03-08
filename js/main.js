@@ -300,70 +300,27 @@ class App {
      */
     initResponsiveHeight() {
         // Appliquer l'adaptation maintenant
-        this.adjustResponsiveHeight();
+        this.updateAvailableHeight();
         
         // Réappliquer l'adaptation à chaque redimensionnement
         window.addEventListener('resize', PerformanceManager.debounce(() => {
-            this.adjustResponsiveHeight();
+            this.updateAvailableHeight();
         }, 100));
     }
     
     /**
-     * Ajuste la hauteur des éléments en fonction de la taille de la fenêtre
+     * Met à jour la variable CSS de hauteur disponible
      */
-    adjustResponsiveHeight() {
-        const isMobile = window.innerWidth <= 768;
+    updateAvailableHeight() {
         const windowHeight = window.innerHeight;
-        
-        // Ne pas appliquer les ajustements sur mobile
-        if (isMobile) {
-            document.documentElement.style.setProperty('--available-height', 'auto');
-            document.body.style.overflow = 'auto';
-            return;
-        }
-        
-        // Calculer et appliquer la hauteur disponible
         const headerHeight = document.querySelector('header')?.offsetHeight || 60;
+        
+        // Mettre à jour la variable CSS de hauteur d'en-tête
         document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
         
-        const contentPadding = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--content-padding') || '20');
-        const footerHeight = document.querySelector('footer')?.offsetHeight || 0;
-        
-        const availableHeight = windowHeight - headerHeight - (contentPadding * 2) - footerHeight;
+        // Calculer et mettre à jour la hauteur disponible
+        const availableHeight = windowHeight - headerHeight - 40; // 40px pour la marge
         document.documentElement.style.setProperty('--available-height', `${availableHeight}px`);
-        
-        // Convertir les sections en conteneurs avec défilement interne
-        this.setupScrollableSections();
-    }
-    
-    /**
-     * Configure les sections pour avoir un défilement interne
-     */
-    setupScrollableSections() {
-        document.querySelectorAll('.section').forEach(section => {
-            // Vérifier si la section a déjà été configurée
-            if (!section.querySelector('.section-content')) {
-                // Obtenir le titre (h2) et tous les autres éléments
-                const title = section.querySelector('h2');
-                const otherElements = Array.from(section.children).filter(child => child !== title);
-                
-                // Créer un conteneur pour le contenu défilable
-                const contentContainer = document.createElement('div');
-                contentContainer.className = 'section-content';
-                
-                // Déplacer tous les éléments sauf le titre dans le conteneur
-                otherElements.forEach(element => {
-                    contentContainer.appendChild(element);
-                });
-                
-                // Ajouter le conteneur à la section après le titre
-                if (title) {
-                    title.after(contentContainer);
-                } else {
-                    section.appendChild(contentContainer);
-                }
-            }
-        });
     }
     
     /**
@@ -387,8 +344,8 @@ class App {
             }
         }
         
-        // Ajuster les hauteurs responsives
-        this.adjustResponsiveHeight();
+        // Mettre à jour la hauteur disponible
+        this.updateAvailableHeight();
     }
     
     /**
