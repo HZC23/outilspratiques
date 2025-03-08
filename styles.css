@@ -39,6 +39,12 @@
     --primary-color-rgb: 0, 102, 204;
     --primary-color-dark: #0052a3;
     --secondary-dark: #b3e0ff;
+    --danger-color-rgb: 255, 0, 0;
+    --danger-color-dark: #cc0000;
+    --success-color-rgb: 0, 204, 0;
+    --success-color-dark: #009900;
+    --info-color-rgb: 51, 153, 255;
+    --info-color-dark: #0066cc;
     --card-bg: #ffffff;
     --light-color: #ffffff;
     --dark-color: #003366;
@@ -676,7 +682,7 @@ button:active {
 .delete-btn,
 .clear-btn {
     background: var(--danger-color);
-    color: rgb(151, 46, 46);
+    color: white;
     border: none;
     padding: 10px 20px;
     border-radius: var(--border-radius);
