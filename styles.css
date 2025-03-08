@@ -676,7 +676,7 @@ button:active {
 .delete-btn,
 .clear-btn {
     background: var(--danger-color);
-    color: white;
+    color: rgb(151, 46, 46);
     border: none;
     padding: 10px 20px;
     border-radius: var(--border-radius);

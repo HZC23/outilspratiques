@@ -82,12 +82,11 @@ function translateText() {
     state.isTranslating = true;
     document.getElementById('translatedText').value = 'Traduction en cours...';
     
-    // Simuler une traduction (à remplacer par une vraie API de traduction)
-    setTimeout(() => {
-        // Simuler une traduction simple
-        let translatedText = state.sourceText;
-        
-        // Ajouter un préfixe pour simuler une traduction
+    // Simuler une traduction simple
+    let translatedText = state.sourceText;
+
+    // Ne traduire que si la langue cible n'est pas le français
+    if (targetLanguage !== 'fr') {
         if (targetLanguage === 'en') {
             translatedText = `[EN] ${state.sourceText}`;
         } else if (targetLanguage === 'es') {
@@ -97,23 +96,20 @@ function translateText() {
         } else {
             translatedText = `[${targetLanguage.toUpperCase()}] ${state.sourceText}`;
         }
-        
-        // Mettre à jour l'état
-        state.translatedText = translatedText;
-        state.isTranslating = false;
-        
-        // Afficher la traduction
-        document.getElementById('translatedText').value = translatedText;
-        
-        // Ajouter à l'historique
-        addToTranslationHistory({
-            sourceText: state.sourceText,
-            translatedText: translatedText,
-            sourceLanguage: state.sourceLanguage,
-            targetLanguage: state.targetLanguage,
-            timestamp: new Date().getTime()
-        });
-    }, 500);
+    }
+
+    state.translatedText = translatedText;
+    state.isTranslating = false;
+
+    document.getElementById('translatedText').value = translatedText;
+
+    addToTranslationHistory({
+        sourceText: state.sourceText,
+        translatedText: translatedText,
+        sourceLanguage: state.sourceLanguage,
+        targetLanguage: state.targetLanguage,
+        timestamp: new Date().getTime()
+    });
 }
 
 /**
