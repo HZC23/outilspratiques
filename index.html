@@ -57,6 +57,7 @@
     
     <!-- CSS -->
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/tools.css">
     <link rel="stylesheet" href="css/menu.css">
     <link rel="stylesheet" href="css/theme-switch.css">
     <link rel="stylesheet" href="css/notification.css">
@@ -64,6 +65,7 @@
     <link rel="stylesheet" href="css/tools/calculator.css">
     <link rel="stylesheet" href="css/tools/converter.css">
     <link rel="stylesheet" href="css/tools/text.css">
+    <link rel="stylesheet" href="css/tools/styletext.css">
     <link rel="stylesheet" href="css/tools/timer.css">
     <link rel="stylesheet" href="css/tools/stopwatch.css">
     <link rel="stylesheet" href="css/tools/notes.css">
@@ -644,25 +646,33 @@
 
             <section id="styletext" class="section" aria-labelledby="styletitle">
                 <h2 id="styletitle">Convertisseur de Styles de Texte</h2>
-                <textarea id="styleInput" placeholder="Ameliorer vos textes avec des styles de texte"></textarea>
-                <div class="buttons-container">
-                    <button class="style-btn" data-style="serif" onclick="applyStyle('serif')">Serif</button>
-                    <button class="style-btn" data-style="script" onclick="applyStyle('script')">Script</button>
-                    <button class="style-btn" data-style="bold" onclick="applyStyle('bold')">Gras</button>
-                    <button class="style-btn" data-style="italic" onclick="applyStyle('italic')">Italique</button>
-                    <button class="style-btn" data-style="gothic" onclick="applyStyle('gothic')">Gothique</button>
-                    <button class="style-btn" data-style="double" onclick="applyStyle('double')">Double</button>
-                </div>
-                <textarea id="styleOutput" readonly></textarea>
-                <button class="copy-btn" onclick="copyStyleOutput()"><i class="fas fa-copy"></i> Copier</button>
-                <div class="style-history">
-                    <div class="history-header">
-                        <h3>Historique récent</h3>
-                        <button type="button" onclick="clearHistory()" class="clear-btn">
-                            <i class="fas fa-trash"></i>
-                        </button>
+                <div class="styletext-container">
+                    <textarea id="styleInput" placeholder="Améliorez vos textes avec des styles typographiques uniques..."></textarea>
+                    
+                    <div class="buttons-container">
+                        <button class="style-btn" data-style="serif" onclick="applyStyle('serif')">𝔖𝔢𝔯𝔦𝔣</button>
+                        <button class="style-btn" data-style="script" onclick="applyStyle('script')">𝓢𝓬𝓻𝓲𝓹𝓽</button>
+                        <button class="style-btn" data-style="bold" onclick="applyStyle('bold')">𝐁𝐨𝐥𝐝</button>
+                        <button class="style-btn" data-style="italic" onclick="applyStyle('italic')">𝘐𝘵𝘢𝘭𝘪𝘤</button>
+                        <button class="style-btn" data-style="gothic" onclick="applyStyle('gothic')">𝕲𝖔𝖙𝖍𝖎𝖈</button>
+                        <button class="style-btn" data-style="double" onclick="applyStyle('double')">𝔻𝕠𝕦𝕓𝕝𝕖</button>
                     </div>
-                    <div id="style-history" class="history-list"></div>
+                    
+                    <textarea id="styleOutput" readonly placeholder="Le texte transformé apparaîtra ici..."></textarea>
+                    
+                    <button class="copy-btn" onclick="copyStyleOutput()">
+                        <i class="fas fa-copy"></i> Copier le texte stylisé
+                    </button>
+                    
+                    <div class="style-history">
+                        <div class="history-header">
+                            <h3>Historique récent</h3>
+                            <button type="button" onclick="clearHistory()" class="clear-btn">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                        <div id="style-history" class="history-list"></div>
+                    </div>
                 </div>
             </section>
 

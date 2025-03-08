@@ -6,6 +6,7 @@ import { CacheManager } from './cache.js';
 import { PerformanceManager } from './performance.js';
 import { Utils } from './utils.js';
 import { SchedulerManager } from './tools/scheduler.js';
+import { StyleTextManager } from './tools/styletext.js';
 
 /**
  * Classe principale de l'application
@@ -181,6 +182,11 @@ class App {
         // Initialisation de SchedulerManager
         if (document.getElementById('schedulerTool')) {
             SchedulerManager.init();
+        }
+        
+        // Initialisation de StyleTextManager
+        if (document.getElementById('styletext')) {
+            StyleTextManager.init();
         }
     }
     
