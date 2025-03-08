@@ -766,10 +766,10 @@
                 <div class="scheduler-container">
                     <!-- En-tête avec mode de planification -->
                     <div class="scheduler-mode">
-                        <button type="button" onclick="togglePlanningMode('auto')" class="mode-btn" id="autoModeBtn">
+                        <button type="button" id="autoModeBtn" class="mode-btn">
                             <i class="fas fa-magic"></i> Mode automatique
                         </button>
-                        <button type="button" onclick="togglePlanningMode('manual')" class="mode-btn" id="manualModeBtn">
+                        <button type="button" id="manualModeBtn" class="mode-btn">
                             <i class="fas fa-hand-paper"></i> Mode manuel
                         </button>
                     </div>
@@ -824,7 +824,7 @@
                                 </select>
                             </div>
                         </div>
-                        <button type="button" onclick="addScheduledTask()" class="add-task-btn">
+                        <button type="button" id="addTaskBtn" class="add-task-btn">
                             <i class="fas fa-plus"></i> Ajouter la tâche
                         </button>
                     </div>
@@ -835,7 +835,7 @@
                         <div class="availability-slots">
                             <div class="availability-day">
                                 <label>
-                                    <input type="checkbox" checked onchange="updateAvailability('monday')"> Lundi
+                                    <input type="checkbox" checked id="monday-checkbox"> Lundi
                                 </label>
                                 <div class="time-slots">
                                     <input type="time" class="time-start" value="09:00">
@@ -845,7 +845,7 @@
                             </div>
                             <!-- Répéter pour chaque jour de la semaine -->
                         </div>
-                        <button type="button" onclick="saveAvailability()" class="save-availability-btn">
+                        <button type="button" id="saveAvailabilityBtn" class="save-availability-btn">
                             <i class="fas fa-save"></i> Enregistrer les disponibilités
                         </button>
                     </div>
@@ -853,11 +853,11 @@
                     <!-- Planning -->
                     <div class="schedule-view">
                         <div class="schedule-header">
-                            <button type="button" onclick="previousDay()" class="nav-btn">
+                            <button type="button" id="prevDayBtn" class="nav-btn">
                                 <i class="fas fa-chevron-left"></i>
                             </button>
                             <h3 id="currentDate">Aujourd'hui</h3>
-                            <button type="button" onclick="nextDay()" class="nav-btn">
+                            <button type="button" id="nextDayBtn" class="nav-btn">
                                 <i class="fas fa-chevron-right"></i>
                             </button>
                         </div>

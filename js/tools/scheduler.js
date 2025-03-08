@@ -17,7 +17,7 @@ export const SchedulerManager = {
      */
     setupListeners() {
         // Gestion du formulaire d'ajout de tâche
-        const addTaskBtn = document.querySelector('.add-task-btn');
+        const addTaskBtn = document.getElementById('addTaskBtn');
         if (addTaskBtn) {
             addTaskBtn.addEventListener('click', () => this.addScheduledTask());
         }
@@ -31,18 +31,32 @@ export const SchedulerManager = {
         }
 
         // Gestion de la navigation des jours
-        const prevDayBtn = document.querySelector('.nav-btn:first-child');
-        const nextDayBtn = document.querySelector('.nav-btn:last-child');
+        const prevDayBtn = document.getElementById('prevDayBtn');
+        const nextDayBtn = document.getElementById('nextDayBtn');
         if (prevDayBtn && nextDayBtn) {
             prevDayBtn.addEventListener('click', () => this.previousDay());
             nextDayBtn.addEventListener('click', () => this.nextDay());
         }
 
         // Gestion des disponibilités
-        const saveAvailabilityBtn = document.querySelector('.save-availability-btn');
+        const saveAvailabilityBtn = document.getElementById('saveAvailabilityBtn');
         if (saveAvailabilityBtn) {
             saveAvailabilityBtn.addEventListener('click', () => this.saveAvailability());
         }
+
+        // Écouteurs pour les jours de la semaine
+        const mondayCheckbox = document.getElementById('monday-checkbox');
+        if (mondayCheckbox) {
+            mondayCheckbox.addEventListener('change', () => this.updateAvailability('monday'));
+        }
+
+        // Exposer les méthodes globalement
+        window.addScheduledTask = () => this.addScheduledTask();
+        window.togglePlanningMode = (mode) => this.togglePlanningMode(mode);
+        window.saveAvailability = () => this.saveAvailability();
+        window.updateAvailability = (day) => this.updateAvailability(day);
+        window.previousDay = () => this.previousDay();
+        window.nextDay = () => this.nextDay();
     },
 
     /**
@@ -80,14 +94,24 @@ export const SchedulerManager = {
      * Met à jour l'affichage des disponibilités
      */
     updateAvailabilityDisplay() {
-        Object.entries(this.availability).forEach(([day, settings]) => {
-            const dayElement = document.querySelector(`.availability-day input[type="checkbox"][onchange="updateAvailability('${day}')"]`);
-            const timeStart = document.querySelector(`.availability-day input[type="time"].time-start[data-day="${day}"]`);
-            const timeEnd = document.querySelector(`.availability-day input[type="time"].time-end[data-day="${day}"]`);
-
-            if (dayElement) dayElement.checked = settings.enabled;
-            if (timeStart) timeStart.value = settings.start;
-            if (timeEnd) timeEnd.value = settings.end;
+        Object.keys(this.availability).forEach(day => {
+            const dayData = this.availability[day];
+            const dayCheckbox = document.getElementById(`${day}-checkbox`);
+            
+            if (dayCheckbox) {
+                dayCheckbox.checked = dayData.enabled;
+                
+                const dayContainer = dayCheckbox.closest('.availability-day');
+                if (dayContainer) {
+                    const startInput = dayContainer.querySelector('.time-start');
+                    const endInput = dayContainer.querySelector('.time-end');
+                    
+                    if (startInput && endInput) {
+                        startInput.value = dayData.start;
+                        endInput.value = dayData.end;
+                    }
+                }
+            }
         });
     },
 
@@ -261,33 +285,39 @@ export const SchedulerManager = {
      * Sauvegarde les disponibilités
      */
     saveAvailability() {
+        const availability = {};
+        
         const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
         
         days.forEach(day => {
-            const checkbox = document.querySelector(`.availability-day input[type="checkbox"][onchange="updateAvailability('${day}')"]`);
-            const timeStart = document.querySelector(`.availability-day input[type="time"].time-start[data-day="${day}"]`);
-            const timeEnd = document.querySelector(`.availability-day input[type="time"].time-end[data-day="${day}"]`);
-
-            if (checkbox && timeStart && timeEnd) {
-                this.availability[day] = {
-                    enabled: checkbox.checked,
-                    start: timeStart.value,
-                    end: timeEnd.value
-                };
+            const dayCheckbox = document.getElementById(`${day}-checkbox`);
+            if (dayCheckbox) {
+                const dayContainer = dayCheckbox.closest('.availability-day');
+                if (dayContainer) {
+                    const startInput = dayContainer.querySelector('.time-start');
+                    const endInput = dayContainer.querySelector('.time-end');
+                    
+                    availability[day] = {
+                        enabled: dayCheckbox.checked,
+                        start: startInput ? startInput.value : '09:00',
+                        end: endInput ? endInput.value : '18:00'
+                    };
+                }
             }
         });
-
+        
+        this.availability = availability;
         Utils.saveToStorage(CONFIG.STORAGE_KEYS.AVAILABILITY, this.availability);
-        Utils.showNotification('Disponibilités sauvegardées', 'success');
+        Utils.showNotification('Disponibilités enregistrées', 'success');
     },
 
     /**
-     * Met à jour les disponibilités pour un jour
+     * Met à jour une disponibilité spécifique
      */
     updateAvailability(day) {
-        const checkbox = document.querySelector(`.availability-day input[type="checkbox"][onchange="updateAvailability('${day}')"]`);
-        if (checkbox) {
-            this.availability[day].enabled = checkbox.checked;
+        const dayCheckbox = document.getElementById(`${day}-checkbox`);
+        if (dayCheckbox && this.availability[day]) {
+            this.availability[day].enabled = dayCheckbox.checked;
             Utils.saveToStorage(CONFIG.STORAGE_KEYS.AVAILABILITY, this.availability);
         }
     },

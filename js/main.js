@@ -5,6 +5,7 @@ import { NotificationManager } from './notification.js';
 import { CacheManager } from './cache.js';
 import { PerformanceManager } from './performance.js';
 import { Utils } from './utils.js';
+import { SchedulerManager } from './tools/scheduler.js';
 
 /**
  * Classe principale de l'application
@@ -169,8 +170,18 @@ class App {
      * Initialise les outils
      */
     initTools() {
-        // Initialiser les outils spécifiques ici
-        // Chaque outil devrait avoir son propre module
+        // Lazy load les gestionnaires d'outils quand nécessaire
+        document.querySelectorAll('[data-tool-id]').forEach(toolBtn => {
+            toolBtn.addEventListener('click', () => {
+                const toolId = toolBtn.getAttribute('data-tool-id');
+                this.showTool(toolId);
+            });
+        });
+        
+        // Initialisation de SchedulerManager
+        if (document.getElementById('schedulerTool')) {
+            SchedulerManager.init();
+        }
     }
     
     /**
