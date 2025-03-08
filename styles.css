@@ -70,12 +70,6 @@
     --animation-timing: cubic-bezier(0.4, 0, 0.2, 1);
     --animation-delay: 0.1s;
     --animation-iteration: 1;
-    
-    /* Variables pour l'adaptation de hauteur */
-    --header-height: 60px;
-    --content-padding: 20px;
-    --footer-height: 0px;
-    --available-height: calc(100vh - var(--header-height) - 40px);
 }
 
 [data-theme="dark"] {
@@ -114,12 +108,6 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-html {
-    font-size: 16px; /* Base pour les calculs rem */
-    height: 100%;
-    scroll-behavior: smooth;
-}
-
 body {
     font-family: 'Poppins', sans-serif;
     background-color: var(--bg-color);
@@ -129,6 +117,7 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    scroll-behavior: smooth;
     overflow-x: hidden;
 }
 
@@ -160,7 +149,6 @@ header {
     position: relative;
     transition: all 0.3s ease;
     z-index: 100;
-    height: var(--header-height);
 }
 
 header h1 {
@@ -298,25 +286,10 @@ header:hover h1::after {
     transform: translateX(-50%) translateY(-10px);
 }
 
-/* Menu de navigation */
-.menu {
-    padding: var(--spacing-md);
-    max-height: var(--available-height);
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary-color) transparent;
-    transition: all 0.3s ease;
-}
-
 /* Tools area */
 .tools {
     width: 100%;
     animation: fadeIn 0.5s ease;
-    max-height: var(--available-height);
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary-color) transparent;
-    padding-right: var(--spacing-sm);
 }
 
 /* Add gradient border to main tools area */
@@ -339,12 +312,6 @@ header:hover h1::after {
     100% {
         background-position: 200% 0%;
     }
-}
-
-/* Section principale */
-.section {
-    height: auto;
-    max-height: none;
 }
 
 /* Scrollbar */
@@ -403,10 +370,6 @@ header:hover h1::after {
     .top-clock .date {
         font-size: 0.7rem;
     }
-    
-    .menu, .tools {
-        max-height: none;
-    }
 }
 
 @media (max-width: 480px) {
@@ -420,72 +383,6 @@ header:hover h1::after {
     
     .container {
         padding: var(--spacing-sm);
-    }
-}
-
-/* Adaptations pour différentes hauteurs d'écran */
-@media (min-height: 900px) {
-    :root {
-        --header-height: 70px;
-        --available-height: calc(100vh - var(--header-height) - 40px);
-    }
-    
-    html {
-        font-size: 18px;
-    }
-}
-
-@media (max-height: 768px) {
-    :root {
-        --header-height: 50px;
-        --content-padding: 15px;
-        --available-height: calc(100vh - var(--header-height) - 30px);
-    }
-    
-    html {
-        font-size: 15px;
-    }
-    
-    .section {
-        padding: 15px;
-        margin-bottom: 20px;
-    }
-    
-    .section h2 {
-        font-size: 1.5rem;
-        margin-bottom: 15px;
-        padding-bottom: 10px;
-    }
-}
-
-@media (max-height: 600px) {
-    :root {
-        --header-height: 40px;
-        --content-padding: 10px;
-        --available-height: calc(100vh - var(--header-height) - 20px);
-    }
-    
-    html {
-        font-size: 14px;
-    }
-    
-    .section {
-        padding: 12px;
-        margin-bottom: 15px;
-    }
-    
-    .section h2 {
-        font-size: 1.3rem;
-        margin-bottom: 12px;
-        padding-bottom: 8px;
-    }
-    
-    input, select, textarea {
-        padding: 8px 12px;
-    }
-    
-    button {
-        padding: 8px 12px;
     }
 }
 

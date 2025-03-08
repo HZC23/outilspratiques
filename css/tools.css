@@ -13,9 +13,6 @@
     margin-bottom: 30px;
     position: relative;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    max-height: calc(100vh - var(--header-height) - var(--spacing-md) * 3);
 }
 
 .section::before {
@@ -50,7 +47,6 @@
     position: relative;
     display: flex;
     align-items: center;
-    flex-shrink: 0; /* Le titre ne se rétrécit pas */
 }
 
 .section h2::after {
@@ -102,22 +98,19 @@ input:focus, select:focus, textarea:focus {
 
 /* Boutons améliorés */
 button {
-    padding: 12px 20px;
+    padding: 12px 18px;
     border: none;
     border-radius: 8px;
     background: var(--primary-color);
     color: white;
     font-weight: 500;
-    font-size: 0.95rem;
     cursor: pointer;
     transition: all 0.3s var(--ease-out-back);
     position: relative;
     overflow: hidden;
-    z-index: 1;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
 }
 
 button::before {
@@ -127,112 +120,112 @@ button::before {
     left: 50%;
     width: 0;
     height: 0;
-    background-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.2);
     border-radius: 50%;
     transform: translate(-50%, -50%);
-    z-index: -1;
-    transition: width 0.5s ease, height 0.5s ease;
+    transition: width 0.6s ease, height 0.6s ease;
 }
 
 button:hover {
     transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(var(--primary-color-rgb), 0.2);
+    box-shadow: 0 5px 15px rgba(var(--primary-color-rgb), 0.3);
 }
 
 button:hover::before {
-    width: 300%;
-    height: 300%;
+    width: 300px;
+    height: 300px;
 }
 
 button:active {
     transform: translateY(0);
-    box-shadow: 0 2px 5px rgba(var(--primary-color-rgb), 0.1);
+    box-shadow: 0 2px 5px rgba(var(--primary-color-rgb), 0.2);
 }
 
 button i {
-    transition: transform 0.3s var(--ease-out-back);
+    margin-right: 8px;
 }
 
+/* Boutons spécifiques */
 .primary-btn {
-    background-color: var(--primary-color);
+    background: var(--primary-color);
     color: white;
 }
 
 .secondary-btn {
-    background-color: var(--secondary-color);
-    color: var(--dark-color);
+    background: var(--secondary-color);
+    color: white;
 }
 
 .success-btn {
-    background-color: var(--success-color);
+    background: var(--success-color);
     color: white;
 }
 
 .danger-btn, .clear-btn {
-    background-color: var(--danger-color);
+    background: var(--danger-color);
     color: white;
 }
 
 .info-btn {
-    background-color: var(--info-color);
+    background: var(--info-color);
     color: white;
 }
 
 .outline-btn {
-    background-color: transparent;
+    background: transparent;
     border: 2px solid var(--primary-color);
     color: var(--primary-color);
-    padding: 10px 18px;
 }
 
 .outline-btn:hover {
-    background-color: var(--primary-color);
+    background: var(--primary-color);
     color: white;
-    border-color: var(--primary-color);
 }
 
+/* Icônes dans les boutons */
 button i {
-    font-size: 1rem;
+    transition: transform 0.3s ease;
 }
 
 button:hover i {
-    transform: scale(1.2);
+    transform: translateY(-2px);
 }
 
+/* Cartes et éléments d'historique */
 .card {
     background: var(--card-bg);
     border-radius: 10px;
     padding: 15px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
     margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
 }
 
 .card:hover {
+    transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
 }
 
 .history-item {
     padding: 12px;
-    border-radius: 8px;
-    background: var(--card-bg);
     margin-bottom: 10px;
-    transition: all 0.3s ease;
+    background: var(--bg-color);
+    border-radius: 8px;
     cursor: pointer;
-    border-left: 3px solid transparent;
+    transition: all 0.3s ease;
 }
 
 .history-item:hover {
-    background: var(--hover-color, rgba(var(--primary-color-rgb), 0.05));
-    border-left-color: var(--primary-color);
-    transform: translateX(3px);
+    background: var(--hover-color);
+    transform: translateX(5px);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
 }
 
+/* Grilles et layouts */
 .grid-2 {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
+    gap: 20px;
 }
 
 .grid-3 {
@@ -247,19 +240,19 @@ button:hover i {
     gap: 15px;
 }
 
+/* Listes */
 .list-container {
     max-height: 300px;
     overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary-color) transparent;
+    padding-right: 5px;
 }
 
 .list-container::-webkit-scrollbar {
-    width: 5px;
+    width: 6px;
 }
 
 .list-container::-webkit-scrollbar-track {
-    background: transparent;
+    background: rgba(0, 0, 0, 0.05);
     border-radius: 3px;
 }
 
@@ -268,29 +261,28 @@ button:hover i {
     border-radius: 3px;
 }
 
+/* En-têtes des sections */
 .section-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     padding-bottom: 10px;
     border-bottom: 1px solid var(--border-color);
 }
 
 .section-header h3 {
+    margin: 0;
+    color: var(--text-color);
     font-size: 1.2rem;
     font-weight: 600;
-    color: var(--primary-color);
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 8px;
 }
 
+/* Animations */
 @keyframes fadeUp {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(10px);
     }
     to {
         opacity: 1;
@@ -299,39 +291,41 @@ button:hover i {
 }
 
 .fade-up {
-    animation: fadeUp 0.5s var(--ease-out-back) forwards;
+    animation: fadeUp 0.5s ease forwards;
 }
 
+/* Styles pour le mode sombre */
 [data-theme="dark"] .section {
+    background: var(--card-bg);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 [data-theme="dark"] .container-base {
+    background: var(--dark-color);
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
 }
 
 [data-theme="dark"] .card {
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+    background: var(--dark-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 [data-theme="dark"] .history-item {
-    background: var(--card-bg);
+    background: var(--dark-color);
 }
 
 [data-theme="dark"] .history-item:hover {
     background: var(--hover-color);
 }
 
-/* Adaptations responsives */
+/* Media queries */
 @media (max-width: 768px) {
     .section {
-        padding: 20px;
-        margin-bottom: 20px;
-        max-height: none;
+        padding: 15px;
     }
     
     .section h2 {
-        font-size: 1.6rem;
+        font-size: 1.5rem;
         margin-bottom: 20px;
     }
     
@@ -340,7 +334,7 @@ button:hover i {
     }
     
     button {
-        padding: 10px 16px;
+        padding: 10px 15px;
         font-size: 0.9rem;
     }
     
@@ -351,83 +345,21 @@ button:hover i {
 
 @media (max-width: 480px) {
     .section {
-        padding: 15px;
-        margin-bottom: 15px;
+        padding: 12px;
     }
     
     .section h2 {
-        font-size: 1.4rem;
+        font-size: 1.3rem;
         margin-bottom: 15px;
     }
     
     input, select, textarea {
-        padding: 10px 14px;
+        padding: 10px;
         font-size: 0.9rem;
     }
     
     button {
-        padding: 8px 14px;
-        font-size: 0.85rem;
-    }
-}
-
-/* Adaptations pour différentes hauteurs d'écran */
-@media (min-height: 900px) {
-    .section {
-        padding: 30px;
-        margin-bottom: 40px;
-    }
-    
-    .section h2 {
-        font-size: 2rem;
-        margin-bottom: 30px;
-    }
-    
-    .list-container {
-        max-height: 400px;
-    }
-}
-
-@media (max-height: 768px) {
-    .section {
-        padding: 20px;
-        margin-bottom: 15px;
-        max-height: calc(100vh - var(--header-height) - 45px);
-    }
-    
-    .section h2 {
-        font-size: 1.6rem;
-        margin-bottom: 15px;
-        padding-bottom: 10px;
-    }
-    
-    .list-container {
-        max-height: 250px;
-    }
-}
-
-@media (max-height: 600px) {
-    .section {
-        padding: 15px;
-        margin-bottom: 10px;
-        max-height: calc(100vh - var(--header-height) - 35px);
-    }
-    
-    .section h2 {
-        font-size: 1.4rem;
-        margin-bottom: 10px;
-        padding-bottom: 8px;
-    }
-    
-    input, select, textarea {
         padding: 8px 12px;
-    }
-    
-    button {
-        padding: 6px 10px;
-    }
-    
-    .list-container {
-        max-height: 200px;
+        font-size: 0.85rem;
     }
 } 

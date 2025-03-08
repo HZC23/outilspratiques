@@ -558,34 +558,82 @@
     }
 }
 
-/* Mode sombre */
+/* Styles pour le mode sombre */
 [data-theme="dark"] .qrcode-output {
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+    background-color: #1a2234;
 }
 
-/* Adaptations pour différentes hauteurs d'écran */
-@media (min-height: 900px) {
-    .form-group textarea {
-        min-height: 150px;
-    }
+[data-theme="dark"] .qrcode-btn,
+[data-theme="dark"] .clear-btn {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-@media (max-height: 768px) {
-    .form-group textarea {
-        min-height: 80px;
-    }
-    
-    .qrcode-btn {
-        padding: 0.6rem 1rem;
-    }
+/* Styles pour améliorer le contraste des boutons */
+.qrcode-btn, 
+.clear-btn,
+button[type="button"] {
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    position: relative;
+    overflow: hidden;
 }
 
-@media (max-height: 600px) {
-    .form-group textarea {
-        min-height: 60px;
-    }
-    
-    .qrcode-output {
-        min-height: 200px;
-    }
+.qrcode-btn::after, 
+.clear-btn::after,
+button[type="button"]::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.1);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.qrcode-btn:hover::after, 
+.clear-btn:hover::after,
+button[type="button"]:hover::after {
+    opacity: 1;
+}
+
+/* Amélioration globale du contraste des boutons */
+button, 
+.btn, 
+.button,
+input[type="button"],
+input[type="submit"] {
+    border: 2px solid transparent;
+    font-weight: 600;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+button:hover, 
+.btn:hover, 
+.button:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+button:active, 
+.btn:active, 
+.button:active,
+input[type="button"]:active,
+input[type="submit"]:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Amélioration du contraste pour les boutons sur fond sombre */
+[data-theme="dark"] button, 
+[data-theme="dark"] .btn, 
+[data-theme="dark"] .button,
+[data-theme="dark"] input[type="button"],
+[data-theme="dark"] input[type="submit"] {
+    border-color: rgba(255, 255, 255, 0.1);
 } 

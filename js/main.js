@@ -55,9 +55,6 @@ class App {
         // Initialiser le lazy loading des images
         this.initLazyLoading();
         
-        // Initialiser l'adaptation responsive de la hauteur
-        this.initResponsiveHeight();
-        
         // Vérifier si les animations sont réduites
         const prefersReducedMotion = window.innerWidth <= 768 && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (prefersReducedMotion) {
@@ -296,34 +293,6 @@ class App {
     }
     
     /**
-     * Initialise l'adaptation responsive de la hauteur
-     */
-    initResponsiveHeight() {
-        // Appliquer l'adaptation maintenant
-        this.updateAvailableHeight();
-        
-        // Réappliquer l'adaptation à chaque redimensionnement
-        window.addEventListener('resize', PerformanceManager.debounce(() => {
-            this.updateAvailableHeight();
-        }, 100));
-    }
-    
-    /**
-     * Met à jour la variable CSS de hauteur disponible
-     */
-    updateAvailableHeight() {
-        const windowHeight = window.innerHeight;
-        const headerHeight = document.querySelector('header')?.offsetHeight || 60;
-        
-        // Mettre à jour la variable CSS de hauteur d'en-tête
-        document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
-        
-        // Calculer et mettre à jour la hauteur disponible
-        const availableHeight = windowHeight - headerHeight - 40; // 40px pour la marge
-        document.documentElement.style.setProperty('--available-height', `${availableHeight}px`);
-    }
-    
-    /**
      * Gère le redimensionnement de la fenêtre
      */
     handleResize() {
@@ -335,17 +304,10 @@ class App {
             MenuManager.state.isMobile = isMobile;
             
             if (!isMobile) {
-                // Reset menu state when switching to desktop
-                MenuManager.closeAllSubmenus();
-                const mainMenu = document.getElementById('mainMenu');
-                if (mainMenu) {
-                    mainMenu.classList.remove('active');
-                }
+                // Passer du mobile au desktop
+                MenuManager.closeMobileMenu();
             }
         }
-        
-        // Mettre à jour la hauteur disponible
-        this.updateAvailableHeight();
     }
     
     /**
