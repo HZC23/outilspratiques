@@ -241,6 +241,7 @@ export const MenuManager = {
     toggleMobileMenu() {
         const mainMenu = document.getElementById('mainMenu');
         const menuOverlay = document.querySelector('.menu-overlay');
+        const menuToggle = document.getElementById('menuToggle');
         
         if (!mainMenu) return;
         
@@ -248,13 +249,33 @@ export const MenuManager = {
             // Fermer le menu
             mainMenu.classList.remove('active');
             if (menuOverlay) menuOverlay.classList.remove('active');
-            document.body.style.overflow = '';
+            document.body.classList.remove('menu-open');
+            
+            // Changer l'icône
+            if (menuToggle) {
+                const icon = menuToggle.querySelector('i');
+                if (icon) {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            }
+            
             this.state.isMenuOpen = false;
         } else {
             // Ouvrir le menu
             mainMenu.classList.add('active');
             if (menuOverlay) menuOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
+            document.body.classList.add('menu-open');
+            
+            // Changer l'icône
+            if (menuToggle) {
+                const icon = menuToggle.querySelector('i');
+                if (icon) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                }
+            }
+            
             this.state.isMenuOpen = true;
         }
     },
@@ -265,16 +286,23 @@ export const MenuManager = {
     closeMobileMenu() {
         const mainMenu = document.getElementById('mainMenu');
         const menuOverlay = document.querySelector('.menu-overlay');
+        const menuToggle = document.getElementById('menuToggle');
         
-        if (mainMenu) {
-            mainMenu.classList.remove('active');
+        if (!mainMenu) return;
+        
+        mainMenu.classList.remove('active');
+        if (menuOverlay) menuOverlay.classList.remove('active');
+        document.body.classList.remove('menu-open');
+        
+        // Changer l'icône
+        if (menuToggle) {
+            const icon = menuToggle.querySelector('i');
+            if (icon) {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
         }
         
-        if (menuOverlay) {
-            menuOverlay.classList.remove('active');
-        }
-        
-        document.body.style.overflow = '';
         this.state.isMenuOpen = false;
     },
 
