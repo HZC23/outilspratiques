@@ -16,14 +16,13 @@ import { QRCodeManager } from './tools/qrcode.js';
 class App {
     constructor() {
         this.init();
+        this.initErrorHandling();
     }
 
     /**
      * Initialise l'application
      */
     init() {
-        // Simuler un écran de chargement pour une meilleure expérience utilisateur
-        this.showLoadingScreen();
         
         // Initialiser les polyfills
         this.initPolyfills();
@@ -426,100 +425,16 @@ class App {
             }
         }
     }
-    
-    /**
-     * Affiche un écran de chargement pour l'initialisation de l'application
-     */
-    showLoadingScreen() {
-        // Créer l'écran de chargement s'il n'existe pas déjà
-        if (!document.getElementById('appLoadingScreen')) {
-            const loadingScreen = document.createElement('div');
-            loadingScreen.id = 'appLoadingScreen';
-            loadingScreen.className = 'app-loading-screen';
-            
-            // Créer le contenu de l'écran de chargement
-            loadingScreen.innerHTML = `
-                <div class="loading-content">
-                    <div class="loading-spinner"></div>
-                    <h2>Outils Pratiques</h2>
-                    <p>Chargement en cours...</p>
-                </div>
-            `;
-            
-            // Ajouter au document
-            document.body.appendChild(loadingScreen);
-            
-            // Appliquer les styles
-            const style = document.createElement('style');
-            style.textContent = `
-                .app-loading-screen {
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background: var(--bg-color);
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    z-index: 9999;
-                    transition: opacity 0.5s ease, visibility 0.5s ease;
-                }
-                .loading-content {
-                    text-align: center;
-                    animation: fadeIn 0.5s ease forwards;
-                }
-                .loading-content h2 {
-                    color: var(--primary-color);
-                    margin: 20px 0 10px;
-                    font-size: 2rem;
-                }
-                .loading-content p {
-                    color: var(--text-muted);
-                    margin: 0;
-                }
-                .loading-spinner {
-                    width: 50px;
-                    height: 50px;
-                    border: 4px solid rgba(var(--primary-color-rgb), 0.2);
-                    border-radius: 50%;
-                    border-top-color: var(--primary-color);
-                    margin: 0 auto;
-                    animation: spin 1s linear infinite;
-                }
-                @keyframes spin {
-                    to { transform: rotate(360deg); }
-                }
-            `;
-            document.head.appendChild(style);
-        }
-    }
-    
-    /**
-     * Masque l'écran de chargement avec une transition fluide
-     */
-    hideLoadingScreen() {
-        const loadingScreen = document.getElementById('appLoadingScreen');
-        if (loadingScreen) {
-            loadingScreen.style.opacity = '0';
-            loadingScreen.style.visibility = 'hidden';
-            
-            // Supprimer l'élément après la transition
-            setTimeout(() => {
-                loadingScreen.remove();
-            }, 500);
-        }
+
+    initErrorHandling() {
+        window.onerror = (msg, url, lineNo, columnNo, error) => {
+            console.error('Error: ' + msg + '\nURL: ' + url + '\nLine: ' + lineNo + '\nColumn: ' + columnNo + '\nError object: ' + JSON.stringify(error));
+            return false;
+        };
     }
 }
 
 // Initialiser l'application lorsque le DOM est chargé
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
     window.app = new App();
-});
-
-// Gestion des erreurs globales
-window.onerror = function(msg, url, lineNo, columnNo, error) {
-    console.error('Error: ' + msg + '\nURL: ' + url + '\nLine: ' + lineNo + '\nColumn: ' + columnNo + '\nError object: ' + JSON.stringify(error));
-    NotificationManager.show('Une erreur est survenue. Veuillez réessayer.', 'error');
-    return false;
-}; 
+}); 

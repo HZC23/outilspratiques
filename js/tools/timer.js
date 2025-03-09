@@ -12,7 +12,8 @@ export const TimerManager = {
             isRunning: false,
             intervalId: null,
             endTime: null,
-            sound: true
+            sound: true,
+            currentSound: 'bell'
         },
         stopwatch: {
             time: 0,
@@ -29,6 +30,7 @@ export const TimerManager = {
         this.loadState();
         this.setupListeners();
         this.updateDisplay();
+        this.loadSoundPreference();
     },
 
     /**
@@ -50,6 +52,10 @@ export const TimerManager = {
 
         document.getElementById('soundToggle')?.addEventListener('click', () => {
             this.toggleSound();
+        });
+
+        document.getElementById('timerSound')?.addEventListener('change', (e) => {
+            this.changeTimerSound(e.target.value);
         });
 
         // Chronomètre
@@ -254,10 +260,13 @@ export const TimerManager = {
      * Joue l'alarme
      */
     playAlarm() {
-        const alarm = document.getElementById('timerAlarm');
-        if (alarm) {
-            alarm.currentTime = 0;
-            alarm.play().catch(() => {
+        if (!this.state.timer.sound) return;
+        
+        const soundId = `timerSound-${this.state.timer.currentSound}`;
+        const sound = document.getElementById(soundId);
+        if (sound) {
+            sound.currentTime = 0;
+            sound.play().catch(() => {
                 console.warn('Impossible de jouer l\'alarme');
             });
         }
@@ -482,6 +491,44 @@ export const TimerManager = {
         clearInterval(this.state.timer.intervalId);
         clearInterval(this.state.stopwatch.intervalId);
         this.saveState();
+    },
+
+    /**
+     * Charge la préférence de son depuis le localStorage
+     */
+    loadSoundPreference() {
+        const savedSound = localStorage.getItem('timerSound');
+        if (savedSound) {
+            this.state.timer.currentSound = savedSound;
+            const soundSelect = document.getElementById('timerSound');
+            if (soundSelect) {
+                soundSelect.value = savedSound;
+            }
+        }
+    },
+
+    /**
+     * Change le son du timer
+     * @param {string} soundType - Le type de son à utiliser
+     */
+    changeTimerSound(soundType) {
+        this.state.timer.currentSound = soundType;
+        localStorage.setItem('timerSound', soundType);
+        this.testTimerSound();
+    },
+
+    /**
+     * Teste le son actuellement sélectionné
+     */
+    testTimerSound() {
+        const soundId = `timerSound-${this.state.timer.currentSound}`;
+        const sound = document.getElementById(soundId);
+        if (sound) {
+            sound.currentTime = 0;
+            sound.play().catch(() => {
+                console.warn('Impossible de jouer le son de test');
+            });
+        }
     }
 };
 
@@ -494,6 +541,13 @@ window.startStopwatch = () => TimerManager.toggleStopwatch();
 window.pauseStopwatch = () => TimerManager.toggleStopwatch();
 window.resetStopwatch = () => TimerManager.resetStopwatch();
 window.lapStopwatch = () => TimerManager.recordLap();
+window.changeTimerSound = () => {
+    const select = document.getElementById('timerSound');
+    if (select) {
+        TimerManager.changeTimerSound(select.value);
+    }
+};
+window.testTimerSound = () => TimerManager.testTimerSound();
 
 // Initialiser le minuteur au chargement
 document.addEventListener('DOMContentLoaded', () => {
