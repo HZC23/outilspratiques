@@ -160,7 +160,6 @@
                 <button type="button"
                         class="menu-trigger has-submenu"
                         data-menu-id="mathMenu"
-                        data-tooltip="Outils de calcul et de mathématiques"
                         aria-expanded="false"
                         aria-controls="mathMenu"
                         aria-haspopup="true">
@@ -169,19 +168,19 @@
                     <i class="fas fa-chevron-down submenu-icon" aria-hidden="true"></i>
                 </button>
                 <div id="mathMenu" class="submenu" role="menu" aria-hidden="true">
-                    <button type="button" data-tool-id="calculatorTool" data-tooltip="Calculatrice scientifique avec fonctions avancées" class="submenu-item" role="menuitem">
+                    <button type="button" data-tool-id="calculatorTool" class="submenu-item" role="menuitem">
                         <i class="fas fa-square-root-alt" aria-hidden="true"></i>
                         <span>Calculatrice scientifique</span>
                     </button>
-                    <button type="button" data-tool-id="percentageTool" data-tooltip="Calculer des pourcentages et variations" class="submenu-item" role="menuitem">
+                    <button type="button" data-tool-id="percentageTool" class="submenu-item" role="menuitem">
                         <i class="fas fa-percent" aria-hidden="true"></i>
                         <span>Pourcentages</span>
                     </button>
-                    <button type="button" data-tool-id="unitTool" data-tooltip="Convertir différentes unités de mesure" class="submenu-item" role="menuitem">
+                    <button type="button" data-tool-id="unitTool" class="submenu-item" role="menuitem">
                         <i class="fas fa-ruler" aria-hidden="true"></i>
                         <span>Unités de mesure</span>
                     </button>
-                    <button type="button" data-tool-id="currencyTool" data-tooltip="Convertisseur de devises en temps réel" class="submenu-item" role="menuitem">
+                    <button type="button" data-tool-id="currencyTool" class="submenu-item" role="menuitem">
                         <i class="fas fa-money-bill-wave" aria-hidden="true"></i>
                         <span>Devises</span>
                     </button>
@@ -193,7 +192,6 @@
                 <button type="button"
                         class="menu-trigger has-submenu"
                         data-menu-id="timeMenu"
-                        data-tooltip="Outils de gestion du temps"
                         aria-expanded="false"
                         aria-controls="timeMenu"
                         aria-haspopup="true">
@@ -202,15 +200,15 @@
                     <i class="fas fa-chevron-down submenu-icon" aria-hidden="true"></i>
                 </button>
                 <div id="timeMenu" class="submenu" role="menu" aria-hidden="true">
-                    <button type="button" data-tool-id="timerTool" data-tooltip="Minuteur avec alarme sonore" class="submenu-item" role="menuitem">
+                    <button type="button" data-tool-id="timerTool" class="submenu-item" role="menuitem">
                         <i class="fas fa-hourglass-start" aria-hidden="true"></i>
                         <span>Minuteur</span>
                     </button>
-                    <button type="button" data-tool-id="stopwatchTool" data-tooltip="Chronomètre avec tours" class="submenu-item" role="menuitem">
+                    <button type="button" data-tool-id="stopwatchTool" class="submenu-item" role="menuitem">
                         <i class="fas fa-stopwatch" aria-hidden="true"></i>
                         <span>Chronomètre</span>
                     </button>
-                    <button type="button" data-tool-id="metronomeTool" data-tooltip="Métronome avec tempo ajustable" class="submenu-item" role="menuitem">
+                    <button type="button" data-tool-id="metronomeTool" class="submenu-item" role="menuitem">
                         <i class="fas fa-drum" aria-hidden="true"></i>
                         <span>Métronome</span>
                     </button>
@@ -222,7 +220,6 @@
                 <button type="button"
                         class="menu-trigger has-submenu"
                         data-menu-id="orgMenu"
-                        data-tooltip="Outils d'organisation et de productivité"
                         aria-expanded="false"
                         aria-controls="orgMenu"
                         aria-haspopup="true">
@@ -235,7 +232,7 @@
                         <i class="fas fa-sticky-note" aria-hidden="true"></i>
                         <span>Bloc-notes</span>
                     </button>
-                    <button type="button" data-tool-id="todoTool" data-tooltip="Liste de tâches avec catégories" class="submenu-item" role="menuitem">
+                    <button type="button" data-tool-id="todoTool" class="submenu-item" role="menuitem">
                         <i class="fas fa-clipboard-list" aria-hidden="true"></i>
                         <span>Liste de tâches</span>
                     </button>
@@ -247,7 +244,6 @@
                 <button type="button"
                         class="menu-trigger has-submenu"
                         data-menu-id="textMenu"
-                        data-tooltip="Outils de manipulation de texte"
                         aria-expanded="false"
                         aria-controls="textMenu"
                         aria-haspopup="true">
@@ -256,11 +252,11 @@
                     <i class="fas fa-chevron-down submenu-icon" aria-hidden="true"></i>
                 </button>
                 <div id="textMenu" class="submenu" role="menu" aria-hidden="true">
-                    <button type="button" data-tool-id="translatorTool" data-tooltip="Traducteur multilingue" class="submenu-item" role="menuitem">
+                    <button type="button" data-tool-id="translatorTool" class="submenu-item" role="menuitem">
                         <i class="fas fa-language" aria-hidden="true"></i>
                         <span>Traducteur</span>
                     </button>
-                    <button type="button" data-tool-id="styletext" data-tooltip="Styliseur de texte avec effets spéciaux" class="submenu-item" role="menuitem">
+                    <button type="button" data-tool-id="styletext" class="submenu-item" role="menuitem">
                         <i class="fas fa-feather-alt" aria-hidden="true"></i>
                         <span>Styliseur de texte</span>
                     </button>
@@ -1238,8 +1234,8 @@
                 
                 <div class="qrcode-history">
                     <div class="history-header">
-                        <h3>Historique récent</h3>
-                        <button type="button" onclick="clearQRCodeHistory()" class="clear-btn">
+                        <h3><i class="fas fa-history"></i> Historique récent</h3>
+                        <button type="button" onclick="qrcodeManager.clearHistory()" class="clear-btn">
                             <i class="fas fa-trash"></i> Effacer
                         </button>
                     </div>

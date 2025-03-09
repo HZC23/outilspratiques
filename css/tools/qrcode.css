@@ -5,12 +5,18 @@
     gap: 1.5rem;
     padding: 1rem;
     max-width: 100%;
-    animation: fadeIn 0.5s ease-out;
+    animation: fadeInUp 0.5s ease forwards;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @media (min-width: 768px) {
@@ -27,23 +33,16 @@
     flex-direction: column;
     gap: 1rem;
     background-color: var(--card-bg);
-    border-radius: 0.75rem;
+    border-radius: 1rem;
     padding: 1.5rem;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 
+                0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.qrcode-config::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 5px;
-    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-    opacity: 0.8;
+.qrcode-config:hover {
+    box-shadow: 0 15px 20px -3px rgba(0, 0, 0, 0.15), 
+                0 6px 8px -2px rgba(0, 0, 0, 0.1);
 }
 
 /* Panneau d'affichage du QR code */
@@ -54,23 +53,16 @@
     align-items: center;
     gap: 1rem;
     background-color: var(--card-bg);
-    border-radius: 0.75rem;
+    border-radius: 1rem;
     padding: 1.5rem;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 
+                0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.qrcode-display::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 5px;
-    background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
-    opacity: 0.8;
+.qrcode-display:hover {
+    box-shadow: 0 15px 20px -3px rgba(0, 0, 0, 0.15), 
+                0 6px 8px -2px rgba(0, 0, 0, 0.1);
 }
 
 .qrcode-output {
@@ -80,21 +72,26 @@
     width: 100%;
     min-height: 280px;
     background-color: var(--bg-color);
-    border-radius: 0.5rem;
-    padding: 1rem;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
     overflow: hidden;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
     position: relative;
+}
+
+.qrcode-output:empty::before {
+    content: 'QR code apparaîtra ici';
+    color: var(--text-muted);
+    font-style: italic;
 }
 
 .qrcode-output img, 
 .qrcode-output svg {
     max-width: 100%;
     height: auto;
-    border-radius: 0.25rem;
+    border-radius: 0.5rem;
     transition: transform 0.3s ease;
-    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.1));
+    will-change: transform;
 }
 
 .qrcode-output:hover img,
@@ -102,71 +99,30 @@
     transform: scale(1.02);
 }
 
-.qrcode-animation {
-    animation: qrcodeAppear 0.5s ease-out;
-}
-
-@keyframes qrcodeAppear {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
-}
-
 .qrcode-info {
     font-size: 0.9rem;
-    color: var(--text-secondary);
+    color: var(--text-muted);
     text-align: center;
     margin-top: 0.5rem;
-}
-
-/* Message d'erreur */
-.qrcode-error {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    color: var(--danger-color);
-    text-align: center;
-    animation: shakeError 0.5s ease-in-out;
-}
-
-@keyframes shakeError {
-    0%, 100% { transform: translateX(0); }
-    20%, 60% { transform: translateX(-5px); }
-    40%, 80% { transform: translateX(5px); }
-}
-
-.qrcode-error i {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-}
-
-.qrcode-error p {
-    font-size: 1rem;
-    max-width: 300px;
 }
 
 /* Formulaire */
 .qrcode-form {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.25rem;
 }
 
 .form-group {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    transition: all 0.2s ease;
-}
-
-.form-group:focus-within {
-    transform: translateY(-2px);
 }
 
 .form-group label {
-    font-weight: 500;
+    font-weight: 600;
     color: var(--text-color);
+    font-size: 0.95rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -175,13 +131,20 @@
 .form-group input,
 .form-group select,
 .form-group textarea {
-    padding: 0.75rem;
-    border-radius: 0.5rem;
+    padding: 0.85rem;
+    border-radius: 0.75rem;
     border: 2px solid var(--border-color);
     background-color: var(--input-bg);
     color: var(--text-color);
     font-size: 1rem;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.form-group input:hover,
+.form-group select:hover,
+.form-group textarea:hover {
+    border-color: var(--border-hover);
 }
 
 .form-group input:focus,
@@ -189,42 +152,118 @@
 .form-group textarea:focus {
     border-color: var(--primary-color);
     outline: none;
-    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
-    transform: translateY(-1px);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.2);
 }
 
 .form-group textarea {
     min-height: 100px;
     resize: vertical;
-    line-height: 1.5;
+}
+
+/* Affichage des valeurs de curseurs */
+.form-group span[id$="Value"] {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-align: right;
+    margin-top: 0.25rem;
+}
+
+/* Personnalisation des curseurs */
+input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--border-color);
+    outline: none;
+    margin: 0.5rem 0;
+    cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.2);
+}
+
+input[type="range"]::-moz-range-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.2);
+}
+
+/* Personnalisation des pickers de couleur */
+input[type="color"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 40px;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+input[type="color"]::-webkit-color-swatch {
+    border: none;
+    border-radius: 0.5rem;
+}
+
+input[type="color"]::-moz-color-swatch {
+    border: none;
+    border-radius: 0.5rem;
 }
 
 /* Options avancées */
 .advanced-options {
-    margin-top: 1rem;
-    border-top: 1px solid var(--border-color);
-    padding-top: 1rem;
+    background-color: rgba(var(--card-bg-rgb), 0.5);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    border: 1px solid var(--border-color);
     transition: all 0.3s ease;
 }
 
-.advanced-options summary {
-    font-weight: 500;
-    cursor: pointer;
-    padding: 0.5rem 0;
-    color: var(--text-color);
-    display: flex;
-    align-items: center;
-    transition: all 0.2s ease;
+.advanced-options:hover {
+    background-color: rgba(var(--card-bg-rgb), 0.8);
+    border-color: var(--border-hover);
 }
 
-.advanced-options summary:hover {
-    color: var(--primary-color);
+.advanced-options summary {
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0.5rem;
+    color: var(--text-color);
+    user-select: none;
+    position: relative;
+    display: flex;
+    align-items: center;
 }
 
 .advanced-options summary::after {
-    content: '\f107';
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
+    content: '▼';
+    font-size: 0.8rem;
     margin-left: auto;
     transition: transform 0.3s ease;
 }
@@ -236,21 +275,26 @@
 .advanced-options .options-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    margin-top: 0.5rem;
-    animation: slideDown 0.3s ease-out;
+    gap: 1.25rem;
+    margin-top: 1rem;
+    animation: fadeIn 0.3s ease;
 }
 
-@keyframes slideDown {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 /* Boutons */
 .qrcode-actions {
     display: flex;
-    gap: 0.75rem;
-    margin-top: 1rem;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
 }
 
 .qrcode-btn {
@@ -258,18 +302,24 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.75rem 1.25rem;
-    border-radius: 0.5rem;
-    font-weight: 500;
+    padding: 0.85rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
     border: none;
     font-size: 1rem;
+    flex: 1;
+    min-width: 120px;
     position: relative;
     overflow: hidden;
 }
 
-.qrcode-btn::after {
+.qrcode-btn i {
+    font-size: 1.1rem;
+}
+
+.qrcode-btn::before {
     content: '';
     position: absolute;
     top: 50%;
@@ -279,62 +329,68 @@
     background-color: rgba(255, 255, 255, 0.2);
     border-radius: 50%;
     transform: translate(-50%, -50%);
-    transition: width 0.5s, height 0.5s;
+    transition: width 0.5s ease, height 0.5s ease;
+    z-index: 1;
 }
 
-.qrcode-btn:hover::after {
-    width: 300%;
-    height: 300%;
+.qrcode-btn:hover::before {
+    width: 200%;
+    height: 200%;
+}
+
+.qrcode-btn span, 
+.qrcode-btn i {
+    position: relative;
+    z-index: 2;
 }
 
 .generate-btn {
     background-color: var(--primary-color);
     color: white;
-    box-shadow: 0 4px 6px rgba(74, 144, 226, 0.2);
+    box-shadow: 0 4px 6px rgba(var(--primary-rgb), 0.2);
 }
 
 .generate-btn:hover {
     background-color: var(--primary-dark);
     transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(74, 144, 226, 0.3);
+    box-shadow: 0 6px 8px rgba(var(--primary-rgb), 0.3);
+}
+
+.generate-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(var(--primary-rgb), 0.2);
 }
 
 .download-btn {
     background-color: var(--secondary-color);
     color: white;
-    box-shadow: 0 4px 6px rgba(0, 123, 255, 0.2);
+    box-shadow: 0 4px 6px rgba(var(--secondary-rgb), 0.2);
 }
 
 .download-btn:hover {
     background-color: var(--secondary-dark);
     transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.3);
+    box-shadow: 0 6px 8px rgba(var(--secondary-rgb), 0.3);
 }
 
-/* État des boutons désactivés */
-.qrcode-btn:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-    pointer-events: none;
-    background-color: var(--border-color);
-    box-shadow: none;
+.download-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(var(--secondary-rgb), 0.2);
 }
 
 /* Historique */
 .qrcode-history {
-    margin-top: 1.5rem;
-    background-color: var(--card-bg);
-    border-radius: 0.75rem;
-    padding: 1.5rem;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    animation: fadeIn 0.5s ease-out 0.3s backwards;
+    margin-top: 2rem;
+    animation: fadeIn 0.8s ease;
 }
 
 .history-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .history-header h3 {
@@ -345,295 +401,201 @@
     gap: 0.5rem;
 }
 
-.history-header h3::before {
-    content: '\f1da';
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-    font-size: 0.9rem;
-    color: var(--primary-color);
-}
-
 .history-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    max-height: 300px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+    max-height: 350px;
     overflow-y: auto;
-    padding-right: 0.5rem;
+    padding: 0.5rem;
+    padding-right: 1rem;
     scrollbar-width: thin;
-    scrollbar-color: var(--primary-color) var(--bg-color);
+    scrollbar-color: var(--border-color) transparent;
 }
 
 .history-list::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
 }
 
 .history-list::-webkit-scrollbar-track {
-    background: var(--bg-color);
-    border-radius: 10px;
+    background: transparent;
 }
 
 .history-list::-webkit-scrollbar-thumb {
-    background: var(--primary-color);
-    border-radius: 10px;
+    background-color: var(--border-color);
+    border-radius: 3px;
 }
 
 .history-item {
     display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.75rem;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
     background-color: var(--card-bg);
-    border-radius: 0.5rem;
+    border-radius: 0.75rem;
     cursor: pointer;
-    transition: all 0.2s ease;
-    border-left: 3px solid transparent;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.history-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background-color: var(--primary-color);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .history-item:hover {
     background-color: var(--hover-color);
-    border-left-color: var(--primary-color);
-    transform: translateX(2px);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    border-color: var(--border-hover);
+}
+
+.history-item:hover::before {
+    opacity: 1;
 }
 
 .history-preview {
-    flex: 1;
     overflow: hidden;
+    flex: 1;
 }
 
 .qrcode-preview {
-    font-size: 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    padding: 0.5rem;
+    background-color: var(--bg-color);
+    border-radius: 0.5rem;
     color: var(--text-color);
 }
 
 .history-meta {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.25rem;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    padding-top: 0.5rem;
+    border-top: 1px dashed var(--border-color);
 }
 
 .history-type {
-    font-size: 0.8rem;
+    font-weight: 600;
+    background-color: rgba(var(--primary-rgb), 0.1);
     color: var(--primary-color);
-    font-weight: 500;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
 }
 
 .history-date {
     font-size: 0.75rem;
-    color: var(--text-secondary);
 }
 
 .clear-btn {
     background-color: var(--danger-color);
     color: white;
-    padding: 0.5rem 0.75rem;
+    padding: 0.5rem 0.85rem;
     border-radius: 0.5rem;
     border: none;
     cursor: pointer;
     font-size: 0.9rem;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.35rem;
 }
 
 .clear-btn:hover {
-    background-color: var(--danger-dark, #c82333);
+    background-color: var(--danger-dark);
     transform: translateY(-2px);
 }
 
-/* Message vide */
-.empty-history {
-    padding: 2rem;
-    text-align: center;
-    color: var(--text-secondary);
-    font-style: italic;
-    background-color: var(--bg-color);
-    border-radius: 0.5rem;
-    border: 1px dashed var(--border-color);
+.clear-btn:active {
+    transform: translateY(0);
 }
 
 /* Animation de chargement */
 .qrcode-loading {
     display: inline-block;
-    position: relative;
-    width: 80px;
-    height: 80px;
-}
-
-.qrcode-loading div {
-    position: absolute;
-    border: 4px solid var(--primary-color);
-    opacity: 1;
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(var(--primary-rgb), 0.3);
     border-radius: 50%;
-    animation: qrcode-loading 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    border-top-color: var(--primary-color);
+    animation: spin 1s ease-in-out infinite;
 }
 
-.qrcode-loading div:nth-child(2) {
-    animation-delay: -0.5s;
-}
-
-@keyframes qrcode-loading {
-    0% {
-        top: 36px;
-        left: 36px;
-        width: 0;
-        height: 0;
-        opacity: 1;
-    }
-    100% {
-        top: 0px;
-        left: 0px;
-        width: 72px;
-        height: 72px;
-        opacity: 0;
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
     }
 }
 
-/* Tooltip personnalisé */
-.qrcode-tooltip {
-    position: relative;
-    display: inline-block;
-}
-
-.qrcode-tooltip::before {
-    content: attr(data-tooltip);
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 0.5rem;
-    background-color: var(--text-color);
-    color: var(--bg-color);
-    border-radius: 0.25rem;
-    font-size: 0.8rem;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition: all 0.2s ease;
-    z-index: 10;
-}
-
-.qrcode-tooltip:hover::before {
-    opacity: 1;
-    bottom: calc(100% + 5px);
-}
-
-/* Type de données spécifiques */
-.type-fields {
-    display: none;
-}
-
-.type-fields.active {
-    display: block;
-    animation: fadeIn 0.3s ease-out;
-}
-
-/* Responsive */
-@media (max-width: 992px) {
-    .qrcode-container {
-        flex-direction: column;
-    }
-    
-    .qrcode-output {
-        min-height: 250px;
-    }
-}
-
-@media (max-width: 480px) {
-    .qrcode-actions {
-        flex-direction: column;
-    }
-    
-    .qrcode-btn {
-        width: 100%;
-    }
-    
-    .advanced-options .options-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* Styles pour le mode sombre */
+/* Mode sombre */
 [data-theme="dark"] .qrcode-output {
-    background-color: #1a2234;
+    background-color: var(--dark-bg-lighter);
 }
 
-[data-theme="dark"] .qrcode-btn,
-[data-theme="dark"] .clear-btn {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+/* Style de focus accessibilité */
+.qrcode-btn:focus, 
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus,
+.advanced-options summary:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.4);
 }
 
-/* Styles pour améliorer le contraste des boutons */
+/* Bouton avec animation d'onde */
 .qrcode-btn, 
-.clear-btn,
-button[type="button"] {
-    font-weight: 600;
-    letter-spacing: 0.01em;
+.clear-btn {
     position: relative;
     overflow: hidden;
 }
 
 .qrcode-btn::after, 
-.clear-btn::after,
-button[type="button"]::after {
+.clear-btn::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.1);
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
     opacity: 0;
-    transition: opacity 0.2s ease;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
 }
 
-.qrcode-btn:hover::after, 
-.clear-btn:hover::after,
-button[type="button"]:hover::after {
-    opacity: 1;
+.qrcode-btn:focus:not(:active)::after,
+.clear-btn:focus:not(:active)::after {
+    animation: ripple 1s ease-out;
 }
 
-/* Amélioration globale du contraste des boutons */
-button, 
-.btn, 
-.button,
-input[type="button"],
-input[type="submit"] {
-    border: 2px solid transparent;
-    font-weight: 600;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    position: relative;
-    overflow: hidden;
-}
-
-button:hover, 
-.btn:hover, 
-.button:hover,
-input[type="button"]:hover,
-input[type="submit"]:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-}
-
-button:active, 
-.btn:active, 
-.button:active,
-input[type="button"]:active,
-input[type="submit"]:active {
-    transform: translateY(1px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Amélioration du contraste pour les boutons sur fond sombre */
-[data-theme="dark"] button, 
-[data-theme="dark"] .btn, 
-[data-theme="dark"] .button,
-[data-theme="dark"] input[type="button"],
-[data-theme="dark"] input[type="submit"] {
-    border-color: rgba(255, 255, 255, 0.1);
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+    }
+    20% {
+        transform: scale(25, 25);
+        opacity: 0.3;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(40, 40);
+    }
 } 

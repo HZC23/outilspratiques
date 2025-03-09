@@ -7,6 +7,7 @@
     overflow-y: auto;
     position: sticky;
     top: 70px;
+    left: 0;
     z-index: 5;
 }
 
@@ -193,7 +194,6 @@ header h1 {
     position: absolute;
     right: 1rem;
     top: 50%;
-    transform: translateY(-50%);
 }
 
 @media (max-width: 768px) {

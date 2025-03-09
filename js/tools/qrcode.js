@@ -15,9 +15,8 @@ export const QRCodeManager = {
             errorCorrectionLevel: 'M', // L | M | Q | H
             format: 'svg' // svg | png
         },
-        history: [],
-        isLoading: false,
-        libraryLoaded: false
+        lastGenerated: null,
+        history: []
     },
 
     // Configuration des types de données
@@ -26,23 +25,17 @@ export const QRCodeManager = {
             name: 'Texte',
             description: 'Texte simple',
             placeholder: 'Entrez votre texte ici',
-            format: (text) => text,
-            validate: (text) => !!text || 'Le texte ne peut pas être vide'
+            format: (text) => text
         },
         url: {
             name: 'URL',
             description: 'Lien web',
             placeholder: 'https://example.com',
-            format: (url) => url.startsWith('http') ? url : `https://${url}`,
-            validate: (url) => {
-                if (!url) return 'L\'URL ne peut pas être vide';
-                try {
-                    // On essaie de construire une URL valide
-                    new URL(url.startsWith('http') ? url : `https://${url}`);
-                    return true;
-                } catch (e) {
-                    return 'URL invalide';
+            format: (url) => {
+                if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                    return 'https://' + url;
                 }
+                return url;
             }
         },
         email: {
@@ -57,25 +50,13 @@ export const QRCodeManager = {
                     if (body) mailto += `${subject ? '&' : ''}body=${encodeURIComponent(body)}`;
                 }
                 return mailto;
-            },
-            validate: (email) => {
-                if (!email) return 'L\'email ne peut pas être vide';
-                // Expression régulière simple pour la validation d'email
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                return emailRegex.test(email) || 'Adresse email invalide';
             }
         },
         tel: {
             name: 'Téléphone',
             description: 'Numéro de téléphone',
             placeholder: '+33612345678',
-            format: (tel) => `tel:${tel.replace(/\s+/g, '')}`,
-            validate: (tel) => {
-                if (!tel) return 'Le numéro de téléphone ne peut pas être vide';
-                // Accepte les chiffres, +, espaces, tirets et parenthèses
-                const telRegex = /^[+0-9\s\-()]+$/;
-                return telRegex.test(tel) || 'Numéro de téléphone invalide';
-            }
+            format: (tel) => `tel:${tel.replace(/\s+/g, '')}`
         },
         sms: {
             name: 'SMS',
@@ -85,11 +66,6 @@ export const QRCodeManager = {
                 let sms = `sms:${tel.replace(/\s+/g, '')}`;
                 if (message) sms += `?body=${encodeURIComponent(message)}`;
                 return sms;
-            },
-            validate: (tel) => {
-                if (!tel) return 'Le numéro de téléphone ne peut pas être vide';
-                const telRegex = /^[+0-9\s\-()]+$/;
-                return telRegex.test(tel) || 'Numéro de téléphone invalide';
             }
         },
         wifi: {
@@ -98,8 +74,7 @@ export const QRCodeManager = {
             placeholder: 'Nom du réseau',
             format: (ssid, password = '', encryption = 'WPA') => {
                 return `WIFI:S:${ssid};T:${encryption};P:${password};;`;
-            },
-            validate: (ssid) => !!ssid || 'Le nom du réseau ne peut pas être vide'
+            }
         },
         vcard: {
             name: 'vCard',
@@ -119,32 +94,13 @@ export const QRCodeManager = {
                     note ? `NOTE:${note}` : '',
                     'END:VCARD'
                 ].filter(Boolean).join('\n');
-            },
-            validate: (data) => {
-                if (!data.name) return 'Le nom ne peut pas être vide';
-                return true;
             }
         },
         geo: {
             name: 'Géolocalisation',
             description: 'Coordonnées GPS',
             placeholder: 'Latitude',
-            format: (lat, lon) => `geo:${lat},${lon}`,
-            validate: (lat, lon) => {
-                if (!lat || !lon) return 'La latitude et la longitude sont requises';
-                // Vérifier que les coordonnées sont des nombres valides
-                if (isNaN(parseFloat(lat)) || isNaN(parseFloat(lon))) {
-                    return 'Les coordonnées doivent être des nombres valides';
-                }
-                // Vérifier que les coordonnées sont dans les plages valides
-                if (parseFloat(lat) < -90 || parseFloat(lat) > 90) {
-                    return 'La latitude doit être entre -90 et 90';
-                }
-                if (parseFloat(lon) < -180 || parseFloat(lon) > 180) {
-                    return 'La longitude doit être entre -180 et 180';
-                }
-                return true;
-            }
+            format: (lat, lon) => `geo:${lat},${lon}`
         }
     },
 
@@ -152,25 +108,33 @@ export const QRCodeManager = {
      * Initialise le générateur
      */
     init() {
+        this.loadState();
+        this.setupListeners();
+        
+        // Chargement de la bibliothèque QR Code
         this.loadQRCodeLibrary()
             .then(() => {
-                this.state.libraryLoaded = true;
-                this.loadState();
-                this.setupListeners();
-                this.updateUIForType();
+                console.log('Bibliothèque QR Code chargée avec succès');
+                this.updateRangeValues();
+                this.updateHistoryDisplay();
                 
-                // Génère le QR code initial si un texte est disponible
-                if (this.state.text) {
+                // On génère un QR code par défaut si l'état est vide
+                if (!this.state.text) {
+                    this.state.text = 'https://outilspratiques.github.io';
+                    
+                    // Met à jour le champ de texte
+                    const textInput = document.getElementById('qrcodeText');
+                    if (textInput) textInput.value = this.state.text;
+                    
+                    this.generate();
+                } else {
+                    // On régénère le QR code si l'état n'est pas vide
                     this.generate();
                 }
-                
-                // Mise à jour initiale de l'interface
-                this.updateInputValues();
             })
             .catch(error => {
                 console.error('Erreur lors du chargement de la bibliothèque QR Code:', error);
-                Utils.showNotification('Erreur lors du chargement du générateur de QR codes', 'error');
-                this.showErrorInQROutput('Impossible de charger la bibliothèque QR Code. Veuillez réessayer plus tard.');
+                this.showError('Impossible de charger la bibliothèque QR Code. Veuillez réessayer.');
             });
     },
 
@@ -178,137 +142,19 @@ export const QRCodeManager = {
      * Charge la bibliothèque QR Code
      */
     async loadQRCodeLibrary() {
-        // Affiche l'animation de chargement
-        this.showLoadingInQROutput();
-        
         return new Promise((resolve, reject) => {
             // Vérifie si la bibliothèque est déjà chargée
             if (window.QRCode) {
-                this.hideLoadingInQROutput();
                 resolve();
                 return;
             }
             
             const script = document.createElement('script');
             script.src = 'https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js';
-            
-            script.onload = () => {
-                this.hideLoadingInQROutput();
-                resolve();
-            };
-            
-            script.onerror = () => {
-                this.hideLoadingInQROutput();
-                reject(new Error('Échec du chargement de la bibliothèque QR Code'));
-            };
-            
+            script.onload = resolve;
+            script.onerror = reject;
             document.head.appendChild(script);
         });
-    },
-
-    /**
-     * Affiche l'animation de chargement
-     */
-    showLoadingInQROutput() {
-        this.state.isLoading = true;
-        const output = document.getElementById('qrcodeOutput');
-        if (!output) return;
-        
-        output.innerHTML = `
-            <div class="qrcode-loading">
-                <div></div>
-                <div></div>
-            </div>
-            <p>Chargement...</p>
-        `;
-    },
-
-    /**
-     * Cache l'animation de chargement
-     */
-    hideLoadingInQROutput() {
-        this.state.isLoading = false;
-        // Ne pas effacer directement, cela sera fait lors de la génération
-    },
-
-    /**
-     * Affiche un message d'erreur dans la zone du QR code
-     */
-    showErrorInQROutput(message) {
-        const output = document.getElementById('qrcodeOutput');
-        if (!output) return;
-        
-        output.innerHTML = `
-            <div class="qrcode-error">
-                <i class="fas fa-exclamation-triangle"></i>
-                <p>${message || 'Une erreur est survenue'}</p>
-            </div>
-        `;
-    },
-
-    /**
-     * Charge l'état sauvegardé
-     */
-    loadState() {
-        try {
-            const savedState = Utils.loadFromStorage('qrcodeState', {
-                text: '',
-                type: 'text',
-                options: this.state.options,
-                history: []
-            });
-
-            this.state = { 
-                ...this.state, 
-                text: savedState.text || '',
-                type: savedState.type || 'text',
-                options: { ...this.state.options, ...savedState.options },
-                history: savedState.history || []
-            };
-        } catch (error) {
-            console.error('Erreur lors du chargement de l\'état:', error);
-            // Continuer avec l'état par défaut
-        }
-    },
-
-    /**
-     * Met à jour les valeurs des champs d'entrée
-     */
-    updateInputValues() {
-        // Texte
-        const textInput = document.getElementById('qrcodeText');
-        if (textInput) textInput.value = this.state.text;
-        
-        // Type
-        const typeSelect = document.getElementById('qrcodeType');
-        if (typeSelect) typeSelect.value = this.state.type;
-        
-        // Options
-        const sizeInput = document.getElementById('qrcodeSize');
-        if (sizeInput) {
-            sizeInput.value = this.state.options.size;
-            const sizeLabel = document.getElementById('qrcodeSizeValue');
-            if (sizeLabel) sizeLabel.textContent = `${this.state.options.size} px`;
-        }
-        
-        const marginInput = document.getElementById('qrcodeMargin');
-        if (marginInput) {
-            marginInput.value = this.state.options.margin;
-            const marginLabel = document.getElementById('qrcodeMarginValue');
-            if (marginLabel) marginLabel.textContent = this.state.options.margin.toString();
-        }
-        
-        const colorInput = document.getElementById('qrcodeColor');
-        if (colorInput) colorInput.value = this.state.options.color;
-        
-        const backgroundInput = document.getElementById('qrcodeBackground');
-        if (backgroundInput) backgroundInput.value = this.state.options.background;
-        
-        const errorLevelSelect = document.getElementById('qrcodeErrorLevel');
-        if (errorLevelSelect) errorLevelSelect.value = this.state.options.errorCorrectionLevel;
-        
-        const formatSelect = document.getElementById('qrcodeFormat');
-        if (formatSelect) formatSelect.value = this.state.options.format;
     },
 
     /**
@@ -327,19 +173,13 @@ export const QRCodeManager = {
 
         // Options
         document.getElementById('qrcodeSize')?.addEventListener('input', (e) => {
-            const size = parseInt(e.target.value, 10);
-            this.updateOption('size', size);
-            // Mise à jour de l'affichage de la valeur
-            const sizeValue = document.getElementById('qrcodeSizeValue');
-            if (sizeValue) sizeValue.textContent = `${size} px`;
+            this.updateOption('size', parseInt(e.target.value, 10));
+            document.getElementById('qrcodeSizeValue').textContent = `${e.target.value} px`;
         });
 
         document.getElementById('qrcodeMargin')?.addEventListener('input', (e) => {
-            const margin = parseInt(e.target.value, 10);
-            this.updateOption('margin', margin);
-            // Mise à jour de l'affichage de la valeur
-            const marginValue = document.getElementById('qrcodeMarginValue');
-            if (marginValue) marginValue.textContent = margin.toString();
+            this.updateOption('margin', parseInt(e.target.value, 10));
+            document.getElementById('qrcodeMarginValue').textContent = e.target.value;
         });
 
         document.getElementById('qrcodeColor')?.addEventListener('input', (e) => {
@@ -367,11 +207,6 @@ export const QRCodeManager = {
             this.download();
         });
 
-        // Nettoyage de l'historique
-        document.querySelector('.qrcode-history .clear-btn')?.addEventListener('click', () => {
-            this.clearHistory();
-        });
-
         // Raccourcis clavier
         document.addEventListener('keydown', (e) => {
             if (!this.isQRCodeGeneratorVisible()) return;
@@ -384,14 +219,33 @@ export const QRCodeManager = {
     },
 
     /**
-     * Met à jour l'interface utilisateur en fonction du type sélectionné
+     * Met à jour les valeurs des curseurs
      */
-    updateUIForType() {
-        const currentType = this.state.type;
-        const typeInfo = this.types[currentType];
+    updateRangeValues() {
+        const sizeValue = document.getElementById('qrcodeSizeValue');
+        if (sizeValue) sizeValue.textContent = `${this.state.options.size} px`;
         
-        const textInput = document.getElementById('qrcodeText');
-        if (textInput) textInput.placeholder = typeInfo.placeholder;
+        const marginValue = document.getElementById('qrcodeMarginValue');
+        if (marginValue) marginValue.textContent = `${this.state.options.margin}`;
+        
+        // Met à jour les valeurs des champs
+        const sizeInput = document.getElementById('qrcodeSize');
+        if (sizeInput) sizeInput.value = this.state.options.size;
+        
+        const marginInput = document.getElementById('qrcodeMargin');
+        if (marginInput) marginInput.value = this.state.options.margin;
+        
+        const colorInput = document.getElementById('qrcodeColor');
+        if (colorInput) colorInput.value = this.state.options.color;
+        
+        const backgroundInput = document.getElementById('qrcodeBackground');
+        if (backgroundInput) backgroundInput.value = this.state.options.background;
+        
+        const errorLevelInput = document.getElementById('qrcodeErrorLevel');
+        if (errorLevelInput) errorLevelInput.value = this.state.options.errorCorrectionLevel;
+        
+        const formatInput = document.getElementById('qrcodeFormat');
+        if (formatInput) formatInput.value = this.state.options.format;
     },
 
     /**
@@ -399,7 +253,7 @@ export const QRCodeManager = {
      */
     isQRCodeGeneratorVisible() {
         const generator = document.getElementById('qrcodeTool');
-        return generator?.classList.contains('active') || generator?.style.display !== 'none';
+        return generator?.style.display !== 'none';
     },
 
     /**
@@ -409,10 +263,7 @@ export const QRCodeManager = {
         if (!this.types[type]) return;
 
         this.state.type = type;
-        this.updateUIForType();
-        
-        // Génération en temps réel
-        this.debouncedGenerate();
+        this.generate();
         this.saveState();
     },
 
@@ -421,21 +272,8 @@ export const QRCodeManager = {
      */
     updateText(text) {
         this.state.text = text;
-        
-        // Génération en temps réel avec un délai
-        this.debouncedGenerate();
+        this.generate();
         this.saveState();
-    },
-
-    /**
-     * Génération différée pour éviter les appels trop fréquents
-     */
-    debouncedGenerate: function() {
-        if (this._debounceTimer) clearTimeout(this._debounceTimer);
-        
-        this._debounceTimer = setTimeout(() => {
-            this.generate();
-        }, 500); // Délai de 500ms
     },
 
     /**
@@ -443,105 +281,102 @@ export const QRCodeManager = {
      */
     updateOption(option, value) {
         this.state.options[option] = value;
-        
-        // Génération en temps réel
-        this.debouncedGenerate();
+        this.generate();
         this.saveState();
-    },
-
-    /**
-     * Valide les données en fonction du type
-     */
-    validateData() {
-        const type = this.types[this.state.type];
-        if (!type) return 'Type non supporté';
-
-        // Validation spécifique au type
-        return type.validate ? type.validate(this.state.text) : true;
     },
 
     /**
      * Génère le QR code
      */
     async generate() {
-        if (!this.state.libraryLoaded) {
-            await this.loadQRCodeLibrary();
-        }
-        
+        const outputEl = document.getElementById('qrcodeOutput');
+        if (!outputEl) return;
+
+        // Vérifie si la bibliothèque est chargée
         if (!window.QRCode) {
-            this.showErrorInQROutput('La bibliothèque QR Code n\'est pas disponible');
-            return;
-        }
-        
-        if (!this.state.text) {
-            this.showErrorInQROutput('Veuillez entrer du contenu pour générer un QR code');
+            this.loadQRCodeLibrary()
+                .then(() => this.generate())
+                .catch(error => {
+                    console.error('Erreur lors du chargement de la bibliothèque QR Code:', error);
+                    this.showError('Impossible de charger la bibliothèque QR Code');
+                });
             return;
         }
 
         // Validation des données
-        const validationResult = this.validateData();
-        if (validationResult !== true) {
-            this.showErrorInQROutput(validationResult);
+        if (!this.state.text.trim()) {
+            this.showError('Veuillez saisir un texte');
             return;
         }
 
-        const output = document.getElementById('qrcodeOutput');
-        if (!output) return;
-
-        // Affiche l'animation de chargement
-        this.showLoadingInQROutput();
-
-        // Nettoie l'affichage
-        output.innerHTML = '';
-
-        // Prépare les données selon le type
-        const type = this.types[this.state.type];
-        const data = type.format(this.state.text);
-
         try {
+            // Efface le contenu précédent
+            outputEl.innerHTML = '';
+            
+            // Applique le formatage selon le type
+            const formattedText = this.types[this.state.type].format(this.state.text);
+            const options = {
+                width: this.state.options.size,
+                height: this.state.options.size,
+                margin: this.state.options.margin,
+                color: {
+                    dark: this.state.options.color,
+                    light: this.state.options.background
+                },
+                errorCorrectionLevel: this.state.options.errorCorrectionLevel
+            };
+
             // Génère le QR code
             if (this.state.options.format === 'svg') {
-                const svg = await QRCode.toString(data, {
-                    type: 'svg',
-                    width: this.state.options.size,
-                    margin: this.state.options.margin,
-                    color: {
-                        dark: this.state.options.color,
-                        light: this.state.options.background
-                    },
-                    errorCorrectionLevel: this.state.options.errorCorrectionLevel
+                QRCode.toString(formattedText, {
+                    ...options,
+                    type: 'svg'
+                }, (error, svg) => {
+                    if (error) {
+                        console.error('Erreur lors de la génération du QR code SVG:', error);
+                        this.showError('Erreur lors de la génération du QR code');
+                        return;
+                    }
+                    
+                    outputEl.innerHTML = svg;
+                    this.state.lastGenerated = { 
+                        data: svg, 
+                        format: 'svg',
+                        text: formattedText
+                    };
+                    
+                    // Ajoute à l'historique
+                    this.addToHistory();
                 });
-                output.innerHTML = svg;
-                
-                // Ajoute des classes CSS pour l'animation
-                const svgElement = output.querySelector('svg');
-                if (svgElement) {
-                    svgElement.classList.add('qrcode-animation');
-                }
             } else {
+                // Crée un canvas
                 const canvas = document.createElement('canvas');
-                await QRCode.toCanvas(canvas, data, {
+                outputEl.appendChild(canvas);
+                
+                QRCode.toCanvas(canvas, formattedText, {
+                    ...options,
                     width: this.state.options.size,
                     margin: this.state.options.margin,
-                    color: {
-                        dark: this.state.options.color,
-                        light: this.state.options.background
-                    },
-                    errorCorrectionLevel: this.state.options.errorCorrectionLevel
+                }, (error) => {
+                    if (error) {
+                        console.error('Erreur lors de la génération du QR code canvas:', error);
+                        this.showError('Erreur lors de la génération du QR code');
+                        return;
+                    }
+                    
+                    this.state.lastGenerated = { 
+                        canvas: canvas, 
+                        format: 'png',
+                        text: formattedText
+                    };
+                    
+                    // Ajoute à l'historique
+                    this.addToHistory();
                 });
-                canvas.classList.add('qrcode-animation');
-                output.appendChild(canvas);
             }
-
-            // Ajoute à l'historique (seulement si l'opération a réussi)
-            this.addToHistory();
-            
-            // Notification de succès
-            Utils.showNotification('QR code généré avec succès', 'success');
         } catch (error) {
             console.error('Erreur lors de la génération du QR code:', error);
-            this.showErrorInQROutput(error.message || 'Erreur lors de la génération du QR code');
-            Utils.showNotification('Erreur lors de la génération du QR code', 'error');
+            this.showError('Erreur lors de la génération du QR code: ' + error.message);
         }
     },
 
@@ -549,40 +384,64 @@ export const QRCodeManager = {
      * Télécharge le QR code
      */
     download() {
-        const output = document.getElementById('qrcodeOutput');
-        if (!output?.firstChild) {
-            Utils.showNotification('Aucun QR code à télécharger', 'warning');
+        if (!this.state.lastGenerated) {
+            this.showError('Veuillez d\'abord générer un QR code');
             return;
         }
-
+        
         try {
             const link = document.createElement('a');
-            const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-            const filename = `qrcode-${timestamp}`;
-
-            if (this.state.options.format === 'svg') {
-                const svg = output.innerHTML;
-                const blob = new Blob([svg], { type: 'image/svg+xml' });
-                link.href = URL.createObjectURL(blob);
-                link.download = `${filename}.svg`;
-            } else {
-                const canvas = output.querySelector('canvas');
-                if (!canvas) {
-                    Utils.showNotification('Aucun QR code à télécharger', 'warning');
-                    return;
-                }
-                link.href = canvas.toDataURL('image/png');
-                link.download = `${filename}.png`;
-            }
-
-            link.click();
-            URL.revokeObjectURL(link.href);
             
-            // Notification de succès
-            Utils.showNotification('QR code téléchargé', 'success');
+            if (this.state.lastGenerated.format === 'svg') {
+                // Téléchargement en SVG
+                const blob = new Blob([this.state.lastGenerated.data], { type: 'image/svg+xml' });
+                link.href = URL.createObjectURL(blob);
+                link.download = `qrcode-${Date.now()}.svg`;
+            } else {
+                // Téléchargement en PNG
+                const canvas = this.state.lastGenerated.canvas;
+                link.href = canvas.toDataURL('image/png');
+                link.download = `qrcode-${Date.now()}.png`;
+            }
+            
+            // Déclenche le téléchargement
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Affiche une notification de succès
+            this.showSuccess('QR code téléchargé avec succès');
         } catch (error) {
-            console.error('Erreur lors du téléchargement:', error);
-            Utils.showNotification('Erreur lors du téléchargement du QR code', 'error');
+            console.error('Erreur lors du téléchargement du QR code:', error);
+            this.showError('Erreur lors du téléchargement: ' + error.message);
+        }
+    },
+
+    /**
+     * Affiche une erreur
+     */
+    showError(message) {
+        if (window.notificationManager) {
+            window.notificationManager.show({
+                type: 'error',
+                message: message,
+                duration: 3000
+            });
+        } else {
+            alert(message);
+        }
+    },
+
+    /**
+     * Affiche un succès
+     */
+    showSuccess(message) {
+        if (window.notificationManager) {
+            window.notificationManager.show({
+                type: 'success',
+                message: message,
+                duration: 3000
+            });
         }
     },
 
@@ -590,44 +449,37 @@ export const QRCodeManager = {
      * Ajoute le QR code à l'historique
      */
     addToHistory() {
-        // Évite les doublons consécutifs
-        if (this.state.history.length > 0) {
-            const lastEntry = this.state.history[0];
-            if (lastEntry.text === this.state.text && lastEntry.type === this.state.type) {
-                // Met à jour uniquement le timestamp
-                lastEntry.timestamp = new Date().toISOString();
-                this.updateHistoryDisplay();
-                this.saveState();
-                return;
-            }
-        }
-        
-        this.state.history.unshift({
+        // Crée une entrée d'historique
+        const entry = {
             text: this.state.text,
             type: this.state.type,
             options: { ...this.state.options },
-            timestamp: new Date().toISOString()
-        });
-
-        // Limite la taille de l'historique
+            timestamp: Date.now()
+        };
+        
+        // Vérifie si l'entrée existe déjà (même texte et type)
+        const existingIndex = this.state.history.findIndex(
+            item => item.text === entry.text && item.type === entry.type
+        );
+        
+        if (existingIndex !== -1) {
+            // Supprime l'entrée existante
+            this.state.history.splice(existingIndex, 1);
+        }
+        
+        // Ajoute la nouvelle entrée en premier
+        this.state.history.unshift(entry);
+        
+        // Limite la taille de l'historique à 10 entrées
         if (this.state.history.length > 10) {
-            this.state.history.pop();
+            this.state.history = this.state.history.slice(0, 10);
         }
-
+        
+        // Met à jour l'affichage de l'historique
         this.updateHistoryDisplay();
+        
+        // Sauvegarde l'état
         this.saveState();
-    },
-
-    /**
-     * Efface l'historique
-     */
-    clearHistory() {
-        if (confirm('Êtes-vous sûr de vouloir effacer tout l\'historique des QR codes ?')) {
-            this.state.history = [];
-            this.updateHistoryDisplay();
-            this.saveState();
-            Utils.showNotification('Historique effacé', 'info');
-        }
     },
 
     /**
@@ -637,17 +489,12 @@ export const QRCodeManager = {
         const container = document.getElementById('qrcodeHistory');
         if (!container) return;
 
-        if (this.state.history.length === 0) {
-            container.innerHTML = '<div class="empty-history">Aucun QR code dans l\'historique</div>';
-            return;
-        }
-
         container.innerHTML = this.state.history
-            .map((entry, index) => `
-                <div class="history-item" onclick="qrcodeManager.useHistoryEntry(${index})">
+            .map(entry => `
+                <div class="history-item" onclick="qrcodeManager.useHistoryEntry(${this.state.history.indexOf(entry)})">
                     <div class="history-preview">
                         <div class="qrcode-preview">
-                            ${entry.text.substring(0, 30)}${entry.text.length > 30 ? '...' : ''}
+                            ${entry.text.substring(0, 50)}${entry.text.length > 50 ? '...' : ''}
                         </div>
                     </div>
                     <div class="history-meta">
@@ -655,37 +502,12 @@ export const QRCodeManager = {
                             ${this.types[entry.type].name}
                         </span>
                         <span class="history-date">
-                            ${this.formatDate(entry.timestamp)}
+                            ${new Date(entry.timestamp).toLocaleString('fr-FR')}
                         </span>
                     </div>
                 </div>
             `)
             .join('');
-    },
-
-    /**
-     * Formatte une date pour l'affichage
-     */
-    formatDate(timestamp) {
-        try {
-            const date = new Date(timestamp);
-            
-            // Si la date est aujourd'hui, affiche seulement l'heure
-            const today = new Date();
-            if (date.toDateString() === today.toDateString()) {
-                return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-            }
-            
-            // Sinon affiche la date complète
-            return date.toLocaleString('fr-FR', { 
-                day: '2-digit', 
-                month: '2-digit',
-                hour: '2-digit', 
-                minute: '2-digit'
-            });
-        } catch (e) {
-            return timestamp;
-        }
     },
 
     /**
@@ -700,14 +522,45 @@ export const QRCodeManager = {
         this.state.options = { ...entry.options };
 
         // Met à jour les champs
-        this.updateInputValues();
-        this.updateUIForType();
+        const textInput = document.getElementById('qrcodeText');
+        if (textInput) textInput.value = entry.text;
+
+        const typeSelect = document.getElementById('qrcodeType');
+        if (typeSelect) typeSelect.value = entry.type;
         
-        // Génère le QR code
+        // Met à jour les valeurs des options
+        this.updateRangeValues();
+
         this.generate();
-        
-        // Notification
-        Utils.showNotification('QR code restauré depuis l\'historique', 'info');
+    },
+
+    /**
+     * Vide l'historique
+     */
+    clearHistory() {
+        this.state.history = [];
+        this.updateHistoryDisplay();
+        this.saveState();
+        this.showSuccess('Historique effacé avec succès');
+    },
+
+    /**
+     * Charge l'état depuis le stockage local
+     */
+    loadState() {
+        const savedState = Utils.getFromStorage('qrcodeState');
+        if (savedState) {
+            this.state = {
+                ...this.state,
+                ...savedState
+            };
+            
+            // S'assure que les options ont toutes les propriétés nécessaires
+            this.state.options = {
+                ...this.state.options,
+                ...savedState.options
+            };
+        }
     },
 
     /**
@@ -726,9 +579,6 @@ export const QRCodeManager = {
      * Nettoie les ressources
      */
     destroy() {
-        if (this._debounceTimer) {
-            clearTimeout(this._debounceTimer);
-        }
         this.saveState();
     }
 }; 

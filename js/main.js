@@ -207,6 +207,8 @@ class App {
         // Initialisation de QRCodeManager
         if (document.getElementById('qrcodeTool')) {
             QRCodeManager.init();
+            // Rendre le QRCodeManager accessible globalement pour les interactions HTML
+            window.qrcodeManager = QRCodeManager;
         }
     }
     
