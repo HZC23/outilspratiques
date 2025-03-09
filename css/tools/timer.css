@@ -5,18 +5,18 @@
     background: var(--card-bg);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
-    padding: 20px;
+    padding: var(--spacing-md);
 }
 
 .timer-config {
-    margin-bottom: 20px;
+    margin-bottom: var(--spacing-md);
 }
 
 .time-inputs {
     display: flex;
-    gap: 15px;
+    gap: var(--spacing-sm);
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: var(--spacing-md);
 }
 
 .time-input-group {
@@ -26,19 +26,20 @@
 }
 
 .time-input-group label {
-    margin-bottom: 5px;
+    margin-bottom: var(--spacing-xs);
     color: var(--text-color);
 }
 
 .time-input-group input {
     width: 80px;
-    padding: 10px;
+    padding: var(--spacing-xs);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     background: var(--input-bg);
     color: var(--text-color);
     font-size: 1.2em;
     text-align: center;
+    transition: var(--transition);
 }
 
 .timer-display {
@@ -46,7 +47,7 @@
     font-weight: bold;
     text-align: center;
     color: var(--text-color);
-    margin: 20px 0;
+    margin: var(--spacing-md) 0;
     font-family: monospace;
 }
 
@@ -87,38 +88,39 @@
 
 .start-btn {
     background: var(--success-color);
-    color: white;
+    color: var(--light-color);
 }
 
 .start-btn:hover {
-    background: #27ae60;
+    background: var(--success-color-dark);
 }
 
 .pause-btn {
     background: var(--warning-color);
-    color: white;
+    color: var(--light-color);
 }
 
 .pause-btn:hover {
-    background: #d35400;
+    background: var(--warning-color);
+    filter: brightness(90%);
 }
 
 .reset-btn {
     background: var(--danger-color);
-    color: rgb(255, 0, 0);
+    color: var(--light-color);
 }
 
 .reset-btn:hover {
-    background: #c0392b;
+    background: var(--danger-color-dark);
 }
 
 .sound-btn {
     background: var(--primary-color);
-    color: rgb(27, 35, 111);
+    color: var(--light-color);
 }
 
 .sound-btn:hover {
-    background: var(--hover-color);
+    background: var(--primary-color-dark);
 }
 
 .timer-status {
@@ -175,7 +177,7 @@
     padding: var(--spacing-sm);
     background: var(--input-bg);
     border-radius: var(--border-radius);
-    transition: all 0.3s ease;
+    transition: var(--transition);
 }
 
 .sound-selector label {
@@ -191,7 +193,7 @@
     background: var(--bg-color);
     color: var(--text-color);
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: var(--transition);
 }
 
 .sound-selector select:hover {
@@ -207,11 +209,11 @@
 .sound-test-btn {
     padding: var(--spacing-sm) var(--spacing-md);
     background: var(--primary-color);
-    color: white;
+    color: var(--light-color);
     border: none;
     border-radius: var(--border-radius);
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: var(--transition);
     display: flex;
     align-items: center;
     gap: var(--spacing-xs);

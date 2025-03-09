@@ -5,8 +5,8 @@
     box-shadow: var(--box-shadow);
     max-width: 600px;
     margin: 0 auto;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    animation: fadeInUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all var(--transition-duration) var(--ease-in-out);
+    animation: fadeInUp var(--animation-duration) var(--ease-out-back);
 }
 
 .metronome-container:hover {
@@ -44,9 +44,9 @@
     border-radius: 4px;
     outline: none;
     margin: var(--spacing-sm) 0;
-    transition: all 0.3s ease;
+    transition: var(--transition);
     cursor: pointer;
-    animation: slideInRight 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: slideInRight var(--animation-duration) var(--ease-out-back);
 }
 
 .tempo-slider:hover {

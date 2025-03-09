@@ -2,25 +2,25 @@
 .color-container {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1.5rem;
-    animation: fadeIn 0.5s ease;
+    gap: var(--spacing-md);
+    animation: fadeIn var(--animation-duration) var(--ease-in-out);
 }
 
 /* Design moderne avec ombres et transitions */
 .color-picker {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: var(--spacing-md);
     background: var(--card-bg);
     border-radius: var(--border-radius-lg);
-    padding: 1.5rem;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
+    padding: var(--spacing-md);
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
 }
 
 .color-picker:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    box-shadow: var(--hover-shadow);
 }
 
 /* Aperçu de couleur amélioré */
@@ -29,12 +29,12 @@
     width: 100%;
     height: 160px;
     border-radius: var(--border-radius);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--box-shadow);
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    transition: all 0.3s ease;
+    transition: var(--transition);
     cursor: pointer;
 }
 
@@ -44,17 +44,10 @@
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 8px;
+    padding: var(--spacing-xs);
     background: rgba(0, 0, 0, 0.6);
-    color: white;
+    color: var(--text-light);
     font-size: 0.8rem;
-    text-align: center;
-    transform: translateY(100%);
-    transition: transform 0.3s ease;
-}
-
-.color-preview:hover::after {
-    transform: translateY(0);
 }
 
 /* Sélecteur de couleur */

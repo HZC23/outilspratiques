@@ -8,9 +8,9 @@
     background: var(--card-bg);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
-    padding: 20px;
-    transition: all 0.3s ease;
-    animation: fadeIn 0.5s ease;
+    padding: var(--spacing-md);
+    transition: var(--transition);
+    animation: fadeIn var(--animation-duration) var(--ease-in-out);
 }
 
 .styletext-container:hover {
@@ -21,8 +21,8 @@
 #styleInput, #styleOutput {
     width: 100%;
     min-height: 100px;
-    padding: 15px;
-    margin: 15px 0;
+    padding: var(--spacing-sm);
+    margin: var(--spacing-sm) 0;
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     background: var(--input-bg);
@@ -30,7 +30,7 @@
     font-size: 1em;
     line-height: 1.5;
     resize: vertical;
-    transition: all 0.3s ease;
+    transition: var(--transition);
 }
 
 #styleInput:focus, #styleOutput:focus {

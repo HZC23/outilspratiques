@@ -1,21 +1,21 @@
 /* Styles pour les notifications */
 .notification {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    padding: 12px 20px;
+    bottom: var(--spacing-md);
+    right: var(--spacing-md);
+    padding: var(--spacing-xs) var(--spacing-md);
     background-color: var(--bg-color);
     color: var(--text-color);
     border-radius: var(--border-radius);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--hover-shadow);
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: var(--spacing-xs);
     z-index: 9999;
     max-width: 400px;
     transform: translateX(120%);
     opacity: 0;
-    transition: transform 0.3s var(--ease-out-back), opacity 0.3s ease;
+    transition: transform var(--transition-duration) var(--ease-out-back), opacity var(--transition-duration) ease;
     border-left: 4px solid var(--primary-color);
 }
 
@@ -33,12 +33,12 @@
     color: var(--text-muted);
     cursor: pointer;
     padding: 4px;
-    margin-left: 8px;
-    border-radius: 50%;
+    margin-left: var(--spacing-xs);
+    border-radius: var(--border-radius-circle);
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 0.2s ease;
+    transition: background-color var(--transition-fast);
 }
 
 .notification .close-btn:hover {

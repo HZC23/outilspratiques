@@ -5,24 +5,24 @@
     background: var(--card-bg);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
-    padding: 20px;
+    padding: var(--spacing-md);
 }
 
 /* Styles du bloc-notes */
 .toolbar {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    padding: 10px;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs);
     background: var(--input-bg);
     border-radius: var(--border-radius);
-    margin-bottom: 20px;
+    margin-bottom: var(--spacing-md);
 }
 
 .toolbar-group {
     display: flex;
-    gap: 5px;
-    padding: 5px;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs);
     border-right: 1px solid var(--border-color);
 }
 
@@ -31,7 +31,7 @@
 }
 
 .toolbar button {
-    padding: 8px;
+    padding: var(--spacing-xs);
     border: none;
     border-radius: var(--border-radius);
     background: var(--bg-color);
@@ -42,11 +42,12 @@
 
 .toolbar select,
 .toolbar input[type="color"] {
-    padding: 8px;
+    padding: var(--spacing-xs);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     background: var(--bg-color);
     color: var(--text-color);
+    transition: var(--transition);
 }
 
 .editor-container {

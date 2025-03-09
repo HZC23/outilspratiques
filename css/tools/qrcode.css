@@ -2,10 +2,10 @@
 .qrcode-container {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    padding: 1rem;
+    gap: var(--spacing-md);
+    padding: var(--spacing-sm);
     max-width: 100%;
-    animation: fadeInUp 0.5s ease forwards;
+    animation: fadeInUp var(--animation-duration) var(--ease-out-back) forwards;
 }
 
 @keyframes fadeInUp {
@@ -31,18 +31,17 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: var(--spacing-sm);
     background-color: var(--card-bg);
-    border-radius: 1rem;
-    padding: 1.5rem;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 
-                0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-md);
+    box-shadow: var(--box-shadow);
+    transition: transform var(--transition-duration) var(--ease-in-out), 
+                box-shadow var(--transition-duration) var(--ease-in-out);
 }
 
 .qrcode-config:hover {
-    box-shadow: 0 15px 20px -3px rgba(0, 0, 0, 0.15), 
-                0 6px 8px -2px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--hover-shadow);
 }
 
 /* Panneau d'affichage du QR code */

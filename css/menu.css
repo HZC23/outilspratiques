@@ -3,7 +3,7 @@
     height: calc(100vh - 70px);
     background-color: var(--card-bg);
     border-right: 1px solid var(--border-color);
-    padding: 1rem;
+    padding: var(--spacing-sm);
     overflow-y: auto;
     position: sticky;
     top: 70px;
@@ -14,8 +14,8 @@
 .container {
     display: grid;
     grid-template-columns: 250px 1fr;
-    gap: 1rem;
-    padding: 1rem;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
     min-height: calc(100vh - 70px);
     margin-top: 70px;
 }
@@ -23,13 +23,13 @@
 .tools {
     background-color: var(--bg-color);
     border-radius: var(--border-radius);
-    padding: 1rem;
+    padding: var(--spacing-sm);
     min-height: calc(100vh - 70px);
     position: fixed;
     left: calc(250px + 2rem);
-    right: 1rem;
+    right: var(--spacing-sm);
     top: calc(70px + 1rem);
-    bottom: 1rem;
+    bottom: var(--spacing-sm);
     overflow-y: auto;
     z-index: 1;
 }
@@ -38,8 +38,8 @@
     .menu {
         position: fixed;
         left: -250px;
-        transition: left 0.3s ease;
-        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        transition: left var(--transition-duration) var(--ease-in-out);
+        box-shadow: var(--box-shadow);
     }
 
     .menu.active {
