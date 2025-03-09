@@ -1,8 +1,11 @@
 /* From Uiverse.io by Galahhad */ 
 .theme-switch {
-  position: relative;
+  position: absolute;
   display: inline-block;
-  margin: 0 1rem;
+  left: 15px; /* Positionner à gauche */
+  top: 50%; /* Centrer verticalement */
+  transform: translateY(-50%); /* Parfait centrage vertical */
+  margin: 0;
   --toggle-size: 20px;
   /* the size is adjusted using font-size,
      this is not transform scale,
@@ -24,6 +27,7 @@
   --back-clouds-color: #AACADF;
   --transition: .5s cubic-bezier(0, -0.02, 0.4, 1.25);
   --circle-transition: .3s cubic-bezier(0, -0.02, 0.35, 1.17);
+  z-index: 10; /* S'assurer qu'il est au-dessus des autres éléments */
 }
 
 .theme-switch, .theme-switch *, .theme-switch *::before, .theme-switch *::after {

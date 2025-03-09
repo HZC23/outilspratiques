@@ -155,10 +155,19 @@
     }
 }
 
+/* Styles spécifiques pour le titre du calculateur de pourcentages */
+#percentageTitle {
+    margin-top: 0;
+    text-align: center;
+    width: 100%;
+    justify-content: center;
+}
+
 /* Styles spécifiques pour le conteneur de pourcentage */
 .percentage-container {
     max-width: 800px;
     margin: 0 auto;
+    margin-top: 20px;
 }
 
 /* Wrapper d'input pour éviter la superposition */

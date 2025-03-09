@@ -49,6 +49,7 @@
     justify-content: center;
     align-items: center;
     text-align: center;
+    width: 100%;
 }
 
 .section h2::after {
@@ -57,7 +58,7 @@
     bottom: -1px;
     left: 50%;
     transform: translateX(-50%);
-    width: 60px;
+    width: 120px;
     height: 3px;
     background: var(--primary-color);
     border-radius: 3px;
@@ -65,7 +66,7 @@
 }
 
 .section:hover h2::after {
-    width: 120px;
+    width: 180px;
 }
 
 /* Style des conteneurs */

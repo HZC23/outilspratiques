@@ -170,6 +170,7 @@ header {
     border-bottom: 1px solid var(--border-color);
     display: flex;
     align-items: center;
+    justify-content: center;
     padding: 0 1rem;
     z-index: 100;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -179,7 +180,10 @@ header h1 {
     margin: 0;
     font-size: 1.5rem;
     color: var(--text-color);
-    margin-left: 4rem;
+    text-align: center;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 /* Style du bouton toggle menu */
@@ -194,6 +198,8 @@ header h1 {
     position: absolute;
     right: 1rem;
     top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
 }
 
 @media (max-width: 768px) {
@@ -202,8 +208,11 @@ header h1 {
     }
     
     header h1 {
-        margin-left: 3.5rem;
+        margin-left: 0;
         font-size: 1.2rem;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
     }
 }
 
