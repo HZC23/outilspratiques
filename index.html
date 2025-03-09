@@ -156,6 +156,9 @@
     <main class="container">
         <!-- Menu de navigation -->
         <nav class="menu" role="navigation" aria-label="Menu principal" id="mainMenu">
+            <button id="toggleMenuWidth" class="toggle-menu-width" aria-label="Réduire/Agrandir le menu" title="Réduire/Agrandir le menu">
+                <i class="fas fa-angle-left"></i>
+            </button>
             <!-- Calculs et Mathématiques -->
             <div class="menu-category">
                 <button type="button"
@@ -306,50 +309,78 @@
                     </div>
 
                     <div class="calculator-grid">
-                        <!-- Fonctions scientifiques -->
+                        <!-- Mode et configuration -->
+                        <button type="button" onclick="toggleAngleUnit()" class="config" aria-label="Mode angle">DEG</button>
+                        <button type="button" onclick="toggleScientificNotation()" class="config" aria-label="Notation scientifique">SCI</button>
+                        <button type="button" onclick="toggleFractionMode()" class="config" aria-label="Mode fraction">a b/c</button>
+                        <button type="button" onclick="calcFunction('mod')" class="operator" aria-label="Modulo">MOD</button>
+                        <button type="button" onclick="calcFunction('abs')" class="operator" aria-label="Valeur absolue">|x|</button>
+                        
+                        <!-- Fonctions avancées (première rangée) -->
                         <button type="button" onclick="calcFunction('sin')" class="operator" aria-label="Sinus">sin</button>
                         <button type="button" onclick="calcFunction('cos')" class="operator" aria-label="Cosinus">cos</button>
                         <button type="button" onclick="calcFunction('tan')" class="operator" aria-label="Tangente">tan</button>
                         <button type="button" onclick="calcFunction('log')" class="operator" aria-label="Logarithme">log</button>
+                        <button type="button" onclick="calcFunction('ln')" class="operator" aria-label="Logarithme naturel">ln</button>
 
+                        <!-- Fonctions avancées (deuxième rangée) -->
+                        <button type="button" onclick="calcFunction('asin')" class="operator" aria-label="Arc sinus">sin⁻¹</button>
+                        <button type="button" onclick="calcFunction('acos')" class="operator" aria-label="Arc cosinus">cos⁻¹</button>
+                        <button type="button" onclick="calcFunction('atan')" class="operator" aria-label="Arc tangente">tan⁻¹</button>
                         <button type="button" onclick="calcFunction('sqrt')" class="operator" aria-label="Racine carrée">√</button>
+                        <button type="button" onclick="calcFunction('cbrt')" class="operator" aria-label="Racine cubique">∛</button>
+
+                        <!-- Fonctions avancées (troisième rangée) -->
+                        <button type="button" onclick="calcFunction('factorial')" class="operator" aria-label="Factorielle">n!</button>
                         <button type="button" onclick="calcFunction('pow')" class="operator" aria-label="Puissance">x²</button>
-                        <button type="button" onclick="calcFunction('exp')" class="operator" aria-label="Exponentielle">exp</button>
+                        <button type="button" onclick="calcFunction('pow3')" class="operator" aria-label="Puissance 3">x³</button>
+                        <button type="button" onclick="calcFunction('powY')" class="operator" aria-label="Puissance y">x^y</button>
+                        <button type="button" onclick="calcFunction('exp')" class="operator" aria-label="Exponentielle">e^x</button>
+
+                        <!-- Fonctions spéciales -->
                         <button type="button" onclick="calcFunction('pi')" class="operator" aria-label="Pi">π</button>
+                        <button type="button" onclick="calcFunction('e')" class="operator" aria-label="Nombre e">e</button>
+                        <button type="button" onclick="calcFunction('random')" class="operator" aria-label="Nombre aléatoire">Ran#</button>
+                        <button type="button" onclick="calcFunction('gcd')" class="operator" aria-label="PGCD">PGCD</button>
+                        <button type="button" onclick="calcFunction('lcm')" class="operator" aria-label="PPCM">PPCM</button>
 
                         <!-- Mémoire -->
                         <button type="button" onclick="calcMemory('ms')" class="memory" aria-label="Mémoire stocker">MS</button>
                         <button type="button" onclick="calcMemory('mr')" class="memory" aria-label="Mémoire rappeler">MR</button>
                         <button type="button" onclick="calcMemory('mc')" class="memory" aria-label="Mémoire effacer">MC</button>
                         <button type="button" onclick="calcMemory('m+')" class="memory" aria-label="Mémoire additionner">M+</button>
+                        <button type="button" onclick="calcMemory('m-')" class="memory" aria-label="Mémoire soustraire">M-</button>
 
                         <!-- Opérations standard -->
                         <button type="button" onclick="clearCalc()" class="clear">C</button>
                         <button type="button" onclick="addToCalc('(')" class="operator">(</button>
                         <button type="button" onclick="addToCalc(')')" class="operator">)</button>
-                        <button type="button" onclick="addToCalc('/')" class="operator">/</button>
+                        <button type="button" onclick="calcFunction('percent')" class="operator">%</button>
+                        <button type="button" onclick="addToCalc('/')" class="operator">÷</button>
 
                         <button type="button" onclick="addToCalc('7')">7</button>
                         <button type="button" onclick="addToCalc('8')">8</button>
                         <button type="button" onclick="addToCalc('9')">9</button>
                         <button type="button" onclick="addToCalc('*')" class="operator">×</button>
+                        <button type="button" onclick="calcFunction('1/x')" class="operator" aria-label="Inverse">1/x</button>
 
                         <button type="button" onclick="addToCalc('4')">4</button>
                         <button type="button" onclick="addToCalc('5')">5</button>
                         <button type="button" onclick="addToCalc('6')">6</button>
                         <button type="button" onclick="addToCalc('-')" class="operator">-</button>
+                        <button type="button" onclick="calcFunction('negate')" class="operator" aria-label="Changer signe">±</button>
 
                         <button type="button" onclick="addToCalc('1')">1</button>
                         <button type="button" onclick="addToCalc('2')">2</button>
                         <button type="button" onclick="addToCalc('3')">3</button>
                         <button type="button" onclick="addToCalc('+')" class="operator">+</button>
+                        <button type="button" onclick="calculate()" class="equals" aria-label="Égal" rowspan="2">=</button>
 
-                        <button type="button" onclick="addToCalc('0')">0</button>
+                        <button type="button" onclick="addToCalc('0')" class="double">0</button>
                         <button type="button" onclick="addToCalc('.')">.</button>
                         <button type="button" onclick="backspace()" class="operator" aria-label="Effacer le dernier caractère">
                             <i class="fas fa-backspace"></i>
                         </button>
-                        <button type="button" onclick="calculate()" class="equals">=</button>
                     </div>
 
                     <div class="calculator-history">

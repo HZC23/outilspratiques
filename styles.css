@@ -291,6 +291,7 @@ header:hover h1::after {
 .tools {
     width: 100%;
     animation: fadeIn 0.5s ease;
+    padding: var(--spacing-md);
 }
 
 /* Add gradient border to main tools area */

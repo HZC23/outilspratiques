@@ -24,6 +24,7 @@ export const MenuManager = {
         this.setupResponsiveMenu();
         this.setupAccessibility();
         this.setupOverlay();
+        this.setupCompactMenu();
         
         // Vérifier si une ancre est présente dans l'URL
         this.checkUrlHash();
@@ -386,14 +387,24 @@ export const MenuManager = {
      * Gère le redimensionnement de la fenêtre
      */
     handleResize() {
-        const isMobile = window.innerWidth <= 768;
+        const wasMobile = this.state.isMobile;
+        this.state.isMobile = window.innerWidth <= 768;
         
-        if (isMobile !== this.state.isMobile) {
-            this.state.isMobile = isMobile;
-            
-            if (!isMobile) {
-                // Passer du mobile au desktop
+        // Si passe de mobile à desktop ou inversement
+        if (wasMobile !== this.state.isMobile) {
+            if (this.state.isMobile) {
+                // Passe en mode mobile
                 this.closeMobileMenu();
+                document.querySelector('.toggle-menu-width')?.classList.add('hidden');
+            } else {
+                // Passe en mode desktop
+                document.querySelector('.toggle-menu-width')?.classList.remove('hidden');
+                
+                // Restaurer le mode compact si préféré
+                const preferCompact = localStorage.getItem('menuCompact') === 'true';
+                if (preferCompact) {
+                    document.getElementById('mainMenu')?.classList.add('compact');
+                }
             }
         }
     },
@@ -457,5 +468,35 @@ export const MenuManager = {
                 firstTool.style.display = 'block';
             }
         }
-    }
+    },
+
+    /**
+     * Configure le menu compact
+     */
+    setupCompactMenu() {
+        const toggleButton = document.getElementById('toggleMenuWidth');
+        if (!toggleButton) return;
+        
+        // Restaurer l'état compact si préféré par l'utilisateur
+        const preferCompact = localStorage.getItem('menuCompact') === 'true';
+        const menu = document.getElementById('mainMenu');
+        
+        if (preferCompact && !this.state.isMobile) {
+            menu?.classList.add('compact');
+        }
+        
+        toggleButton.addEventListener('click', () => {
+            menu?.classList.toggle('compact');
+            
+            // Sauvegarder la préférence
+            const isCompact = menu?.classList.contains('compact');
+            localStorage.setItem('menuCompact', isCompact);
+            
+            // Annoncer pour l'accessibilité
+            const message = isCompact ? 'Menu réduit' : 'Menu étendu';
+            if (Utils && typeof Utils.announceToScreenReader === 'function') {
+                Utils.announceToScreenReader(message);
+            }
+        });
+    },
 }; 
