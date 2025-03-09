@@ -182,7 +182,7 @@
                     </button>
                     <button type="button" data-tool-id="unitTool" class="submenu-item" role="menuitem">
                         <i class="fas fa-ruler" aria-hidden="true"></i>
-                        <span>Unités de mesure</span>
+                        <span>Conversions</span>
                     </button>
                     <button type="button" data-tool-id="currencyTool" class="submenu-item" role="menuitem">
                         <i class="fas fa-money-bill-wave" aria-hidden="true"></i>
@@ -313,34 +313,32 @@
                         <button type="button" onclick="toggleAngleUnit()" class="config" aria-label="Mode angle">DEG</button>
                         <button type="button" onclick="toggleScientificNotation()" class="config" aria-label="Notation scientifique">SCI</button>
                         <button type="button" onclick="toggleFractionMode()" class="config" aria-label="Mode fraction">a b/c</button>
-                        <button type="button" onclick="calcFunction('mod')" class="operator" aria-label="Modulo">MOD</button>
                         <button type="button" onclick="calcFunction('abs')" class="operator" aria-label="Valeur absolue">|x|</button>
-                        
-                        <!-- Fonctions avancées (première rangée) -->
+                        <button type="button" onclick="clearCalc()" class="clear">C</button>
+
+                        <!-- Fonctions trigonométriques -->
                         <button type="button" onclick="calcFunction('sin')" class="operator" aria-label="Sinus">sin</button>
                         <button type="button" onclick="calcFunction('cos')" class="operator" aria-label="Cosinus">cos</button>
                         <button type="button" onclick="calcFunction('tan')" class="operator" aria-label="Tangente">tan</button>
-                        <button type="button" onclick="calcFunction('log')" class="operator" aria-label="Logarithme">log</button>
-                        <button type="button" onclick="calcFunction('ln')" class="operator" aria-label="Logarithme naturel">ln</button>
+                        <button type="button" onclick="calcFunction('pi')" class="operator" aria-label="Pi">π</button>
+                        <button type="button" onclick="calcFunction('e')" class="operator" aria-label="Nombre e">e</button>
 
-                        <!-- Fonctions avancées (deuxième rangée) -->
                         <button type="button" onclick="calcFunction('asin')" class="operator" aria-label="Arc sinus">sin⁻¹</button>
                         <button type="button" onclick="calcFunction('acos')" class="operator" aria-label="Arc cosinus">cos⁻¹</button>
                         <button type="button" onclick="calcFunction('atan')" class="operator" aria-label="Arc tangente">tan⁻¹</button>
+                        <button type="button" onclick="calcFunction('log')" class="operator" aria-label="Logarithme">log</button>
+                        <button type="button" onclick="calcFunction('ln')" class="operator" aria-label="Logarithme naturel">ln</button>
+
+                        <!-- Fonctions avancées -->
                         <button type="button" onclick="calcFunction('sqrt')" class="operator" aria-label="Racine carrée">√</button>
                         <button type="button" onclick="calcFunction('cbrt')" class="operator" aria-label="Racine cubique">∛</button>
-
-                        <!-- Fonctions avancées (troisième rangée) -->
-                        <button type="button" onclick="calcFunction('factorial')" class="operator" aria-label="Factorielle">n!</button>
-                        <button type="button" onclick="calcFunction('pow')" class="operator" aria-label="Puissance">x²</button>
-                        <button type="button" onclick="calcFunction('pow3')" class="operator" aria-label="Puissance 3">x³</button>
+                        <button type="button" onclick="calcFunction('pow')" class="operator" aria-label="Carré">x²</button>
+                        <button type="button" onclick="calcFunction('pow3')" class="operator" aria-label="Cube">x³</button>
                         <button type="button" onclick="calcFunction('powY')" class="operator" aria-label="Puissance y">x^y</button>
-                        <button type="button" onclick="calcFunction('exp')" class="operator" aria-label="Exponentielle">e^x</button>
 
-                        <!-- Fonctions spéciales -->
-                        <button type="button" onclick="calcFunction('pi')" class="operator" aria-label="Pi">π</button>
-                        <button type="button" onclick="calcFunction('e')" class="operator" aria-label="Nombre e">e</button>
-                        <button type="button" onclick="calcFunction('random')" class="operator" aria-label="Nombre aléatoire">Ran#</button>
+                        <button type="button" onclick="calcFunction('exp')" class="operator" aria-label="Exponentielle">e^x</button>
+                        <button type="button" onclick="calcFunction('factorial')" class="operator" aria-label="Factorielle">n!</button>
+                        <button type="button" onclick="calcFunction('mod')" class="operator" aria-label="Modulo">MOD</button>
                         <button type="button" onclick="calcFunction('gcd')" class="operator" aria-label="PGCD">PGCD</button>
                         <button type="button" onclick="calcFunction('lcm')" class="operator" aria-label="PPCM">PPCM</button>
 
@@ -349,38 +347,35 @@
                         <button type="button" onclick="calcMemory('mr')" class="memory" aria-label="Mémoire rappeler">MR</button>
                         <button type="button" onclick="calcMemory('mc')" class="memory" aria-label="Mémoire effacer">MC</button>
                         <button type="button" onclick="calcMemory('m+')" class="memory" aria-label="Mémoire additionner">M+</button>
-                        <button type="button" onclick="calcMemory('m-')" class="memory" aria-label="Mémoire soustraire">M-</button>
+                        <button type="button" onclick="calcFunction('random')" class="operator" aria-label="Nombre aléatoire">Ran#</button>
 
-                        <!-- Opérations standard -->
-                        <button type="button" onclick="clearCalc()" class="clear">C</button>
-                        <button type="button" onclick="addToCalc('(')" class="operator">(</button>
-                        <button type="button" onclick="addToCalc(')')" class="operator">)</button>
-                        <button type="button" onclick="calcFunction('percent')" class="operator">%</button>
-                        <button type="button" onclick="addToCalc('/')" class="operator">÷</button>
+                        <!-- Pavé numérique et opérations de base -->
+                        <div class="numpad">
+                            <button type="button" onclick="calcFunction('1/x')" class="operator" aria-label="Inverse">1/x</button>
+                            <button type="button" onclick="calcFunction('percent')" class="operator">%</button>
+                            <button type="button" onclick="calcFunction('negate')" class="operator" aria-label="Changer signe">±</button>
 
-                        <button type="button" onclick="addToCalc('7')">7</button>
-                        <button type="button" onclick="addToCalc('8')">8</button>
-                        <button type="button" onclick="addToCalc('9')">9</button>
-                        <button type="button" onclick="addToCalc('*')" class="operator">×</button>
-                        <button type="button" onclick="calcFunction('1/x')" class="operator" aria-label="Inverse">1/x</button>
+                            <button type="button" onclick="addToCalc('7')">7</button>
+                            <button type="button" onclick="addToCalc('8')">8</button>
+                            <button type="button" onclick="addToCalc('9')">9</button>
 
-                        <button type="button" onclick="addToCalc('4')">4</button>
-                        <button type="button" onclick="addToCalc('5')">5</button>
-                        <button type="button" onclick="addToCalc('6')">6</button>
-                        <button type="button" onclick="addToCalc('-')" class="operator">-</button>
-                        <button type="button" onclick="calcFunction('negate')" class="operator" aria-label="Changer signe">±</button>
+                            <button type="button" onclick="addToCalc('4')">4</button>
+                            <button type="button" onclick="addToCalc('5')">5</button>
+                            <button type="button" onclick="addToCalc('6')">6</button>
 
-                        <button type="button" onclick="addToCalc('1')">1</button>
-                        <button type="button" onclick="addToCalc('2')">2</button>
-                        <button type="button" onclick="addToCalc('3')">3</button>
-                        <button type="button" onclick="addToCalc('+')" class="operator">+</button>
-                        <button type="button" onclick="calculate()" class="equals" aria-label="Égal" rowspan="2">=</button>
+                            <button type="button" onclick="addToCalc('1')">1</button>
+                            <button type="button" onclick="addToCalc('2')">2</button>
+                            <button type="button" onclick="addToCalc('3')">3</button>
 
-                        <button type="button" onclick="addToCalc('0')" class="double">0</button>
-                        <button type="button" onclick="addToCalc('.')">.</button>
-                        <button type="button" onclick="backspace()" class="operator" aria-label="Effacer le dernier caractère">
-                            <i class="fas fa-backspace"></i>
-                        </button>
+                            <button type="button" onclick="addToCalc('0')" class="double">0</button>
+                            <button type="button" onclick="addToCalc('.')">.</button>
+
+                            <button type="button" onclick="addToCalc('/')" class="operator">÷</button>
+                            <button type="button" onclick="addToCalc('*')" class="operator">×</button>
+                            <button type="button" onclick="addToCalc('-')" class="operator">-</button>
+                            <button type="button" onclick="addToCalc('+')" class="operator">+</button>
+                            <button type="button" onclick="calculate()" class="equals">=</button>
+                        </div>
                     </div>
 
                     <div class="calculator-history">
@@ -1045,38 +1040,74 @@
             <!-- Convertisseur de devises -->
             <section id="currencyTool" class="section" aria-labelledby="currencyTitle">
                 <h2 id="currencyTitle">Convertisseur de devises</h2>
-                <div class="converter-container">
-                    <div class="exchange-rates">
-                        <div class="rates-header">
-                            <h3>Taux de change</h3>
-                            <span id="lastUpdate"></span>
-                            <button onclick="ConverterManager.updateRates()" class="update-btn">
-                                <i class="fas fa-sync-alt"></i> Actualiser
+                <div class="currency-container">
+                    <div class="currency-quick-access">
+                        <h3>Accès rapide</h3>
+                        <div class="currency-groups">
+                            <button type="button" onclick="selectCurrencyGroup('popular')" class="currency-group-btn">
+                                <i class="fas fa-star"></i> Populaires
+                            </button>
+                            <button type="button" onclick="selectCurrencyGroup('europe')" class="currency-group-btn">
+                                <i class="fas fa-euro-sign"></i> Europe
+                            </button>
+                            <button type="button" onclick="selectCurrencyGroup('america')" class="currency-group-btn">
+                                <i class="fas fa-dollar-sign"></i> Amériques
+                            </button>
+                            <button type="button" onclick="selectCurrencyGroup('asia')" class="currency-group-btn">
+                                <i class="fas fa-yen-sign"></i> Asie
+                            </button>
+                            <button type="button" onclick="selectCurrencyGroup('oceania')" class="currency-group-btn">
+                                <i class="fas fa-globe-asia"></i> Océanie
                             </button>
                         </div>
-                        <div id="ratesList" class="rates-grid"></div>
                     </div>
 
                     <div class="currency-converter">
-                        <div class="conversion-inputs">
-                            <div class="input-group">
-                                <input type="number" id="fromAmount" oninput="convertCurrency()">
-                                <select id="fromCurrency" onchange="convertCurrency()"></select>
+                        <div class="currency-input-group">
+                            <label for="fromAmount">Montant</label>
+                            <div class="currency-input">
+                                <input type="number" 
+                                       id="fromAmount" 
+                                       min="0" 
+                                       step="0.01" 
+                                       placeholder="Montant à convertir"
+                                       aria-label="Montant à convertir">
+                                <select id="fromCurrency" aria-label="Devise source"></select>
                             </div>
-                            <button onclick="swapCurrencies()" class="swap-btn">
-                                <i class="fas fa-exchange-alt"></i>
-                            </button>
-                            <div class="input-group">
-                                <input type="number" id="toAmount" readonly>
-                                <select id="toCurrency" onchange="convertCurrency()"></select>
+                        </div>
+
+                        <button type="button" onclick="swapCurrencies()" class="swap-currencies" aria-label="Inverser les devises">
+                            <i class="fas fa-exchange-alt"></i>
+                        </button>
+
+                        <div class="currency-input-group">
+                            <label for="toAmount">Résultat</label>
+                            <div class="currency-input">
+                                <input type="number" 
+                                       id="toAmount" 
+                                       readonly 
+                                       placeholder="Résultat de la conversion"
+                                       aria-label="Résultat de la conversion">
+                                <select id="toCurrency" aria-label="Devise cible"></select>
+                            </div>
+                        </div>
+
+                        <div class="currency-info">
+                            <div id="exchangeRate" class="exchange-rate">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Taux de change en direct</span>
+                            </div>
+                            <div id="lastUpdate" class="last-update">
+                                <i class="fas fa-clock"></i>
+                                <span>Dernière mise à jour: --:--</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="conversion-history">
+                    <div class="currency-history">
                         <h3>Historique des conversions</h3>
-                        <div id="currencyHistory" class="history-list"></div>
-                        <button onclick="clearCurrencyHistory()" class="clear-btn">
+                        <ul id="conversionHistory" aria-label="Historique des conversions"></ul>
+                        <button type="button" onclick="clearCurrencyHistory()" class="clear-history">
                             <i class="fas fa-trash"></i> Effacer l'historique
                         </button>
                     </div>

@@ -13,7 +13,12 @@ export const TimerManager = {
             intervalId: null,
             endTime: null,
             sound: true,
-            currentSound: 'bell'
+            currentSound: 'bell',
+            initialTime: {
+                hours: 0,
+                minutes: 0,
+                seconds: 0
+            }
         },
         stopwatch: {
             time: 0,
@@ -117,6 +122,13 @@ export const TimerManager = {
             return;
         }
 
+        // Sauvegarder le temps initial
+        this.state.timer.initialTime = {
+            hours: this.state.timer.hours,
+            minutes: this.state.timer.minutes,
+            seconds: this.state.timer.seconds
+        };
+
         this.state.timer.endTime = Date.now() + totalSeconds * 1000;
         this.state.timer.isRunning = true;
         this.state.timer.intervalId = setInterval(() => this.updateTimer(), 1000);
@@ -183,16 +195,16 @@ export const TimerManager = {
         this.state.timer.intervalId = null;
         this.state.timer.endTime = null;
 
-        // Réinitialiser à 0
-        this.state.timer.hours = 0;
-        this.state.timer.minutes = 0;
-        this.state.timer.seconds = 0;
+        // Restaurer le temps initial
+        this.state.timer.hours = this.state.timer.initialTime.hours;
+        this.state.timer.minutes = this.state.timer.initialTime.minutes;
+        this.state.timer.seconds = this.state.timer.initialTime.seconds;
 
-        // Réinitialiser les champs d'entrée
+        // Réinitialiser les champs d'entrée avec le temps initial
         ['hours', 'minutes', 'seconds'].forEach(field => {
             const input = document.getElementById(`${field}Input`);
             if (input) {
-                input.value = '0';
+                input.value = this.state.timer.initialTime[field];
             }
         });
 
@@ -206,8 +218,8 @@ export const TimerManager = {
         this.updateDisplay();
         this.updateTimerControls();
         
-        // Sauvegarder l'état pour persister les valeurs à 0
-        this.saveState();
+        // Supprimer l'état sauvegardé au lieu de le sauvegarder
+        localStorage.removeItem('timerState');
     },
 
     /**
@@ -237,16 +249,16 @@ export const TimerManager = {
         this.state.timer.intervalId = null;
         this.state.timer.endTime = null;
 
-        // Réinitialiser à 0 au lieu de garder le temps initial
-        this.state.timer.hours = 0;
-        this.state.timer.minutes = 0;
-        this.state.timer.seconds = 0;
+        // Restaurer le temps initial
+        this.state.timer.hours = this.state.timer.initialTime.hours;
+        this.state.timer.minutes = this.state.timer.initialTime.minutes;
+        this.state.timer.seconds = this.state.timer.initialTime.seconds;
 
-        // Réinitialiser les champs d'entrée
+        // Réinitialiser les champs d'entrée avec le temps initial
         ['hours', 'minutes', 'seconds'].forEach(field => {
             const input = document.getElementById(`${field}Input`);
             if (input) {
-                input.value = '0';
+                input.value = this.state.timer.initialTime[field];
             }
         });
 
@@ -260,8 +272,8 @@ export const TimerManager = {
         this.updateDisplay();
         this.updateTimerControls();
         
-        // Sauvegarder l'état pour persister les valeurs à 0
-        this.saveState();
+        // Supprimer l'état sauvegardé au lieu de le sauvegarder
+        localStorage.removeItem('timerState');
 
         if (this.state.timer.sound) {
             this.playAlarm();

@@ -13,17 +13,36 @@ let state = {
 
 // Liste des devises principales
 const MAIN_CURRENCIES = [
-    { code: 'EUR', name: 'Euro', symbol: '€' },
-    { code: 'USD', name: 'Dollar américain', symbol: '$' },
-    { code: 'GBP', name: 'Livre sterling', symbol: '£' },
-    { code: 'JPY', name: 'Yen japonais', symbol: '¥' },
-    { code: 'CAD', name: 'Dollar canadien', symbol: 'C$' },
-    { code: 'AUD', name: 'Dollar australien', symbol: 'A$' },
-    { code: 'CHF', name: 'Franc suisse', symbol: 'Fr' },
-    { code: 'CNY', name: 'Yuan chinois', symbol: '¥' },
-    { code: 'INR', name: 'Roupie indienne', symbol: '₹' },
-    { code: 'BRL', name: 'Real brésilien', symbol: 'R$' }
+    { code: 'EUR', name: 'Euro', symbol: '€', flag: '🇪🇺' },
+    { code: 'USD', name: 'Dollar américain', symbol: '$', flag: '🇺🇸' },
+    { code: 'GBP', name: 'Livre sterling', symbol: '£', flag: '🇬🇧' },
+    { code: 'JPY', name: 'Yen japonais', symbol: '¥', flag: '🇯🇵' },
+    { code: 'CAD', name: 'Dollar canadien', symbol: 'C$', flag: '🇨🇦' },
+    { code: 'AUD', name: 'Dollar australien', symbol: 'A$', flag: '🇦🇺' },
+    { code: 'CHF', name: 'Franc suisse', symbol: 'Fr', flag: '🇨🇭' },
+    { code: 'CNY', name: 'Yuan chinois', symbol: '¥', flag: '🇨🇳' },
+    { code: 'INR', name: 'Roupie indienne', symbol: '₹', flag: '🇮🇳' },
+    { code: 'BRL', name: 'Real brésilien', symbol: 'R$', flag: '🇧🇷' },
+    { code: 'RUB', name: 'Rouble russe', symbol: '₽', flag: '🇷🇺' },
+    { code: 'KRW', name: 'Won sud-coréen', symbol: '₩', flag: '🇰🇷' },
+    { code: 'SGD', name: 'Dollar de Singapour', symbol: 'S$', flag: '🇸🇬' },
+    { code: 'NZD', name: 'Dollar néo-zélandais', symbol: 'NZ$', flag: '🇳🇿' },
+    { code: 'MXN', name: 'Peso mexicain', symbol: 'Mex$', flag: '🇲🇽' },
+    { code: 'HKD', name: 'Dollar de Hong Kong', symbol: 'HK$', flag: '🇭🇰' },
+    { code: 'TRY', name: 'Livre turque', symbol: '₺', flag: '🇹🇷' },
+    { code: 'ZAR', name: 'Rand sud-africain', symbol: 'R', flag: '🇿🇦' },
+    { code: 'SEK', name: 'Couronne suédoise', symbol: 'kr', flag: '🇸🇪' },
+    { code: 'NOK', name: 'Couronne norvégienne', symbol: 'kr', flag: '🇳🇴' }
 ];
+
+// Groupes de devises pour un accès rapide
+const CURRENCY_GROUPS = {
+    'popular': ['EUR', 'USD', 'GBP', 'JPY', 'CHF'],
+    'asia': ['JPY', 'CNY', 'HKD', 'SGD', 'KRW', 'INR'],
+    'america': ['USD', 'CAD', 'BRL', 'MXN'],
+    'europe': ['EUR', 'GBP', 'CHF', 'SEK', 'NOK', 'TRY'],
+    'oceania': ['AUD', 'NZD']
+};
 
 /**
  * Initialise le convertisseur de devises
@@ -64,22 +83,68 @@ function initCurrencySelects() {
     fromSelect.innerHTML = '';
     toSelect.innerHTML = '';
     
-    // Ajouter les devises principales
-    MAIN_CURRENCIES.forEach(currency => {
-        const fromOption = document.createElement('option');
-        fromOption.value = currency.code;
-        fromOption.textContent = `${currency.code} (${currency.symbol}) - ${currency.name}`;
-        fromSelect.appendChild(fromOption);
+    // Créer les groupes
+    Object.entries(CURRENCY_GROUPS).forEach(([groupName, currencies]) => {
+        const fromGroup = document.createElement('optgroup');
+        const toGroup = document.createElement('optgroup');
+        fromGroup.label = toGroup.label = capitalizeFirstLetter(groupName);
         
-        const toOption = document.createElement('option');
-        toOption.value = currency.code;
-        toOption.textContent = `${currency.code} (${currency.symbol}) - ${currency.name}`;
-        toSelect.appendChild(toOption);
+        // Ajouter les devises du groupe
+        currencies.forEach(code => {
+            const currency = MAIN_CURRENCIES.find(c => c.code === code);
+            if (currency) {
+                const fromOption = createCurrencyOption(currency);
+                const toOption = createCurrencyOption(currency);
+                fromGroup.appendChild(fromOption);
+                toGroup.appendChild(toOption);
+            }
+        });
+        
+        fromSelect.appendChild(fromGroup);
+        toSelect.appendChild(toGroup);
     });
+    
+    // Ajouter les autres devises dans un groupe séparé
+    const otherFromGroup = document.createElement('optgroup');
+    const otherToGroup = document.createElement('optgroup');
+    otherFromGroup.label = otherToGroup.label = 'Autres devises';
+    
+    MAIN_CURRENCIES.forEach(currency => {
+        if (!Object.values(CURRENCY_GROUPS).flat().includes(currency.code)) {
+            const fromOption = createCurrencyOption(currency);
+            const toOption = createCurrencyOption(currency);
+            otherFromGroup.appendChild(fromOption);
+            otherToGroup.appendChild(toOption);
+        }
+    });
+    
+    fromSelect.appendChild(otherFromGroup);
+    toSelect.appendChild(otherToGroup);
     
     // Définir les valeurs par défaut
     fromSelect.value = 'EUR';
     toSelect.value = 'USD';
+}
+
+/**
+ * Crée une option pour une devise
+ * @param {Object} currency - La devise
+ * @returns {HTMLOptionElement} - L'élément option
+ */
+function createCurrencyOption(currency) {
+    const option = document.createElement('option');
+    option.value = currency.code;
+    option.textContent = `${currency.flag} ${currency.code} (${currency.symbol}) - ${currency.name}`;
+    return option;
+}
+
+/**
+ * Met en majuscule la première lettre d'une chaîne
+ * @param {string} str - La chaîne à modifier
+ * @returns {string} - La chaîne modifiée
+ */
+function capitalizeFirstLetter(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 /**
