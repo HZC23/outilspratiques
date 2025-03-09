@@ -441,6 +441,12 @@ function calculateInitial() {
     }
 }
 
+// Exporter les fonctions pour les rendre disponibles globalement
+window.calculatePercentage = calculatePercentage;
+window.calculateVariation = calculateVariation;
+window.calculateInitial = calculateInitial;
+window.animateResult = animateResult;
+
 // Ajout des écouteurs d'événements pour les touches Entrée
 document.addEventListener('DOMContentLoaded', () => {
     const inputs = document.querySelectorAll('.percentage-tools input[type="number"]');

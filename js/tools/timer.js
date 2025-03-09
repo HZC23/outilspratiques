@@ -205,6 +205,9 @@ export const TimerManager = {
 
         this.updateDisplay();
         this.updateTimerControls();
+        
+        // Sauvegarder l'état pour persister les valeurs à 0
+        this.saveState();
     },
 
     /**
@@ -239,6 +242,14 @@ export const TimerManager = {
         this.state.timer.minutes = 0;
         this.state.timer.seconds = 0;
 
+        // Réinitialiser les champs d'entrée
+        ['hours', 'minutes', 'seconds'].forEach(field => {
+            const input = document.getElementById(`${field}Input`);
+            if (input) {
+                input.value = '0';
+            }
+        });
+
         // Réinitialiser la barre de progression
         const progressBar = document.getElementById('timerProgressBar');
         if (progressBar) {
@@ -248,9 +259,21 @@ export const TimerManager = {
 
         this.updateDisplay();
         this.updateTimerControls();
+        
+        // Sauvegarder l'état pour persister les valeurs à 0
+        this.saveState();
 
         if (this.state.timer.sound) {
             this.playAlarm();
+            
+            // Ajouter l'animation d'alarme
+            const timerContainer = document.querySelector('.timer-container');
+            if (timerContainer) {
+                timerContainer.classList.add('timer-alarm-active');
+                setTimeout(() => {
+                    timerContainer.classList.remove('timer-alarm-active');
+                }, 3000); // Arrêter l'animation après 3 secondes
+            }
         }
 
         Utils.showNotification('Minuteur terminé !', 'success');
@@ -458,6 +481,9 @@ export const TimerManager = {
         let max = field === 'hours' ? 99 : 59;
         this.state.timer[field] = Math.min(Math.max(0, num), max);
         this.updateTimerDisplay();
+        
+        // Sauvegarder l'état pour persister les valeurs modifiées
+        this.saveState();
     },
 
     /**

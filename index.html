@@ -107,6 +107,7 @@
     <script type="module" src="js/tools/metronome.js"></script>
     <script type="module" src="js/tools/password.js"></script>
     <script type="module" src="js/tools/qrcode.js"></script>
+    <script type="module" src="js/tools/currency.js"></script>
     <script type="module" src="js/theme.js"></script>
     
     <!-- Scripts non-modules pour les fonctions globales -->
@@ -1018,7 +1019,7 @@
                         <div class="rates-header">
                             <h3>Taux de change</h3>
                             <span id="lastUpdate"></span>
-                            <button onclick="updateRates()" class="update-btn">
+                            <button onclick="ConverterManager.updateRates()" class="update-btn">
                                 <i class="fas fa-sync-alt"></i> Actualiser
                             </button>
                         </div>

@@ -690,4 +690,7 @@ export const ConverterManager = {
         this.setupCurrencySelects();
         this.updateRates();
     }
-}; 
+};
+
+// Exposer ConverterManager globalement
+window.ConverterManager = ConverterManager; 

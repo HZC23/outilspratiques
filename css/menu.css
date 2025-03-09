@@ -304,21 +304,6 @@ header h1 {
     outline: 2px solid var(--primary-color);
     outline-offset: 2px;
 }
-
-/* Ajout d'un badge pour les nouveaux éléments */
-.menu-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--primary-color);
-    color: white;
-    font-size: 0.7rem;
-    font-weight: bold;
-    padding: 2px 6px;
-    border-radius: 10px;
-    margin-left: var(--spacing-sm);
-}
-
 /* Ajout d'un indicateur pour les sous-menus actifs */
 .menu-category.has-active-item > .menu-trigger {
     color: var(--primary-color);
