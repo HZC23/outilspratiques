@@ -2,7 +2,6 @@
     max-width: 800px;
     margin: 0 auto;
     background: var(--card-bg);
-    border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
     padding: var(--spacing-md);
 }
@@ -11,7 +10,6 @@
     margin-bottom: var(--spacing-md);
     background: var(--surface-color);
     padding: var(--spacing-md);
-    border-radius: var(--border-radius);
 }
 
 .currency-quick-access h3 {
@@ -29,8 +27,6 @@
 .currency-group-btn {
     padding: 0.5rem 1rem;
     background: var(--input-bg);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
     color: var(--text-color);
     cursor: pointer;
     transition: all 0.2s ease;
@@ -52,7 +48,6 @@
 .currency-converter {
     background: var(--surface-color);
     padding: var(--spacing-md);
-    border-radius: var(--border-radius);
     margin-bottom: var(--spacing-md);
 }
 
@@ -75,8 +70,6 @@
 .currency-input input {
     flex: 2;
     padding: 0.8rem;
-    border: 2px solid var(--border-color);
-    border-radius: var(--border-radius);
     background: var(--input-bg);
     color: var(--text-color);
     font-size: 1.1rem;
@@ -84,7 +77,6 @@
 }
 
 .currency-input input:focus {
-    border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.2);
     outline: none;
 }
@@ -92,8 +84,6 @@
 .currency-input select {
     flex: 1;
     padding: 0.8rem;
-    border: 2px solid var(--border-color);
-    border-radius: var(--border-radius);
     background: var(--input-bg);
     color: var(--text-color);
     font-size: 1rem;
@@ -102,7 +92,6 @@
 }
 
 .currency-input select:focus {
-    border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.2);
     outline: none;
 }
@@ -113,8 +102,6 @@
     height: 40px;
     margin: -10px auto;
     background: var(--primary-color);
-    border: none;
-    border-radius: 50%;
     color: white;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -149,7 +136,6 @@
 .currency-history {
     background: var(--surface-color);
     padding: var(--spacing-md);
-    border-radius: var(--border-radius);
 }
 
 .currency-history h3 {
@@ -166,7 +152,6 @@
 
 .currency-history li {
     padding: var(--spacing-sm);
-    border-bottom: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
     align-items: center;

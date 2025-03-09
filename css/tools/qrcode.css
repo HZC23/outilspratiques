@@ -71,7 +71,6 @@
     width: 100%;
     min-height: 280px;
     background-color: var(--bg-color);
-    border-radius: 0.75rem;
     padding: 1.5rem;
     overflow: hidden;
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -88,7 +87,6 @@
 .qrcode-output svg {
     max-width: 100%;
     height: auto;
-    border-radius: 0.5rem;
     transition: transform 0.3s ease;
     will-change: transform;
 }
@@ -131,8 +129,6 @@
 .form-group select,
 .form-group textarea {
     padding: 0.85rem;
-    border-radius: 0.75rem;
-    border: 2px solid var(--border-color);
     background-color: var(--input-bg);
     color: var(--text-color);
     font-size: 1rem;
@@ -143,13 +139,11 @@
 .form-group input:hover,
 .form-group select:hover,
 .form-group textarea:hover {
-    border-color: var(--border-hover);
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
-    border-color: var(--primary-color);
     outline: none;
     box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.2);
 }
@@ -171,7 +165,6 @@
 input[type="range"] {
     width: 100%;
     height: 6px;
-    border-radius: 3px;
     background: var(--border-color);
     outline: none;
     margin: 0.5rem 0;
@@ -183,7 +176,6 @@ input[type="range"]::-webkit-slider-thumb {
     appearance: none;
     width: 18px;
     height: 18px;
-    border-radius: 50%;
     background: var(--primary-color);
     cursor: pointer;
     transition: all 0.2s ease;
@@ -192,11 +184,9 @@ input[type="range"]::-webkit-slider-thumb {
 input[type="range"]::-moz-range-thumb {
     width: 18px;
     height: 18px;
-    border-radius: 50%;
     background: var(--primary-color);
     cursor: pointer;
     transition: all 0.2s ease;
-    border: none;
 }
 
 input[type="range"]::-webkit-slider-thumb:hover {
@@ -213,8 +203,6 @@ input[type="range"]::-moz-range-thumb:hover {
 input[type="color"] {
     width: 100%;
     height: 40px;
-    border-radius: 0.5rem;
-    overflow: hidden;
     cursor: pointer;
 }
 
@@ -223,28 +211,21 @@ input[type="color"]::-webkit-color-swatch-wrapper {
 }
 
 input[type="color"]::-webkit-color-swatch {
-    border: none;
-    border-radius: 0.5rem;
 }
 
 input[type="color"]::-moz-color-swatch {
-    border: none;
-    border-radius: 0.5rem;
 }
 
 /* Options avancées */
 .advanced-options {
     background-color: rgba(var(--card-bg-rgb), 0.5);
-    border-radius: 0.75rem;
     padding: 1rem;
     margin-top: 0.5rem;
-    border: 1px solid var(--border-color);
     transition: all 0.3s ease;
 }
 
 .advanced-options:hover {
     background-color: rgba(var(--card-bg-rgb), 0.8);
-    border-color: var(--border-hover);
 }
 
 .advanced-options summary {
@@ -429,11 +410,9 @@ input[type="color"]::-moz-color-swatch {
     gap: 0.5rem;
     padding: 1rem;
     background-color: var(--card-bg);
-    border-radius: 0.75rem;
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    border: 1px solid var(--border-color);
     position: relative;
     overflow: hidden;
 }
@@ -454,7 +433,6 @@ input[type="color"]::-moz-color-swatch {
     background-color: var(--hover-color);
     transform: translateY(-3px);
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-    border-color: var(--border-hover);
 }
 
 .history-item:hover::before {
@@ -474,7 +452,6 @@ input[type="color"]::-moz-color-swatch {
     text-overflow: ellipsis;
     padding: 0.5rem;
     background-color: var(--bg-color);
-    border-radius: 0.5rem;
     color: var(--text-color);
 }
 
@@ -485,7 +462,6 @@ input[type="color"]::-moz-color-swatch {
     font-size: 0.8rem;
     color: var(--text-muted);
     padding-top: 0.5rem;
-    border-top: 1px dashed var(--border-color);
 }
 
 .history-type {
@@ -493,7 +469,6 @@ input[type="color"]::-moz-color-swatch {
     background-color: rgba(var(--primary-rgb), 0.1);
     color: var(--primary-color);
     padding: 0.25rem 0.5rem;
-    border-radius: 0.5rem;
 }
 
 .history-date {
@@ -504,8 +479,6 @@ input[type="color"]::-moz-color-swatch {
     background-color: var(--danger-color);
     color: white;
     padding: 0.5rem 0.85rem;
-    border-radius: 0.5rem;
-    border: none;
     cursor: pointer;
     font-size: 0.9rem;
     transition: all 0.3s ease;

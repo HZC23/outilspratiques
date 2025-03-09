@@ -168,7 +168,6 @@
 .harmony-colors {
     display: flex;
     height: 80px;
-    border-radius: var(--border-radius);
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     cursor: pointer;
@@ -214,7 +213,6 @@
 
 .named-color {
     height: 50px;
-    border-radius: var(--border-radius);
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -248,7 +246,6 @@
 /* Historique des couleurs */
 .color-history {
     background: var(--card-bg);
-    border-radius: var(--border-radius-lg);
     padding: 1.5rem;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
     margin-top: 1.5rem;

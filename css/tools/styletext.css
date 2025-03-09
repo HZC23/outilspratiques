@@ -137,8 +137,6 @@
     width: 100%;
     padding: 12px 15px;
     margin: 10px 0 20px;
-    border: none;
-    border-radius: var(--border-radius);
     background: var(--primary-color);
     color: white;
     font-weight: 500;
@@ -167,7 +165,6 @@
     margin-top: 20px;
     padding: 15px;
     background: var(--card-bg);
-    border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
 }
 
@@ -177,7 +174,6 @@
     align-items: center;
     margin-bottom: 15px;
     padding-bottom: 10px;
-    border-bottom: 1px solid var(--border-color);
 }
 
 .history-header h3 {
@@ -188,8 +184,6 @@
 
 .clear-btn {
     padding: 5px 10px;
-    border: none;
-    border-radius: var(--border-radius);
     background: var(--danger-color);
     color: rgb(255, 0, 0);
     cursor: pointer;
@@ -211,7 +205,6 @@
     margin-bottom: 10px;
     padding: 10px;
     background: var(--bg-color);
-    border-radius: var(--border-radius);
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);

@@ -1,6 +1,5 @@
 .metronome-container {
     background-color: var(--card-bg);
-    border-radius: var(--border-radius);
     padding: var(--spacing-lg);
     box-shadow: var(--box-shadow);
     max-width: 600px;
@@ -41,7 +40,6 @@
     -webkit-appearance: none;
     appearance: none;
     background: var(--border-color);
-    border-radius: 4px;
     outline: none;
     margin: var(--spacing-sm) 0;
     transition: var(--transition);
@@ -58,31 +56,13 @@
     appearance: none;
     width: 20px;
     height: 20px;
-    border-radius: 50%;
     background: var(--primary-color);
     cursor: pointer;
-    border: 2px solid var(--card-bg);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .tempo-slider::-webkit-slider-thumb:hover {
-    transform: scale(1.2);
-    background: var(--info-color);
-}
-
-.tempo-slider::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: var(--primary-color);
-    cursor: pointer;
-    border: 2px solid var(--card-bg);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.tempo-slider::-moz-range-thumb:hover {
     transform: scale(1.2);
     background: var(--info-color);
 }
@@ -197,7 +177,6 @@
 .beat-indicator {
     width: 50px;
     height: 50px;
-    border-radius: 50%;
     background-color: var(--border-color);
     margin: var(--spacing-md) auto;
     transition: background-color 0.05s ease, transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -214,23 +193,18 @@
     left: -5px;
     right: -5px;
     bottom: -5px;
-    border-radius: 50%;
     background: transparent;
-    border: 2px solid transparent;
     animation: pulseBorder 2s infinite;
 }
 
 @keyframes pulseBorder {
     0% {
-        border-color: transparent;
         transform: scale(1);
     }
     50% {
-        border-color: var(--primary-color);
         transform: scale(1.1);
     }
     100% {
-        border-color: transparent;
         transform: scale(1);
     }
 }

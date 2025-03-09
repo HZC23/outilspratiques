@@ -2,7 +2,6 @@
     max-width: 1000px;
     margin: 0 auto;
     background: var(--card-bg);
-    border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
     padding: var(--spacing-md);
 }
@@ -11,8 +10,6 @@
     width: 100%;
     min-height: 200px;
     padding: var(--spacing-sm);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
     background: var(--input-bg);
     color: var(--text-color);
     font-size: 1em;
@@ -32,7 +29,6 @@
 .text-option-group {
     background: var(--input-bg);
     padding: var(--spacing-sm);
-    border-radius: var(--border-radius);
 }
 
 .text-option-group h3 {
@@ -44,8 +40,6 @@
 .text-option-group input {
     width: 100%;
     padding: var(--spacing-xs);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
     background: var(--bg-color);
     color: var(--text-color);
     margin-bottom: var(--spacing-xs);
@@ -68,8 +62,6 @@
     padding: 10px 15px;
     background: var(--primary-color);
     color: white;
-    border: none;
-    border-radius: var(--border-radius);
     cursor: pointer;
     display: flex;
     align-items: center;
