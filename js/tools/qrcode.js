@@ -548,7 +548,7 @@ export const QRCodeManager = {
      * Charge l'état depuis le stockage local
      */
     loadState() {
-        const savedState = Utils.getFromStorage('qrcodeState');
+        const savedState = Utils.loadFromStorage('qrcodeState');
         if (savedState) {
             this.state = {
                 ...this.state,

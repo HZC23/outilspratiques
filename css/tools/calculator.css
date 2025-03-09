@@ -43,10 +43,10 @@
 }
 
 .calculator-grid button {
-    padding: 20px;
-    font-size: 1.2em;
-    border: none;
+    width: 100%;
+    height: 60px;
     border-radius: var(--border-radius);
+    border: none;
     background: var(--input-bg);
     color: var(--text-color);
     cursor: pointer;
@@ -56,60 +56,24 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.calculator-grid button:hover {
-    background: var(--primary-color);
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.calculator-grid button:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
 .calculator-grid button.operator {
-    background: var(--primary-color);
+    background: var(--info-color);
     color: white;
-    font-weight: bold;
-}
-
-.calculator-grid button.operator:hover {
-    background: var(--hover-color);
-    transform: translateY(-2px);
 }
 
 .calculator-grid button.clear {
     background: var(--danger-color);
     color: white;
-    font-weight: bold;
-}
-
-.calculator-grid button.clear:hover {
-    background: #dc3545;
-    transform: translateY(-2px);
 }
 
 .calculator-grid button.equals {
     background: var(--success-color);
     color: white;
-    font-weight: bold;
-}
-
-.calculator-grid button.equals:hover {
-    background: #28a745;
-    transform: translateY(-2px);
 }
 
 .calculator-grid button.memory {
     background: var(--warning-color);
     color: white;
-    font-weight: bold;
-}
-
-.calculator-grid button.memory:hover {
-    background: #ffc107;
-    transform: translateY(-2px);
 }
 
 .calculator-history {
@@ -150,22 +114,19 @@
 }
 
 .clear-history {
-    margin-top: 15px;
     background: var(--danger-color);
     color: white;
     border: none;
-    padding: 10px 20px;
     border-radius: var(--border-radius);
+    padding: 10px 15px;
+    margin-top: 10px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: bold;
     width: 100%;
-}
-
-.clear-history:hover {
-    background: #dc3545;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
 }
 
 @media (max-width: 480px) {

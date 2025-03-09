@@ -75,12 +75,13 @@ importScripts('js/dependencies/cache-polyfill.js');
 
 const urlsToPrefetch = [
     './',
-    'styles/common.css',
-    'js/dependencies/autolinker.js',
+    'styles.css',
     'js/dependencies/cache-polyfill.js',
-    'template.js',
-    'images/icon.png',
-    'images/icon.svg'
+    'js/main.js',
+    'js/config.js',
+    'js/utils.js',
+    'icons/icon.png',
+    'icons/icon.svg'
 ];
 
 const version = '1.0.0';

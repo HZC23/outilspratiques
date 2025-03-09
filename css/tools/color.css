@@ -125,19 +125,17 @@
 }
 
 .value-input button {
+    width: 40px;
+    height: 38px;
     background: var(--primary-color);
     color: white;
     border: none;
-    padding: 10px;
+    border-radius: 0 6px 6px 0;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
     transition: all 0.3s ease;
-}
-
-.value-input button:hover {
-    background: var(--primary-color-dark);
 }
 
 /* Palette de couleurs harmonieuses */
@@ -276,18 +274,17 @@
 }
 
 .color-history h3 button {
-    background: var(--danger-color);
-    color: white;
+    background: transparent;
+    color: var(--text-color);
     border: none;
-    padding: 5px 10px;
-    border-radius: var(--border-radius);
-    font-size: 0.8rem;
     cursor: pointer;
+    padding: 5px;
+    font-size: 0.9em;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: all 0.3s ease;
-}
-
-.color-history h3 button:hover {
-    background: var(--danger-color-dark);
 }
 
 .color-grid {

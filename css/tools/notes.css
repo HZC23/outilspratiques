@@ -40,11 +40,6 @@
     transition: var(--transition);
 }
 
-.toolbar button:hover {
-    background: var(--primary-color);
-    color: rgb(5, 210, 251);
-}
-
 .toolbar select,
 .toolbar input[type="color"] {
     padding: 8px;
@@ -94,20 +89,14 @@
 }
 
 .notepad-actions button {
-    padding: 8px 16px;
-    border: none;
-    border-radius: var(--border-radius);
+    padding: 8px 15px;
     background: var(--primary-color);
     color: white;
+    border: none;
+    border-radius: var(--border-radius);
     cursor: pointer;
-    transition: var(--transition);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.notepad-actions button:hover {
-    background: var(--hover-color);
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
 }
 
 .note-status {
@@ -161,18 +150,12 @@
 
 .todo-filters select,
 .todo-filters button {
-    padding: 8px 16px;
+    padding: 8px;
+    background: var(--bg-color);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
-    background: var(--input-bg);
-    color: var(--text-color);
     cursor: pointer;
-    transition: var(--transition);
-}
-
-.todo-filters button:hover {
-    background: var(--primary-color);
-    color: white;
+    transition: all 0.3s ease;
 }
 
 .todo-list {
@@ -243,20 +226,17 @@
 }
 
 .todo-actions button {
-    padding: 8px 16px;
+    padding: 8px 15px;
+    background: var(--primary-color);
+    color: white;
     border: none;
     border-radius: var(--border-radius);
-    background: var(--danger-color);
-    color: white;
     cursor: pointer;
-    transition: var(--transition);
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
     display: flex;
     align-items: center;
-    gap: 8px;
-}
-
-.todo-actions button:hover {
-    background: #c0392b;
+    justify-content: center;
 }
 
 @media (max-width: 768px) {
@@ -367,11 +347,6 @@
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.toolbar button:hover {
-    transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
 .toolbar button:active {
     transform: translateY(1px) scale(0.95);
 }
@@ -383,20 +358,6 @@
 .notepad-editor:focus {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.notepad-actions button {
-    transform-origin: center;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.notepad-actions button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.notepad-actions button:active {
-    transform: translateY(1px) scale(0.95);
 }
 
 /* Animation pour les compteurs */

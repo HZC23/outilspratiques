@@ -511,3 +511,91 @@ header::before {
     transform: translateY(-10px);
     transition: opacity 0.3s, transform 0.3s;
 }
+
+/* Styles de survol centralisés pour tous les boutons */
+button:hover,
+.btn:hover,
+.menu-toggle:hover,
+.start-btn:hover,
+.pause-btn:hover,
+.reset-btn:hover,
+.sound-btn:hover,
+.stopwatch-btn:hover,
+.lap-btn:hover,
+.metronome-btn:hover,
+.save-btn:hover,
+.clear-btn:hover,
+.download-btn:hover,
+.add-todo-btn:hover,
+.sort-btn:hover,
+.clear-completed-btn:hover,
+.export-btn:hover,
+.copy-btn:hover,
+.style-btn:hover,
+.swap-btn:hover,
+.calc-btn:hover,
+.update-btn:hover,
+.generate-btn:hover,
+.qrcode-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(var(--primary-color-rgb), 0.3);
+    filter: brightness(110%);
+    transition: all 0.3s var(--ease-out-back);
+}
+
+button:active,
+.btn:active,
+.menu-toggle:active,
+.start-btn:active,
+.pause-btn:active,
+.reset-btn:active,
+.sound-btn:active,
+.stopwatch-btn:active,
+.lap-btn:active,
+.metronome-btn:active,
+.save-btn:active,
+.clear-btn:active,
+.download-btn:active,
+.add-todo-btn:active,
+.sort-btn:active,
+.clear-completed-btn:active,
+.export-btn:active,
+.copy-btn:active,
+.style-btn:active,
+.swap-btn:active,
+.calc-btn:active,
+.update-btn:active,
+.generate-btn:active,
+.qrcode-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(var(--primary-color-rgb), 0.2);
+    filter: brightness(95%);
+    transition: all 0.1s ease;
+}
+
+/* Boutons spécifiques avec des styles de survol personnalisés */
+.primary-btn:hover {
+    background: var(--primary-color-dark);
+}
+
+.secondary-btn:hover {
+    background: var(--secondary-dark);
+}
+
+.danger-btn:hover, 
+.clear-btn:hover {
+    background: var(--danger-color-dark);
+}
+
+.success-btn:hover {
+    background: var(--success-color-dark);
+}
+
+.info-btn:hover {
+    background: var(--info-color-dark);
+}
+
+.outline-btn:hover {
+    background: var(--primary-color);
+    color: white;
+}

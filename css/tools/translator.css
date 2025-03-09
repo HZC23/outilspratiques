@@ -86,17 +86,17 @@
 }
 
 .text-controls button {
-    padding: 5px 10px;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: none;
-    border-radius: var(--border-radius);
-    background: var(--primary-color);
-    color: white;
+    background: transparent;
+    color: var(--text-color);
     cursor: pointer;
-    transition: var(--transition);
-}
-
-.text-controls button:hover {
-    background: var(--hover-color);
+    border-radius: 50%;
+    transition: all 0.3s ease;
 }
 
 .translation-history {
