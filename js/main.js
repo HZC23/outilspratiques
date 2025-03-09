@@ -60,12 +60,6 @@ class App {
             console.log('Les animations sont désactivées car votre système est configuré pour réduire les animations');
             Utils.showNotification('Les animations sont désactivées dans vos préférences système', 'info');
         }
-        
-        // Masquer l'écran de chargement après 500ms pour assurer une transition fluide
-        setTimeout(() => {
-            this.hideLoadingScreen();
-        }, 500);
-        
         console.log('Application initialisée');
     }
     

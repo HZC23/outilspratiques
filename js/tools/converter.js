@@ -11,7 +11,9 @@ export const ConverterManager = {
         value: '', // Valeur à convertir
         result: '', // Résultat de la conversion
         history: [], // Historique des conversions
-        favorites: new Set() // Conversions favorites
+        favorites: new Set(), // Conversions favorites
+        rates: {},
+        lastUpdate: null
     },
 
     // Définition des catégories et unités
@@ -115,14 +117,18 @@ export const ConverterManager = {
         const savedState = Utils.loadFromStorage('converterState', {
             category: 'length',
             history: [],
-            favorites: []
+            favorites: [],
+            rates: {},
+            lastUpdate: null
         });
 
         this.state = {
             ...this.state,
             category: savedState.category,
             history: savedState.history,
-            favorites: new Set(savedState.favorites)
+            favorites: new Set(savedState.favorites),
+            rates: savedState.rates,
+            lastUpdate: savedState.lastUpdate
         };
 
         // Définit les unités par défaut pour la catégorie
@@ -458,7 +464,9 @@ export const ConverterManager = {
         Utils.saveToStorage('converterState', {
             category: this.state.category,
             history: this.state.history,
-            favorites: [...this.state.favorites]
+            favorites: [...this.state.favorites],
+            rates: this.state.rates,
+            lastUpdate: this.state.lastUpdate
         });
     },
 
@@ -467,5 +475,219 @@ export const ConverterManager = {
      */
     destroy() {
         this.saveState();
+    },
+
+    // Configuration des devises
+    CURRENCIES: {
+        EUR: { symbol: '€', name: 'Euro' },
+        USD: { symbol: '$', name: 'Dollar américain' },
+        GBP: { symbol: '£', name: 'Livre sterling' },
+        JPY: { symbol: '¥', name: 'Yen japonais' },
+        CHF: { symbol: 'CHF', name: 'Franc suisse' },
+        CAD: { symbol: 'C$', name: 'Dollar canadien' },
+        AUD: { symbol: 'A$', name: 'Dollar australien' },
+        CNY: { symbol: '¥', name: 'Yuan chinois' }
+    },
+
+    // Initialisation du convertisseur
+    initCurrencyConverter() {
+        this.loadCurrencyState();
+        this.setupCurrencySelects();
+        this.updateRates();
+    },
+
+    // Charge l'état sauvegardé
+    loadCurrencyState() {
+        const savedState = localStorage.getItem('currencyState');
+        if (savedState) {
+            const parsed = JSON.parse(savedState);
+            if (parsed.lastUpdate && (Date.now() - new Date(parsed.lastUpdate).getTime() < 3600000)) {
+                this.state = parsed;
+                this.updateDisplay();
+                return;
+            }
+        }
+        this.updateRates();
+    },
+
+    // Configure les sélecteurs de devises
+    setupCurrencySelects() {
+        const fromSelect = document.getElementById('fromCurrency');
+        const toSelect = document.getElementById('toCurrency');
+        
+        if (!fromSelect || !toSelect) return;
+
+        Object.entries(this.CURRENCIES).forEach(([code, data]) => {
+            const option = document.createElement('option');
+            option.value = code;
+            option.textContent = `${code} - ${data.name}`;
+            fromSelect.appendChild(option.cloneNode(true));
+            toSelect.appendChild(option);
+        });
+
+        // Valeurs par défaut
+        fromSelect.value = 'EUR';
+        toSelect.value = 'USD';
+    },
+
+    // Met à jour les taux de change
+    async updateRates() {
+        try {
+            const response = await fetch('https://api.exchangerate-api.com/v4/latest/EUR');
+            if (!response.ok) throw new Error('Erreur réseau');
+            
+            const data = await response.json();
+            this.state.rates = data.rates;
+            this.state.lastUpdate = new Date().toISOString();
+            
+            this.updateDisplay();
+            this.saveCurrencyState();
+            
+            // Notification de succès
+            Utils.showNotification('Taux de change mis à jour avec succès', 'success');
+        } catch (error) {
+            console.error('Erreur lors de la mise à jour des taux:', error);
+            Utils.showNotification('Impossible de mettre à jour les taux de change', 'error');
+        }
+    },
+
+    // Convertit les devises
+    convertCurrency() {
+        const amount = parseFloat(document.getElementById('fromAmount').value);
+        const fromCurrency = document.getElementById('fromCurrency').value;
+        const toCurrency = document.getElementById('toCurrency').value;
+        
+        if (isNaN(amount)) {
+            document.getElementById('toAmount').value = '';
+            return;
+        }
+        
+        const result = this.convert(amount, fromCurrency, toCurrency);
+        document.getElementById('toAmount').value = result.toFixed(2);
+        
+        // Ajoute à l'historique
+        this.addToHistory({
+            category: 'currency',
+            fromUnit: fromCurrency,
+            toUnit: toCurrency,
+            value: amount,
+            result: result,
+            timestamp: new Date().toISOString()
+        });
+    },
+
+    // Fonction de conversion
+    convert(amount, from, to) {
+        if (!this.state.rates[from] || !this.state.rates[to]) return 0;
+        
+        // Conversion via EUR comme devise de base
+        const amountInEUR = from === 'EUR' ? amount : amount / this.state.rates[from];
+        return to === 'EUR' ? amountInEUR : amountInEUR * this.state.rates[to];
+    },
+
+    // Échange les devises
+    swapCurrencies() {
+        const fromSelect = document.getElementById('fromCurrency');
+        const toSelect = document.getElementById('toCurrency');
+        const fromAmount = document.getElementById('fromAmount');
+        const toAmount = document.getElementById('toAmount');
+        
+        [fromSelect.value, toSelect.value] = [toSelect.value, fromSelect.value];
+        [fromAmount.value, toAmount.value] = [toAmount.value, fromAmount.value];
+        
+        this.convertCurrency();
+    },
+
+    // Ajoute une conversion à l'historique
+    addToHistory(fromAmount, fromCurrency, toAmount, toCurrency) {
+        const historyContainer = document.getElementById('currencyHistory');
+        if (!historyContainer) return;
+        
+        const historyItem = document.createElement('div');
+        historyItem.className = 'history-item';
+        historyItem.innerHTML = `
+            <span>${fromAmount.toFixed(2)} ${fromCurrency}</span>
+            <i class="fas fa-arrow-right"></i>
+            <span>${toAmount.toFixed(2)} ${toCurrency}</span>
+            <small>${new Date().toLocaleString()}</small>
+        `;
+        
+        historyContainer.insertBefore(historyItem, historyContainer.firstChild);
+        
+        // Limite l'historique à 10 entrées
+        while (historyContainer.children.length > 10) {
+            historyContainer.removeChild(historyContainer.lastChild);
+        }
+    },
+
+    // Efface l'historique
+    clearCurrencyHistory() {
+        const historyContainer = document.getElementById('currencyHistory');
+        if (historyContainer) {
+            historyContainer.innerHTML = '';
+        }
+    },
+
+    // Met à jour l'affichage
+    updateDisplay() {
+        // Met à jour la date de dernière mise à jour
+        const lastUpdateElement = document.getElementById('lastUpdate');
+        if (lastUpdateElement && this.state.lastUpdate) {
+            const date = new Date(this.state.lastUpdate);
+            lastUpdateElement.textContent = `Dernière mise à jour : ${date.toLocaleString()}`;
+        }
+        
+        // Met à jour la grille des taux
+        const ratesGrid = document.getElementById('ratesList');
+        if (ratesGrid) {
+            ratesGrid.innerHTML = '';
+            Object.entries(this.CURRENCIES).forEach(([code, data]) => {
+                if (code === 'EUR') return; // Skip EUR as base currency
+                
+                const rate = this.state.rates[code];
+                if (!rate) return;
+                
+                const rateItem = document.createElement('div');
+                rateItem.className = 'rate-item';
+                rateItem.innerHTML = `
+                    <span class="currency-code">${code}</span>
+                    <span class="currency-symbol">${data.symbol}</span>
+                    <span class="rate-value">${rate.toFixed(4)}</span>
+                `;
+                ratesGrid.appendChild(rateItem);
+            });
+        }
+        
+        // Déclenche une conversion si des valeurs sont déjà présentes
+        const fromAmount = document.getElementById('fromAmount');
+        if (fromAmount && fromAmount.value) {
+            this.convertCurrency();
+        }
+    },
+
+    // Sauvegarde l'état
+    saveCurrencyState() {
+        localStorage.setItem('currencyState', JSON.stringify(this.state));
+    },
+
+    // Affiche une notification
+    showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.classList.add('fade-out');
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    },
+
+    // Initialisation au chargement de la page
+    initCurrencyConverter() {
+        this.loadCurrencyState();
+        this.setupCurrencySelects();
+        this.updateRates();
     }
 }; 

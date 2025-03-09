@@ -392,4 +392,65 @@ export const CalculatorManager = {
     destroy() {
         this.saveState();
     }
-}; 
+};
+
+// Fonction pour animer les résultats
+function animateResult(resultElement) {
+    resultElement.classList.remove('updated');
+    void resultElement.offsetWidth; // Force reflow
+    resultElement.classList.add('updated');
+}
+
+// Fonction pour calculer le pourcentage de base
+function calculatePercentage() {
+    const percent = parseFloat(document.getElementById('percentValue').value);
+    const base = parseFloat(document.getElementById('baseValue').value);
+    const result = document.getElementById('percentResult');
+    
+    if (!isNaN(percent) && !isNaN(base)) {
+        const calculated = (percent * base) / 100;
+        result.textContent = `Résultat : ${calculated.toLocaleString('fr-FR', { maximumFractionDigits: 2 })}`;
+        animateResult(result);
+    }
+}
+
+// Fonction pour calculer la variation en pourcentage
+function calculateVariation() {
+    const initial = parseFloat(document.getElementById('initialValue').value);
+    const final = parseFloat(document.getElementById('finalValue').value);
+    const result = document.getElementById('variationResult');
+    
+    if (!isNaN(initial) && !isNaN(final) && initial !== 0) {
+        const variation = ((final - initial) / initial) * 100;
+        const sign = variation > 0 ? '+' : '';
+        result.textContent = `Variation : ${sign}${variation.toLocaleString('fr-FR', { maximumFractionDigits: 2 })}%`;
+        animateResult(result);
+    }
+}
+
+// Fonction pour calculer la valeur initiale
+function calculateInitial() {
+    const final = parseFloat(document.getElementById('finalAmount').value);
+    const percent = parseFloat(document.getElementById('percentage').value);
+    const result = document.getElementById('initialResult');
+    
+    if (!isNaN(final) && !isNaN(percent) && percent !== 0) {
+        const initial = (final * 100) / percent;
+        result.textContent = `Valeur initiale : ${initial.toLocaleString('fr-FR', { maximumFractionDigits: 2 })}`;
+        animateResult(result);
+    }
+}
+
+// Ajout des écouteurs d'événements pour les touches Entrée
+document.addEventListener('DOMContentLoaded', () => {
+    const inputs = document.querySelectorAll('.percentage-tools input[type="number"]');
+    
+    inputs.forEach(input => {
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const group = input.closest('.calc-group');
+                group.querySelector('.calc-btn').click();
+            }
+        });
+    });
+}); 
