@@ -3,46 +3,75 @@
     position: fixed;
     bottom: var(--spacing-md);
     right: var(--spacing-md);
-    padding: var(--spacing-xs) var(--spacing-md);
+    padding: var(--spacing-xs) var(--spacing-sm);
     background-color: var(--bg-color);
     color: var(--text-color);
-    border-radius: var(--border-radius);
     box-shadow: var(--hover-shadow);
     display: flex;
     align-items: center;
     gap: var(--spacing-xs);
     z-index: 9999;
-    max-width: 400px;
+    max-width: 350px;
     transform: translateX(120%);
     opacity: 0;
     transition: transform var(--transition-duration) var(--ease-out-back), opacity var(--transition-duration) ease;
-    border-left: 4px solid var(--primary-color);
+    border-left: 3px solid var(--primary-color);
 }
 
 .notification i {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
 }
 
 .notification span {
     flex: 1;
+    font-size: 0.9rem;
 }
 
 .notification .close-btn {
     background: transparent;
-    border: none;
     color: var(--text-muted);
     cursor: pointer;
-    padding: 4px;
+    padding: 3px;
     margin-left: var(--spacing-xs);
-    border-radius: var(--border-radius-circle);
     display: flex;
     align-items: center;
     justify-content: center;
     transition: background-color var(--transition-fast);
+    min-width: 24px;
+    min-height: 24px;
+    border: none;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
 }
 
 .notification .close-btn:hover {
     background-color: rgba(0, 0, 0, 0.1);
+    transform: scale(1.1);
+}
+
+.notification .close-btn:active {
+    transform: scale(0.95);
+}
+
+.notification .close-btn i {
+    font-size: 0.9rem;
+    position: relative;
+    z-index: 2;
+}
+
+/* Pour afficher plusieurs notifications sans chevauchement */
+.notification:nth-child(1) {
+    bottom: calc(var(--spacing-md));
+}
+
+.notification:nth-child(2) {
+    bottom: calc(var(--spacing-md) + 60px);
+}
+
+.notification:nth-child(3) {
+    bottom: calc(var(--spacing-md) + 120px);
 }
 
 /* Types de notifications */
@@ -81,7 +110,7 @@
 /* Mode sombre */
 [data-theme="dark"] .notification {
     background-color: var(--card-bg);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 [data-theme="dark"] .notification .close-btn:hover {
@@ -91,10 +120,24 @@
 /* Responsive */
 @media (max-width: 768px) {
     .notification {
-        bottom: 10px;
+        bottom: 15px;
         right: 10px;
         left: 10px;
         max-width: calc(100% - 20px);
+        font-size: 0.85rem;
+    }
+    
+    /* Ajuster l'espacement pour les notifications multiples sur mobile */
+    .notification:nth-child(1) {
+        bottom: 15px;
+    }
+    
+    .notification:nth-child(2) {
+        bottom: 75px;
+    }
+    
+    .notification:nth-child(3) {
+        bottom: 135px;
     }
 }
 

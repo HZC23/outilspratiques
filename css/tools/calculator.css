@@ -93,6 +93,37 @@
     align-items: center;
     justify-content: center;
     text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin: 0;
+    z-index: 1;
+}
+
+.calculator-grid button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+}
+
+.calculator-grid button:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.calculator-grid button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255,255,255,0.1);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.calculator-grid button:hover::after {
+    opacity: 1;
 }
 
 .calculator-grid button.operator {
@@ -188,8 +219,13 @@
     }
     
     .calculator-grid button {
-        height: 45px;
+        height: 40px;
         font-size: 0.9rem;
+        padding: 0.3rem;
+    }
+    
+    .calculator-grid .numpad button {
+        font-size: 1rem;
     }
     
     .current-operation {
@@ -211,7 +247,14 @@
         grid-column: 1 / span 4;
         grid-row: 1;
         margin-bottom: var(--spacing-md);
-        padding: var(--spacing-sm);
+        padding: 4px;
+        gap: 4px;
+    }
+    
+    .calculator-grid button {
+        height: 45px;
+        font-size: 1rem;
+        padding: 0.4rem;
     }
 }
 

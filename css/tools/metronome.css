@@ -1,6 +1,6 @@
 .metronome-container {
     background-color: var(--card-bg);
-    padding: var(--spacing-lg);
+    padding: var(--spacing-sm);
     box-shadow: var(--box-shadow);
     max-width: 600px;
     margin: 0 auto;
@@ -16,14 +16,14 @@
 .metronome-controls {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-md);
-    margin-bottom: var(--spacing-lg);
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-sm);
 }
 
 .tempo-control {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-sm);
+    gap: var(--spacing-xs);
     animation: fadeIn 0.5s ease-in-out;
 }
 
@@ -36,12 +36,12 @@
 
 .tempo-slider {
     width: 100%;
-    height: 8px;
+    height: 6px;
     -webkit-appearance: none;
     appearance: none;
     background: var(--border-color);
     outline: none;
-    margin: var(--spacing-sm) 0;
+    margin: var(--spacing-xs) 0;
     transition: var(--transition);
     cursor: pointer;
     animation: slideInRight var(--animation-duration) var(--ease-out-back);
@@ -54,8 +54,8 @@
 .tempo-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     background: var(--primary-color);
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -80,11 +80,11 @@
 }
 
 .tempo-display {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 600;
     text-align: center;
     color: var(--text-color);
-    margin: var(--spacing-sm) 0;
+    margin: var(--spacing-xs) 0;
     animation: fadeIn 0.5s ease-in-out;
     transition: all 0.3s ease;
 }
@@ -97,28 +97,32 @@
 .metronome-buttons {
     display: flex;
     justify-content: center;
-    gap: var(--spacing-md);
-    margin-top: var(--spacing-md);
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-xs);
     animation: fadeInUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     animation-delay: 0.2s;
     animation-fill-mode: both;
+    flex-wrap: wrap;
 }
 
 .metronome-btn {
-    padding: var(--spacing-sm) var(--spacing-lg);
+    padding: var(--spacing-xs) var(--spacing-sm);
     background-color: var(--primary-color);
     color: var(--text-light);
-    border: none;
-    border-radius: var(--border-radius);
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex;
     align-items: center;
-    gap: var(--spacing-sm);
+    gap: var(--spacing-xs);
     position: relative;
     overflow: hidden;
+    border: none;
+    border-radius: var(--border-radius);
+    min-width: 90px;
+    height: 38px;
+    z-index: 1;
 }
 
 .metronome-btn::after {
@@ -130,55 +134,46 @@
     height: 5px;
     background: rgba(255, 255, 255, 0.5);
     opacity: 0;
-    border-radius: 100%;
     transform: scale(1, 1) translate(-50%);
     transform-origin: 50% 50%;
+    z-index: -1;
+    border-radius: 50%;
 }
 
 .metronome-btn:hover::after {
     animation: ripple 0.6s ease-out;
 }
 
-@keyframes ripple {
-    0% {
-        transform: scale(0, 0);
-        opacity: 0.5;
-    }
-    20% {
-        transform: scale(25, 25);
-        opacity: 0.5;
-    }
-    100% {
-        opacity: 0;
-        transform: scale(40, 40);
-    }
-}
-
 .metronome-btn:hover {
-    background-color: var(--info-color);
     transform: translateY(-2px);
-    box-shadow: var(--hover-shadow);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.metronome-btn.active {
-    background-color: var(--error-color);
-    animation: pulse 2s infinite;
+.metronome-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.metronome-btn.play {
+    background-color: var(--success-color);
+}
+
+.metronome-btn.stop {
+    background-color: var(--danger-color);
 }
 
 .metronome-btn i {
     font-size: 1rem;
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.metronome-btn:hover i {
-    transform: scale(1.2);
+    margin-right: 4px;
+    position: relative;
+    z-index: 2;
 }
 
 .beat-indicator {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     background-color: var(--border-color);
-    margin: var(--spacing-md) auto;
+    margin: var(--spacing-xs) auto;
     transition: background-color 0.05s ease, transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     animation: fadeIn 0.5s ease-in-out;
     animation-delay: 0.3s;
@@ -284,6 +279,21 @@
     }
 }
 
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+    }
+    20% {
+        transform: scale(25, 25);
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(40, 40);
+    }
+}
+
 /* Mode sombre */
 [data-theme="dark"] .metronome-container {
     background-color: var(--card-bg);
@@ -324,21 +334,45 @@
 /* Responsive */
 @media (max-width: 768px) {
     .metronome-container {
-        padding: var(--spacing-md);
+        padding: var(--spacing-xs);
     }
 
     .metronome-buttons {
-        flex-direction: column;
-        gap: var(--spacing-sm);
+        gap: 8px;
+        flex-direction: row;
+    }
+    
+    .metronome-btn {
+        min-width: 80px;
+        height: 36px;
+        font-size: 0.85rem;
+        flex: 1;
     }
 
     .tempo-display {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
     }
 
     .beat-indicator {
-        width: 40px;
-        height: 40px;
+        width: 30px;
+        height: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .metronome-buttons {
+        gap: 6px;
+    }
+    
+    .metronome-btn {
+        min-width: 70px;
+        height: 34px;
+        font-size: 0.8rem;
+        padding: 4px 8px;
+    }
+    
+    .metronome-btn i {
+        font-size: 0.9rem;
     }
 }
 

@@ -6,13 +6,13 @@
 /* Style de base pour tous les outils */
 .section {
     background: var(--card-bg);
-    border-radius: var(--border-radius-lg);
-    padding: var(--spacing-lg);
+    padding: var(--spacing-sm);
     box-shadow: var(--box-shadow);
     transition: var(--transition-slow) var(--ease-out-back);
-    margin-bottom: var(--spacing-xl);
+    margin-bottom: var(--spacing-md);
     position: relative;
     overflow: hidden;
+    clear: both;
 }
 
 .section::before {
@@ -21,14 +21,14 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 4px;
+    height: 2px;
     background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
     opacity: 0;
     transition: opacity var(--transition-duration) ease;
 }
 
 .section:hover {
-    transform: translateY(-5px);
+    transform: translateY(-2px);
     box-shadow: var(--hover-shadow);
 }
 
@@ -39,10 +39,10 @@
 /* Titres des sections */
 .section h2 {
     color: var(--primary-color);
-    font-size: 1.8rem;
+    font-size: 1.4rem;
     font-weight: 600;
-    margin-bottom: var(--spacing-lg);
-    padding-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+    padding-bottom: var(--spacing-xs);
     position: relative;
     display: flex;
     justify-content: center;
@@ -57,48 +57,50 @@
     bottom: -1px;
     left: 50%;
     transform: translateX(-50%);
-    width: 120px;
-    height: 3px;
+    width: 80px;
+    height: 2px;
     background: var(--primary-color);
-    border-radius: 3px;
     transition: width 0.4s var(--ease-out-back);
 }
 
 .section:hover h2::after {
-    width: 180px;
+    width: 120px;
 }
 
 /* Style des conteneurs */
 .container-base {
     background: var(--bg-color);
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    padding: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
+    margin-bottom: var(--spacing-sm);
+    position: relative;
+    overflow: hidden;
 }
 
 .container-base:hover {
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Entrées et champs de texte */
 input, select, textarea {
     width: 100%;
-    padding: 12px 16px;
+    padding: 8px 12px;
     background: var(--input-bg);
     color: var(--text-color);
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     transition: all 0.3s ease;
+    margin-bottom: var(--spacing-xs);
 }
 
 input:focus, select:focus, textarea:focus {
-    box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.15);
+    box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.15);
     outline: none;
 }
 
 /* Boutons améliorés */
 button {
-    padding: 12px 18px;
+    padding: 8px 12px;
     background: var(--primary-color);
     color: white;
     font-weight: 500;
@@ -109,6 +111,14 @@ button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    margin: 0 2px 2px 0;
+    border: none;
+    border-radius: var(--border-radius);
+    min-height: 36px;
+    text-align: center;
+    line-height: 1.2;
+    box-sizing: border-box;
+    touch-action: manipulation;
 }
 
 button::before {
@@ -119,13 +129,32 @@ button::before {
     width: 0;
     height: 0;
     background: rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
     transform: translate(-50%, -50%);
     transition: width 0.6s ease, height 0.6s ease;
+    border-radius: 50%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+button:hover::before {
+    width: 120px;
+    height: 120px;
+}
+
+button:active {
+    transform: translateY(1px);
+    transition: transform 0.1s;
 }
 
 button i {
-    margin-right: 8px;
+    margin-right: 6px;
+    position: relative;
+    z-index: 2;
+}
+
+button span {
+    position: relative;
+    z-index: 2;
 }
 
 /* Boutons spécifiques */
@@ -157,11 +186,20 @@ button i {
 .outline-btn {
     background: transparent;
     color: var(--primary-color);
+    border: 1px solid var(--primary-color);
 }
 
 .outline-btn:hover {
     background: var(--primary-color);
     color: white;
+}
+
+/* Bouton désactivé */
+button:disabled,
+button[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
 }
 
 /* Icônes dans les boutons */
@@ -170,77 +208,103 @@ button i {
 }
 
 button:hover i {
-    transform: translateY(-2px);
+    transform: translateY(-1px);
+}
+
+/* Styles adaptatifs pour les boutons */
+@media (max-width: 768px) {
+    button {
+        padding: 8px 10px;
+        font-size: 0.9rem;
+        min-height: 34px;
+    }
+}
+
+@media (max-width: 480px) {
+    button {
+        padding: 6px 8px;
+        font-size: 0.8rem;
+        min-height: 32px;
+    }
+    
+    button i {
+        margin-right: 4px;
+        font-size: 0.9em;
+    }
 }
 
 /* Cartes et éléments d'historique */
 .card {
     background: var(--card-bg);
-    border-radius: 10px;
-    padding: 15px;
-    margin-bottom: 15px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
 }
 
 .card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
 
 .history-item {
-    padding: 12px;
-    margin-bottom: 10px;
+    padding: 8px;
+    margin-bottom: 8px;
     background: var(--bg-color);
-    border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
 }
 
 .history-item:hover {
     background: var(--hover-color);
-    transform: translateX(5px);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    transform: translateX(3px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 /* Grilles et layouts */
 .grid-2 {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    gap: 10px;
+    margin-bottom: var(--spacing-sm);
 }
 
 .grid-3 {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
+    gap: 10px;
+    margin-bottom: var(--spacing-sm);
 }
 
 .grid-4 {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
+    gap: 10px;
+    margin-bottom: var(--spacing-sm);
 }
 
 /* Listes */
 .list-container {
-    max-height: 300px;
+    max-height: 200px;
     overflow-y: auto;
     padding-right: 5px;
+    margin-bottom: var(--spacing-sm);
 }
 
 .list-container::-webkit-scrollbar {
-    width: 6px;
+    width: 4px;
 }
 
 .list-container::-webkit-scrollbar-track {
     background: rgba(0, 0, 0, 0.05);
-    border-radius: 3px;
 }
 
 .list-container::-webkit-scrollbar-thumb {
     background: var(--primary-color);
-    border-radius: 3px;
 }
 
 /* En-têtes des sections */
@@ -248,16 +312,23 @@ button:hover i {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    clear: both;
 }
 
 .section-header h3 {
     margin: 0;
     color: var(--text-color);
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 600;
+}
+
+/* Fix pour les flottants et la hauteur */
+.clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
 }
 
 /* Animations */
@@ -279,17 +350,17 @@ button:hover i {
 /* Styles pour le mode sombre */
 [data-theme="dark"] .section {
     background: var(--card-bg);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
 }
 
 [data-theme="dark"] .container-base {
     background: var(--dark-color);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 [data-theme="dark"] .card {
     background: var(--dark-color);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
 }
 
 [data-theme="dark"] .history-item {
@@ -300,34 +371,11 @@ button:hover i {
     background: var(--hover-color);
 }
 
-/* Media queries */
+/* Correctifs pour les petits écrans */
 @media (max-width: 768px) {
     .section {
-        padding: 15px;
-    }
-    
-    .section h2 {
-        font-size: 1.5rem;
-        margin-bottom: 20px;
-    }
-    
-    .grid-2, .grid-3, .grid-4 {
-        grid-template-columns: 1fr;
-    }
-    
-    button {
-        padding: 10px 15px;
-        font-size: 0.9rem;
-    }
-    
-    .container-base {
-        padding: 15px;
-    }
-}
-
-@media (max-width: 480px) {
-    .section {
-        padding: 12px;
+        padding: 10px;
+        margin-bottom: var(--spacing-sm);
     }
     
     .section h2 {
@@ -335,13 +383,148 @@ button:hover i {
         margin-bottom: 15px;
     }
     
-    input, select, textarea {
-        padding: 10px;
-        font-size: 0.9rem;
+    .grid-2, .grid-3, .grid-4 {
+        grid-template-columns: 1fr;
+        gap: 8px;
     }
     
     button {
         padding: 8px 12px;
-        font-size: 0.85rem;
+        font-size: 0.9rem;
+        margin-bottom: 5px;
     }
+    
+    .container-base {
+        padding: 10px;
+        margin-bottom: var(--spacing-xs);
+    }
+    
+    .tool-card {
+        padding: var(--spacing-sm);
+        margin-bottom: var(--spacing-sm);
+    }
+}
+
+@media (max-width: 480px) {
+    .section {
+        padding: 8px;
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .section h2 {
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+    }
+    
+    input, select, textarea {
+        padding: 6px 10px;
+        font-size: 0.85rem;
+        margin-bottom: 8px;
+    }
+    
+    button {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+        margin-bottom: 5px;
+    }
+    
+    .card, .history-item {
+        margin-bottom: 6px;
+    }
+}
+
+/* Styles généraux pour les outils */
+.tools-container {
+    position: relative;
+    margin-left: var(--menu-width);
+    padding: var(--spacing-sm);
+    width: calc(100% - var(--menu-width));
+    transition: margin-left var(--transition-duration), width var(--transition-duration);
+    min-height: calc(100vh - var(--header-height));
+    z-index: 1;
+    overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+    .tools-container {
+        width: 100%;
+        margin-left: 0;
+        padding: var(--spacing-xs);
+    }
+}
+
+/* Styles communs pour les cartes d'outils */
+.tool-card {
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    transition: transform var(--transition-duration), box-shadow var(--transition-duration);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.tool-card:hover {
+    box-shadow: var(--hover-shadow);
+    transform: translateY(-2px);
+}
+
+/* Garantir une bonne séparation entre les éléments */
+.section {
+    position: relative;
+    margin-bottom: var(--spacing-md);
+    clear: both;
+}
+
+.container-base {
+    position: relative;
+    margin-bottom: var(--spacing-sm);
+    overflow: hidden;
+}
+
+/* Garantir un bon espacement des boutons */
+button {
+    margin: 0 2px 2px 0;
+}
+
+/* Garantir que les cartes et éléments d'historique ne se chevauchent pas */
+.card, .history-item {
+    position: relative;
+    z-index: 1;
+}
+
+/* Garantir un bon espacement des grilles */
+.grid-2, .grid-3, .grid-4 {
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Garantir un bon espacement des listes */
+.list-container {
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Assurer une bonne séparation entre les en-têtes de section */
+.section-header {
+    clear: both;
+}
+
+/* Fix clearfix pour éviter les problèmes de flottement */
+.clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Assurer que les éléments avec position fixe ne chevauchent pas le contenu principal */
+.fixed-element {
+    z-index: 100;
+}
+
+/* S'assurer que le contenu reste toujours visible */
+.content-container {
+    position: relative;
+    z-index: 1;
 } 
