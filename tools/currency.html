@@ -1,0 +1,51 @@
+<div class="currency-tool section">
+    <h2>Convertisseur de devises</h2>
+    
+    <div class="container-base">
+        <!-- Groupes de devises rapides -->
+        <div class="currency-groups">
+            <button onclick="selectCurrencyGroup('popular')" class="currency-group-btn">Populaires</button>
+            <button onclick="selectCurrencyGroup('europe')" class="currency-group-btn">Europe</button>
+            <button onclick="selectCurrencyGroup('america')" class="currency-group-btn">Amériques</button>
+            <button onclick="selectCurrencyGroup('asia')" class="currency-group-btn">Asie</button>
+            <button onclick="selectCurrencyGroup('oceania')" class="currency-group-btn">Océanie</button>
+        </div>
+
+        <!-- Convertisseur -->
+        <div class="currency-converter">
+            <div class="converter-inputs">
+                <div class="input-group">
+                    <input type="number" id="fromAmount" value="1" min="0" step="0.01">
+                    <select id="fromCurrency"></select>
+                </div>
+                
+                <button onclick="swapCurrencies()" class="swap-btn">
+                    <i class="fas fa-exchange-alt"></i>
+                </button>
+                
+                <div class="input-group">
+                    <input type="number" id="toAmount" readonly>
+                    <select id="toCurrency"></select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Taux de change -->
+        <div class="exchange-rates">
+            <h3>Taux de change</h3>
+            <p id="lastUpdate" class="last-update"></p>
+            <div id="ratesList" class="rates-list"></div>
+        </div>
+
+        <!-- Historique -->
+        <div class="conversion-history">
+            <div class="history-header">
+                <h3>Historique des conversions</h3>
+                <button onclick="clearCurrencyHistory()" class="clear-btn">
+                    <i class="fas fa-trash"></i> Effacer
+                </button>
+            </div>
+            <div id="conversionHistory" class="history-list"></div>
+        </div>
+    </div>
+</div> 

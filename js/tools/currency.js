@@ -230,12 +230,20 @@ function loadSavedRates() {
  */
 function displayRates() {
     const ratesList = document.getElementById('ratesList');
+    const lastUpdateElement = document.getElementById('lastUpdate');
+    
+    // Vérifier si les éléments existent
+    if (!ratesList || !lastUpdateElement) {
+        console.warn('Éléments HTML manquants pour l\'affichage des taux');
+        return;
+    }
+    
     ratesList.innerHTML = '';
     
     // Afficher la date de dernière mise à jour
     if (state.lastUpdate) {
         const lastUpdateDate = new Date(state.lastUpdate);
-        document.getElementById('lastUpdate').textContent = `Dernière mise à jour : ${formatDate(lastUpdateDate)}`;
+        lastUpdateElement.textContent = `Dernière mise à jour : ${formatDate(lastUpdateDate)}`;
     }
     
     // Afficher les taux pour chaque devise
@@ -247,18 +255,38 @@ function displayRates() {
         
         const rateItem = document.createElement('div');
         rateItem.className = 'rate-item';
-        
-        const fromAmount = 1;
-        const toAmount = rate;
-        
         rateItem.innerHTML = `
-            <div class="rate-from">${fromAmount} ${state.baseCurrency}</div>
-            <div class="rate-equals">=</div>
-            <div class="rate-to">${toAmount.toFixed(4)} ${currency.code}</div>
+            <span class="currency-flag">${currency.flag}</span>
+            <span class="currency-code">${currency.code}</span>
+            <span class="currency-rate">${rate.toFixed(4)}</span>
         `;
-        
         ratesList.appendChild(rateItem);
     });
+}
+
+/**
+ * Sélectionne un groupe de devises
+ * @param {string} groupName - Le nom du groupe à sélectionner
+ */
+function selectCurrencyGroup(groupName) {
+    const group = CURRENCY_GROUPS[groupName];
+    if (!group) {
+        console.warn(`Groupe de devises "${groupName}" non trouvé`);
+        return;
+    }
+    
+    // Mettre à jour les sélecteurs de devises
+    const fromSelect = document.getElementById('fromCurrency');
+    const toSelect = document.getElementById('toCurrency');
+    
+    if (fromSelect && toSelect && group.length >= 2) {
+        // Sélectionner la première devise du groupe comme devise source
+        fromSelect.value = group[0];
+        // Sélectionner la deuxième devise du groupe comme devise cible
+        toSelect.value = group[1];
+        // Déclencher la conversion
+        convertCurrency();
+    }
 }
 
 /**

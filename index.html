@@ -1043,38 +1043,33 @@
                 <div class="currency-container">
                     <div class="currency-quick-access">
                         <h3>Accès rapide</h3>
+                         <!-- Groupes de devises rapides -->
                         <div class="currency-groups">
-                            <button type="button" onclick="selectCurrencyGroup('popular')" class="currency-group-btn">
-                                <i class="fas fa-star"></i> Populaires
-                            </button>
-                            <button type="button" onclick="selectCurrencyGroup('europe')" class="currency-group-btn">
-                                <i class="fas fa-euro-sign"></i> Europe
-                            </button>
-                            <button type="button" onclick="selectCurrencyGroup('america')" class="currency-group-btn">
-                                <i class="fas fa-dollar-sign"></i> Amériques
-                            </button>
-                            <button type="button" onclick="selectCurrencyGroup('asia')" class="currency-group-btn">
-                                <i class="fas fa-yen-sign"></i> Asie
-                            </button>
-                            <button type="button" onclick="selectCurrencyGroup('oceania')" class="currency-group-btn">
-                                <i class="fas fa-globe-asia"></i> Océanie
-                            </button>
+                            <button onclick="selectCurrencyGroup('popular')" class="currency-group-btn">Populaires</button>
+                            <button onclick="selectCurrencyGroup('europe')" class="currency-group-btn">Europe</button>
+                            <button onclick="selectCurrencyGroup('america')" class="currency-group-btn">Amériques</button>
+                            <button onclick="selectCurrencyGroup('asia')" class="currency-group-btn">Asie</button>
+                            <button onclick="selectCurrencyGroup('oceania')" class="currency-group-btn">Océanie</button>
                         </div>
                     </div>
 
                     <div class="currency-converter">
-                        <div class="currency-input-group">
-                            <label for="fromAmount">Montant</label>
-                            <div class="currency-input">
-                                <input type="number" 
-                                       id="fromAmount" 
-                                       min="0" 
-                                       step="0.01" 
-                                       placeholder="Montant à convertir"
-                                       aria-label="Montant à convertir">
-                                <select id="fromCurrency" aria-label="Devise source"></select>
+                        <div class="converter-inputs">
+                            <div class="input-group">
+                                <input type="number" id="fromAmount" value="1" min="0" step="0.01">
+                                <select id="fromCurrency"></select>
+                            </div>
+                            
+                            <button onclick="swapCurrencies()" class="swap-btn">
+                                <i class="fas fa-exchange-alt"></i>
+                            </button>
+                            
+                            <div class="input-group">
+                                <input type="number" id="toAmount" readonly>
+                                <select id="toCurrency"></select>
                             </div>
                         </div>
+                    </div>
 
                         <button type="button" onclick="swapCurrencies()" class="swap-currencies" aria-label="Inverser les devises">
                             <i class="fas fa-exchange-alt"></i>
