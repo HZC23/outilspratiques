@@ -6,525 +6,292 @@
 /* Style de base pour tous les outils */
 .section {
     background: var(--card-bg);
-    padding: var(--spacing-sm);
+    padding: var(--spacing-md);
     box-shadow: var(--box-shadow);
-    transition: var(--transition-slow) var(--ease-out-back);
+    border-radius: var(--border-radius-md);
     margin-bottom: var(--spacing-md);
     position: relative;
     overflow: hidden;
-    clear: both;
+    transition: var(--transition-medium);
 }
 
-.section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-    opacity: 0;
-    transition: opacity var(--transition-duration) ease;
-}
-
-.section:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--hover-shadow);
-}
-
-.section:hover::before {
-    opacity: 1;
-}
-
-/* Titres des sections */
 .section h2 {
-    color: var(--primary-color);
     font-size: 1.4rem;
     font-weight: 600;
-    margin-bottom: var(--spacing-sm);
-    padding-bottom: var(--spacing-xs);
-    position: relative;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--border-color);
     display: flex;
-    justify-content: center;
     align-items: center;
-    text-align: center;
-    width: 100%;
+    gap: var(--spacing-sm);
 }
 
-.section h2::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 2px;
-    background: var(--primary-color);
-    transition: width 0.4s var(--ease-out-back);
+.section h2 i {
+    color: var(--primary-color);
+    font-size: 1.2rem;
 }
 
-.section:hover h2::after {
-    width: 120px;
-}
-
-/* Style des conteneurs */
 .container-base {
     background: var(--bg-color);
-    padding: 12px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
-    margin-bottom: var(--spacing-sm);
-    position: relative;
-    overflow: hidden;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    transition: var(--transition-medium);
 }
 
-.container-base:hover {
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Entrées et champs de texte */
+/* Formulaires et entrées */
 input, select, textarea {
     width: 100%;
-    padding: 8px 12px;
-    background: var(--input-bg);
-    color: var(--text-color);
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-    margin-bottom: var(--spacing-xs);
+    padding: 0.6rem 0.8rem;
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    color: var(--input-text);
+    transition: var(--transition-medium);
 }
 
 input:focus, select:focus, textarea:focus {
-    box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.15);
     outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
-/* Boutons améliorés */
+/* Boutons */
 button {
-    padding: 8px 12px;
-    background: var(--primary-color);
-    color: white;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s var(--ease-out-back);
-    position: relative;
-    overflow: hidden;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin: 0 2px 2px 0;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    font-weight: 500;
     border: none;
-    border-radius: var(--border-radius);
-    min-height: 36px;
-    text-align: center;
-    line-height: 1.2;
-    box-sizing: border-box;
-    touch-action: manipulation;
+    border-radius: var(--border-radius-md);
+    background-color: var(--primary-color);
+    color: white;
+    cursor: pointer;
+    transition: var(--transition-medium);
 }
 
-button::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    background: rgba(255, 255, 255, 0.2);
-    transform: translate(-50%, -50%);
-    transition: width 0.6s ease, height 0.6s ease;
-    border-radius: 50%;
-    z-index: 1;
-    pointer-events: none;
-}
-
-button:hover::before {
-    width: 120px;
-    height: 120px;
+button:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-1px);
 }
 
 button:active {
-    transform: translateY(1px);
-    transition: transform 0.1s;
+    transform: translateY(0);
 }
 
 button i {
-    margin-right: 6px;
-    position: relative;
-    z-index: 2;
+    font-size: 1rem;
 }
 
-button span {
-    position: relative;
-    z-index: 2;
-}
-
-/* Boutons spécifiques */
+/* Types de boutons */
 .primary-btn {
-    background: var(--primary-color);
-    color: white;
+    background-color: var(--primary-color);
 }
 
 .secondary-btn {
-    background: var(--secondary-color);
-    color: white;
+    background-color: var(--secondary-color);
 }
 
 .success-btn {
-    background: var(--success-color);
-    color: white;
+    background-color: var(--success-color);
 }
 
 .danger-btn, .clear-btn {
-    background: var(--danger-color);
-    color: white;
+    background-color: var(--danger-color);
 }
 
 .info-btn {
-    background: var(--info-color);
-    color: white;
+    background-color: var(--info-color);
 }
 
 .outline-btn {
-    background: transparent;
-    color: var(--primary-color);
+    background-color: transparent;
     border: 1px solid var(--primary-color);
+    color: var(--primary-color);
 }
 
 .outline-btn:hover {
-    background: var(--primary-color);
+    background-color: var(--primary-color);
     color: white;
 }
 
-/* Bouton désactivé */
-button:disabled,
-button[disabled] {
+button:disabled {
     opacity: 0.6;
     cursor: not-allowed;
     pointer-events: none;
 }
 
-/* Icônes dans les boutons */
-button i {
-    transition: transform 0.3s ease;
-}
-
-button:hover i {
-    transform: translateY(-1px);
-}
-
-/* Styles adaptatifs pour les boutons */
-@media (max-width: 768px) {
-    button {
-        padding: 8px 10px;
-        font-size: 0.9rem;
-        min-height: 34px;
-    }
-}
-
-@media (max-width: 480px) {
-    button {
-        padding: 6px 8px;
-        font-size: 0.8rem;
-        min-height: 32px;
-    }
-    
-    button i {
-        margin-right: 4px;
-        font-size: 0.9em;
-    }
-}
-
 /* Cartes et éléments d'historique */
 .card {
     background: var(--card-bg);
-    padding: 10px;
-    margin-bottom: 10px;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
-    position: relative;
-    z-index: 1;
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-md);
+    border: 1px solid var(--border-color);
+    transition: var(--transition-medium);
+    margin-bottom: var(--spacing-sm);
 }
 
 .card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--box-shadow);
 }
 
 .history-item {
-    padding: 8px;
-    margin-bottom: 8px;
-    background: var(--bg-color);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-    z-index: 1;
+    background: var(--card-bg);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+    border: 1px solid var(--border-color);
+    transition: var(--transition-medium);
 }
 
 .history-item:hover {
-    background: var(--hover-color);
-    transform: translateX(3px);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--box-shadow);
+    border-color: var(--primary-color);
 }
 
-/* Grilles et layouts */
+/* Grilles */
 .grid-2 {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-bottom: var(--spacing-sm);
+    gap: var(--spacing-md);
 }
 
 .grid-3 {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-bottom: var(--spacing-sm);
+    gap: var(--spacing-md);
 }
 
 .grid-4 {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    margin-bottom: var(--spacing-sm);
+    gap: var(--spacing-md);
 }
 
-/* Listes */
+/* Conteneurs de listes */
 .list-container {
-    max-height: 200px;
+    max-height: 300px;
     overflow-y: auto;
-    padding-right: 5px;
-    margin-bottom: var(--spacing-sm);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-sm);
 }
 
-.list-container::-webkit-scrollbar {
-    width: 4px;
-}
-
-.list-container::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.05);
-}
-
-.list-container::-webkit-scrollbar-thumb {
-    background: var(--primary-color);
-}
-
-/* En-têtes des sections */
+/* En-têtes de section */
 .section-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
-    padding-bottom: 6px;
-    clear: both;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .section-header h3 {
-    margin: 0;
-    color: var(--text-color);
     font-size: 1.1rem;
     font-weight: 600;
+    color: var(--text-color);
+    margin: 0;
 }
 
-/* Fix pour les flottants et la hauteur */
+/* Utilitaires */
 .clearfix::after {
     content: "";
     display: table;
     clear: both;
 }
 
-/* Animations */
-@keyframes fadeUp {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* Animation simple de fondu */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
-.fade-up {
-    animation: fadeUp 0.5s ease forwards;
+.fade-in {
+    animation: fadeIn 0.3s ease forwards;
 }
 
-/* Styles pour le mode sombre */
-[data-theme="dark"] .section {
+/* Container global des outils */
+.tools-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-md);
+}
+
+/* Cartes des outils */
+.tool-card {
     background: var(--card-bg);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    transition: var(--transition-medium);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
-[data-theme="dark"] .container-base {
-    background: var(--dark-color);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+.tool-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--box-shadow);
 }
 
-[data-theme="dark"] .card {
-    background: var(--dark-color);
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+.tool-card-header {
+    padding: var(--spacing-md);
+    background-color: var(--primary-color);
+    color: white;
 }
 
-[data-theme="dark"] .history-item {
-    background: var(--dark-color);
+.tool-card-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
 }
 
-[data-theme="dark"] .history-item:hover {
-    background: var(--hover-color);
+.tool-card-body {
+    padding: var(--spacing-md);
+    flex-grow: 1;
 }
 
-/* Correctifs pour les petits écrans */
+.tool-card-footer {
+    padding: var(--spacing-md);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Media Queries */
 @media (max-width: 768px) {
-    .section {
-        padding: 10px;
-        margin-bottom: var(--spacing-sm);
-    }
-    
-    .section h2 {
-        font-size: 1.3rem;
-        margin-bottom: 15px;
-    }
-    
     .grid-2, .grid-3, .grid-4 {
         grid-template-columns: 1fr;
-        gap: 8px;
+    }
+    
+    .tools-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .section {
+        padding: var(--spacing-sm);
     }
     
     button {
-        padding: 8px 12px;
-        font-size: 0.9rem;
-        margin-bottom: 5px;
-    }
-    
-    .container-base {
-        padding: 10px;
-        margin-bottom: var(--spacing-xs);
-    }
-    
-    .tool-card {
-        padding: var(--spacing-sm);
-        margin-bottom: var(--spacing-sm);
+        padding: 0.5rem 1rem;
     }
 }
 
 @media (max-width: 480px) {
-    .section {
-        padding: 8px;
-        margin-bottom: var(--spacing-sm);
-    }
-    
     .section h2 {
         font-size: 1.2rem;
-        margin-bottom: 10px;
     }
     
-    input, select, textarea {
-        padding: 6px 10px;
-        font-size: 0.85rem;
-        margin-bottom: 8px;
+    .tool-card-header h3 {
+        font-size: 1.1rem;
     }
     
-    button {
-        padding: 6px 10px;
-        font-size: 0.8rem;
-        margin-bottom: 5px;
+    .container-base, .card, .history-item {
+        padding: var(--spacing-sm);
     }
-    
-    .card, .history-item {
-        margin-bottom: 6px;
-    }
-}
-
-/* Styles généraux pour les outils */
-.tools-container {
-    position: relative;
-    margin-left: var(--menu-width);
-    padding: var(--spacing-sm);
-    width: calc(100% - var(--menu-width));
-    transition: margin-left var(--transition-duration), width var(--transition-duration);
-    min-height: calc(100vh - var(--header-height));
-    z-index: 1;
-    overflow-x: hidden;
-}
-
-@media (max-width: 768px) {
-    .tools-container {
-        width: 100%;
-        margin-left: 0;
-        padding: var(--spacing-xs);
-    }
-}
-
-/* Styles communs pour les cartes d'outils */
-.tool-card {
-    background-color: var(--card-bg);
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    padding: var(--spacing-md);
-    margin-bottom: var(--spacing-md);
-    transition: transform var(--transition-duration), box-shadow var(--transition-duration);
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-}
-
-.tool-card:hover {
-    box-shadow: var(--hover-shadow);
-    transform: translateY(-2px);
-}
-
-/* Garantir une bonne séparation entre les éléments */
-.section {
-    position: relative;
-    margin-bottom: var(--spacing-md);
-    clear: both;
-}
-
-.container-base {
-    position: relative;
-    margin-bottom: var(--spacing-sm);
-    overflow: hidden;
-}
-
-/* Garantir un bon espacement des boutons */
-button {
-    margin: 0 2px 2px 0;
-}
-
-/* Garantir que les cartes et éléments d'historique ne se chevauchent pas */
-.card, .history-item {
-    position: relative;
-    z-index: 1;
-}
-
-/* Garantir un bon espacement des grilles */
-.grid-2, .grid-3, .grid-4 {
-    margin-bottom: var(--spacing-sm);
-}
-
-/* Garantir un bon espacement des listes */
-.list-container {
-    margin-bottom: var(--spacing-sm);
-}
-
-/* Assurer une bonne séparation entre les en-têtes de section */
-.section-header {
-    clear: both;
-}
-
-/* Fix clearfix pour éviter les problèmes de flottement */
-.clearfix::after {
-    content: "";
-    display: table;
-    clear: both;
-}
-
-/* Assurer que les éléments avec position fixe ne chevauchent pas le contenu principal */
-.fixed-element {
-    z-index: 100;
-}
-
-/* S'assurer que le contenu reste toujours visible */
-.content-container {
-    position: relative;
-    z-index: 1;
 } 

@@ -9,141 +9,77 @@
   --theme-switch-padding: 3px;
 }
 
-/* Conteneur principal du switch */
+/* Commutateur de thème */
+.theme-switch-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 .theme-switch {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-right: 5px;
-  z-index: 10; /* S'assurer qu'il est au-dessus d'autres éléments */
-  height: 28px; /* Hauteur fixe pour éviter des problèmes de dimensionnement */
+    display: inline-block;
+    height: 24px;
+    position: relative;
+    width: 48px;
 }
 
-/* Style de base pour le switch */
-.theme-switch-toggle {
-  position: relative;
-  width: calc(var(--theme-switch-size) * 2 + var(--theme-switch-padding) * 2);
-  height: calc(var(--theme-switch-size) + var(--theme-switch-padding) * 2);
-  background-color: rgba(var(--rgb-text-muted), 0.15);
-  border-radius: 100px;
-  cursor: pointer;
-  transition: background-color var(--transition-fast);
-  overflow: hidden;
+.theme-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
 }
 
-/* Petit cercle qui se déplace */
-.theme-switch-toggle::before {
-  content: "";
-  position: absolute;
-  left: var(--theme-switch-padding);
-  top: var(--theme-switch-padding);
-  width: var(--theme-switch-size);
-  height: var(--theme-switch-size);
-  border-radius: 50%;
-  background-color: var(--text-color);
-  transition: transform var(--transition-duration), background-color var(--transition-fast);
-  z-index: 2;
+.slider {
+    background-color: #ccc;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: var(--transition-medium);
+    border-radius: 24px;
 }
 
-/* État activé du switch */
-.theme-switch-toggle[aria-checked="true"] {
-  background-color: rgba(var(--rgb-primary), 0.25);
+.slider:before {
+    background-color: white;
+    bottom: 4px;
+    content: "";
+    height: 16px;
+    left: 4px;
+    position: absolute;
+    transition: var(--transition-medium);
+    width: 16px;
+    border-radius: 50%;
 }
 
-/* Position du cercle quand le switch est activé */
-.theme-switch-toggle[aria-checked="true"]::before {
-  transform: translateX(var(--theme-switch-size));
-  background-color: var(--primary-color);
+input:checked + .slider {
+    background-color: var(--primary-color);
 }
 
-/* Icônes du soleil et de la lune */
-.theme-switch-toggle .theme-icon {
-  position: absolute;
-  top: 50%;
-  width: var(--theme-switch-icon-size);
-  height: var(--theme-switch-icon-size);
-  transform: translateY(-50%);
-  z-index: 1;
-  opacity: 0.7;
-  transition: opacity var(--transition-fast);
+input:focus + .slider {
+    box-shadow: 0 0 1px var(--primary-color);
 }
 
-/* Position de l'icône du soleil */
-.theme-switch-toggle .sun-icon {
-  left: calc(var(--theme-switch-padding) + (var(--theme-switch-size) - var(--theme-switch-icon-size))/2);
+input:checked + .slider:before {
+    transform: translateX(24px);
 }
 
-/* Position de l'icône de la lune */
-.theme-switch-toggle .moon-icon {
-  right: calc(var(--theme-switch-padding) + (var(--theme-switch-size) - var(--theme-switch-icon-size))/2);
+/* Icônes pour le commutateur de thème */
+.slider:after {
+    content: "☀️";
+    position: absolute;
+    font-size: 10px;
+    color: #ffeb3b;
+    top: 6px;
+    left: 7px;
+    transition: var(--transition-medium);
 }
 
-/* Opacité des icônes selon l'état du switch */
-.theme-switch-toggle[aria-checked="false"] .sun-icon,
-.theme-switch-toggle[aria-checked="true"] .moon-icon {
-  opacity: 1;
-}
-
-.theme-switch-toggle[aria-checked="true"] .sun-icon,
-.theme-switch-toggle[aria-checked="false"] .moon-icon {
-  opacity: 0.5;
-}
-
-/* Cercles décoratifs pour l'icône de la lune */
-.moon-icon .moon-crater {
-  fill: var(--text-muted);
-  transition: fill var(--transition-fast);
-}
-
-/* Animation lors du changement de thème */
-@keyframes rotateSun {
-  0% {
-    transform: translateY(-50%) rotate(0);
-  }
-  100% {
-    transform: translateY(-50%) rotate(360deg);
-  }
-}
-
-@keyframes wobbleMoon {
-  0%, 100% {
-    transform: translateY(-50%) scale(1);
-  }
-  50% {
-    transform: translateY(-50%) scale(1.1);
-  }
-}
-
-.theme-switch-toggle[aria-checked="false"] .sun-icon {
-  animation: rotateSun 10s linear infinite;
-}
-
-.theme-switch-toggle[aria-checked="true"] .moon-icon {
-  animation: wobbleMoon 10s ease-in-out infinite;
-}
-
-/* Effet hover */
-.theme-switch-toggle:hover {
-  background-color: rgba(var(--rgb-text-muted), 0.25);
-}
-
-.theme-switch-toggle[aria-checked="true"]:hover {
-  background-color: rgba(var(--rgb-primary), 0.35);
-}
-
-/* Focus style pour l'accessibilité */
-.theme-switch-toggle:focus-visible {
-  box-shadow: 0 0 0 2px var(--primary-color);
-  outline: none;
-}
-
-/* Libellé du switch */
-.theme-switch-label {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  user-select: none;
-  margin: 0 5px;
+input:checked + .slider:after {
+    content: "🌙";
+    left: unset;
+    right: 7px;
 }
 
 /* Mode sombre spécifique */
@@ -161,21 +97,9 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  .theme-switch {
-    gap: 6px;
-    margin-right: 2px;
-    height: 26px;
-  }
-  
-  :root {
-    --theme-switch-size: 14px;
-    --theme-switch-icon-size: 10px;
-    --theme-switch-padding: 3px;
-  }
-  
-  .theme-switch-label {
-    font-size: 0.75rem;
-  }
+    .theme-switch-wrapper {
+        margin-left: auto;
+    }
 }
 
 /* Version extra-compacte pour très petits écrans */
