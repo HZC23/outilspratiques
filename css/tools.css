@@ -12,28 +12,17 @@
     transition: var(--transition-slow) var(--ease-out-back);
     margin-bottom: var(--spacing-xl, 2rem);
     position: relative;
-    overflow: hidden;
+    overflow: visible;
+    border: none;
 }
 
 .section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    background: linear-gradient(to right, var(--primary-color, #2A6EBB), var(--secondary-color, #4CAF50));
-    opacity: 0;
-    transition: opacity var(--transition-duration, 0.3s) ease;
+    display: none;
 }
 
 .section:hover {
     transform: translateY(-5px);
     box-shadow: var(--hover-shadow, 0 8px 24px rgba(0, 0, 0, 0.12));
-}
-
-.section:hover::before {
-    opacity: 1;
 }
 
 /* Titres des sections */
@@ -52,33 +41,21 @@
 }
 
 .section h2::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 120px;
-    height: 3px;
-    background: var(--primary-color);
-    border-radius: 3px;
-    transition: width 0.4s var(--ease-out-back);
-}
-
-.section:hover h2::after {
-    width: 180px;
+    display: none;
 }
 
 /* Style des conteneurs */
 .container-base {
-    background: var(--bg-color);
+    background: transparent;
     border-radius: 10px;
     padding: 20px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: none;
     transition: all 0.3s ease;
+    border: none;
 }
 
 .container-base:hover {
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: none;
 }
 
 /* Entrées et champs de texte */
@@ -89,6 +66,8 @@ input, select, textarea {
     color: var(--text-color);
     font-size: 0.95rem;
     transition: all 0.3s ease;
+    border: none;
+    border-radius: var(--border-radius-circle);
 }
 
 input:focus, select:focus, textarea:focus {
@@ -102,7 +81,7 @@ button {
     background: var(--primary-color, #2A6EBB);
     color: white;
     font-weight: 500;
-    border-radius: var(--border-radius, 8px);
+    border-radius: var(--border-radius-circle);
     border: none;
     cursor: pointer;
     transition: all 0.3s var(--ease-out-back);
@@ -183,7 +162,7 @@ button:hover i {
     padding: 15px;
     margin-bottom: 15px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    border: 1px solid var(--border-color, #E0E0E0);
+    border: none;
     transition: all 0.3s ease;
 }
 
@@ -199,7 +178,7 @@ button:hover i {
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
-    border: 1px solid var(--border-color, #E0E0E0);
+    border: none;
 }
 
 .history-item:hover {
@@ -227,49 +206,44 @@ button:hover i {
     gap: 15px;
 }
 
-/* Listes */
+/* Listes - Suppression des conteneurs scrollables */
 .list-container {
-    max-height: 300px;
-    overflow-y: auto;
+    max-height: none;
+    overflow-y: visible;
     padding-right: 5px;
 }
 
 .list-container::-webkit-scrollbar {
-    width: 6px;
+    display: none;
 }
 
 .list-container::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 3px;
+    display: none;
 }
 
 .list-container::-webkit-scrollbar-thumb {
-    background: var(--primary-color);
-    border-radius: 3px;
+    display: none;
 }
 
-/* En-têtes des sections */
 .section-header {
+    margin-bottom: var(--spacing-md);
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--border-color);
+    justify-content: center;
+    text-align: center;
 }
 
 .section-header h3 {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    font-weight: 500;
     margin: 0;
-    color: var(--text-color);
-    font-size: 1.2rem;
-    font-weight: 600;
 }
 
-/* Animations */
 @keyframes fadeUp {
     from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(20px);
     }
     to {
         opacity: 1;
@@ -281,45 +255,44 @@ button:hover i {
     animation: fadeUp 0.5s ease forwards;
 }
 
-/* Styles pour le mode sombre */
 [data-theme="dark"] .section {
-    background: var(--card-bg);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    background-color: var(--card-bg);
+    border: none;
 }
 
 [data-theme="dark"] .container-base {
-    background: var(--dark-color);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+    background-color: transparent;
+    border: none;
 }
 
 [data-theme="dark"] .card {
-    background: var(--dark-color);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    background-color: var(--card-bg);
+    border: none;
 }
 
 [data-theme="dark"] .history-item {
-    background: var(--dark-color);
+    background-color: var(--card-bg);
+    border: none;
 }
 
 [data-theme="dark"] .history-item:hover {
-    background: var(--hover-color);
+    background-color: var(--hover-color);
 }
 
-/* Media queries */
 @media (max-width: 768px) {
     .section {
-        padding: var(--spacing-md, 1rem);
-        margin-bottom: var(--spacing-lg, 1.5rem);
+        padding: var(--spacing-md);
+        margin-bottom: var(--spacing-lg);
     }
     
     .section h2 {
         font-size: 1.5rem;
-        margin-bottom: var(--spacing-md, 1rem);
+        margin-bottom: var(--spacing-md);
     }
     
     .grid-2, .grid-3, .grid-4 {
         grid-template-columns: 1fr;
-        gap: 12px;
+        gap: 15px;
     }
     
     button {
@@ -334,13 +307,13 @@ button:hover i {
 
 @media (max-width: 480px) {
     .section {
-        padding: var(--spacing-sm, 0.75rem);
-        border-radius: var(--border-radius-md, 8px);
+        padding: var(--spacing-sm);
+        border-radius: var(--border-radius);
     }
     
     .section h2 {
         font-size: 1.3rem;
-        margin-bottom: var(--spacing-sm, 0.75rem);
+        margin-bottom: var(--spacing-sm);
     }
     
     input, select, textarea {

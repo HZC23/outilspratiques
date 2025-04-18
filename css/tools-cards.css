@@ -19,7 +19,7 @@
     overflow: hidden;
     transition: transform 0.3s var(--ease-out-back), box-shadow 0.3s ease;
     position: relative;
-    border: 1px solid var(--border-color);
+    border: none;
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -32,14 +32,7 @@
 
 /* Bannière colorée en haut de la carte */
 .tool-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-    z-index: 1;
+    display: none;
 }
 
 /* En-tête de la carte avec icône */
@@ -48,7 +41,7 @@
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: none;
 }
 
 .tool-card-icon {
@@ -88,7 +81,7 @@
 /* Pied de la carte avec bouton */
 .tool-card-footer {
     padding: var(--spacing-md);
-    border-top: 1px solid var(--border-color);
+    border-top: none;
     display: flex;
     justify-content: flex-end;
 }
@@ -98,7 +91,7 @@
     background-color: var(--primary-color);
     color: white;
     border: none;
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-circle);
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.2s ease;
@@ -117,19 +110,19 @@
 
 /* Variantes de cartes pour différentes catégories */
 .tool-card.calculation {
-    border-left: 3px solid var(--primary-color);
+    border-left: none;
 }
 
 .tool-card.conversion {
-    border-left: 3px solid var(--secondary-color);
+    border-left: none;
 }
 
 .tool-card.utility {
-    border-left: 3px solid var(--info-color);
+    border-left: none;
 }
 
 .tool-card.text {
-    border-left: 3px solid var(--warning-color);
+    border-left: none;
 }
 
 /* États des cartes */
