@@ -1,0 +1,110 @@
+/**
+ * Variables CSS globales
+ * Nouvelle palette de couleurs et système d'espacement
+ */
+
+:root {
+    /* Couleurs principales */
+    --primary-color: #2A6EBB;
+    --primary-color-rgb: 42, 110, 187;
+    --primary-light: #E3F2FD;
+    --secondary-color: #4CAF50;
+    --secondary-color-rgb: 76, 175, 80;
+    
+    /* Couleurs d'interface */
+    --bg-color: #F5F5F5;
+    --card-bg: #FFFFFF;
+    --border-color: #E0E0E0;
+    --hover-color: #E3F2FD;
+    
+    /* Couleurs pour les textes */
+    --text-color: #333333;
+    --text-secondary: #666666;
+    --text-muted: #999999;
+    
+    /* Couleurs fonctionnelles */
+    --success-color: #4CAF50;
+    --warning-color: #FF9800;
+    --error-color: #F44336;
+    --info-color: #2196F3;
+    --danger-color: #F44336;
+    
+    /* Système d'espacement */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 0.75rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-xxl: 3rem;
+    
+    /* Bordures et arrondi */
+    --border-radius-sm: 4px;
+    --border-radius: 8px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+    --border-radius-xl: 16px;
+    --border-radius-circle: 50%;
+    
+    /* Ombres */
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --hover-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    --inset-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+    
+    /* Animation et transitions */
+    --transition-fast: 0.15s ease;
+    --transition-duration: 0.3s;
+    --transition-slow: 0.5s;
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+    
+    /* Typographie */
+    --font-family: 'Roboto', 'Open Sans', sans-serif;
+    --font-size-sm: 0.85rem;
+    --font-size: 1rem;
+    --font-size-md: 1.2rem;
+    --font-size-lg: 1.5rem;
+    --font-size-xl: 1.8rem;
+    --font-size-xxl: 2.4rem;
+}
+
+/* Variables pour le thème sombre */
+[data-theme="dark"] {
+    /* Couleurs principales en mode sombre */
+    --primary-color: #4F8BD1;
+    --secondary-color: #66BB69;
+    
+    /* Couleurs d'interface en mode sombre */
+    --bg-color: #121212;
+    --card-bg: #1E1E1E;
+    --border-color: #333333;
+    --hover-color: #2A3747;
+    
+    /* Couleurs pour les textes en mode sombre */
+    --text-color: #E0E0E0;
+    --text-secondary: #AAAAAA;
+    --text-muted: #777777;
+    
+    /* Ombres en mode sombre */
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    --hover-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    --inset-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Adaptation mobile */
+@media (max-width: 768px) {
+    :root {
+        --spacing-lg: 1.25rem;
+        --spacing-xl: 1.5rem;
+        --spacing-xxl: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --spacing-md: 0.75rem;
+        --spacing-lg: 1rem;
+        --spacing-xl: 1.25rem;
+        --font-size-xl: 1.5rem;
+        --font-size-xxl: 2rem;
+    }
+} 

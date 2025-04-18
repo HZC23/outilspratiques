@@ -5,12 +5,12 @@
 
 /* Style de base pour tous les outils */
 .section {
-    background: var(--card-bg);
-    border-radius: var(--border-radius-lg);
-    padding: var(--spacing-lg);
-    box-shadow: var(--box-shadow);
+    background: var(--card-bg, #FFFFFF);
+    border-radius: var(--border-radius-lg, 12px);
+    padding: var(--spacing-lg, 1.5rem);
+    box-shadow: var(--box-shadow, 0 4px 12px rgba(0, 0, 0, 0.08));
     transition: var(--transition-slow) var(--ease-out-back);
-    margin-bottom: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl, 2rem);
     position: relative;
     overflow: hidden;
 }
@@ -22,14 +22,14 @@
     left: 0;
     width: 100%;
     height: 4px;
-    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+    background: linear-gradient(to right, var(--primary-color, #2A6EBB), var(--secondary-color, #4CAF50));
     opacity: 0;
-    transition: opacity var(--transition-duration) ease;
+    transition: opacity var(--transition-duration, 0.3s) ease;
 }
 
 .section:hover {
     transform: translateY(-5px);
-    box-shadow: var(--hover-shadow);
+    box-shadow: var(--hover-shadow, 0 8px 24px rgba(0, 0, 0, 0.12));
 }
 
 .section:hover::before {
@@ -38,11 +38,11 @@
 
 /* Titres des sections */
 .section h2 {
-    color: var(--primary-color);
+    color: var(--primary-color, #2A6EBB);
     font-size: 1.8rem;
     font-weight: 600;
-    margin-bottom: var(--spacing-lg);
-    padding-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg, 1.5rem);
+    padding-bottom: var(--spacing-sm, 0.75rem);
     position: relative;
     display: flex;
     justify-content: center;
@@ -99,9 +99,11 @@ input:focus, select:focus, textarea:focus {
 /* Boutons améliorés */
 button {
     padding: 12px 18px;
-    background: var(--primary-color);
+    background: var(--primary-color, #2A6EBB);
     color: white;
     font-weight: 500;
+    border-radius: var(--border-radius, 8px);
+    border: none;
     cursor: pointer;
     transition: all 0.3s var(--ease-out-back);
     position: relative;
@@ -130,37 +132,38 @@ button i {
 
 /* Boutons spécifiques */
 .primary-btn {
-    background: var(--primary-color);
+    background: var(--primary-color, #2A6EBB);
     color: white;
 }
 
 .secondary-btn {
-    background: var(--secondary-color);
+    background: var(--secondary-color, #4CAF50);
     color: white;
 }
 
 .success-btn {
-    background: var(--success-color);
+    background: var(--success-color, #4CAF50);
     color: white;
 }
 
 .danger-btn, .clear-btn {
-    background: var(--danger-color);
+    background: var(--danger-color, #F44336);
     color: white;
 }
 
 .info-btn {
-    background: var(--info-color);
+    background: var(--info-color, #2196F3);
     color: white;
 }
 
 .outline-btn {
     background: transparent;
-    color: var(--primary-color);
+    color: var(--primary-color, #2A6EBB);
+    border: 1px solid var(--primary-color, #2A6EBB);
 }
 
 .outline-btn:hover {
-    background: var(--primary-color);
+    background: var(--primary-color, #2A6EBB);
     color: white;
 }
 
@@ -175,11 +178,12 @@ button:hover i {
 
 /* Cartes et éléments d'historique */
 .card {
-    background: var(--card-bg);
+    background: var(--card-bg, #FFFFFF);
     border-radius: 10px;
     padding: 15px;
     margin-bottom: 15px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color, #E0E0E0);
     transition: all 0.3s ease;
 }
 
@@ -191,14 +195,15 @@ button:hover i {
 .history-item {
     padding: 12px;
     margin-bottom: 10px;
-    background: var(--bg-color);
+    background: var(--bg-color, #F5F5F5);
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
+    border: 1px solid var(--border-color, #E0E0E0);
 }
 
 .history-item:hover {
-    background: var(--hover-color);
+    background: var(--hover-color, #E3F2FD);
     transform: translateX(5px);
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
 }
@@ -303,20 +308,22 @@ button:hover i {
 /* Media queries */
 @media (max-width: 768px) {
     .section {
-        padding: 15px;
+        padding: var(--spacing-md, 1rem);
+        margin-bottom: var(--spacing-lg, 1.5rem);
     }
     
     .section h2 {
         font-size: 1.5rem;
-        margin-bottom: 20px;
+        margin-bottom: var(--spacing-md, 1rem);
     }
     
     .grid-2, .grid-3, .grid-4 {
         grid-template-columns: 1fr;
+        gap: 12px;
     }
     
     button {
-        padding: 10px 15px;
+        padding: 10px 16px;
         font-size: 0.9rem;
     }
     
@@ -327,21 +334,22 @@ button:hover i {
 
 @media (max-width: 480px) {
     .section {
-        padding: 12px;
+        padding: var(--spacing-sm, 0.75rem);
+        border-radius: var(--border-radius-md, 8px);
     }
     
     .section h2 {
         font-size: 1.3rem;
-        margin-bottom: 15px;
+        margin-bottom: var(--spacing-sm, 0.75rem);
     }
     
     input, select, textarea {
-        padding: 10px;
+        padding: 10px 14px;
         font-size: 0.9rem;
     }
     
     button {
-        padding: 8px 12px;
+        padding: 8px 14px;
         font-size: 0.85rem;
     }
 } 
