@@ -5,8 +5,8 @@
 
 :root {
     /* Couleurs principales */
-    --primary-color: #2A6EBB;
-    --primary-color-rgb: 42, 110, 187;
+    --primary-color: #0E9CFF;
+    --primary-color-rgb: 14, 156, 255;
     --primary-light: #E3F2FD;
     --secondary-color: #4CAF50;
     --secondary-color-rgb: 76, 175, 80;
@@ -39,10 +39,10 @@
     
     /* Bordures et arrondi */
     --border-radius-sm: 4px;
-    --border-radius: 8px;
-    --border-radius-md: 8px;
-    --border-radius-lg: 12px;
-    --border-radius-xl: 16px;
+    --border-radius: 12px;
+    --border-radius-md: 12px;
+    --border-radius-lg: 16px;
+    --border-radius-xl: 20px;
     --border-radius-circle: 50%;
     
     /* Ombres */
@@ -70,7 +70,7 @@
 /* Variables pour le thème sombre */
 [data-theme="dark"] {
     /* Couleurs principales en mode sombre */
-    --primary-color: #4F8BD1;
+    --primary-color: #0E9CFF;
     --secondary-color: #66BB69;
     
     /* Couleurs d'interface en mode sombre */

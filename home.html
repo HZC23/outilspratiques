@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' https: data:; font-src 'self' https: data:; connect-src 'self' https:;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
+    <meta name="description" content="Collection d'outils pratiques gratuits pour le calcul, la gestion du temps, l'organisation et plus encore. Calculatrice, minuteur, bloc-notes et traducteur en ligne.">
+    <meta name="theme-color" content="#4a90e2" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    <meta name="color-scheme" content="light dark">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Outils Pratiques">
+    <meta name="application-name" content="Outils Pratiques">
+    <meta name="keywords" content="outils en ligne, calculatrice scientifique, minuteur, chronomètre, bloc-notes, todo list, traducteur, convertisseur, gratuit">
+    <meta name="author" content="Outils Pratiques">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Outils Pratiques - Collection d'outils en ligne gratuits">
+    <meta property="og:description" content="Collection d'outils pratiques gratuits pour le calcul, la gestion du temps, l'organisation et plus encore. Calculatrice, minuteur, bloc-notes et traducteur en ligne.">
+    <meta property="og:image" content="https://hzc23.github.io/outilspratiques.github.io/icons/icon-512x512.png">
+    <meta property="og:url" content="https://hzc23.github.io/outilspratiques.github.io/">
+    <meta property="og:site_name" content="Outils Pratiques">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Outils Pratiques - Collection d'outils en ligne gratuits">
+    <meta name="twitter:description" content="Collection d'outils pratiques gratuits pour le calcul, la gestion du temps, l'organisation et plus encore.">
+    <meta name="twitter:image" content="https://hzc23.github.io/outilspratiques.github.io/icons/icon-512x512.png">
+    <link rel="canonical" href="https://hzc23.github.io/outilspratiques.github.io/">
+    <title>Accueil - Outils Pratiques - Collection d'outils en ligne gratuits</title>
+    
+    <!-- Base URL pour GitHub Pages -->
+    <base href="https://hzc23.github.io/outilspratiques.github.io/">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="icons/favicon.ico">
+    <link rel="icon" type="image/png" sizes="144x144" href="icons/icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="icons/icon-144x144.png">
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Preload des ressources critiques -->
+    <link rel="preload" href="styles.css" as="style">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/tools.css">
+    <link rel="stylesheet" href="css/menu.css">
+    <link rel="stylesheet" href="css/theme-switch.css">
+    <link rel="stylesheet" href="css/notification.css">
+    <link rel="stylesheet" href="css/tools-cards.css">
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" 
+          media="print" 
+          onload="this.media='all'" 
+          crossorigin="anonymous"
+          integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+          referrerpolicy="no-referrer">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" 
+          rel="stylesheet" 
+          media="print" 
+          onload="this.media='all'"
+          crossorigin="anonymous">
+    
+    <!-- Noscript fallback -->
+    <noscript>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    </noscript>
+    
+    <!-- JavaScript Modules -->
+    <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/menu.js"></script>
+    <script type="module" src="js/theme.js"></script>
+</head>
+<body>
+    <!-- Horloge en haut à droite -->
+    <div class="top-clock" role="complementary" aria-label="Horloge">
+        <div class="time" id="topTime">00:00:00</div>
+        <div class="date" id="topDate">01 Janvier 2024</div>
+    </div>
+
+    <header>
+        <!-- From Uiverse.io by Galahhad --> 
+        <label class="theme-switch">
+            <input type="checkbox" class="theme-switch__checkbox">
+            <div class="theme-switch__container">
+              <div class="theme-switch__clouds"></div>
+              <div class="theme-switch__stars-container">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144 55" fill="none">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M135.831 3.00688C135.055 3.85027 134.111 4.29946 133 4.35447C134.111 4.40947 135.055 4.85867 135.831 5.71123C136.607 6.55462 136.996 7.56303 136.996 8.72727C136.996 7.95722 137.172 7.25134 137.525 6.59129C137.886 5.93124 138.372 5.39954 138.98 5.00535C139.598 4.60199 140.268 4.39114 141 4.35447C139.88 4.2903 138.936 3.85027 138.16 3.00688C137.384 2.16348 136.996 1.16425 136.996 0C136.996 1.16425 136.607 2.16348 135.831 3.00688ZM31 23.3545C32.1114 23.2995 33.0551 22.8503 33.8313 22.0069C34.6075 21.1635 34.9956 20.1642 34.9956 19C34.9956 20.1642 35.3837 21.1635 36.1599 22.0069C36.9361 22.8503 37.8798 23.2903 39 23.3545C38.2679 23.3911 37.5976 23.602 36.9802 24.0053C36.3716 24.3995 35.8864 24.9312 35.5248 25.5913C35.172 26.2513 34.9956 26.9572 34.9956 27.7273C34.9956 26.563 34.6075 25.5546 33.8313 24.7112C33.0551 23.8587 32.1114 23.4095 31 23.3545ZM0 36.3545C1.11136 36.2995 2.05513 35.8503 2.83131 35.0069C3.6075 34.1635 3.99559 33.1642 3.99559 32C3.99559 33.1642 4.38368 34.1635 5.15987 35.0069C5.93605 35.8503 6.87982 36.2903 8 36.3545C7.26792 36.3911 6.59757 36.602 5.98015 37.0053C5.37155 37.3995 4.88644 37.9312 4.52481 38.5913C4.172 39.2513 3.99559 39.9572 3.99559 40.7273C3.99559 39.563 3.6075 38.5546 2.83131 37.7112C2.05513 36.8587 1.11136 36.4095 0 36.3545ZM56.8313 24.0069C56.0551 24.8503 55.1114 25.2995 54 25.3545C55.1114 25.4095 56.0551 25.8587 56.8313 26.7112C57.6075 27.5546 57.9956 28.563 57.9956 29.7273C57.9956 28.9572 58.172 28.2513 58.5248 27.5913C58.8864 26.9312 59.3716 26.3995 59.9802 26.0053C60.5976 25.602 61.2679 25.3911 62 25.3545C60.8798 25.2903 59.9361 24.8503 59.1599 24.0069C58.3837 23.1635 57.9956 22.1642 57.9956 21C57.9956 22.1642 57.6075 23.1635 56.8313 24.0069ZM81 25.3545C82.1114 25.2995 83.0551 24.8503 83.8313 24.0069C84.6075 23.1635 84.9956 22.1642 84.9956 21C84.9956 22.1642 85.3837 23.1635 86.1599 24.0069C86.9361 24.8503 87.8798 25.2903 89 25.3545C88.2679 25.3911 87.5976 25.602 86.9802 26.0053C86.3716 26.3995 85.8864 26.9312 85.5248 27.5913C85.172 28.2513 84.9956 28.9572 84.9956 29.7273C84.9956 28.563 84.6075 27.5546 83.8313 26.7112C83.0551 25.8587 82.1114 25.4095 81 25.3545ZM136 36.3545C137.111 36.2995 138.055 35.8503 138.831 35.0069C139.607 34.1635 139.996 33.1642 139.996 32C139.996 33.1642 140.384 34.1635 141.16 35.0069C141.936 35.8503 142.88 36.2903 144 36.3545C143.268 36.3911 142.598 36.602 141.98 37.0053C141.372 37.3995 140.886 37.9312 140.525 38.5913C140.172 39.2513 139.996 39.9572 139.996 40.7273C139.996 39.563 139.607 38.5546 138.831 37.7112C138.055 36.8587 137.111 36.4095 136 36.3545ZM101.831 49.0069C101.055 49.8503 100.111 50.2995 99 50.3545C100.111 50.4095 101.055 50.8587 101.831 51.7112C102.607 52.5546 102.996 53.563 102.996 54.7273C102.996 53.9572 103.172 53.2513 103.525 52.5913C103.886 51.9312 104.372 51.3995 104.98 51.0053C105.598 50.602 106.268 50.3911 107 50.3545C105.88 50.2903 104.936 49.8503 104.16 49.0069C103.384 48.1635 102.996 47.1642 102.996 46C102.996 47.1642 102.607 48.1635 101.831 49.0069Z" fill="currentColor"></path>
+                </svg>
+              </div>
+              <div class="theme-switch__circle-container">
+                <div class="theme-switch__sun-moon-container">
+                  <div class="theme-switch__moon">
+                    <div class="theme-switch__spot"></div>
+                    <div class="theme-switch__spot"></div>
+                    <div class="theme-switch__spot"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </label>
+        <h1>Outils Pratiques</h1>
+        <button id="menuToggle" class="menu-toggle" aria-label="Ouvrir le menu">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <main class="container">
+        <!-- Menu de navigation -->
+        <nav class="menu" role="navigation" aria-label="Menu principal" id="mainMenu">
+            <button id="toggleMenuWidth" class="toggle-menu-width" aria-label="Réduire/Agrandir le menu" title="Réduire/Agrandir le menu">
+                <i class="fas fa-angle-left"></i>
+            </button>
+            <!-- Calculs et Mathématiques -->
+            <div class="menu-category">
+                <button type="button"
+                        class="menu-trigger has-submenu"
+                        data-menu-id="mathMenu"
+                        aria-expanded="false"
+                        aria-controls="mathMenu"
+                        aria-haspopup="true">
+                    <i class="fas fa-calculator" aria-hidden="true"></i>
+                    <span>Calculs</span>
+                    <i class="fas fa-chevron-down submenu-icon" aria-hidden="true"></i>
+                </button>
+                <div id="mathMenu" class="submenu" role="menu" aria-hidden="true">
+                    <button type="button" data-tool-id="calculatorTool" class="submenu-item" role="menuitem">
+                        <i class="fas fa-square-root-alt" aria-hidden="true"></i>
+                        <span>Calculatrice scientifique</span>
+                    </button>
+                    <button type="button" data-tool-id="percentageTool" class="submenu-item" role="menuitem">
+                        <i class="fas fa-percent" aria-hidden="true"></i>
+                        <span>Pourcentages</span>
+                    </button>
+                    <button type="button" data-tool-id="unitTool" class="submenu-item" role="menuitem">
+                        <i class="fas fa-ruler" aria-hidden="true"></i>
+                        <span>Conversions</span>
+                    </button>
+                    <button type="button" data-tool-id="currencyTool" class="submenu-item" role="menuitem">
+                        <i class="fas fa-money-bill-wave" aria-hidden="true"></i>
+                        <span>Devises</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Temps -->
+            <div class="menu-category">
+                <button type="button"
+                        class="menu-trigger has-submenu"
+                        data-menu-id="timeMenu"
+                        aria-expanded="false"
+                        aria-controls="timeMenu"
+                        aria-haspopup="true">
+                    <i class="fas fa-clock" aria-hidden="true"></i>
+                    <span>Temps</span>
+                    <i class="fas fa-chevron-down submenu-icon" aria-hidden="true"></i>
+                </button>
+                <div id="timeMenu" class="submenu" role="menu" aria-hidden="true">
+                    <button type="button" data-tool-id="timerTool" class="submenu-item" role="menuitem">
+                        <i class="fas fa-hourglass-start" aria-hidden="true"></i>
+                        <span>Minuteur</span>
+                    </button>
+                    <button type="button" data-tool-id="stopwatchTool" class="submenu-item" role="menuitem">
+                        <i class="fas fa-stopwatch" aria-hidden="true"></i>
+                        <span>Chronomètre</span>
+                    </button>
+                    <button type="button" data-tool-id="metronomeTool" class="submenu-item" role="menuitem">
+                        <i class="fas fa-drum" aria-hidden="true"></i>
+                        <span>Métronome</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Organisation -->
+            <div class="menu-category">
+                <button type="button"
+                        class="menu-trigger has-submenu"
+                        data-menu-id="orgMenu"
+                        aria-expanded="false"
+                        aria-controls="orgMenu"
+                        aria-haspopup="true">
+                    <i class="fas fa-tasks" aria-hidden="true"></i>
+                    <span>Organisation</span>
+                    <i class="fas fa-chevron-down submenu-icon" aria-hidden="true"></i>
+                </button>
+                <div id="orgMenu" class="submenu" role="menu" aria-hidden="true">
+                    <button type="button" data-tool-id="noteTool" data-tooltip="Bloc-notes avec formatage de texte" class="submenu-item" role="menuitem">
+                        <i class="fas fa-sticky-note" aria-hidden="true"></i>
+                        <span>Bloc-notes</span>
+                    </button>
+                    <button type="button" data-tool-id="todoTool" class="submenu-item" role="menuitem">
+                        <i class="fas fa-clipboard-list" aria-hidden="true"></i>
+                        <span>Liste de tâches</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Texte -->
+            <div class="menu-category">
+                <button type="button"
+                        class="menu-trigger has-submenu"
+                        data-menu-id="textMenu"
+                        aria-expanded="false"
+                        aria-controls="textMenu"
+                        aria-haspopup="true">
+                    <i class="fas fa-font" aria-hidden="true"></i>
+                    <span>Texte</span>
+                    <i class="fas fa-chevron-down submenu-icon" aria-hidden="true"></i>
+                </button>
+                <div id="textMenu" class="submenu" role="menu" aria-hidden="true">
+                    <button type="button" data-tool-id="translatorTool" class="submenu-item" role="menuitem">
+                        <i class="fas fa-language" aria-hidden="true"></i>
+                        <span>Traducteur</span>
+                    </button>
+                    <button type="button" data-tool-id="styletext" class="submenu-item" role="menuitem">
+                        <i class="fas fa-feather-alt" aria-hidden="true"></i>
+                        <span>Styliseur de texte</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Utilitaires -->
+            <div class="menu-category">
+                <button type="button"
+                        class="menu-trigger has-submenu"
+                        data-menu-id="utilsMenu"
+                        data-tooltip="Outils utilitaires divers"
+                        aria-expanded="false"
+                        aria-controls="utilsMenu"
+                        aria-haspopup="true">
+                    <i class="fas fa-tools" aria-hidden="true"></i>
+                    <span>Utilitaires</span>
+                    <i class="fas fa-chevron-down submenu-icon" aria-hidden="true"></i>
+                </button>
+                <div id="utilsMenu" class="submenu" role="menu" aria-hidden="true">
+                    <button type="button" data-tool-id="passwordTool" data-tooltip="Générateur de mots de passe sécurisés" class="submenu-item" role="menuitem">
+                        <i class="fas fa-key" aria-hidden="true"></i>
+                        <span>Générateur de mot de passe</span>
+                    </button>
+                    <button type="button" data-tool-id="colorTool" data-tooltip="Sélecteur de couleurs avec codes" class="submenu-item" role="menuitem">
+                        <i class="fas fa-palette" aria-hidden="true"></i>
+                        <span>Sélecteur de couleur</span>
+                    </button>
+                    <button type="button" data-tool-id="qrcodeTool" data-tooltip="Générateur de QR codes personnalisés" class="submenu-item" role="menuitem">
+                        <i class="fas fa-qrcode" aria-hidden="true"></i>
+                        <span>Générateur de QR code</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Contenu principal de la page d'accueil -->
+        <div class="home-content">
+            <!-- Bannière d'accueil -->
+            <section class="hero-banner">
+                <div class="hero-content">
+                    <h2>Bienvenue sur Outils Pratiques</h2>
+                    <p>Votre collection d'outils en ligne gratuits, simples et efficaces pour tous vos besoins quotidiens.</p>
+                    <p class="hero-description">Tous nos outils fonctionnent directement dans votre navigateur, sans inscription ni installation. Vos données restent sur votre appareil.</p>
+                </div>
+                <div class="hero-illustration">
+                    <i class="fas fa-tools hero-icon"></i>
+                </div>
+            </section>
+
+            <!-- Grille d'outils -->
+            <h2 class="section-title">Nos outils</h2>
+            <div class="tools-grid">
+                <!-- Catégorie Calculs -->
+                <div class="tool-card calculation">
+                    <div class="tool-card-header">
+                        <div class="tool-card-icon">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <h3 class="tool-card-title">Calculatrice</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p class="tool-card-description">Calculatrice scientifique complète avec historique et fonctions avancées.</p>
+                    </div>
+                    <div class="tool-card-footer">
+                        <a href="index.html#calculatorTool" class="tool-card-button">
+                            <span>Utiliser</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="tool-card conversion">
+                    <div class="tool-card-header">
+                        <div class="tool-card-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <h3 class="tool-card-title">Convertisseur</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p class="tool-card-description">Convertissez facilement des unités de mesure, de temps, de volume et plus encore.</p>
+                    </div>
+                    <div class="tool-card-footer">
+                        <a href="index.html#unitTool" class="tool-card-button">
+                            <span>Utiliser</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Catégorie Temps -->
+                <div class="tool-card popular">
+                    <div class="tool-card-header">
+                        <div class="tool-card-icon">
+                            <i class="fas fa-hourglass-start"></i>
+                        </div>
+                        <h3 class="tool-card-title">Minuteur</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p class="tool-card-description">Minuteur simple avec alarme personnalisable et notification visuelle.</p>
+                    </div>
+                    <div class="tool-card-footer">
+                        <a href="index.html#timerTool" class="tool-card-button">
+                            <span>Utiliser</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-card-icon">
+                            <i class="fas fa-stopwatch"></i>
+                        </div>
+                        <h3 class="tool-card-title">Chronomètre</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p class="tool-card-description">Chronomètre précis avec fonction tour et enregistrement des performances.</p>
+                    </div>
+                    <div class="tool-card-footer">
+                        <a href="index.html#stopwatchTool" class="tool-card-button">
+                            <span>Utiliser</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Catégorie Organisation -->
+                <div class="tool-card popular">
+                    <div class="tool-card-header">
+                        <div class="tool-card-icon">
+                            <i class="fas fa-sticky-note"></i>
+                        </div>
+                        <h3 class="tool-card-title">Bloc-notes</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p class="tool-card-description">Prenez des notes avec mise en forme, sauvegarde automatique et exportation facile.</p>
+                    </div>
+                    <div class="tool-card-footer">
+                        <a href="index.html#noteTool" class="tool-card-button">
+                            <span>Utiliser</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-card-icon">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <h3 class="tool-card-title">Liste de tâches</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p class="tool-card-description">Organisez vos tâches par catégorie, priorité et échéance avec rappels visuels.</p>
+                    </div>
+                    <div class="tool-card-footer">
+                        <a href="index.html#todoTool" class="tool-card-button">
+                            <span>Utiliser</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Catégorie Texte -->
+                <div class="tool-card text">
+                    <div class="tool-card-header">
+                        <div class="tool-card-icon">
+                            <i class="fas fa-language"></i>
+                        </div>
+                        <h3 class="tool-card-title">Traducteur</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p class="tool-card-description">Traduisez du texte entre plusieurs langues avec conversion vocale intégrée.</p>
+                    </div>
+                    <div class="tool-card-footer">
+                        <a href="index.html#translatorTool" class="tool-card-button">
+                            <span>Utiliser</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Catégorie Utilitaires -->
+                <div class="tool-card utility new">
+                    <div class="tool-card-header">
+                        <div class="tool-card-icon">
+                            <i class="fas fa-key"></i>
+                        </div>
+                        <h3 class="tool-card-title">Générateur de mot de passe</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p class="tool-card-description">Créez des mots de passe sécurisés et personnalisés avec évaluation de force.</p>
+                    </div>
+                    <div class="tool-card-footer">
+                        <a href="index.html#passwordTool" class="tool-card-button">
+                            <span>Utiliser</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section fonctionnalités -->
+            <section class="features-section">
+                <h2 class="section-title">Pourquoi choisir nos outils ?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h3>Rapide et léger</h3>
+                        <p>Nos outils se chargent instantanément et n'utilisent que les ressources nécessaires.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h3>Sécurisé</h3>
+                        <p>Vos données restent sur votre appareil et ne sont jamais envoyées à nos serveurs.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3>Adaptatif</h3>
+                        <p>Fonctionne parfaitement sur tous les appareils : ordinateurs, tablettes et smartphones.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-moon"></i>
+                        </div>
+                        <h3>Mode sombre</h3>
+                        <p>Choisissez entre le mode clair et sombre pour un meilleur confort visuel.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Appel à l'action -->
+            <section class="cta-section">
+                <h2>Prêt à simplifier votre quotidien ?</h2>
+                <p>Explorez notre collection d'outils pratiques et découvrez comment ils peuvent vous faire gagner du temps.</p>
+                <a href="index.html" class="cta-button">
+                    <span>Accéder aux outils</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <h2>Outils Pratiques</h2>
+                <p>Simplifiez votre quotidien</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-section">
+                    <h3>Catégories</h3>
+                    <ul>
+                        <li><a href="index.html#calculatorTool">Calculs</a></li>
+                        <li><a href="index.html#timerTool">Temps</a></li>
+                        <li><a href="index.html#noteTool">Organisation</a></li>
+                        <li><a href="index.html#translatorTool">Texte</a></li>
+                        <li><a href="index.html#passwordTool">Utilitaires</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>À propos</h3>
+                    <ul>
+                        <li><a href="#">Confidentialité</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Outils Pratiques. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <!-- Script pour mettre à jour l'horloge -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function updateClock() {
+                const now = new Date();
+                const timeElem = document.getElementById('topTime');
+                const dateElem = document.getElementById('topDate');
+                
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const seconds = String(now.getSeconds()).padStart(2, '0');
+                
+                const options = { day: '2-digit', month: 'long', year: 'numeric' };
+                const dateStr = now.toLocaleDateString('fr-FR', options);
+                
+                if (timeElem) timeElem.textContent = `${hours}:${minutes}:${seconds}`;
+                if (dateElem) dateElem.textContent = dateStr;
+            }
+            
+            updateClock();
+            setInterval(updateClock, 1000);
+        });
+    </script>
+</body>
+</html> 
