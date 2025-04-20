@@ -296,10 +296,26 @@
                     return response.text();
                 })
                 .then(html => {
-                    toolsContainer.innerHTML = html;
+                    // Créer un élément temporaire pour parser le HTML
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = html;
                     
-                    // Mettre à jour l'URL 
-                    history.pushState(null, null, `#${toolId}`);
+                    // Extraire uniquement la section de l'outil
+                    const toolSection = tempDiv.querySelector('section');
+                    
+                    if (toolSection) {
+                        toolsContainer.innerHTML = '';
+                        toolsContainer.appendChild(toolSection);
+                        
+                        // Charger et exécuter les scripts de l'outil si nécessaire
+                        const scriptId = toolId.replace('Tool', '');
+                        // Vous pouvez ajouter une logique d'initialisation spécifique ici si nécessaire
+                        
+                        // Mettre à jour l'URL 
+                        history.pushState(null, null, `#${toolId}`);
+                    } else {
+                        throw new Error("Structure d'outil invalide");
+                    }
                 })
                 .catch(error => {
                     console.error('Erreur lors du chargement de l\'outil:', error);
