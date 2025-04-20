@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Calculateur de pourcentages - Outils Pratiques</title>
+    
+    <base href="https://hzc23.github.io/outilspratiques.github.io/">
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/tools.css">
+    <link rel="stylesheet" href="css/tools/percentage.css">
+    
+    <script type="module" src="js/tools/percentage.js"></script>
+</head>
+<body>
+    <section id="percentageTool" class="section" aria-labelledby="percentageTitle">
+        <h2 id="percentageTitle">Calculateur de pourcentages</h2>
+        <div class="percentage-container">
+            <div class="percentage-input">
+                <label for="amount">Montant</label>
+                <input type="number" id="amount" placeholder="Entrez le montant">
+            </div>
+            <div class="percentage-input">
+                <label for="percentage">Pourcentage</label>
+                <input type="number" id="percentage" placeholder="Entrez le pourcentage">
+            </div>
+            <button type="button" onclick="calculatePercentage()">Calculer</button>
+        </div>
+        <div class="result" id="result">Résultat: 0</div>
+    </section>
+</body>
+</html> 

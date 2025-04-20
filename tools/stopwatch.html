@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Chronomètre - Outils Pratiques</title>
+    
+    <base href="https://hzc23.github.io/outilspratiques.github.io/">
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/tools.css">
+    <link rel="stylesheet" href="css/tools/stopwatch.css">
+    
+    <script type="module" src="js/tools/stopwatch.js"></script>
+</head>
+<body>
+    <section id="stopwatchTool" class="section" aria-labelledby="stopwatchTitle">
+        <h2 id="stopwatchTitle">Chronomètre</h2>
+        <div class="stopwatch-container">
+            <div class="stopwatch-display" id="stopwatchDisplay" aria-live="polite">00:00:00</div>
+            
+            <div class="stopwatch-controls">
+                <button type="button" onclick="startStopwatch()" class="start-btn" id="stopwatchStartBtn" aria-label="Démarrer le chronomètre">
+                    <i class="fas fa-play"></i> Démarrer
+                </button>
+                <button type="button" onclick="resetStopwatch()" class="reset-btn" id="stopwatchResetBtn" aria-label="Réinitialiser le chronomètre">
+                    <i class="fas fa-sync-alt"></i> Réinitialiser
+                </button>
+            </div>
+        </div>
+    </section>
+</body>
+</html> 

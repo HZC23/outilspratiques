@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Traducteur - Outils Pratiques</title>
+    
+    <base href="https://hzc23.github.io/outilspratiques.github.io/">
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/tools.css">
+    <link rel="stylesheet" href="css/tools/translator.css">
+    
+    <script type="module" src="js/tools/translator.js"></script>
+</head>
+<body>
+    <section id="translatorTool" class="section" aria-labelledby="translatorTitle">
+        <h2 id="translatorTitle">Traducteur</h2>
+        <div class="translator-container">
+            <div class="translator-input">
+                <label for="sourceLanguage">Langue source:</label>
+                <select id="sourceLanguage">
+                    <option value="en">Anglais</option>
+                    <option value="fr">Français</option>
+                    <option value="es">Espagnol</option>
+                    <option value="de">Allemand</option>
+                    <option value="it">Italien</option>
+                    <option value="ja">Japonais</option>
+                    <option value="zh">Chinois</option>
+                </select>
+            </div>
+            <div class="translator-input">
+                <label for="targetLanguage">Langue cible:</label>
+                <select id="targetLanguage">
+                    <option value="en">Anglais</option>
+                    <option value="fr">Français</option>
+                    <option value="es">Espagnol</option>
+                    <option value="de">Allemand</option>
+                    <option value="it">Italien</option>
+                    <option value="ja">Japonais</option>
+                    <option value="zh">Chinois</option>
+                </select>
+            </div>
+            <textarea id="textInput" placeholder="Entrez le texte à traduire"></textarea>
+            <button type="button" onclick="translateText()">Traduire</button>
+            <div id="translatedText" class="translated-text"></div>
+        </div>
+    </section>
+</body>
+</html> 

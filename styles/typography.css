@@ -1,0 +1,232 @@
+/* Système de typographie */
+
+/* Réinitialisation de base pour la cohérence */
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Titres */
+h1, .h1 {
+  font-size: var(--font-size-3xl);
+  line-height: var(--line-height-tight);
+  font-weight: 700;
+  margin-bottom: var(--space-6);
+}
+
+h2, .h2 {
+  font-size: var(--font-size-2xl);
+  line-height: var(--line-height-tight);
+  font-weight: 700;
+  margin-bottom: var(--space-4);
+}
+
+h3, .h3 {
+  font-size: var(--font-size-xl);
+  line-height: var(--line-height-tight);
+  font-weight: 600;
+  margin-bottom: var(--space-3);
+}
+
+h4, .h4 {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-tight);
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+}
+
+h5, .h5 {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+}
+
+h6, .h6 {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+}
+
+/* Paragraphes et autres éléments textuels */
+p {
+  margin-bottom: var(--space-4);
+}
+
+.text-sm {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.text-xs {
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-normal);
+}
+
+.text-lg {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-normal);
+}
+
+.text-xl {
+  font-size: var(--font-size-xl);
+  line-height: var(--line-height-tight);
+}
+
+/* Formatage de texte */
+.text-bold {
+  font-weight: 700;
+}
+
+.text-semibold {
+  font-weight: 600;
+}
+
+.text-medium {
+  font-weight: 500;
+}
+
+.text-regular {
+  font-weight: 400;
+}
+
+.text-light {
+  font-weight: 300;
+}
+
+/* Alignement */
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-justify {
+  text-align: justify;
+}
+
+/* Couleurs de texte */
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-tertiary {
+  color: var(--text-tertiary);
+}
+
+.text-brand {
+  color: var(--color-primary);
+}
+
+.text-success {
+  color: var(--color-success);
+}
+
+.text-warning {
+  color: var(--color-warning);
+}
+
+.text-error {
+  color: var(--color-error);
+}
+
+.text-info {
+  color: var(--color-info);
+}
+
+/* Troncation et ellipsis */
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.line-clamp-1,
+.line-clamp-2,
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+/* Autres styles de texte */
+.uppercase {
+  text-transform: uppercase;
+}
+
+.lowercase {
+  text-transform: lowercase;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.no-underline {
+  text-decoration: none;
+}
+
+/* Espacement des lettres */
+.tracking-tight {
+  letter-spacing: -0.025em;
+}
+
+.tracking-normal {
+  letter-spacing: 0;
+}
+
+.tracking-wide {
+  letter-spacing: 0.025em;
+}
+
+/* Listes */
+ul, ol {
+  padding-left: var(--space-6);
+  margin-bottom: var(--space-4);
+}
+
+li {
+  margin-bottom: var(--space-2);
+}
+
+/* Responsive - ajustements pour mobile */
+@media (max-width: 640px) {
+  h1, .h1 {
+    font-size: var(--font-size-2xl);
+  }
+  
+  h2, .h2 {
+    font-size: var(--font-size-xl);
+  }
+  
+  h3, .h3 {
+    font-size: var(--font-size-lg);
+  }
+} 

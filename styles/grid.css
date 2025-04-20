@@ -1,0 +1,124 @@
+/* Système de grille pour le site */
+
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
+}
+
+/* Breakpoints définis dans interface.md */
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+    padding-left: var(--space-6);
+    padding-right: var(--space-6);
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+    padding-left: var(--space-8);
+    padding-right: var(--space-8);
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+/* Grille principale - 12 colonnes */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+/* Grille avec espacement personnalisé */
+.grid-gap-1 { gap: var(--space-1); }
+.grid-gap-2 { gap: var(--space-2); }
+.grid-gap-3 { gap: var(--space-3); }
+.grid-gap-4 { gap: var(--space-4); }
+.grid-gap-6 { gap: var(--space-6); }
+.grid-gap-8 { gap: var(--space-8); }
+
+/* Classes pour les éléments dans la grille */
+.col-span-1 { grid-column: span 1 / span 1; }
+.col-span-2 { grid-column: span 2 / span 2; }
+.col-span-3 { grid-column: span 3 / span 3; }
+.col-span-4 { grid-column: span 4 / span 4; }
+.col-span-5 { grid-column: span 5 / span 5; }
+.col-span-6 { grid-column: span 6 / span 6; }
+.col-span-7 { grid-column: span 7 / span 7; }
+.col-span-8 { grid-column: span 8 / span 8; }
+.col-span-9 { grid-column: span 9 / span 9; }
+.col-span-10 { grid-column: span 10 / span 10; }
+.col-span-11 { grid-column: span 11 / span 11; }
+.col-span-12 { grid-column: span 12 / span 12; }
+.col-span-full { grid-column: 1 / -1; }
+
+/* Grille alternative pour les cartes et listes */
+.grid-cards {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+/* Responsive pour la grille de cartes */
+@media (min-width: 640px) {
+  .grid-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .grid-cards {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* Layout principal avec sidebar */
+.layout-with-sidebar {
+  display: grid;
+  gap: 0;
+  min-height: 100vh;
+  grid-template-areas: 
+    "header header"
+    "sidebar main"
+    "footer footer";
+  grid-template-columns: 0 1fr; /* Par défaut sidebar fermée sur mobile */
+  grid-template-rows: auto 1fr auto;
+}
+
+.layout-header { grid-area: header; }
+.layout-sidebar { grid-area: sidebar; }
+.layout-main { grid-area: main; }
+.layout-footer { grid-area: footer; }
+
+/* Adaptation responsive pour le layout */
+@media (min-width: 1024px) {
+  .layout-with-sidebar {
+    grid-template-columns: 250px 1fr; /* Sidebar visible sur desktop */
+  }
+  
+  /* Variation avec sidebar réduite (icônes seulement) */
+  .layout-with-sidebar.sidebar-collapsed {
+    grid-template-columns: 64px 1fr;
+  }
+} 

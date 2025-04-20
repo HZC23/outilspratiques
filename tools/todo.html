@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Liste de tâches - Outils Pratiques</title>
+    
+    <base href="https://hzc23.github.io/outilspratiques.github.io/">
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/tools.css">
+    <link rel="stylesheet" href="css/tools/todo.css">
+    
+    <script type="module" src="js/tools/todo.js"></script>
+</head>
+<body>
+    <section id="todoTool" class="section" aria-labelledby="todoTitle">
+        <h2 id="todoTitle">Liste de tâches</h2>
+        <div class="todo-container">
+            <div class="todo-header">
+                <div class="todo-input-group">
+                    <input type="text" 
+                           id="todoInput" 
+                           placeholder="Nouvelle tâche..."
+                           aria-label="Ajouter une nouvelle tâche">
+                    <select id="todoCategory" aria-label="Catégorie de la tâche">
+                        <option value="general">🔄 Général</option>
+                        <option value="work">💼 Travail</option>
+                        <option value="personal">👤 Personnel</option>
+                        <option value="shopping">🛒 Courses</option>
+                        <option value="urgent">⚠️ Urgent</option>
+                        <option value="health">❤️ Santé</option>
+                        <option value="study">📚 Études</option>
+                        <option value="home">🏠 Maison</option>
+                        <option value="leisure">🎮 Loisirs</option>
+                        <option value="finance">💰 Finances</option>
+                    </select>
+                    <input type="time" 
+                           id="todoTime" 
+                           aria-label="Heure d'échéance">
+                    <button type="button" onclick="addTodo()" class="add-todo-btn">
+                        <i class="fas fa-plus"></i> Ajouter
+                    </button>
+                </div>
+                <div class="todo-filters">
+                    <select id="filterCategory" onchange="filterTodos()" aria-label="Filtrer par catégorie">
+                        <option value="all">🔍 Toutes les catégories</option>
+                        <option value="general">🔄 Général</option>
+                        <option value="work">💼 Travail</option>
+                        <option value="personal">👤 Personnel</option>
+                        <option value="shopping">🛒 Courses</option>
+                        <option value="urgent">⚠️ Urgent</option>
+                        <option value="health">❤️ Santé</option>
+                        <option value="study">📚 Études</option>
+                        <option value="home">🏠 Maison</option>
+                        <option value="leisure">🎮 Loisirs</option>
+                        <option value="finance">💰 Finances</option>
+                    </select>
+                    <select id="filterStatus" onchange="filterTodos()" aria-label="Filtrer par statut">
+                        <option value="all">Tous les statuts</option>
+                        <option value="active">À faire</option>
+                        <option value="completed">Terminées</option>
+                    </select>
+                    <button type="button" onclick="sortTodos('date')" class="sort-btn" title="Trier par date">
+                        <i class="fas fa-sort-amount-down"></i>
+                    </button>
+                    <button type="button" onclick="sortTodos('priority')" class="sort-btn" title="Trier par priorité">
+                        <i class="fas fa-sort-numeric-down"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="todo-list" id="todoList"></div>
+
+            <div class="todo-footer">
+                <div class="todo-stats">
+                    <span id="todoCount">0 tâches au total</span>
+                    <span id="todoCompleted">0 terminées</span>
+                    <span id="todoRemaining">0 restantes</span>
+                </div>
+                <div class="todo-actions">
+                    <button type="button" onclick="clearCompletedTodos()" class="clear-completed-btn">
+                        <i class="fas fa-trash"></i> Effacer les tâches terminées
+                    </button>
+                    <button type="button" onclick="exportTodos()" class="export-btn">
+                        <i class="fas fa-file-export"></i> Exporter
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html> 

@@ -1,0 +1,240 @@
+/* Système de cartes */
+
+/* Carte de base */
+.card {
+  background-color: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  transition: transform var(--transition-normal) ease,
+              box-shadow var(--transition-normal) ease,
+              border-color var(--transition-normal) ease;
+}
+
+.card:hover {
+  border-color: var(--text-tertiary);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* Structure interne de la carte */
+.card-header {
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-body {
+  padding: var(--space-4);
+}
+
+.card-footer {
+  padding: var(--space-4);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+/* Carte d'outil - variante spécifique pour les outils */
+.tool-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.tool-card .card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.tool-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background-color: rgba(59, 130, 246, 0.1);
+  color: var(--color-primary);
+  margin-bottom: var(--space-3);
+}
+
+.tool-card-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+  color: var(--text-primary);
+}
+
+.tool-card-description {
+  font-size: var(--font-size-base);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-4);
+  flex: 1;
+}
+
+.tool-card-meta {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* Variante compacte */
+.tool-card-compact {
+  flex-direction: row;
+  align-items: center;
+  padding: var(--space-3);
+}
+
+.tool-card-compact .tool-card-icon {
+  width: 36px;
+  height: 36px;
+  margin-bottom: 0;
+  margin-right: var(--space-3);
+}
+
+.tool-card-compact .tool-card-content {
+  flex: 1;
+}
+
+.tool-card-compact .tool-card-title {
+  margin-bottom: var(--space-1);
+  font-size: var(--font-size-base);
+}
+
+.tool-card-compact .tool-card-description {
+  margin-bottom: 0;
+  font-size: var(--font-size-sm);
+}
+
+/* Variante avec image de fond */
+.tool-card-featured {
+  position: relative;
+  overflow: hidden;
+  min-height: 200px;
+  color: white;
+}
+
+.tool-card-featured::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.1) 100%);
+  z-index: 1;
+}
+
+.tool-card-featured .card-body {
+  position: relative;
+  z-index: 2;
+}
+
+.tool-card-featured .tool-card-title,
+.tool-card-featured .tool-card-description {
+  color: white;
+}
+
+.tool-card-featured .tool-card-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+/* État sélectionné */
+.tool-card.selected {
+  border-color: var(--color-primary);
+  background-color: rgba(59, 130, 246, 0.05);
+}
+
+.tool-card.selected::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background-color: var(--color-primary);
+}
+
+/* État de chargement */
+.tool-card.loading {
+  opacity: 0.7;
+  pointer-events: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.tool-card.loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  animation: loading-shimmer 1.5s infinite;
+}
+
+@keyframes loading-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Carte simple pour d'autres contextes */
+.simple-card {
+  padding: var(--space-4);
+  height: 100%;
+}
+
+/* Skeletons de chargement pour les cartes */
+.card-skeleton {
+  pointer-events: none;
+}
+
+.card-skeleton .skeleton-line {
+  height: 20px;
+  margin-bottom: var(--space-2);
+  background-color: var(--bg-surface-3);
+  border-radius: var(--radius-sm);
+  animation: skeleton-pulse 1.5s infinite ease-in-out;
+}
+
+.card-skeleton .skeleton-line:last-child {
+  width: 70%;
+}
+
+.card-skeleton .skeleton-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--bg-surface-3);
+  margin-bottom: var(--space-3);
+  animation: skeleton-pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.8;
+  }
+} 

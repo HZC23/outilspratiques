@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Minuteur - Outils Pratiques</title>
+    
+    <base href="https://hzc23.github.io/outilspratiques.github.io/">
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/tools.css">
+    <link rel="stylesheet" href="css/tools/timer.css">
+    
+    <script type="module" src="js/tools/timer.js"></script>
+</head>
+<body>
+    <audio id="timerAlarm" preload="none">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" type="audio/mpeg">
+    </audio>
+
+    <section id="timerTool" class="section" aria-labelledby="timerTitle">
+        <h2 id="timerTitle">Minuteur</h2>
+        <div class="timer-container">
+            <div class="timer-config">
+                <div class="time-inputs">
+                    <div class="time-input-group">
+                        <label for="hoursInput">Heures</label>
+                        <input type="number" 
+                               id="hoursInput" 
+                               min="0" 
+                               max="23" 
+                               value="0"
+                               aria-label="Heures">
+                    </div>
+                    <!-- ... autres entrées de temps ... -->
+                </div>
+            </div>
+
+            <div class="timer-display" id="timerDisplay" aria-live="polite">00:00:00</div>
+            
+            <div class="timer-progress">
+                <div id="timerProgressBar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+
+            <div class="timer-controls">
+                <button type="button" onclick="startTimer()" class="start-btn" id="timerStartBtn" aria-label="Démarrer le minuteur">
+                    <i class="fas fa-play"></i> Démarrer
+                </button>
+                <!-- ... autres boutons de contrôle ... -->
+            </div>
+
+            <!-- ... autres éléments du minuteur ... -->
+        </div>
+
+        <!-- Sons du timer -->
+        <audio id="timerSound-bell" preload="none">
+            <source src="sounds/bell.mp3" type="audio/mpeg">
+        </audio>
+        <!-- ... autres sons ... -->
+    </section>
+</body>
+</html> 

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Calculatrice scientifique - Outils Pratiques</title>
+    
+    <base href="https://hzc23.github.io/outilspratiques.github.io/">
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/tools.css">
+    <link rel="stylesheet" href="css/tools/calculator.css">
+    
+    <script src="js/calculator-global.js"></script>
+    <script type="module" src="js/tools/calculator.js"></script>
+</head>
+<body>
+    <section id="calculatorTool" class="section" aria-labelledby="calcTitle">
+        <h2 id="calcTitle">Calculatrice scientifique</h2>
+        <div class="calculator-container">
+            <div class="calculator-display">
+                <div class="previous-operation" id="previousCalc" aria-live="polite"></div>
+                <div class="current-operation" id="currentCalc" aria-live="polite">0</div>
+            </div>
+
+            <div class="calculator-grid">
+                <!-- Mode et configuration -->
+                <button type="button" onclick="toggleAngleUnit()" class="config" aria-label="Mode angle">DEG</button>
+                <button type="button" onclick="toggleScientificNotation()" class="config" aria-label="Notation scientifique">SCI</button>
+                <button type="button" onclick="toggleFractionMode()" class="config" aria-label="Mode fraction">a b/c</button>
+                <button type="button" onclick="calcFunction('abs')" class="operator" aria-label="Valeur absolue">|x|</button>
+                <button type="button" onclick="clearCalc()" class="clear">C</button>
+
+                <!-- Fonctions trigonométriques -->
+                <button type="button" onclick="calcFunction('sin')" class="operator" aria-label="Sinus">sin</button>
+                <button type="button" onclick="calcFunction('cos')" class="operator" aria-label="Cosinus">cos</button>
+                <button type="button" onclick="calcFunction('tan')" class="operator" aria-label="Tangente">tan</button>
+                <button type="button" onclick="calcFunction('pi')" class="operator" aria-label="Pi">π</button>
+                <button type="button" onclick="calcFunction('e')" class="operator" aria-label="Nombre e">e</button>
+
+                <!-- ... autres boutons de la calculatrice ... -->
+                <!-- Pavé numérique et opérations de base -->
+                <div class="numpad">
+                    <button type="button" onclick="calcFunction('1/x')" class="operator" aria-label="Inverse">1/x</button>
+                    <button type="button" onclick="calcFunction('percent')" class="operator">%</button>
+                    <button type="button" onclick="calcFunction('negate')" class="operator" aria-label="Changer signe">±</button>
+
+                    <button type="button" onclick="addToCalc('7')">7</button>
+                    <button type="button" onclick="addToCalc('8')">8</button>
+                    <button type="button" onclick="addToCalc('9')">9</button>
+
+                    <!-- ... autres boutons du pavé numérique ... -->
+                    <button type="button" onclick="calculate()" class="equals">=</button>
+                </div>
+            </div>
+
+            <div class="calculator-history">
+                <h3>Historique</h3>
+                <ul id="calcHistory" aria-label="Historique des calculs"></ul>
+                <button type="button" onclick="clearcalcHistory()" class="clear-history">
+                    <i class="fas fa-trash"></i> Effacer l'historique
+                </button>
+            </div>
+        </div>
+    </section>
+</body>
+</html> 

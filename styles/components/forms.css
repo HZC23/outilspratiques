@@ -1,0 +1,414 @@
+/* Système de formulaires */
+
+/* Groupe de formulaire */
+.form-group {
+  margin-bottom: var(--space-4);
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+/* Étiquettes */
+.form-label {
+  display: block;
+  margin-bottom: var(--space-2);
+  font-weight: 500;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+}
+
+.form-label.required::after {
+  content: "*";
+  color: var(--color-error);
+  margin-left: var(--space-1);
+}
+
+/* Style commun pour les éléments de formulaire */
+.form-control {
+  display: block;
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+  color: var(--text-primary);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition-normal) ease,
+              box-shadow var(--transition-normal) ease;
+}
+
+.form-control:focus {
+  border-color: var(--color-primary);
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.form-control:disabled,
+.form-control[readonly] {
+  background-color: var(--bg-surface-2);
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Inputs de texte (text, email, etc.) */
+input[type="text"].form-control,
+input[type="email"].form-control,
+input[type="password"].form-control,
+input[type="url"].form-control,
+input[type="number"].form-control,
+input[type="tel"].form-control,
+input[type="search"].form-control {
+  height: 40px;
+}
+
+/* Textarea */
+textarea.form-control {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* Select */
+select.form-control {
+  padding-right: var(--space-8);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-position: right var(--space-3) center;
+  background-repeat: no-repeat;
+  background-size: 16px 16px;
+  appearance: none;
+}
+
+/* Checkbox et Radio */
+.form-check {
+  display: flex;
+  align-items: flex-start;
+  padding-left: 0;
+  margin-bottom: var(--space-2);
+}
+
+.form-check:last-child {
+  margin-bottom: 0;
+}
+
+.form-check-input {
+  margin-right: var(--space-2);
+  margin-top: 0.25em;
+}
+
+.form-check-label {
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+}
+
+/* Style personnalisé pour les checkbox */
+.checkbox-custom {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.checkbox-custom input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkbox-custom .checkmark {
+  position: relative;
+  height: 18px;
+  width: 18px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  margin-right: var(--space-2);
+  transition: all var(--transition-normal) ease;
+}
+
+.checkbox-custom:hover input ~ .checkmark {
+  border-color: var(--text-tertiary);
+}
+
+.checkbox-custom input:checked ~ .checkmark {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.checkbox-custom .checkmark::after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.checkbox-custom input:checked ~ .checkmark::after {
+  display: block;
+}
+
+/* Style personnalisé pour les radio */
+.radio-custom {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.radio-custom input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.radio-custom .radiomark {
+  position: relative;
+  height: 18px;
+  width: 18px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  margin-right: var(--space-2);
+  transition: all var(--transition-normal) ease;
+}
+
+.radio-custom:hover input ~ .radiomark {
+  border-color: var(--text-tertiary);
+}
+
+.radio-custom input:checked ~ .radiomark {
+  border-color: var(--color-primary);
+}
+
+.radio-custom .radiomark::after {
+  content: "";
+  position: absolute;
+  display: none;
+  top: 4px;
+  left: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-primary);
+}
+
+.radio-custom input:checked ~ .radiomark::after {
+  display: block;
+}
+
+/* Style pour les switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--bg-surface-3);
+  transition: var(--transition-normal);
+  border-radius: 34px;
+}
+
+.switch .slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: var(--transition-normal);
+  border-radius: 50%;
+}
+
+.switch input:checked + .slider {
+  background-color: var(--color-primary);
+}
+
+.switch input:focus + .slider {
+  box-shadow: 0 0 1px var(--color-primary);
+}
+
+.switch input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
+/* Validation des formulaires */
+.form-control.is-invalid {
+  border-color: var(--color-error);
+  padding-right: calc(1.5em + 0.75rem);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ef4444' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='12' y1='8' x2='12' y2='12'%3E%3C/line%3E%3Cline x1='12' y1='16' x2='12.01' y2='16'%3E%3C/line%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right calc(0.375em + 0.1875rem) center;
+  background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+.form-control.is-valid {
+  border-color: var(--color-success);
+  padding-right: calc(1.5em + 0.75rem);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2310b981' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 11.08V12a10 10 0 1 1-5.93-9.14'%3E%3C/path%3E%3Cpolyline points='22 4 12 14.01 9 11.01'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right calc(0.375em + 0.1875rem) center;
+  background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+.form-feedback {
+  display: block;
+  width: 100%;
+  margin-top: var(--space-1);
+  font-size: var(--font-size-sm);
+}
+
+.form-feedback.invalid-feedback {
+  color: var(--color-error);
+}
+
+.form-feedback.valid-feedback {
+  color: var(--color-success);
+}
+
+/* Taille des contrôles */
+.form-control-sm {
+  height: 32px;
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--font-size-sm);
+}
+
+.form-control-lg {
+  height: 48px;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--font-size-lg);
+}
+
+/* Fichier d'input */
+.form-file {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.form-file-input {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: calc(1.5em + 0.75rem + 2px);
+  margin: 0;
+  opacity: 0;
+}
+
+.form-file-label {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  height: calc(1.5em + 0.75rem + 2px);
+  padding: var(--space-2) var(--space-3);
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+.form-file-text {
+  display: block;
+  flex-grow: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.form-file-button {
+  display: block;
+  padding: var(--space-1) var(--space-3);
+  margin-left: var(--space-2);
+  color: var(--text-primary);
+  background-color: var(--bg-surface-2);
+  border-left: 1px solid var(--border-color);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+/* Input groups */
+.input-group {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  width: 100%;
+}
+
+.input-group .form-control {
+  position: relative;
+  flex: 1 1 auto;
+  width: 1%;
+}
+
+.input-group-prepend,
+.input-group-append {
+  display: flex;
+}
+
+.input-group-text {
+  display: flex;
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-base);
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  text-align: center;
+  white-space: nowrap;
+  background-color: var(--bg-surface-2);
+  border: 1px solid var(--border-color);
+}
+
+.input-group-prepend .input-group-text {
+  border-right: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-top-left-radius: var(--radius-md);
+  border-bottom-left-radius: var(--radius-md);
+}
+
+.input-group-append .input-group-text {
+  border-left: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: var(--radius-md);
+  border-bottom-right-radius: var(--radius-md);
+}
+
+.input-group > .form-control:not(:last-child) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.input-group > .form-control:not(:first-child) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+} 
