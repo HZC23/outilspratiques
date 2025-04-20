@@ -36,10 +36,10 @@
     --ease-out-circ: cubic-bezier(0, 0.55, 0.45, 1);
 
     /* Couleurs du thème clair avec meilleur contraste */
-    --primary-color-rgb: 0, 82, 204;
+    --primary-color-rgb: #0052cc;
     --primary-color-dark: #003d99;
     --secondary-dark: #3385cc;
-    --danger-color-rgb: 204, 0, 0;
+    --danger-color-rgb: #cc0000;
     --danger-color-dark: #990000;
     --success-color-rgb: 0, 179, 0;
     --success-color-dark: #008000;

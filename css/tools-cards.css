@@ -14,7 +14,7 @@
 /* Carte d'outil individuelle */
 .tool-card {
     background: var(--card-bg);
-    border-radius: var(--border-radius-lg);
+    border-radius: 0;
     box-shadow: var(--box-shadow);
     overflow: hidden;
     transition: transform 0.3s var(--ease-out-back), box-shadow 0.3s ease;
@@ -51,7 +51,7 @@
     align-items: center;
     justify-content: center;
     background-color: var(--primary-light);
-    border-radius: var(--border-radius-circle);
+    border-radius: 0;
     font-size: 1.2rem;
     color: var(--primary-color);
 }
@@ -91,7 +91,7 @@
     background-color: var(--primary-color);
     color: white;
     border: none;
-    border-radius: var(--border-radius-circle);
+    border-radius: 0;
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.2s ease;
@@ -135,7 +135,7 @@
     color: white;
     font-size: 0.75rem;
     padding: 3px 8px;
-    border-radius: 12px;
+    border-radius: 0;
     font-weight: 500;
 }
 
@@ -148,7 +148,7 @@
     color: white;
     font-size: 0.75rem;
     padding: 3px 8px;
-    border-radius: 12px;
+    border-radius: 0;
     font-weight: 500;
 }
 

@@ -6,7 +6,7 @@
 /* Container de formulaire */
 .form-container {
     background-color: var(--card-bg);
-    border-radius: var(--border-radius-lg);
+    border-radius: 0;
     padding: var(--spacing-lg);
     box-shadow: var(--box-shadow);
     border: 1px solid var(--border-color);
@@ -30,7 +30,7 @@
     width: 100%;
     padding: 12px 16px;
     border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
+    border-radius: 0;
     background-color: var(--bg-color);
     color: var(--text-color);
     font-size: var(--font-size);
@@ -99,13 +99,13 @@ textarea.form-control {
 }
 
 .input-group .form-control:first-child {
-    border-top-left-radius: var(--border-radius);
-    border-bottom-left-radius: var(--border-radius);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 .input-group .form-control:last-child {
-    border-top-right-radius: var(--border-radius);
-    border-bottom-right-radius: var(--border-radius);
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
 }
 
 .input-group-prepend,
@@ -120,14 +120,14 @@ textarea.form-control {
 
 .input-group-prepend {
     border-right: none;
-    border-top-left-radius: var(--border-radius);
-    border-bottom-left-radius: var(--border-radius);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 .input-group-append {
     border-left: none;
-    border-top-right-radius: var(--border-radius);
-    border-bottom-right-radius: var(--border-radius);
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
 }
 
 /* Checkbox et radio */
@@ -163,7 +163,7 @@ textarea.form-control {
 .result-container {
     background-color: var(--primary-light);
     padding: var(--spacing-md);
-    border-radius: var(--border-radius);
+    border-radius: 0;
     margin-top: var(--spacing-md);
     border: 1px solid rgba(var(--primary-color-rgb), 0.2);
 }

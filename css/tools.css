@@ -6,7 +6,7 @@
 /* Style de base pour tous les outils */
 .section {
     background: var(--card-bg, #FFFFFF);
-    border-radius: var(--border-radius-lg, 12px);
+    border-radius: 0;
     padding: var(--spacing-lg, 1.5rem);
     box-shadow: var(--box-shadow, 0 4px 12px rgba(0, 0, 0, 0.08));
     transition: var(--transition-slow) var(--ease-out-back);
@@ -47,7 +47,7 @@
 /* Style des conteneurs */
 .container-base {
     background: transparent;
-    border-radius: 10px;
+    border-radius: 0;
     padding: 20px;
     box-shadow: none;
     transition: all 0.3s ease;
@@ -67,7 +67,7 @@ input, select, textarea {
     font-size: 0.95rem;
     transition: all 0.3s ease;
     border: none;
-    border-radius: var(--border-radius-circle);
+    border-radius: 0;
 }
 
 input:focus, select:focus, textarea:focus {
@@ -81,7 +81,7 @@ button {
     background: var(--primary-color, #2A6EBB);
     color: white;
     font-weight: 500;
-    border-radius: var(--border-radius-circle);
+    border-radius: 0;
     border: none;
     cursor: pointer;
     transition: all 0.3s var(--ease-out-back);
@@ -100,7 +100,7 @@ button::before {
     width: 0;
     height: 0;
     background: rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
+    border-radius: 0;
     transform: translate(-50%, -50%);
     transition: width 0.6s ease, height 0.6s ease;
 }
@@ -158,7 +158,7 @@ button:hover i {
 /* Cartes et éléments d'historique */
 .card {
     background: var(--card-bg, #FFFFFF);
-    border-radius: 10px;
+    border-radius: 0;
     padding: 15px;
     margin-bottom: 15px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -175,7 +175,7 @@ button:hover i {
     padding: 12px;
     margin-bottom: 10px;
     background: var(--bg-color, #F5F5F5);
-    border-radius: 8px;
+    border-radius: 0;
     cursor: pointer;
     transition: all 0.3s ease;
     border: none;
@@ -308,7 +308,7 @@ button:hover i {
 @media (max-width: 480px) {
     .section {
         padding: var(--spacing-sm);
-        border-radius: var(--border-radius);
+        border-radius: 0;
     }
     
     .section h2 {
