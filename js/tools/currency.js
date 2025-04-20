@@ -3,12 +3,71 @@
  * Gère la conversion entre différentes devises avec des taux de change
  */
 
+// Taux de change (dernière mise à jour: 2024-03-15)
+const exchangeRates = {
+    EUR: 1.00,     // Euro (base)
+    USD: 1.09,     // Dollar américain
+    GBP: 0.85,     // Livre sterling
+    JPY: 161.12,   // Yen japonais
+    CHF: 0.96,     // Franc suisse
+    CAD: 1.47,     // Dollar canadien
+    AUD: 1.65,     // Dollar australien
+    CNY: 7.87,     // Yuan chinois
+    INR: 90.39,    // Roupie indienne
+    BRL: 5.47,     // Real brésilien
+    RUB: 98.23,    // Rouble russe
+    KRW: 1454.86,  // Won sud-coréen
+    TRY: 35.06,    // Livre turque
+    MXN: 18.15,    // Peso mexicain
+    ZAR: 20.12,    // Rand sud-africain
+    SGD: 1.46,     // Dollar de Singapour
+    HKD: 8.52,     // Dollar de Hong Kong
+    SEK: 11.31,    // Couronne suédoise
+    NZD: 1.78,     // Dollar néo-zélandais
+    PLN: 4.31      // Złoty polonais
+};
+
+// Symboles des devises
+const currencySymbols = {
+    EUR: '€',
+    USD: '$',
+    GBP: '£',
+    JPY: '¥',
+    CHF: 'Fr',
+    CAD: 'C$',
+    AUD: 'A$',
+    CNY: '¥',
+    INR: '₹',
+    BRL: 'R$',
+    RUB: '₽',
+    KRW: '₩',
+    TRY: '₺',
+    MXN: '$',
+    ZAR: 'R',
+    SGD: 'S$',
+    HKD: 'HK$',
+    SEK: 'kr',
+    NZD: 'NZ$',
+    PLN: 'zł'
+};
+
+// Groupement des devises par région
+const currencyRegions = {
+    popular: ['EUR', 'USD', 'GBP', 'JPY', 'CHF'],
+    europe: ['EUR', 'GBP', 'CHF', 'SEK', 'PLN'],
+    americas: ['USD', 'CAD', 'MXN', 'BRL'],
+    asia: ['JPY', 'CNY', 'INR', 'SGD', 'HKD', 'KRW'],
+    oceania: ['AUD', 'NZD']
+};
+
 // État du convertisseur
 let state = {
-    rates: {},
-    baseCurrency: 'EUR',
-    lastUpdate: null,
-    history: []
+    amount: 1,
+    fromCurrency: 'EUR',
+    toCurrency: 'USD',
+    result: 0,
+    history: [],
+    currentRegion: 'popular'
 };
 
 // Liste des devises principales
@@ -35,107 +94,233 @@ const MAIN_CURRENCIES = [
     { code: 'NOK', name: 'Couronne norvégienne', symbol: 'kr', flag: '🇳🇴' }
 ];
 
-// Groupes de devises pour un accès rapide
-const CURRENCY_GROUPS = {
-    'popular': ['EUR', 'USD', 'GBP', 'JPY', 'CHF'],
-    'asia': ['JPY', 'CNY', 'HKD', 'SGD', 'KRW', 'INR'],
-    'america': ['USD', 'CAD', 'BRL', 'MXN'],
-    'europe': ['EUR', 'GBP', 'CHF', 'SEK', 'NOK', 'TRY'],
-    'oceania': ['AUD', 'NZD']
-};
-
 /**
  * Initialise le convertisseur de devises
  */
 function initCurrencyConverter() {
-    // Charger les taux de change sauvegardés
-    loadSavedRates();
+    // Vérifier si les éléments existent
+    const container = document.getElementById('currencyTool');
     
-    // Charger l'historique des conversions
-    loadConversionHistory();
-    
-    // Initialiser les listes déroulantes de devises
-    initCurrencySelects();
-    
-    // Mettre à jour les taux si nécessaire
-    if (shouldUpdateRates()) {
-        updateRates();
-    } else {
-        displayRates();
+    if (!container) {
+        console.log('Le convertisseur de devises n\'est pas présent dans la page actuelle');
+        return;
     }
     
-    // Initialiser les écouteurs d'événements
-    document.getElementById('fromAmount').addEventListener('input', convertCurrency);
-    document.getElementById('fromCurrency').addEventListener('change', convertCurrency);
-    document.getElementById('toCurrency').addEventListener('change', convertCurrency);
+    const fromSelect = document.getElementById('fromCurrency');
+    const toSelect = document.getElementById('toCurrency');
+    const amountInput = document.getElementById('amount');
+    const resultDisplay = document.getElementById('result');
+    
+    if (!fromSelect || !toSelect || !amountInput || !resultDisplay) {
+        console.log('Éléments du convertisseur de devises manquants dans la page');
+        return;
+    }
+    
+    // Initialiser les sélecteurs de devises
+    initCurrencySelects();
+    
+    // Configurer les écouteurs d'événements
+    setupEventListeners();
+    
+    // Charger les conversions populaires
+    loadPopularConversions();
+    
+    // Effectuer une conversion initiale
+    convertCurrency();
     
     console.log('Convertisseur de devises initialisé');
 }
 
 /**
- * Initialise les listes déroulantes de devises
+ * Initialise les sélecteurs de devises
  */
 function initCurrencySelects() {
     const fromSelect = document.getElementById('fromCurrency');
     const toSelect = document.getElementById('toCurrency');
     
-    // Vider les listes
+    if (!fromSelect || !toSelect) {
+        return;
+    }
+    
+    // Vider les sélecteurs
     fromSelect.innerHTML = '';
     toSelect.innerHTML = '';
     
-    // Créer les groupes
-    Object.entries(CURRENCY_GROUPS).forEach(([groupName, currencies]) => {
-        const fromGroup = document.createElement('optgroup');
-        const toGroup = document.createElement('optgroup');
-        fromGroup.label = toGroup.label = capitalizeFirstLetter(groupName);
+    // Remplir les sélecteurs avec les devises disponibles
+    Object.keys(exchangeRates).forEach(currency => {
+        const fromOption = document.createElement('option');
+        fromOption.value = currency;
+        fromOption.textContent = `${currency} (${currencySymbols[currency]})`;
+        fromSelect.appendChild(fromOption);
         
-        // Ajouter les devises du groupe
-        currencies.forEach(code => {
-            const currency = MAIN_CURRENCIES.find(c => c.code === code);
-            if (currency) {
-                const fromOption = createCurrencyOption(currency);
-                const toOption = createCurrencyOption(currency);
-                fromGroup.appendChild(fromOption);
-                toGroup.appendChild(toOption);
-            }
-        });
-        
-        fromSelect.appendChild(fromGroup);
-        toSelect.appendChild(toGroup);
+        const toOption = document.createElement('option');
+        toOption.value = currency;
+        toOption.textContent = `${currency} (${currencySymbols[currency]})`;
+        toSelect.appendChild(toOption);
     });
-    
-    // Ajouter les autres devises dans un groupe séparé
-    const otherFromGroup = document.createElement('optgroup');
-    const otherToGroup = document.createElement('optgroup');
-    otherFromGroup.label = otherToGroup.label = 'Autres devises';
-    
-    MAIN_CURRENCIES.forEach(currency => {
-        if (!Object.values(CURRENCY_GROUPS).flat().includes(currency.code)) {
-            const fromOption = createCurrencyOption(currency);
-            const toOption = createCurrencyOption(currency);
-            otherFromGroup.appendChild(fromOption);
-            otherToGroup.appendChild(toOption);
-        }
-    });
-    
-    fromSelect.appendChild(otherFromGroup);
-    toSelect.appendChild(otherToGroup);
     
     // Définir les valeurs par défaut
-    fromSelect.value = 'EUR';
-    toSelect.value = 'USD';
+    fromSelect.value = state.fromCurrency;
+    toSelect.value = state.toCurrency;
 }
 
 /**
- * Crée une option pour une devise
- * @param {Object} currency - La devise
- * @returns {HTMLOptionElement} - L'élément option
+ * Configurer les écouteurs d'événements
  */
-function createCurrencyOption(currency) {
-    const option = document.createElement('option');
-    option.value = currency.code;
-    option.textContent = `${currency.flag} ${currency.code} (${currency.symbol}) - ${currency.name}`;
-    return option;
+function setupEventListeners() {
+    // Éléments
+    const amountInput = document.getElementById('amount');
+    const fromSelect = document.getElementById('fromCurrency');
+    const toSelect = document.getElementById('toCurrency');
+    const swapButton = document.getElementById('swapCurrencies');
+    const tabs = document.querySelectorAll('.tab');
+    
+    if (!amountInput || !fromSelect || !toSelect || !swapButton || tabs.length === 0) {
+        return;
+    }
+    
+    // Écouteurs pour les entrées
+    amountInput.addEventListener('input', convertCurrency);
+    fromSelect.addEventListener('change', convertCurrency);
+    toSelect.addEventListener('change', convertCurrency);
+    
+    // Écouteur pour le bouton d'échange
+    swapButton.addEventListener('click', swapCurrencies);
+    
+    // Écouteurs pour les onglets de région
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Mettre à jour l'onglet actif
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            
+            // Changer la région sélectionnée
+            state.currentRegion = tab.dataset.region;
+            
+            // Charger les conversions pour cette région
+            loadRegionConversions(state.currentRegion);
+        });
+    });
+}
+
+/**
+ * Convertit la devise
+ */
+function convertCurrency() {
+    const amount = parseFloat(document.getElementById('amount').value);
+    const fromCurrency = document.getElementById('fromCurrency').value;
+    const toCurrency = document.getElementById('toCurrency').value;
+    
+    if (isNaN(amount) || !fromCurrency || !toCurrency) {
+        return;
+    }
+    
+    // Mettre à jour l'état
+    state.amount = amount;
+    state.fromCurrency = fromCurrency;
+    state.toCurrency = toCurrency;
+    
+    // Calculer le résultat
+    const result = calculateConversion(amount, fromCurrency, toCurrency);
+    state.result = result;
+    
+    // Afficher le résultat
+    updateResultDisplay(result);
+}
+
+/**
+ * Calcule la conversion entre deux devises
+ * @param {number} amount - Montant à convertir
+ * @param {string} fromCurrency - Devise source
+ * @param {string} toCurrency - Devise cible
+ * @returns {number} - Montant converti
+ */
+function calculateConversion(amount, fromCurrency, toCurrency) {
+    // Convertir en EUR d'abord (la devise de base)
+    const amountInEUR = fromCurrency === 'EUR' ? amount : amount / exchangeRates[fromCurrency];
+    
+    // Puis convertir de EUR vers la devise cible
+    return toCurrency === 'EUR' ? amountInEUR : amountInEUR * exchangeRates[toCurrency];
+}
+
+/**
+ * Mettre à jour l'affichage du résultat
+ * @param {number} result - Résultat de la conversion
+ */
+function updateResultDisplay(result) {
+    const resultInput = document.getElementById('result');
+    const resultText = document.getElementById('conversionResult');
+    
+    if (!resultInput || !resultText) {
+        return;
+    }
+    
+    const formatted = result.toFixed(2);
+    resultInput.value = formatted;
+    
+    resultText.textContent = `${state.amount} ${state.fromCurrency} = ${formatted} ${state.toCurrency}`;
+}
+
+/**
+ * Échange les devises source et cible
+ */
+function swapCurrencies() {
+    const fromSelect = document.getElementById('fromCurrency');
+    const toSelect = document.getElementById('toCurrency');
+    
+    if (!fromSelect || !toSelect) {
+        return;
+    }
+    
+    // Échanger les valeurs
+    const temp = fromSelect.value;
+    fromSelect.value = toSelect.value;
+    toSelect.value = temp;
+    
+    // Mettre à jour la conversion
+    convertCurrency();
+}
+
+/**
+ * Charge les conversions populaires
+ */
+function loadPopularConversions() {
+    loadRegionConversions('popular');
+}
+
+/**
+ * Charge les conversions pour une région donnée
+ * @param {string} region - Région à charger
+ */
+function loadRegionConversions(region) {
+    const popularDiv = document.getElementById('popularConversions');
+    
+    if (!popularDiv) {
+        return;
+    }
+    
+    // Vider la div
+    popularDiv.innerHTML = '';
+    
+    // Récupérer les devises de la région
+    const currencies = currencyRegions[region] || currencyRegions.popular;
+    
+    // Pour chaque devise, afficher la conversion par rapport à l'euro
+    currencies.forEach(currency => {
+        if (currency === 'EUR') return; // Éviter EUR vers EUR
+        
+        const conversionItem = document.createElement('div');
+        conversionItem.className = 'conversion-item';
+        
+        const rate = calculateConversion(1, 'EUR', currency).toFixed(2);
+        
+        conversionItem.innerHTML = `
+            <div class="from">1 EUR = ${rate} ${currency}</div>
+            <div class="to">1 ${currency} = ${calculateConversion(1, currency, 'EUR').toFixed(2)} EUR</div>
+        `;
+        
+        popularDiv.appendChild(conversionItem);
+    });
 }
 
 /**
@@ -290,63 +475,6 @@ function selectCurrencyGroup(groupName) {
 }
 
 /**
- * Convertit un montant d'une devise à une autre
- */
-function convertCurrency() {
-    const fromAmount = parseFloat(document.getElementById('fromAmount').value);
-    const fromCurrency = document.getElementById('fromCurrency').value;
-    const toCurrency = document.getElementById('toCurrency').value;
-    
-    // Vérifier si le montant est valide
-    if (isNaN(fromAmount) || fromAmount <= 0) {
-        document.getElementById('toAmount').value = '';
-        return;
-    }
-    
-    // Vérifier si les taux sont disponibles
-    if (!state.rates || !state.rates[fromCurrency] || !state.rates[toCurrency]) {
-        document.getElementById('toAmount').value = 'Taux non disponibles';
-        return;
-    }
-    
-    // Convertir le montant
-    const rateFrom = state.rates[fromCurrency];
-    const rateTo = state.rates[toCurrency];
-    const toAmount = (fromAmount / rateFrom) * rateTo;
-    
-    // Afficher le résultat
-    document.getElementById('toAmount').value = toAmount.toFixed(2);
-    
-    // Ajouter à l'historique
-    addToConversionHistory({
-        fromAmount,
-        fromCurrency,
-        toAmount,
-        toCurrency,
-        timestamp: new Date().getTime()
-    });
-}
-
-/**
- * Inverse les devises source et cible
- */
-function swapCurrencies() {
-    const fromCurrency = document.getElementById('fromCurrency').value;
-    const toCurrency = document.getElementById('toCurrency').value;
-    const fromAmount = document.getElementById('fromAmount').value;
-    const toAmount = document.getElementById('toAmount').value;
-    
-    document.getElementById('fromCurrency').value = toCurrency;
-    document.getElementById('toCurrency').value = fromCurrency;
-    
-    // Si un montant a été converti, inverser aussi les montants
-    if (fromAmount && toAmount) {
-        document.getElementById('fromAmount').value = toAmount;
-        convertCurrency();
-    }
-}
-
-/**
  * Ajoute une conversion à l'historique
  * @param {Object} conversion - La conversion à ajouter
  */
@@ -475,11 +603,29 @@ function showNotification(message, type = 'info') {
     }
 }
 
-// Initialiser le convertisseur au chargement du document
-document.addEventListener('DOMContentLoaded', initCurrencyConverter);
+// Initialiser le convertisseur de devises seulement quand le DOM est complètement chargé
+// et seulement si nous sommes sur la page du convertisseur de devises
+document.addEventListener('DOMContentLoaded', () => {
+    if (document.getElementById('currencyTool')) {
+        initCurrencyConverter();
+    }
+});
 
 // Exposer les fonctions globalement
 window.updateRates = updateRates;
 window.swapCurrencies = swapCurrencies;
 window.convertCurrency = convertCurrency;
-window.clearCurrencyHistory = clearCurrencyHistory; 
+window.clearCurrencyHistory = clearCurrencyHistory;
+
+// Ajouter un écouteur d'événement pour initialiser le convertisseur quand le DOM est prêt
+document.addEventListener('DOMContentLoaded', () => {
+    initCurrencyConverter();
+});
+
+// Exporter les fonctions pour permettre l'utilisation comme module
+export {
+    initCurrencyConverter,
+    convertCurrency,
+    swapCurrencies,
+    calculateConversion
+}; 

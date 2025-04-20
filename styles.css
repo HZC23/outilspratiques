@@ -1,0 +1,582 @@
+/* Variables CSS globales */
+:root {
+    /* Couleurs basiques avec meilleur contraste */
+    --primary-color: #0052cc;
+    --secondary-color: #4a9eff;
+    --success-color: #00b300;
+    --info-color: #0066cc;
+    --warning-color: #cc7700;
+    --danger-color: #cc0000;
+    
+    /* Thème clair optimisé */
+    --bg-color: #ffffff;
+    --text-color: #2c3e50;
+    --header-bg: #0d00ff;
+    --border-color: #000000;
+    --input-bg: #f8f9fa;
+    --input-text: #2c3e50;
+    --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
+    /* Espacement uniforme */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 0.75rem;
+    --spacing-md: 1.25rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 2.5rem;
+    
+    /* Transitions optimisées */
+    --transition: all 0.25s var(--animation-timing);
+    --transition-slow: all 0.4s var(--animation-timing);
+    --transition-fast: all 0.15s var(--animation-timing);
+    
+    /* Easing amélioré */
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-in-back: cubic-bezier(0.36, 0, 0.66, -0.56);
+    --ease-out-circ: cubic-bezier(0, 0.55, 0.45, 1);
+
+    /* Couleurs du thème clair avec meilleur contraste */
+    --primary-color-rgb: #0052cc;
+    --primary-color-dark: #003d99;
+    --secondary-dark: #3385cc;
+    --danger-color-rgb: #cc0000;
+    --danger-color-dark: #990000;
+    --success-color-rgb: 0, 179, 0;
+    --success-color-dark: #008000;
+    --info-color-rgb: 0, 102, 204;
+    --info-color-dark: #004d99;
+    --card-bg: #ffffff;
+    --light-color: #ffffff;
+    --dark-color: #1a1a1a;
+    --dark-border: #2c3e50;
+    --text-muted: #6c757d;
+    --text-light: #ffffff;
+    --text-secondary: #4a5568;
+    --hover-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    /* Bordures et ombres */
+    --border-radius: 8px;
+    --border-radius-lg: 12px;
+    --border-radius-xl: 16px;
+    --border-radius-circle: 50%;
+
+    /* Transitions */
+    --transition-duration: 0.3s;
+    --animation-duration: 0.4s;
+    --will-change-properties: transform, opacity;
+    
+    /* Animations */
+    --animation-duration: 0.4s;
+    --animation-timing: cubic-bezier(0.4, 0, 0.2, 1);
+    --animation-delay: 0.1s;
+    --animation-iteration: 1;
+}
+
+[data-theme="dark"] {
+    /* Thème sombre optimisé */
+    --bg-color: #1a1a1a;
+    --text-color: #e0e0e0;
+    --header-bg: #2c2c2c;
+    --border-color: #404040;
+    --input-bg: #333333;
+    --input-text: #e0e0e0;
+    --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    --primary-color: #4a9eff;
+    --primary-color-rgb: 74, 158, 255;
+    --primary-color-dark: #1a7fff;
+    --secondary-color: #64b5f6;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --hover-color: #333333;
+    --active-color: #404040;
+    --card-bg: #2c2c2c;
+    --error-color: #ff4d4d;
+    --success-color: #4caf50;
+    --warning-color: #ffa726;
+    --info-color: #4a9eff;
+    --danger-color: #ff4d4d;
+    --danger-dark: #cc0000;
+    --secondary-dark: #1976d2;
+    --dark-border: #404040;
+}
+
+/* Reset et styles de base améliorés */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+}
+
+/* Style pour bloquer le scroll du body quand le menu est ouvert */
+body.menu-open {
+    overflow: hidden;
+}
+
+.container {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: var(--spacing-md);
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: var(--spacing-lg);
+    animation: fadeIn 0.5s ease;
+    position: relative;
+}
+
+/* Header styles */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md) var(--spacing-lg);
+    background-color: var(--header-bg);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    transition: all 0.3s ease;
+    z-index: 100;
+}
+
+header h1 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    transition: color 0.3s ease;
+    margin: 0;
+    position: relative;
+    padding-bottom: 3px;
+}
+
+header h1::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary-color), transparent);
+    transition: width 0.3s var(--ease-out-back);
+}
+
+header:hover h1::after {
+    width: 100%;
+}
+
+/* Improved animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Improved top clock */
+.top-clock {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    background: var(--primary-color);
+    color: white;
+    padding: 8px 15px;
+    border-radius: var(--border-radius);
+    z-index: 1000;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s var(--ease-out-back);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: default;
+    transform-origin: top right;
+    animation: slideInRight 0.5s var(--ease-out-back) forwards;
+}
+
+.top-clock:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.top-clock .time {
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.top-clock .date {
+    font-size: 0.8rem;
+    opacity: 0.9;
+}
+
+/* Tooltips */
+[data-tooltip] {
+    position: relative;
+}
+
+[data-tooltip]::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-5px);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    pointer-events: none;
+    z-index: 1001;
+}
+
+[data-tooltip]:hover::before {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-10px);
+}
+
+/* Tools area */
+.tools {
+    width: 100%;
+    animation: fadeIn 0.5s ease;
+    padding: var(--spacing-md);
+}
+
+/* Add gradient border to main tools area */
+.tools::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--success-color), var(--primary-color));
+    background-size: 200% 100%;
+    animation: gradientBorder 3s linear infinite;
+}
+
+@keyframes gradientBorder {
+    0% {
+        background-position: 0% 0%;
+    }
+    100% {
+        background-position: 200% 0%;
+    }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(var(--primary-color-rgb), 0.05);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(var(--primary-color-rgb), 0.3);
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(var(--primary-color-rgb), 0.5);
+}
+
+/* Media Queries optimisées */
+@media (max-width: 992px) {
+    .container {
+        grid-template-columns: 1fr;
+        margin-top: 60px;
+        gap: var(--spacing-md);
+    }
+    
+    header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        padding: var(--spacing-sm);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+    
+    header h1 {
+        font-size: 1.4rem;
+    }
+    
+    .top-clock {
+        top: 60px;
+        right: var(--spacing-sm);
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --spacing-xs: 0.35rem;
+        --spacing-sm: 0.5rem;
+        --spacing-md: 1rem;
+        --spacing-lg: 1.5rem;
+        --spacing-xl: 2rem;
+    }
+    
+    header {
+        padding: var(--spacing-xs);
+    }
+    
+    header h1 {
+        font-size: 1.2rem;
+    }
+    
+    .container {
+        padding: var(--spacing-sm);
+    }
+    
+    input, select, textarea {
+        font-size: 16px; /* Évite le zoom sur iOS */
+    }
+}
+
+/* Amélioration de l'accessibilité */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Focus visible amélioré */
+:focus-visible {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Amélioration du contraste pour l'accessibilité */
+.text-muted {
+    color: var(--text-secondary);
+}
+
+/* Support du mode sombre système */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --bg-color: #1a1a1a;
+        --text-color: #e0e0e0;
+        --header-bg: #2c2c2c;
+        --border-color: #404040;
+        --input-bg: #333333;
+        --input-text: #e0e0e0;
+    }
+}
+/* Animated background for the header */
+header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg,
+        rgba(74, 144, 226, 0.05) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(74, 144, 226, 0.05) 50%,
+        rgba(74, 144, 226, 0.05) 75%,
+        transparent 75%,
+        transparent);
+    background-size: 20px 20px;
+    opacity: 0.6;
+    z-index: -1;
+    animation: moveStripes 30s linear infinite;
+}
+
+@keyframes moveStripes {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 50px 50px;
+    }
+}
+
+/* Improved page transitions */
+.page-transition-enter {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.page-transition-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.page-transition-exit {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.page-transition-exit-active {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+/* Styles de survol centralisés pour tous les boutons */
+button:hover,
+.btn:hover,
+.menu-toggle:hover,
+.start-btn:hover,
+.pause-btn:hover,
+.reset-btn:hover,
+.sound-btn:hover,
+.stopwatch-btn:hover,
+.lap-btn:hover,
+.metronome-btn:hover,
+.save-btn:hover,
+.clear-btn:hover,
+.download-btn:hover,
+.add-todo-btn:hover,
+.sort-btn:hover,
+.clear-completed-btn:hover,
+.export-btn:hover,
+.copy-btn:hover,
+.style-btn:hover,
+.swap-btn:hover,
+.calc-btn:hover,
+.update-btn:hover,
+.generate-btn:hover,
+.qrcode-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(var(--primary-color-rgb), 0.3);
+    filter: brightness(110%);
+    transition: all 0.3s var(--ease-out-back);
+}
+
+button:active,
+.btn:active,
+.menu-toggle:active,
+.start-btn:active,
+.pause-btn:active,
+.reset-btn:active,
+.sound-btn:active,
+.stopwatch-btn:active,
+.lap-btn:active,
+.metronome-btn:active,
+.save-btn:active,
+.clear-btn:active,
+.download-btn:active,
+.add-todo-btn:active,
+.sort-btn:active,
+.clear-completed-btn:active,
+.export-btn:active,
+.copy-btn:active,
+.style-btn:active,
+.swap-btn:active,
+.calc-btn:active,
+.update-btn:active,
+.generate-btn:active,
+.qrcode-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(var(--primary-color-rgb), 0.2);
+    filter: brightness(95%);
+    transition: all 0.1s ease;
+}
+
+/* Boutons spécifiques avec des styles de survol personnalisés */
+.primary-btn:hover {
+    background: var(--primary-color-dark);
+}
+
+.secondary-btn:hover {
+    background: var(--secondary-dark);
+}
+
+.danger-btn:hover, 
+.clear-btn:hover {
+    background: var(--danger-color-dark);
+}
+
+.success-btn:hover {
+    background: var(--success-color-dark);
+}
+
+.info-btn:hover {
+    background: var(--info-color-dark);
+}
+
+.outline-btn:hover {
+    background: var(--primary-color);
+    color: white;
+}

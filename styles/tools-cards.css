@@ -1,0 +1,217 @@
+/* Styles pour les cartes d'outils sur la page d'accueil */
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+.tool-card {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 100%;
+  border: 1px solid var(--border-color);
+}
+
+.tool-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+}
+
+.tool-card-header {
+  padding: var(--space-4);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.tool-card-icon {
+  width: 48px;
+  height: 48px;
+  background-color: var(--color-primary-light);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: var(--space-3);
+  font-size: 1.5rem;
+  color: var(--color-primary);
+}
+
+.tool-card-title-container {
+  flex: 1;
+}
+
+.tool-card-title {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-1);
+}
+
+.tool-card-category {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+}
+
+.tool-card-category i {
+  margin-right: var(--space-1);
+  font-size: 0.8rem;
+}
+
+.tool-card-content {
+  padding: var(--space-4);
+  flex: 1;
+}
+
+.tool-card-description {
+  color: var(--text-secondary);
+  margin-bottom: var(--space-3);
+  line-height: 1.5;
+}
+
+.tool-card-features {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tool-card-feature {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--space-2);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.tool-card-feature i {
+  color: var(--color-success);
+  margin-right: var(--space-2);
+  font-size: 0.8rem;
+}
+
+.tool-card-footer {
+  padding: var(--space-4);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tool-card-open {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) var(--space-4);
+  background-color: var(--color-primary);
+  color: white;
+  border-radius: var(--radius-full);
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.tool-card-open:hover {
+  background-color: var(--color-primary-dark);
+  color: white;
+}
+
+.tool-card-open i {
+  margin-left: var(--space-2);
+  font-size: 0.8rem;
+  transition: transform 0.2s ease;
+}
+
+.tool-card-open:hover i {
+  transform: translateX(3px);
+}
+
+.tool-card-stats {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.tool-card-stat {
+  display: flex;
+  align-items: center;
+  color: var(--text-tertiary);
+  font-size: 0.8rem;
+}
+
+.tool-card-stat i {
+  margin-right: var(--space-1);
+}
+
+/* Badges */
+.tool-card-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  z-index: 1;
+}
+
+.tool-card-badge-new {
+  background-color: var(--color-success);
+  color: white;
+}
+
+.tool-card-badge-popular {
+  background-color: var(--color-warning);
+  color: var(--color-warning-contrast);
+}
+
+.tool-card-badge-updated {
+  background-color: var(--color-info);
+  color: white;
+}
+
+/* Compact version */
+.tools-grid-compact {
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+
+.tool-card-compact .tool-card-content {
+  padding: var(--space-3);
+}
+
+.tool-card-compact .tool-card-header {
+  padding: var(--space-3);
+}
+
+.tool-card-compact .tool-card-footer {
+  padding: var(--space-3);
+}
+
+.tool-card-compact .tool-card-icon {
+  width: 36px;
+  height: 36px;
+  font-size: 1.2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .tools-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+  
+  .tool-card:hover {
+    transform: translateY(-3px);
+  }
+} 

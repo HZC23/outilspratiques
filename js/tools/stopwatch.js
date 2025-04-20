@@ -26,7 +26,7 @@ export const StopwatchManager = {
 
         // Vérifier si les éléments existent
         if (!this.display || !this.startBtn || !this.resetBtn || !this.lapBtn || !this.lapsList) {
-            console.error('Éléments du chronomètre non trouvés dans le DOM');
+            console.log('Éléments du chronomètre non présents dans la page actuelle');
             return;
         }
 
@@ -195,7 +195,10 @@ export const StopwatchManager = {
     }
 };
 
-// Initialiser le chronomètre lorsque le DOM est chargé
+// Initialiser le chronomètre seulement quand le DOM est complètement chargé
+// et seulement si nous sommes sur la page du chronomètre
 document.addEventListener('DOMContentLoaded', () => {
-    StopwatchManager.init();
+    if (document.getElementById('stopwatchDisplay')) {
+        StopwatchManager.init();
+    }
 }); 

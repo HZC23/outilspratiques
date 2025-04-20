@@ -1,16 +1,75 @@
+/**
+ * Métronome avec battements réglables
+ */
 class Metronome {
     constructor() {
-        this.audioContext = null;
-        this.nextNoteTime = 0.0;
+        // État initial
         this.tempo = 120;
         this.isPlaying = false;
+        this.beatsPerMeasure = 4;
+        this.audioContext = null;
+        this.nextNoteTime = 0.0;
         this.timerWorker = null;
-        this.beatCount = 0;
-        this.useWorkerFallback = false;
-        this.fallbackTimerId = null;
-
+        
+        // Initialisation différée, vérifions d'abord si les éléments existent
+        const tempoSlider = document.getElementById('tempoSlider');
+        
+        if (!tempoSlider) {
+            console.log('Éléments du métronome non présents dans la page actuelle');
+            return;
+        }
+        
+        this.setupInterface();
         this.setupEventListeners();
         this.createWorker();
+    }
+    
+    setupInterface() {
+        // Récupérer tous les éléments d'interface
+        this.tempoDisplay = document.getElementById('tempoDisplay');
+        this.tempoSlider = document.getElementById('tempoSlider');
+        this.startButton = document.getElementById('startMetronome');
+        this.beatsSelect = document.getElementById('beatsPerMeasure');
+        
+        // Si un élément manque, annuler l'initialisation
+        if (!this.tempoDisplay || !this.tempoSlider || !this.startButton || !this.beatsSelect) {
+            console.log('Éléments d\'interface du métronome manquants');
+            return;
+        }
+        
+        // Initialiser les valeurs
+        this.tempoSlider.value = this.tempo;
+        this.tempoDisplay.textContent = `${this.tempo} BPM`;
+    }
+    
+    setupEventListeners() {
+        // Vérifier si les éléments existent avant d'ajouter des écouteurs
+        if (!this.tempoSlider || !this.startButton || !this.beatsSelect) {
+            return;
+        }
+        
+        // Configurer les écouteurs d'événements
+        this.tempoSlider.addEventListener('input', () => {
+            this.tempo = parseInt(this.tempoSlider.value);
+            this.tempoDisplay.textContent = `${this.tempo} BPM`;
+        });
+        
+        this.startButton.addEventListener('click', () => {
+            this.initializeAudioContext();
+            if (!this.isPlaying) {
+                this.start();
+                this.startButton.innerHTML = '<i class="fas fa-pause"></i> Pause';
+                this.startButton.classList.add('active');
+            } else {
+                this.stop();
+                this.startButton.innerHTML = '<i class="fas fa-play"></i> Démarrer';
+                this.startButton.classList.remove('active');
+            }
+        });
+        
+        this.beatsSelect.addEventListener('change', () => {
+            this.beatsPerMeasure = parseInt(this.beatsSelect.value);
+        });
     }
 
     initializeAudioContext() {
@@ -23,66 +82,6 @@ class Metronome {
             }
         }
         return this.audioContext;
-    }
-
-    setupEventListeners() {
-        const tempoSlider = document.getElementById('tempoSlider');
-        const startButton = document.getElementById('startMetronome');
-        const tapTempoButton = document.getElementById('tapTempo');
-        const tempoDisplay = document.getElementById('tempoDisplay');
-
-        tempoSlider.addEventListener('input', () => {
-            this.tempo = parseInt(tempoSlider.value);
-            tempoDisplay.textContent = `${this.tempo} BPM`;
-        });
-
-        startButton.addEventListener('click', () => {
-            this.initializeAudioContext();
-            if (!this.isPlaying) {
-                this.start();
-                startButton.innerHTML = '<i class="fas fa-pause"></i> Pause';
-                startButton.classList.add('active');
-            } else {
-                this.stop();
-                startButton.innerHTML = '<i class="fas fa-play"></i> Démarrer';
-                startButton.classList.remove('active');
-            }
-        });
-
-        let lastTap = 0;
-        let tapCount = 0;
-        let tapTimes = [];
-
-        tapTempoButton.addEventListener('click', () => {
-            const currentTime = Date.now();
-            
-            if (currentTime - lastTap > 2000) {
-                tapCount = 0;
-                tapTimes = [];
-            }
-
-            lastTap = currentTime;
-            tapTimes.push(currentTime);
-            tapCount++;
-
-            if (tapCount >= 4) {
-                let intervals = [];
-                for (let i = 1; i < tapTimes.length; i++) {
-                    intervals.push(tapTimes[i] - tapTimes[i-1]);
-                }
-                
-                const averageInterval = intervals.reduce((a, b) => a + b) / intervals.length;
-                const newTempo = Math.round(60000 / averageInterval);
-                
-                if (newTempo >= 30 && newTempo <= 240) {
-                    this.tempo = newTempo;
-                    tempoSlider.value = this.tempo;
-                    tempoDisplay.textContent = `${this.tempo} BPM`;
-                }
-
-                tapTimes.shift();
-            }
-        });
     }
 
     createWorker() {
@@ -174,7 +173,10 @@ class Metronome {
     }
 }
 
-// Initialisation du métronome
+// Initialiser le métronome seulement quand le DOM est chargé
+// et seulement si nous sommes sur la page du métronome
 document.addEventListener('DOMContentLoaded', () => {
-    window.metronome = new Metronome();
+    if (document.getElementById('metronomeContainer') || document.getElementById('tempoSlider')) {
+        new Metronome();
+    }
 }); 

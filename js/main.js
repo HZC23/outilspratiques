@@ -174,7 +174,10 @@ class App {
      * Initialise les outils
      */
     initTools() {
-        // Lazy load les gestionnaires d'outils quand nécessaire
+        // Les gestionnaires d'outils sont maintenant initialisés à la demande
+        // dans leur propre fichier, seulement lorsque les éléments DOM sont présents
+        
+        // Configurer le gestionnaire de chargement des outils
         document.querySelectorAll('[data-tool-id]').forEach(toolBtn => {
             toolBtn.addEventListener('click', () => {
                 const toolId = toolBtn.getAttribute('data-tool-id');
@@ -182,27 +185,7 @@ class App {
             });
         });
         
-        // Initialisation de SchedulerManager
-        if (document.getElementById('schedulerTool')) {
-            SchedulerManager.init();
-        }
-        
-        // Initialisation de StyleTextManager
-        if (document.getElementById('styletext')) {
-            StyleTextManager.init();
-        }
-        
-        // Initialisation de ColorManager
-        if (document.getElementById('colorTool')) {
-            ColorManager.init();
-        }
-        
-        // Initialisation de QRCodeManager
-        if (document.getElementById('qrcodeTool')) {
-            QRCodeManager.init();
-            // Rendre le QRCodeManager accessible globalement pour les interactions HTML
-            window.qrcodeManager = QRCodeManager;
-        }
+        console.log('Gestionnaires d\'outils configurés pour initialisation à la demande');
     }
     
     /**
@@ -344,41 +327,71 @@ class App {
     
     /**
      * Affiche un outil spécifique
-     * @param {string} toolId - L'identifiant de l'outil à afficher
+     * @param {string} toolId - Identifiant de l'outil
      */
     showTool(toolId) {
-        // Animation de sortie pour l'outil actuel
-        const currentTool = document.querySelector('.section.active');
-        if (currentTool) {
-            currentTool.style.opacity = '0';
-            currentTool.style.transform = 'translateY(20px)';
-        }
+        console.log(`Affichage de l'outil: ${toolId}`);
         
-        // Masquer tous les outils après l'animation
-        setTimeout(() => {
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.remove('active');
-                section.style.display = 'none';
+        // Récupérer le conteneur des outils
+        const toolsContainer = document.getElementById('toolsContainer');
+        if (!toolsContainer) return;
+        
+        // Afficher l'indicateur de chargement
+        toolsContainer.innerHTML = '<div class="loading-indicator"><div class="spinner"></div><p>Chargement de l\'outil...</p></div>';
+        
+        // Charger le contenu de l'outil
+        const toolContentUrl = `./tools/${toolId.replace('Tool', '')}.html`;
+        
+        fetch(toolContentUrl)
+            .then(response => {
+                if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
+                return response.text();
+            })
+            .then(html => {
+                toolsContainer.innerHTML = html;
+                
+                // Mettre à jour l'URL avec l'ancre
+                history.pushState(null, null, `#${toolId}`);
+                
+                // Animer l'entrée
+                toolsContainer.classList.add('tool-fade-in');
+                setTimeout(() => toolsContainer.classList.remove('tool-fade-in'), 500);
+                
+                // Charger le script spécifique à l'outil si nécessaire
+                this.loadToolScript(toolId);
+            })
+            .catch(error => {
+                console.error('Erreur lors du chargement de l\'outil:', error);
+                toolsContainer.innerHTML = `
+                    <div class="error-container">
+                        <div class="error-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        <h3>Erreur lors du chargement de l'outil</h3>
+                        <p>Impossible de charger l'outil demandé. Veuillez réessayer plus tard.</p>
+                        <button type="button" class="retry-btn" onclick="app.showTool('${toolId}')">Réessayer</button>
+                    </div>
+                `;
             });
-            
-            // Afficher le nouvel outil avec animation
-            const tool = document.getElementById(toolId);
-            if (tool) {
-                tool.classList.add('active');
-                tool.style.display = 'block';
-                
-                requestAnimationFrame(() => {
-                    tool.style.opacity = '1';
-                    tool.style.transform = 'translateY(0)';
-                });
-                
-                // Mettre à jour l'URL
-                history.pushState({ tool: toolId }, '', `#${toolId}`);
-                
-                // Mettre à jour le menu
-                this.updateMenuState(toolId);
-            }
-        }, 300);
+    }
+    
+    /**
+     * Charge le script spécifique à l'outil
+     * @param {string} toolId - Identifiant de l'outil
+     */
+    loadToolScript(toolId) {
+        const toolName = toolId.replace('Tool', '');
+        const scriptPath = `js/tools/${toolName}.js`;
+        
+        // Vérifier si le script est déjà chargé
+        const scriptExists = document.querySelector(`script[src="${scriptPath}"]`);
+        if (scriptExists) return;
+        
+        // Créer et ajouter le script
+        const script = document.createElement('script');
+        script.type = 'module';
+        script.src = scriptPath;
+        document.head.appendChild(script);
+        
+        console.log(`Script chargé dynamiquement: ${scriptPath}`);
     }
     
     /**

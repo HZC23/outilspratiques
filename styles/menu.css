@@ -1,0 +1,175 @@
+/* Styles pour le menu de navigation */
+
+.menu {
+  width: 280px;
+  height: 100%;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  padding: var(--space-4) 0;
+  overflow-y: auto;
+  transition: width 0.3s ease, transform 0.3s ease;
+  position: relative;
+  z-index: 20;
+  transform: translateX(0);
+}
+
+/* Menu réduit */
+.menu-collapsed {
+  width: 60px;
+  overflow: hidden;
+}
+
+.menu-collapsed .menu-trigger span,
+.menu-collapsed .submenu,
+.menu-collapsed .submenu-icon {
+  display: none;
+}
+
+.menu-collapsed .menu-trigger {
+  justify-content: center;
+  padding: var(--space-2);
+}
+
+.menu-collapsed .menu-trigger i {
+  margin-right: 0;
+  font-size: 1.5rem;
+}
+
+/* Menu sur petit écran */
+@media (max-width: 992px) {
+  .menu {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    transform: translateX(-100%);
+    z-index: 1000;
+  }
+  
+  .menu.open {
+    transform: translateX(0);
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+/* Catégories du menu */
+.menu-category {
+  margin-bottom: var(--space-2);
+}
+
+/* Bouton pour déclencher le sous-menu */
+.menu-trigger {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  padding: var(--space-2) var(--space-4);
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-weight: 500;
+  transition: background 0.2s ease, color 0.2s ease;
+  cursor: pointer;
+  position: relative;
+  justify-content: space-between;
+}
+
+.menu-trigger i:first-child {
+  margin-right: var(--space-3);
+  width: 24px;
+  text-align: center;
+  color: var(--color-primary);
+}
+
+.menu-trigger:hover {
+  background-color: var(--bg-sidebar-hover);
+  color: var(--text-primary);
+}
+
+.menu-trigger.active {
+  background-color: var(--bg-sidebar-active);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* Icône de flèche pour sous-menu */
+.submenu-icon {
+  font-size: 0.75rem;
+  transition: transform 0.2s ease;
+}
+
+.menu-trigger[aria-expanded="true"] .submenu-icon {
+  transform: rotate(180deg);
+}
+
+/* Sous-menu */
+.submenu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background-color: var(--bg-sidebar-submenu);
+}
+
+.submenu[aria-hidden="false"] {
+  max-height: 500px; /* Valeur arbitraire suffisamment grande */
+}
+
+/* Éléments du sous-menu */
+.submenu-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  padding: var(--space-2) var(--space-4) var(--space-2) var(--space-8);
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  transition: background 0.2s ease, color 0.2s ease;
+  cursor: pointer;
+}
+
+.submenu-item i {
+  margin-right: var(--space-2);
+  width: 20px;
+  text-align: center;
+  color: var(--color-primary-light);
+}
+
+.submenu-item:hover {
+  background-color: var(--bg-sidebar-item-hover);
+  color: var(--text-primary);
+}
+
+.submenu-item.active {
+  color: var(--color-primary);
+  font-weight: 500;
+  background-color: var(--bg-sidebar-item-active);
+}
+
+/* Bouton pour réduire/agrandir le menu */
+.toggle-menu-width {
+  position: absolute;
+  right: -10px;
+  top: 10px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 21;
+  color: var(--text-secondary);
+  transition: transform 0.3s ease;
+}
+
+.toggle-menu-width:hover {
+  color: var(--color-primary);
+}
+
+.menu-collapsed .toggle-menu-width i {
+  transform: rotate(180deg);
+} 
