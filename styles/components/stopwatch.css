@@ -1,0 +1,199 @@
+/* styles/components/stopwatch.css */
+/* Styles pour le composant de chronomètre */
+
+.stopwatch-tool {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+.stopwatch-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 2rem;
+    border-radius: 12px;
+    background-color: var(--bg-color-secondary);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+.stopwatch-time {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--text-color);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    font-family: 'Courier New', monospace;
+}
+
+.stopwatch-milliseconds {
+    font-size: 2rem;
+    color: var(--primary-color);
+}
+
+.stopwatch-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+    max-width: 500px;
+}
+
+.stopwatch-btn {
+    flex: 1;
+    min-width: 100px;
+    padding: 1rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.stopwatch-btn.start {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.stopwatch-btn.start:hover {
+    background-color: var(--primary-color-dark);
+}
+
+.stopwatch-btn.pause {
+    background-color: var(--warning-color);
+    color: white;
+}
+
+.stopwatch-btn.pause:hover {
+    background-color: var(--warning-color-dark);
+}
+
+.stopwatch-btn.reset {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.stopwatch-btn.reset:hover {
+    background-color: var(--danger-color-dark);
+}
+
+.stopwatch-btn.lap {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.stopwatch-btn.lap:hover {
+    background-color: var(--secondary-color-dark);
+}
+
+.stopwatch-btn i {
+    font-size: 1.25rem;
+}
+
+.stopwatch-laps {
+    width: 100%;
+    max-width: 500px;
+    margin-top: 1rem;
+}
+
+.stopwatch-laps-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.stopwatch-laps-title {
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.stopwatch-laps-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.stopwatch-laps-action {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--bg-color-secondary);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.stopwatch-laps-action:hover {
+    background-color: var(--bg-color-hover);
+}
+
+.stopwatch-laps-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 0.5rem;
+    border-radius: 8px;
+    background-color: var(--bg-color-secondary);
+}
+
+.stopwatch-lap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    background-color: var(--bg-color);
+}
+
+.stopwatch-lap-number {
+    font-weight: 600;
+    color: var(--primary-color);
+    min-width: 40px;
+}
+
+.stopwatch-lap-time {
+    font-family: 'Courier New', monospace;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-color);
+}
+
+.stopwatch-lap-split {
+    color: var(--text-color-secondary);
+    font-size: 0.875rem;
+}
+
+.stopwatch-lap.best {
+    border-left: 3px solid var(--success-color);
+}
+
+.stopwatch-lap.worst {
+    border-left: 3px solid var(--danger-color);
+}
+
+@media (max-width: 768px) {
+    .stopwatch-time {
+        font-size: 2.5rem;
+    }
+    
+    .stopwatch-milliseconds {
+        font-size: 1.5rem;
+    }
+    
+    .stopwatch-btn {
+        min-width: 80px;
+        padding: 0.75rem;
+    }
+} 

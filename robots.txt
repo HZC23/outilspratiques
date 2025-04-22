@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://hzc23.github.io/outilspratiques.github.io/sitemap.xml 

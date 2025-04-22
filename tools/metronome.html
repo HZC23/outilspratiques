@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<div class="tool-container" id="metronomeTool">
+    <div class="tool-header">
+        <h2><i class="fas fa-drum"></i> Métronome</h2>
+        <div class="tool-actions">
+            <button type="button" class="btn-icon" id="metronomeHelp" aria-label="Aide">
+                <i class="fas fa-question-circle"></i>
+            </button>
+            <button type="button" class="btn-icon" id="metronomeFullscreen" aria-label="Plein écran">
+                <i class="fas fa-expand"></i>
+            </button>
+        </div>
+    </div>
+    
+    <div class="tool-content">
+        <div class="metronome-container">
+            <div class="metronome-display">
+                <div class="tempo-display">
+                    <span id="currentTempo">120</span>
+                    <span class="tempo-unit">BPM</span>
+                </div>
+                <div class="beat-indicator" id="beatIndicator"></div>
+            </div>
+            
+            <div class="metronome-controls">
+                <button type="button" class="btn-circle" id="startMetronome" aria-label="Démarrer">
+                    <i class="fas fa-play"></i>
+                </button>
+                <button type="button" class="btn-circle" id="stopMetronome" aria-label="Arrêter" disabled>
+                    <i class="fas fa-stop"></i>
+                </button>
+            </div>
+            
+            <div class="tempo-slider-container">
+                <div class="tempo-range">
+                    <span>40</span>
+                    <input type="range" id="tempoSlider" min="40" max="240" value="120" class="tempo-slider">
+                    <span>240</span>
+                </div>
+                <div class="tempo-buttons">
+                    <button type="button" class="btn" id="tempoDown" aria-label="Réduire le tempo">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn" id="tempoUp" aria-label="Augmenter le tempo">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="metronome-options">
+                <div class="option-group">
+                    <label for="timeSignature">Mesure</label>
+                    <select id="timeSignature" class="form-select">
+                        <option value="2">2/4</option>
+                        <option value="3">3/4</option>
+                        <option value="4" selected>4/4</option>
+                        <option value="5">5/4</option>
+                        <option value="6">6/8</option>
+                        <option value="7">7/8</option>
+                    </select>
+                </div>
+                
+                <div class="option-group">
+                    <label for="soundType">Son</label>
+                    <select id="soundType" class="form-select">
+                        <option value="click">Clic</option>
+                        <option value="wood">Bois</option>
+                        <option value="digital">Digital</option>
+                        <option value="bell">Cloche</option>
+                    </select>
+                </div>
+                
+                <div class="option-group">
+                    <label for="accentFirst">Accentuation</label>
+                    <select id="accentFirst" class="form-select">
+                        <option value="true" selected>Premier temps</option>
+                        <option value="false">Aucune</option>
+                        <option value="custom">Personnalisée</option>
+                    </select>
+                </div>
+                
+                <div class="accent-pattern" id="accentPattern">
+                    <!-- Généré dynamiquement en fonction de la mesure sélectionnée -->
+                </div>
+                
+                <div class="option-group">
+                    <label for="volume">Volume</label>
+                    <input type="range" id="volume" min="0" max="100" value="80" class="volume-slider">
+                </div>
+                
+                <div class="option-group">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="visualFlash" class="checkbox-input" checked>
+                        <span class="checkbox-label">Indicateur visuel</span>
+                    </label>
+                </div>
+                
+                <div class="option-group">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="vibration" class="checkbox-input">
+                        <span class="checkbox-label">Vibration</span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="tempo-presets">
+                <h3>Tempos courants</h3>
+                <div class="preset-buttons">
+                    <button type="button" class="preset-btn" data-tempo="60">
+                        <span class="preset-tempo">60</span>
+                        <span class="preset-name">Largo</span>
+                    </button>
+                    <button type="button" class="preset-btn" data-tempo="76">
+                        <span class="preset-tempo">76</span>
+                        <span class="preset-name">Adagio</span>
+                    </button>
+                    <button type="button" class="preset-btn" data-tempo="108">
+                        <span class="preset-tempo">108</span>
+                        <span class="preset-name">Andante</span>
+                    </button>
+                    <button type="button" class="preset-btn" data-tempo="120">
+                        <span class="preset-tempo">120</span>
+                        <span class="preset-name">Moderato</span>
+                    </button>
+                    <button type="button" class="preset-btn" data-tempo="156">
+                        <span class="preset-tempo">156</span>
+                        <span class="preset-name">Allegro</span>
+                    </button>
+                    <button type="button" class="preset-btn" data-tempo="176">
+                        <span class="preset-tempo">176</span>
+                        <span class="preset-name">Vivace</span>
+                    </button>
+                    <button type="button" class="preset-btn" data-tempo="200">
+                        <span class="preset-tempo">200</span>
+                        <span class="preset-name">Presto</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="help-panel" id="metronomeHelpPanel">
+        <div class="help-panel-header">
+            <h3>Aide - Métronome</h3>
+            <button type="button" class="btn-icon" id="closeMetronomeHelp">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="help-panel-content">
+            <h4>Comment utiliser</h4>
+            <ol>
+                <li>Réglez le tempo en BPM (battements par minute) avec le curseur ou les boutons</li>
+                <li>Sélectionnez la mesure souhaitée (4/4, 3/4, etc.)</li>
+                <li>Appuyez sur "Démarrer" pour lancer le métronome</li>
+                <li>Vous pouvez régler les options sonores et visuelles selon vos préférences</li>
+            </ol>
+            
+            <h4>Fonctionnalités</h4>
+            <ul>
+                <li><strong>Tempos préréglés</strong> : accès rapide aux tempos musicaux standards</li>
+                <li><strong>Accentuation</strong> : possibilité d'accentuer certains temps de la mesure</li>
+                <li><strong>Personnalisation</strong> : différents sons et effets visuels disponibles</li>
+                <li><strong>Précision</strong> : timing précis pour un entraînement musical optimal</li>
+            </ul>
+            
+            <h4>Termes musicaux</h4>
+            <ul>
+                <li><strong>Largo</strong> : très lent (40-60 BPM)</li>
+                <li><strong>Adagio</strong> : lent (66-76 BPM)</li>
+                <li><strong>Andante</strong> : modérément lent (76-108 BPM)</li>
+                <li><strong>Moderato</strong> : modéré (108-120 BPM)</li>
+                <li><strong>Allegro</strong> : rapide (120-168 BPM)</li>
+                <li><strong>Vivace</strong> : vif (168-176 BPM)</li>
+                <li><strong>Presto</strong> : très rapide (168-200 BPM)</li>
+            </ul>
+        </div>
+    </div>
+</div> 

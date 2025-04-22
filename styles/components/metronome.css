@@ -1,0 +1,288 @@
+/* styles/components/metronome.css */
+/* Styles pour le composant de métronome */
+
+.metronome-tool {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+.metronome-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    max-width: 400px;
+}
+
+.metronome-bpm {
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--text-color);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    position: relative;
+}
+
+.metronome-bpm::after {
+    content: "BPM";
+    position: absolute;
+    right: -60px;
+    bottom: 10px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-color-secondary);
+}
+
+.metronome-visual {
+    width: 200px;
+    height: 8px;
+    background-color: var(--bg-color-secondary);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    margin: 1rem 0;
+}
+
+.metronome-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: var(--primary-color);
+    transition: width 0.1s linear;
+}
+
+.metronome-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+    max-width: 400px;
+}
+
+.metronome-tempo {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.tempo-slider-container {
+    position: relative;
+    width: 100%;
+    height: 40px;
+}
+
+.tempo-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background-color: var(--bg-color-secondary);
+    outline: none;
+}
+
+.tempo-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.tempo-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+}
+
+.tempo-slider::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.tempo-slider::-moz-range-thumb:hover {
+    transform: scale(1.1);
+}
+
+.tempo-marks {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 12px;
+    margin-top: 0.5rem;
+}
+
+.tempo-mark {
+    font-size: 0.75rem;
+    color: var(--text-color-secondary);
+    position: relative;
+}
+
+.tempo-mark::before {
+    content: "";
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 10px;
+    background-color: var(--border-color);
+}
+
+.tempo-presets {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.tempo-preset {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--bg-color-secondary);
+    color: var(--text-color);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tempo-preset:hover {
+    background-color: var(--bg-color-hover);
+}
+
+.tempo-preset.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.metronome-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.metronome-btn {
+    flex: 1;
+    max-width: 160px;
+    padding: 1rem;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--bg-color-secondary);
+    color: var(--text-color);
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.metronome-btn:hover {
+    background-color: var(--bg-color-hover);
+}
+
+.metronome-btn.play {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.metronome-btn.play:hover {
+    background-color: var(--primary-color-dark);
+}
+
+.metronome-btn i {
+    font-size: 1.25rem;
+}
+
+.metronome-settings {
+    width: 100%;
+    max-width: 400px;
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: var(--bg-color-secondary);
+}
+
+.metronome-settings-title {
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
+.setting-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+}
+
+.setting-label {
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.setting-control {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.setting-control select, 
+.setting-control input {
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+}
+
+.time-signature {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.time-signature-divider {
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+@media (max-width: 768px) {
+    .metronome-bpm {
+        font-size: 3rem;
+    }
+    
+    .metronome-bpm::after {
+        right: -40px;
+        bottom: 6px;
+        font-size: 0.875rem;
+    }
+    
+    .tempo-presets {
+        justify-content: center;
+    }
+    
+    .metronome-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .metronome-btn {
+        max-width: 100%;
+    }
+} 

@@ -1,0 +1,233 @@
+/* styles/components/translator.css */
+/* Styles pour le composant de traduction */
+
+.translator-tool {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.translator-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.translator-header-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.language-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.language-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 200px;
+}
+
+.language-group label {
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.language-select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.swap-languages {
+    height: 40px;
+    width: 40px;
+    border: none;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1.5rem;
+    transition: background-color 0.2s;
+}
+
+.swap-languages:hover {
+    background-color: var(--primary-color-dark);
+}
+
+.translator-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.translator-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.translator-box-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.translator-box-title {
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.translator-box-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.translator-box-btn {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--bg-color-secondary);
+    color: var(--text-color);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.translator-box-btn:hover {
+    background-color: var(--bg-color-hover);
+}
+
+.translator-textarea {
+    height: 180px;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    resize: vertical;
+}
+
+.translator-textarea::placeholder {
+    color: var(--text-color-lighter);
+}
+
+.translator-output {
+    height: 180px;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    overflow-y: auto;
+}
+
+.translator-extras {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.translator-statistics {
+    flex: 1;
+    min-width: 250px;
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: var(--bg-color-secondary);
+}
+
+.translator-statistics-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
+
+.translator-stat {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.25rem;
+}
+
+.translator-stat-label {
+    color: var(--text-color-secondary);
+}
+
+.translator-stat-value {
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.translator-history {
+    flex: 2;
+    min-width: 300px;
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: var(--bg-color-secondary);
+}
+
+.translator-history-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
+
+.translator-history-item {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.translator-history-item:last-child {
+    border-bottom: none;
+}
+
+.translator-history-item:hover {
+    background-color: var(--bg-color-hover);
+}
+
+.translator-languages {
+    font-size: 0.875rem;
+    color: var(--text-color-secondary);
+    margin-bottom: 0.25rem;
+}
+
+.translator-text {
+    color: var(--text-color);
+}
+
+@media (max-width: 768px) {
+    .translator-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .swap-languages {
+        transform: rotate(90deg);
+        margin: 0 auto;
+    }
+} 

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<div class="tool-container" id="todoTool">
+    <div class="tool-header">
+        <h2><i class="fas fa-clipboard-list"></i> Liste de tâches</h2>
+        <div class="tool-actions">
+            <button type="button" class="btn-icon" id="todoHelp" aria-label="Aide">
+                <i class="fas fa-question-circle"></i>
+            </button>
+            <button type="button" class="btn-icon" id="todoFullscreen" aria-label="Plein écran">
+                <i class="fas fa-expand"></i>
+            </button>
+        </div>
+    </div>
+    
+    <div class="tool-content">
+        <div class="todo-container">
+            <div class="todo-sidebar">
+                <div class="todo-header">
+                    <h3>Listes</h3>
+                    <button type="button" class="btn-icon" id="addNewList" aria-label="Nouvelle liste">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                
+                <div class="todo-lists" id="listsContainer">
+                    <div class="list-item active" data-list-id="default">
+                        <i class="fas fa-list"></i>
+                        <span>Tâches</span>
+                        <span class="list-count">0</span>
+                    </div>
+                    <div class="list-item" data-list-id="today">
+                        <i class="fas fa-calendar-day"></i>
+                        <span>Aujourd'hui</span>
+                        <span class="list-count">0</span>
+                    </div>
+                    <div class="list-item" data-list-id="important">
+                        <i class="fas fa-star"></i>
+                        <span>Important</span>
+                        <span class="list-count">0</span>
+                    </div>
+                    <div class="list-item" data-list-id="completed">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Terminé</span>
+                        <span class="list-count">0</span>
+                    </div>
+                    <!-- Les listes personnalisées seront ajoutées ici -->
+                </div>
+                
+                <div class="todo-sidebar-actions">
+                    <button type="button" class="btn btn-outline" id="exportAllLists">
+                        <i class="fas fa-download"></i> Exporter
+                    </button>
+                    <button type="button" class="btn btn-outline" id="importLists">
+                        <i class="fas fa-upload"></i> Importer
+                    </button>
+                </div>
+            </div>
+            
+            <div class="todo-main">
+                <div class="todo-main-header">
+                    <h3 id="currentListTitle">Tâches</h3>
+                    <div class="todo-actions">
+                        <div class="todo-filter">
+                            <select id="todoFilter" class="form-select">
+                                <option value="all">Toutes</option>
+                                <option value="active">Actives</option>
+                                <option value="completed">Terminées</option>
+                            </select>
+                        </div>
+                        <div class="todo-sort">
+                            <select id="todoSort" class="form-select">
+                                <option value="added">Date d'ajout</option>
+                                <option value="due">Date d'échéance</option>
+                                <option value="priority">Priorité</option>
+                                <option value="alphabetical">Alphabétique</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="todo-add-container">
+                    <form id="addTodoForm">
+                        <div class="todo-input-group">
+                            <input type="text" id="newTodoInput" placeholder="Ajouter une tâche..." class="todo-input" required>
+                            <button type="submit" class="btn-icon add-todo" aria-label="Ajouter la tâche">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="todo-list" id="todoList">
+                    <!-- Liste des tâches générée dynamiquement -->
+                </div>
+                
+                <div class="todo-summary">
+                    <div class="todo-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="todoProgress" style="width: 0%"></div>
+                        </div>
+                        <div class="progress-text">
+                            <span id="completedCount">0</span> sur <span id="totalCount">0</span> tâches terminées
+                        </div>
+                    </div>
+                    <div class="todo-actions">
+                        <button type="button" class="btn btn-sm" id="clearCompletedTasks">
+                            <i class="fas fa-trash-alt"></i> Supprimer les tâches terminées
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="todo-details" id="todoDetails">
+                <div class="details-header">
+                    <h3>Détails de la tâche</h3>
+                    <button type="button" class="btn-icon" id="closeTodoDetails">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="details-content">
+                    <div class="details-title">
+                        <input type="text" id="detailsTitle" placeholder="Titre de la tâche" class="details-input">
+                    </div>
+                    
+                    <div class="details-group">
+                        <label for="detailsPriority">Priorité</label>
+                        <select id="detailsPriority" class="form-select">
+                            <option value="low">Faible</option>
+                            <option value="medium">Moyenne</option>
+                            <option value="high">Élevée</option>
+                        </select>
+                    </div>
+                    
+                    <div class="details-group">
+                        <label for="detailsDueDate">Date d'échéance</label>
+                        <input type="date" id="detailsDueDate" class="form-input">
+                    </div>
+                    
+                    <div class="details-group">
+                        <label for="detailsNotes">Notes</label>
+                        <textarea id="detailsNotes" placeholder="Ajouter des notes..." class="details-textarea"></textarea>
+                    </div>
+                    
+                    <div class="details-group">
+                        <label>
+                            <input type="checkbox" id="detailsReminder" class="checkbox-input">
+                            <span>Ajouter un rappel</span>
+                        </label>
+                        <div class="reminder-options" id="reminderOptions">
+                            <input type="datetime-local" id="reminderDateTime" class="form-input">
+                        </div>
+                    </div>
+                    
+                    <div class="details-group">
+                        <label>Sous-tâches</label>
+                        <div class="subtasks-container">
+                            <div class="subtask-add">
+                                <input type="text" id="newSubtask" placeholder="Ajouter une sous-tâche..." class="form-input">
+                                <button type="button" class="btn-icon" id="addSubtask">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <div class="subtasks-list" id="subtasksList">
+                                <!-- Les sous-tâches seront ajoutées ici -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="details-footer">
+                    <div class="details-info">
+                        <span>Créée le <span id="createdDate">01/01/2024</span></span>
+                    </div>
+                    <div class="details-actions">
+                        <button type="button" class="btn btn-outline btn-danger" id="deleteTodo">
+                            <i class="fas fa-trash-alt"></i> Supprimer
+                        </button>
+                        <button type="button" class="btn btn-primary" id="saveTodoDetails">
+                            <i class="fas fa-save"></i> Enregistrer
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Dialogue pour ajouter une nouvelle liste -->
+    <div class="modal" id="newListModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Nouvelle liste</h3>
+                <button type="button" class="btn-icon" id="closeNewListModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="newListForm">
+                    <div class="form-group">
+                        <label for="newListName">Nom de la liste</label>
+                        <input type="text" id="newListName" placeholder="Entrez un nom..." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newListIcon">Icône</label>
+                        <select id="newListIcon" class="form-select">
+                            <option value="list">📋 Liste</option>
+                            <option value="home">🏠 Maison</option>
+                            <option value="work">💼 Travail</option>
+                            <option value="shopping">🛒 Courses</option>
+                            <option value="gym">💪 Sport</option>
+                            <option value="travel">✈️ Voyage</option>
+                            <option value="study">📚 Études</option>
+                            <option value="finance">💰 Finance</option>
+                            <option value="health">🏥 Santé</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" id="cancelNewList">Annuler</button>
+                <button type="button" class="btn btn-primary" id="confirmNewList">Créer</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="help-panel" id="todoHelpPanel">
+        <div class="help-panel-header">
+            <h3>Aide - Liste de tâches</h3>
+            <button type="button" class="btn-icon" id="closeTodoHelp">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="help-panel-content">
+            <h4>Comment utiliser</h4>
+            <ol>
+                <li>Organisez vos tâches en créant différentes listes (travail, personnel, etc.)</li>
+                <li>Ajoutez des tâches en utilisant le champ de saisie et la touche Entrée</li>
+                <li>Cliquez sur une tâche pour voir et modifier ses détails</li>
+                <li>Cochez une tâche pour la marquer comme terminée</li>
+                <li>Utilisez les filtres et le tri pour organiser l'affichage de vos tâches</li>
+            </ol>
+            
+            <h4>Fonctionnalités</h4>
+            <ul>
+                <li><strong>Priorités</strong> : définissez l'importance de chaque tâche</li>
+                <li><strong>Dates d'échéance</strong> : ne manquez plus vos délais</li>
+                <li><strong>Sous-tâches</strong> : divisez les tâches complexes en étapes plus petites</li>
+                <li><strong>Rappels</strong> : recevez des notifications pour les tâches importantes</li>
+                <li><strong>Filtres</strong> : visualisez rapidement vos tâches par statut ou par date</li>
+                <li><strong>Export/Import</strong> : sauvegardez et partagez vos listes</li>
+            </ul>
+            
+            <h4>Conseils</h4>
+            <ul>
+                <li>Utilisez différentes listes pour séparer vos contextes (personnel, professionnel)</li>
+                <li>Ajoutez des dates d'échéance pour les tâches qui doivent être terminées à une date précise</li>
+                <li>Priorisez vos tâches pour vous concentrer sur ce qui est vraiment important</li>
+                <li>Décomposez les grandes tâches en sous-tâches plus faciles à gérer</li>
+            </ul>
+        </div>
+    </div>
+</div> 

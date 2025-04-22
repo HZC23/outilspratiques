@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<div class="tool-container" id="styletextTool">
+    <div class="tool-header">
+        <h2><i class="fas fa-feather-alt"></i> Styliseur de texte</h2>
+        <div class="tool-actions">
+            <button type="button" class="btn-icon" id="styletextHelp" aria-label="Aide">
+                <i class="fas fa-question-circle"></i>
+            </button>
+            <button type="button" class="btn-icon" id="styletextFullscreen" aria-label="Plein écran">
+                <i class="fas fa-expand"></i>
+            </button>
+        </div>
+    </div>
+    
+    <div class="tool-content">
+        <div class="styletext-container">
+            <div class="input-section">
+                <h3>Texte à styliser</h3>
+                <div class="textarea-container">
+                    <textarea id="originalText" placeholder="Saisissez ou collez votre texte ici..." class="styletext-textarea"></textarea>
+                    <div class="text-controls">
+                        <button type="button" class="btn-icon" id="clearText" aria-label="Effacer">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        <button type="button" class="btn-icon" id="pasteText" aria-label="Coller">
+                            <i class="fas fa-paste"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="character-count">
+                    <span id="charCount">0</span> caractères
+                </div>
+            </div>
+            
+            <div class="style-options">
+                <div class="style-tabs">
+                    <button type="button" class="tab-button active" data-tab="fonts">Polices</button>
+                    <button type="button" class="tab-button" data-tab="symbols">Symboles</button>
+                    <button type="button" class="tab-button" data-tab="emojis">Émojis</button>
+                    <button type="button" class="tab-button" data-tab="borders">Bordures</button>
+                </div>
+                
+                <div class="tab-content">
+                    <div class="tab-pane active" id="fonts">
+                        <div class="font-styles" id="fontStyles">
+                            <div class="style-item" data-style="bold">
+                                <div class="style-preview">𝐓𝐞𝐱𝐭𝐞 𝐠𝐫𝐚𝐬</div>
+                                <div class="style-name">Gras</div>
+                            </div>
+                            <div class="style-item" data-style="italic">
+                                <div class="style-preview">𝘛𝘦𝘹𝘵𝘦 𝘪𝘵𝘢𝘭𝘪𝘲𝘶𝘦</div>
+                                <div class="style-name">Italique</div>
+                            </div>
+                            <div class="style-item" data-style="script">
+                                <div class="style-preview">𝓣𝓮𝔁𝓽𝓮 𝓼𝓬𝓻𝓲𝓹𝓽</div>
+                                <div class="style-name">Script</div>
+                            </div>
+                            <div class="style-item" data-style="double-struck">
+                                <div class="style-preview">𝕋𝕖𝕩𝕥𝕖 𝕕𝕠𝕦𝕓𝕝𝕖</div>
+                                <div class="style-name">Double</div>
+                            </div>
+                            <div class="style-item" data-style="monospace">
+                                <div class="style-preview">𝚃𝚎𝚡𝚝𝚎 𝚖𝚘𝚗𝚘</div>
+                                <div class="style-name">Monospace</div>
+                            </div>
+                            <div class="style-item" data-style="small-caps">
+                                <div class="style-preview">ᴛᴇxᴛᴇ ᴘᴇᴛɪᴛᴇs ᴄᴀᴘs</div>
+                                <div class="style-name">Petites caps</div>
+                            </div>
+                            <div class="style-item" data-style="upside-down">
+                                <div class="style-preview">ʇǝxʇǝ ɹǝuʌǝɹsé</div>
+                                <div class="style-name">Renversé</div>
+                            </div>
+                            <div class="style-item" data-style="strikethrough">
+                                <div class="style-preview">T̶e̶x̶t̶e̶ ̶b̶a̶r̶r̶é̶</div>
+                                <div class="style-name">Barré</div>
+                            </div>
+                            <div class="style-item" data-style="bubble">
+                                <div class="style-preview">ⓣⓔⓧⓣⓔ ⓑⓤⓛⓛⓔ</div>
+                                <div class="style-name">Bulle</div>
+                            </div>
+                            <div class="style-item" data-style="medieval">
+                                <div class="style-preview">𝔗𝔢𝔵𝔱𝔢 𝔪é𝔡𝔦é𝔳𝔞𝔩</div>
+                                <div class="style-name">Médiéval</div>
+                            </div>
+                            <div class="style-item" data-style="vaporwave">
+                                <div class="style-preview">Ｔｅｘｔｅ　ｖａｐｏｒｗａｖｅ</div>
+                                <div class="style-name">Vaporwave</div>
+                            </div>
+                            <div class="style-item" data-style="zalgo">
+                                <div class="style-preview">T̷̢̮̦̭̞̿̊͋̀̕ḙ̶̯̗̔̎̊͝ͅx̸̮̗̩͔̓͆̍̀t̵̤͊̐͆̓e̵̟͎̓̑̏̓ ̴̯̤̃̔͗͒͘Z̴̠̈͜a̸̞̹̠̍̂̽͘͝ḽ̸͕͊̏̄̀̏g̴̱͐̔͋̒̉o̷̔̎͑͜</div>
+                                <div class="style-name">Zalgo</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-pane" id="symbols">
+                        <div class="symbols-grid" id="symbolsGrid">
+                            <button type="button" class="symbol-btn" data-symbol="★">★</button>
+                            <button type="button" class="symbol-btn" data-symbol="☆">☆</button>
+                            <button type="button" class="symbol-btn" data-symbol="♥">♥</button>
+                            <button type="button" class="symbol-btn" data-symbol="♡">♡</button>
+                            <button type="button" class="symbol-btn" data-symbol="✓">✓</button>
+                            <button type="button" class="symbol-btn" data-symbol="✗">✗</button>
+                            <button type="button" class="symbol-btn" data-symbol="♫">♫</button>
+                            <button type="button" class="symbol-btn" data-symbol="♪">♪</button>
+                            <button type="button" class="symbol-btn" data-symbol="☺">☺</button>
+                            <button type="button" class="symbol-btn" data-symbol="☹">☹</button>
+                            <button type="button" class="symbol-btn" data-symbol="♣">♣</button>
+                            <button type="button" class="symbol-btn" data-symbol="♠">♠</button>
+                            <button type="button" class="symbol-btn" data-symbol="♦">♦</button>
+                            <button type="button" class="symbol-btn" data-symbol="♤">♤</button>
+                            <button type="button" class="symbol-btn" data-symbol="♧">♧</button>
+                            <button type="button" class="symbol-btn" data-symbol="♢">♢</button>
+                            <button type="button" class="symbol-btn" data-symbol="☼">☼</button>
+                            <button type="button" class="symbol-btn" data-symbol="☾">☾</button>
+                            <button type="button" class="symbol-btn" data-symbol="✈">✈</button>
+                            <button type="button" class="symbol-btn" data-symbol="⚓">⚓</button>
+                            <button type="button" class="symbol-btn" data-symbol="⚔">⚔</button>
+                            <button type="button" class="symbol-btn" data-symbol="☮">☮</button>
+                            <button type="button" class="symbol-btn" data-symbol="☯">☯</button>
+                            <button type="button" class="symbol-btn" data-symbol="∞">∞</button>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-pane" id="emojis">
+                        <div class="emoji-categories">
+                            <button type="button" class="emoji-category active" data-category="smileys">😀</button>
+                            <button type="button" class="emoji-category" data-category="people">👨</button>
+                            <button type="button" class="emoji-category" data-category="animals">🐶</button>
+                            <button type="button" class="emoji-category" data-category="food">🍎</button>
+                            <button type="button" class="emoji-category" data-category="activities">⚽</button>
+                            <button type="button" class="emoji-category" data-category="travel">🚗</button>
+                            <button type="button" class="emoji-category" data-category="objects">💡</button>
+                            <button type="button" class="emoji-category" data-category="symbols">💯</button>
+                        </div>
+                        <div class="emoji-grid" id="emojiGrid">
+                            <!-- Les émojis seront ajoutés dynamiquement ici -->
+                        </div>
+                    </div>
+                    
+                    <div class="tab-pane" id="borders">
+                        <div class="border-styles" id="borderStyles">
+                            <div class="style-item" data-border="simple">
+                                <div class="style-preview">┌─────┐<br>│ Texte │<br>└─────┘</div>
+                                <div class="style-name">Simple</div>
+                            </div>
+                            <div class="style-item" data-border="double">
+                                <div class="style-preview">╔═════╗<br>║ Texte ║<br>╚═════╝</div>
+                                <div class="style-name">Double</div>
+                            </div>
+                            <div class="style-item" data-border="rounded">
+                                <div class="style-preview">╭─────╮<br>│ Texte │<br>╰─────╯</div>
+                                <div class="style-name">Arrondi</div>
+                            </div>
+                            <div class="style-item" data-border="stars">
+                                <div class="style-preview">★★★★★★★<br>★ Texte ★<br>★★★★★★★</div>
+                                <div class="style-name">Étoiles</div>
+                            </div>
+                            <div class="style-item" data-border="hearts">
+                                <div class="style-preview">♥♥♥♥♥♥♥<br>♥ Texte ♥<br>♥♥♥♥♥♥♥</div>
+                                <div class="style-name">Cœurs</div>
+                            </div>
+                            <div class="style-item" data-border="flowers">
+                                <div class="style-preview">✿✿✿✿✿✿✿<br>✿ Texte ✿<br>✿✿✿✿✿✿✿</div>
+                                <div class="style-name">Fleurs</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="output-section">
+                <h3>Texte stylisé</h3>
+                <div class="output-container">
+                    <div id="styledText" class="styled-text"></div>
+                    <div class="output-controls">
+                        <button type="button" class="btn-icon" id="copyStyledText" aria-label="Copier">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                        <button type="button" class="btn-icon" id="downloadStyledText" aria-label="Télécharger">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button type="button" class="btn-icon" id="shareStyledText" aria-label="Partager">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="help-panel" id="styletextHelpPanel">
+        <div class="help-panel-header">
+            <h3>Aide - Styliseur de texte</h3>
+            <button type="button" class="btn-icon" id="closeStyletextHelp">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="help-panel-content">
+            <h4>Comment utiliser</h4>
+            <ol>
+                <li>Saisissez ou collez votre texte dans la zone "Texte à styliser"</li>
+                <li>Sélectionnez l'onglet correspondant au type de style souhaité (polices, symboles, etc.)</li>
+                <li>Cliquez sur un style pour l'appliquer à votre texte</li>
+                <li>Le texte stylisé apparaîtra dans la zone de sortie</li>
+                <li>Utilisez les boutons pour copier, télécharger ou partager votre texte stylisé</li>
+            </ol>
+            
+            <h4>Fonctionnalités</h4>
+            <ul>
+                <li><strong>Polices</strong> : transformez votre texte avec différents styles typographiques</li>
+                <li><strong>Symboles</strong> : ajoutez des symboles spéciaux à votre texte</li>
+                <li><strong>Émojis</strong> : agrémentez votre texte avec des émojis classés par catégorie</li>
+                <li><strong>Bordures</strong> : encadrez votre texte avec différents styles de bordures</li>
+            </ul>
+            
+            <h4>Remarques</h4>
+            <p>Certains styles de texte utilisent des caractères Unicode qui peuvent ne pas s'afficher correctement sur tous les appareils ou plateformes. Pour une meilleure compatibilité, privilégiez les styles simples lorsque vous partagez votre texte.</p>
+        </div>
+    </div>
+</div> 

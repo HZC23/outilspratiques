@@ -340,11 +340,16 @@ class App {
         toolsContainer.innerHTML = '<div class="loading-indicator"><div class="spinner"></div><p>Chargement de l\'outil...</p></div>';
         
         // Charger le contenu de l'outil
-        const toolContentUrl = `./tools/${toolId.replace('Tool', '')}.html`;
+        const toolContentUrl = `./tools/${toolId.toLowerCase().replace('tool', '')}.html`;
         
         fetch(toolContentUrl)
             .then(response => {
-                if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        throw new Error(`L'outil "${toolId}" n'existe pas.`);
+                    }
+                    throw new Error(`Erreur HTTP: ${response.status}`);
+                }
                 return response.text();
             })
             .then(html => {
@@ -362,11 +367,15 @@ class App {
             })
             .catch(error => {
                 console.error('Erreur lors du chargement de l\'outil:', error);
+                const errorMessage = error.message.includes('404') 
+                    ? `L'outil "${toolId}" n'existe pas ou n'est pas disponible.`
+                    : 'Une erreur est survenue lors du chargement de l\'outil. Veuillez réessayer plus tard.';
+                
                 toolsContainer.innerHTML = `
                     <div class="error-container">
                         <div class="error-icon"><i class="fas fa-exclamation-triangle"></i></div>
                         <h3>Erreur lors du chargement de l'outil</h3>
-                        <p>Impossible de charger l'outil demandé. Veuillez réessayer plus tard.</p>
+                        <p>${errorMessage}</p>
                         <button type="button" class="retry-btn" onclick="app.showTool('${toolId}')">Réessayer</button>
                     </div>
                 `;

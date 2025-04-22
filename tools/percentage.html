@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<div class="tool-container" id="percentageTool">
+    <div class="tool-header">
+        <h2><i class="fas fa-percent"></i> Calculateur de pourcentages</h2>
+        <div class="tool-actions">
+            <button type="button" class="btn-icon" id="percentageHelp" aria-label="Aide">
+                <i class="fas fa-question-circle"></i>
+            </button>
+            <button type="button" class="btn-icon" id="percentageFullscreen" aria-label="Plein écran">
+                <i class="fas fa-expand"></i>
+            </button>
+        </div>
+    </div>
+    
+    <div class="tool-content">
+        <div class="percentage-calculator">
+            <div class="calculation-tabs">
+                <button type="button" class="tab-button active" data-tab="basicPercentage">Calcul de base</button>
+                <button type="button" class="tab-button" data-tab="percentageChange">Variation</button>
+                <button type="button" class="tab-button" data-tab="percentageOf">Pourcentage de</button>
+                <button type="button" class="tab-button" data-tab="percentageTip">Pourboire</button>
+            </div>
+            
+            <div class="calculation-content">
+                <!-- Calcul de base -->
+                <div class="tab-content active" id="basicPercentage">
+                    <h3>Calculer un pourcentage</h3>
+                    <div class="input-group">
+                        <label for="percentageValue">Valeur</label>
+                        <input type="number" id="percentageValue" placeholder="0" step="any">
+                    </div>
+                    <div class="input-group">
+                        <label for="percentageRate">Pourcentage (%)</label>
+                        <input type="number" id="percentageRate" placeholder="0" step="any">
+                    </div>
+                    <button type="button" class="btn btn-primary" id="calculatePercentage">Calculer</button>
+                    
+                    <div class="result-container">
+                        <div class="result-item">
+                            <span class="result-label">Résultat:</span>
+                            <span class="result-value" id="percentageResult">0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Variation en pourcentage -->
+                <div class="tab-content" id="percentageChange">
+                    <h3>Calculer une variation</h3>
+                    <div class="input-group">
+                        <label for="oldValue">Valeur initiale</label>
+                        <input type="number" id="oldValue" placeholder="0" step="any">
+                    </div>
+                    <div class="input-group">
+                        <label for="newValue">Valeur finale</label>
+                        <input type="number" id="newValue" placeholder="0" step="any">
+                    </div>
+                    <button type="button" class="btn btn-primary" id="calculateChange">Calculer</button>
+                    
+                    <div class="result-container">
+                        <div class="result-item">
+                            <span class="result-label">Variation:</span>
+                            <span class="result-value" id="changeResult">0%</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Différence:</span>
+                            <span class="result-value" id="differenceResult">0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pourcentage de -->
+                <div class="tab-content" id="percentageOf">
+                    <h3>Quel pourcentage représente...</h3>
+                    <div class="input-group">
+                        <label for="partValue">Partie</label>
+                        <input type="number" id="partValue" placeholder="0" step="any">
+                    </div>
+                    <div class="input-group">
+                        <label for="totalValue">Total</label>
+                        <input type="number" id="totalValue" placeholder="0" step="any">
+                    </div>
+                    <button type="button" class="btn btn-primary" id="calculateOf">Calculer</button>
+                    
+                    <div class="result-container">
+                        <div class="result-item">
+                            <span class="result-label">Pourcentage:</span>
+                            <span class="result-value" id="ofResult">0%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Calcul de pourboire -->
+                <div class="tab-content" id="percentageTip">
+                    <h3>Calculateur de pourboire</h3>
+                    <div class="input-group">
+                        <label for="billAmount">Montant de la facture</label>
+                        <input type="number" id="billAmount" placeholder="0" step="any">
+                    </div>
+                    <div class="input-group">
+                        <label for="tipPercentage">Pourcentage du pourboire</label>
+                        <input type="number" id="tipPercentage" placeholder="15" value="15" step="any">
+                    </div>
+                    <div class="input-group">
+                        <label for="numPeople">Nombre de personnes</label>
+                        <input type="number" id="numPeople" placeholder="1" value="1" min="1">
+                    </div>
+                    <button type="button" class="btn btn-primary" id="calculateTip">Calculer</button>
+                    
+                    <div class="result-container">
+                        <div class="result-item">
+                            <span class="result-label">Pourboire:</span>
+                            <span class="result-value" id="tipResult">0</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Total:</span>
+                            <span class="result-value" id="totalWithTipResult">0</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Par personne:</span>
+                            <span class="result-value" id="perPersonResult">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="help-panel" id="percentageHelpPanel">
+        <div class="help-panel-header">
+            <h3>Aide - Calculateur de pourcentages</h3>
+            <button type="button" class="btn-icon" id="closePercentageHelp">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="help-panel-content">
+            <h4>Comment utiliser</h4>
+            <ul>
+                <li><strong>Calcul de base</strong> : Calculez un pourcentage d'une valeur</li>
+                <li><strong>Variation</strong> : Calculez le pourcentage de variation entre deux valeurs</li>
+                <li><strong>Pourcentage de</strong> : Calculez quel pourcentage une valeur représente du total</li>
+                <li><strong>Pourboire</strong> : Calculez un pourboire et partagez-le entre plusieurs personnes</li>
+            </ul>
+            
+            <h4>Exemples d'utilisation</h4>
+            <ul>
+                <li>Calculer une réduction sur un prix</li>
+                <li>Évaluer une augmentation salariale</li>
+                <li>Déterminer la proportion d'un budget</li>
+                <li>Partager équitablement une addition</li>
+            </ul>
+        </div>
+    </div>
+</div> 

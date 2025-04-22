@@ -2,7 +2,7 @@
     "name": "Outils Pratiques",
     "short_name": "Outils",
     "description": "Collection d'outils pratiques gratuits pour le calcul, la gestion du temps, l'organisation et plus encore.",
-    "start_url": "/home.html",
+    "start_url": "/index.html",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#4a90e2",
