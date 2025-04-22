@@ -17,23 +17,16 @@ toolFiles.forEach(file => {
     // Lire le contenu du fichier
     let content = fs.readFileSync(filePath, 'utf8');
     
-    // Supprimer la balise base
-    content = content.replace(/<base href="https:\/\/hzc23\.github\.io\/outilspratiques\.github\.io\/">/g, '');
+    // Extraire uniquement la section de l'outil en utilisant une expression régulière
+    const sectionMatch = content.match(/<section[^>]*>([\s\S]*?)<\/section>/i);
     
-    // Remplacer les chemins CSS et JS
-    content = content.replace(/<link rel="stylesheet" href="styles\.css">/g, '<link rel="stylesheet" href="../styles/main.css">');
-    content = content.replace(/<link rel="stylesheet" href="css\/tools\.css">/g, '<link rel="stylesheet" href="../styles/tools.css">');
-    
-    // Remplacer les chemins pour les fichiers CSS spécifiques aux outils
-    content = content.replace(/<link rel="stylesheet" href="css\/tools\/([^"]+)\.css">/g, '<!-- Styles spécifiques à l\'outil -->');
-    
-    // Remplacer les chemins pour les fichiers JS
-    content = content.replace(/src="js\//g, 'src="../js/');
-    
-    // Écrire le contenu modifié dans le fichier
-    fs.writeFileSync(filePath, content);
-    
-    console.log(`Fichier corrigé : ${file}`);
+    if (sectionMatch && sectionMatch[0]) {
+        // Sauvegarder uniquement la section
+        fs.writeFileSync(filePath, sectionMatch[0]);
+        console.log(`Fichier simplifié : ${file}`);
+    } else {
+        console.log(`Avertissement : Aucune section trouvée dans ${file}`);
+    }
 });
 
-console.log('Tous les fichiers ont été corrigés avec succès !'); 
+console.log('Tous les fichiers ont été convertis au nouveau format simplifié !'); 
