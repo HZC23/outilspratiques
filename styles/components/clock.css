@@ -1,0 +1,49 @@
+/* Style de l'horloge dans le header */
+.top-clock {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: var(--surface-color);
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.top-clock:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+.top-clock .time {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+    text-align: center;
+    margin-bottom: 2px;
+}
+
+.top-clock .date {
+    font-size: 0.9rem;
+    color: var(--text-secondary-color);
+    text-align: center;
+}
+
+/* Animation de l'horloge */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+.top-clock .time {
+    animation: pulse 2s infinite;
+}
+
+/* Masquer l'horloge sur mobile */
+@media (max-width: 768px) {
+    .top-clock {
+        display: none;
+    }
+}

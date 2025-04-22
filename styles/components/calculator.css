@@ -4,13 +4,12 @@
  */
 
 .calculator-container {
-    max-width: 400px;
+    max-width: 320px;
     margin: 0 auto;
-    background-color: var(--tool-container-bg);
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    padding: var(--calc-padding);
-    overflow: hidden;
+    background-color: var(--background-color);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
 .calculator-header {
@@ -27,55 +26,48 @@
 }
 
 .calculator-display {
-    background-color: var(--calc-display-bg);
-    border-radius: var(--border-radius-sm);
-    padding: var(--spacing-md);
-    margin-bottom: var(--spacing-md);
-    box-shadow: var(--inset-shadow);
-    min-height: 80px;
+    padding: 20px;
+    margin-bottom: 24px;
+    text-align: right;
+    min-height: 100px;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    transition: background-color var(--transition-duration) ease;
+    gap: 8px;
 }
 
 .calculator-previous {
-    font-size: var(--font-size-sm);
+    font-size: 14px;
     color: var(--text-secondary);
-    text-align: right;
-    height: 1.5em;
+    height: 20px;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
 .calculator-current {
-    font-size: var(--font-size-xl);
-    color: var(--calc-display-text);
+    font-size: 36px;
+    color: var(--text-primary);
     font-weight: 500;
-    text-align: right;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
-.calculator-buttons {
+.calculator-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: var(--button-gap);
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
 }
 
 .calculator-button {
-    background-color: var(--calc-button-bg);
-    color: var(--calc-button-text);
-    border: 1px solid var(--border-color);
-    border-radius: var(--button-border-radius);
-    padding: var(--spacing-md) var(--spacing-sm);
-    font-size: var(--font-size);
-    text-align: center;
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 20px;
     cursor: pointer;
-    transition: all var(--transition-fast);
-    aspect-ratio: 1/1;
+    transition: all 0.2s ease;
+    aspect-ratio: 1;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -84,45 +76,33 @@
 }
 
 .calculator-button:hover {
-    background-color: var(--calc-button-bg-hover);
+    background-color: var(--button-hover-bg);
     transform: translateY(-2px);
-    box-shadow: var(--hover-shadow);
 }
 
 .calculator-button:active {
     transform: translateY(0);
-    box-shadow: var(--box-shadow);
 }
 
 .calculator-button.operator {
-    background-color: var(--calc-button-operator);
-    color: var(--text-color);
+    background-color: var(--operator-button-bg);
+    color: var(--primary-color);
 }
 
-.calculator-button.primary {
-    background-color: var(--calc-button-primary);
-    color: var(--text-on-primary);
-    border-color: var(--calc-button-primary);
-}
-
-.calculator-button.secondary {
-    background-color: var(--calc-button-secondary);
-    color: var(--text-on-primary);
-    border-color: var(--calc-button-secondary);
+.calculator-button.function {
+    background-color: var(--function-button-bg);
+    color: var(--primary-color);
 }
 
 .calculator-button.equals {
-    background-color: var(--calc-button-equals);
-    color: var(--text-on-primary);
-    border-color: var(--calc-button-equals);
-    grid-row: span 2;
-    aspect-ratio: auto;
-}
-
-.calculator-button.clear {
-    background-color: var(--calc-button-clear);
-    color: var(--text-on-primary);
-    border-color: var(--calc-button-clear);
+    background-color: var(--success-color);
+    color: var(--primary-light);
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .calculator-history {
@@ -261,4 +241,4 @@
 
 [data-theme="dark"] .calculator-button.operator {
     background-color: var(--calc-button-operator);
-} 
+}

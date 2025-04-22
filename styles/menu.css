@@ -13,6 +13,8 @@
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
     scrollbar-width: thin;
     scrollbar-color: var(--border-color) transparent;
+    will-change: transform;
+    contain: content;
 }
 
 .menu::-webkit-scrollbar {
@@ -91,7 +93,7 @@
 @media (max-width: 768px) {
     .menu {
         position: fixed;
-        left: -100%;
+        left: 0;
         width: 85%;
         max-width: 320px;
         height: 100vh;
@@ -133,6 +135,7 @@
 /* Styles pour le menu et les sous-menus */
 .menu-category {
     margin-bottom: 1rem;
+    contain: content;
 }
 
 .menu-trigger {
@@ -153,6 +156,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
     position: relative;
+    will-change: transform;
+    contain: content;
 }
 
 .menu-trigger span {
@@ -166,11 +171,17 @@
     transform: translateX(3px);
 }
 
+.menu-trigger:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
 .menu-trigger i {
     width: 1.5rem;
     text-align: center;
     flex-shrink: 0;
     transition: transform 0.2s var(--ease-out-back);
+    will-change: transform;
 }
 
 .submenu-icon {
@@ -178,6 +189,7 @@
     font-size: 0.8rem;
     transition: transform 0.3s var(--ease-out-back);
     flex-shrink: 0;
+    will-change: transform;
 }
 
 .menu-trigger[aria-expanded="true"] .submenu-icon {
@@ -194,6 +206,8 @@
     border-radius: var(--border-radius);
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
     transition: all 0.3s var(--ease-out-back);
+    will-change: height, opacity;
+    contain: content;
 }
 
 .submenu.active {
@@ -224,6 +238,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
     position: relative;
+    will-change: transform;
+    contain: content;
 }
 
 .submenu-item span {
@@ -237,12 +253,18 @@
     transform: translateX(3px);
 }
 
+.submenu-item:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
 .submenu-item i {
     width: 1.5rem;
     text-align: center;
     font-size: 0.9rem;
     flex-shrink: 0;
     transition: transform 0.2s var(--ease-out-back);
+    will-change: transform;
 }
 
 .submenu-item:hover i {
@@ -258,18 +280,17 @@
     right: 0;
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 140;
+    z-index: 100;
     opacity: 0;
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
-    transition: opacity 0.3s ease;
+    transition: opacity 0.3s var(--ease-in-out);
+    will-change: opacity;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
 }
 
-@media (max-width: 768px) {
-    .menu-overlay.active {
-        display: block;
-        opacity: 1;
-    }
+.menu-overlay.active {
+    display: block;
+    opacity: 1;
 }
 
 /* Style du header */
@@ -298,15 +319,18 @@ header h1 {
 /* Style du bouton hamburger */
 .menu-toggle {
     display: none;
-    padding: 0.5rem;
     background: none;
     border: none;
-    color: var(--text-color);
+    color: var(--text-on-primary);
+    font-size: 1.5rem;
     cursor: pointer;
-    z-index: 200;
-    height: 40px;
-    width: 40px;
-    position: relative;
+    padding: 0.5rem;
+    margin-left: auto;
+    transition: transform 0.3s var(--ease-out-back);
+}
+
+.menu-toggle:hover {
+    transform: scale(1.1);
 }
 
 .hamburger {
@@ -504,6 +528,7 @@ header h1 {
     z-index: 10;
     transition: transform 0.3s ease;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    will-change: transform;
 }
 
 .toggle-menu-width:hover {

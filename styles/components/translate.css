@@ -1,7 +1,4 @@
-/* styles/components/translator.css */
-/* Styles pour le composant de traduction */
-
-.translator-container {
+.translate-container {
     max-width: 800px;
     margin: 2rem auto;
     padding: 2rem;
@@ -10,20 +7,20 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.translator-header {
+.translate-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
 }
 
-.translator-languages {
+.translate-languages {
     display: flex;
     gap: 1rem;
     align-items: center;
 }
 
-.translator-select {
+.translate-select {
     padding: 0.5rem 1rem;
     border: 1px solid var(--border-color);
     border-radius: 8px;
@@ -33,7 +30,7 @@
     cursor: pointer;
 }
 
-.translator-swap {
+.translate-swap {
     padding: 0.5rem;
     border: none;
     border-radius: 8px;
@@ -43,18 +40,18 @@
     transition: all 0.2s ease;
 }
 
-.translator-swap:hover {
+.translate-swap:hover {
     background: var(--button-hover-bg);
     transform: rotate(180deg);
 }
 
-.translator-content {
+.translate-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
 }
 
-.translator-textarea {
+.translate-textarea {
     width: 100%;
     min-height: 200px;
     padding: 1rem;
@@ -66,14 +63,14 @@
     resize: vertical;
 }
 
-.translator-actions {
+.translate-actions {
     display: flex;
     justify-content: flex-end;
     gap: 1rem;
     margin-top: 1rem;
 }
 
-.translator-button {
+.translate-button {
     padding: 0.8rem 1.5rem;
     border: none;
     border-radius: 8px;
@@ -83,29 +80,29 @@
     transition: all 0.2s ease;
 }
 
-.translator-button:hover {
+.translate-button:hover {
     background: var(--primary-hover);
     transform: translateY(-2px);
 }
 
-.translator-button:active {
+.translate-button:active {
     transform: translateY(0);
 }
 
-.translator-button.secondary {
+.translate-button.secondary {
     background: var(--button-bg);
     color: var(--text-color);
 }
 
-.translator-button.secondary:hover {
+.translate-button.secondary:hover {
     background: var(--button-hover-bg);
 }
 
-.translator-result {
+.translate-result {
     position: relative;
 }
 
-.translator-copy {
+.translate-copy {
     position: absolute;
     top: 1rem;
     right: 1rem;
@@ -118,27 +115,27 @@
     transition: all 0.2s ease;
 }
 
-.translator-copy:hover {
+.translate-copy:hover {
     background: var(--button-hover-bg);
 }
 
 @media (max-width: 768px) {
-    .translator-container {
+    .translate-container {
         margin: 1rem;
         padding: 1rem;
     }
 
-    .translator-content {
+    .translate-content {
         grid-template-columns: 1fr;
         gap: 1rem;
     }
 
-    .translator-header {
+    .translate-header {
         flex-direction: column;
         gap: 1rem;
     }
 
-    .translator-languages {
+    .translate-languages {
         width: 100%;
         justify-content: space-between;
     }

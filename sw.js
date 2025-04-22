@@ -7,6 +7,7 @@ const CORE_ASSETS = [
     './',
     'index.html',
     'offline.html',
+    '404.html',
     'styles.css',
     'js/main.js',
     'js/config.js',

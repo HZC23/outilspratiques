@@ -1,149 +1,68 @@
 /* styles/components/timer.css */
 /* Styles pour le composant de minuteur */
 
-.timer-tool {
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
+.timer-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .timer-display {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
-    width: 100%;
-}
-
-.timer-circle {
-    position: relative;
-    width: 280px;
-    height: 280px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.timer-progress {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    transform: rotate(-90deg);
-}
-
-.timer-progress-bg {
-    fill: none;
-    stroke: var(--border-color);
-    stroke-width: 8px;
-}
-
-.timer-progress-indicator {
-    fill: none;
-    stroke: var(--primary-color);
-    stroke-width: 8px;
-    stroke-linecap: round;
-    transition: stroke-dashoffset 0.5s ease;
+    margin-bottom: 2rem;
 }
 
 .timer-time {
-    font-size: 3rem;
-    font-weight: 700;
+    font-size: 4rem;
+    font-weight: 600;
     color: var(--text-color);
-    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    margin-bottom: 1rem;
 }
 
-.timer-status {
-    font-size: 1.25rem;
-    color: var(--text-color-secondary);
+.timer-progress {
+    width: 100%;
+    height: 8px;
+    background: var(--input-bg);
+    border-radius: 4px;
+    margin-bottom: 2rem;
+    overflow: hidden;
 }
 
-.timer-controls {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+.timer-progress-bar {
+    height: 100%;
+    background: var(--primary-color);
+    transition: width 1s linear;
+}
+
+.timer-inputs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
-    width: 100%;
-    max-width: 500px;
+    margin-bottom: 2rem;
 }
 
-.timer-btn {
-    flex: 1;
-    min-width: 100px;
-    padding: 1rem;
-    border: none;
-    border-radius: 8px;
-    background-color: var(--bg-color-secondary);
-    color: var(--text-color);
-    font-weight: 500;
-    font-size: 1rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    transition: all 0.2s ease;
-}
-
-.timer-btn:hover {
-    background-color: var(--bg-color-hover);
-}
-
-.timer-btn.primary {
-    background-color: var(--primary-color);
-    color: white;
-}
-
-.timer-btn.primary:hover {
-    background-color: var(--primary-color-dark);
-}
-
-.timer-btn.secondary {
-    background-color: var(--secondary-color);
-    color: white;
-}
-
-.timer-btn.secondary:hover {
-    background-color: var(--secondary-color-dark);
-}
-
-.timer-btn i {
-    font-size: 1.25rem;
-}
-
-.timer-input {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.5rem;
-    width: 100%;
-    max-width: 500px;
-}
-
-.timer-input-field {
-    flex: 1;
-    min-width: 80px;
-    max-width: 120px;
+.timer-input-group {
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 0.5rem;
 }
 
-.timer-input-field label {
+.timer-input-group label {
     font-weight: 500;
     color: var(--text-color);
 }
 
-.timer-input-field input {
-    width: 100%;
-    padding: 0.75rem;
+.timer-input-group input {
+    padding: 0.8rem;
     border: 1px solid var(--border-color);
-    border-radius: 6px;
-    background-color: var(--input-bg);
+    border-radius: 8px;
+    background: var(--input-bg);
     color: var(--text-color);
     font-size: 1rem;
     text-align: center;
@@ -152,82 +71,121 @@
 .timer-presets {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
     gap: 0.5rem;
-    width: 100%;
-    max-width: 500px;
+    margin-bottom: 2rem;
 }
 
 .timer-preset {
-    padding: 0.75rem 1rem;
-    border: none;
-    border-radius: 6px;
-    background-color: var(--bg-color-secondary);
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--input-bg);
     color: var(--text-color);
-    font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
 .timer-preset:hover {
-    background-color: var(--bg-color-hover);
+    background: var(--button-hover-bg);
+}
+
+.timer-preset.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.timer-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.timer-button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--primary-color);
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.timer-button:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+.timer-button:active {
+    transform: translateY(0);
+}
+
+.timer-button.secondary {
+    background: var(--button-bg);
+    color: var(--text-color);
+}
+
+.timer-button.secondary:hover {
+    background: var(--button-hover-bg);
+}
+
+.timer-button.danger {
+    background: var(--danger-color);
+    color: white;
+}
+
+.timer-button.danger:hover {
+    background: var(--danger-hover);
 }
 
 .timer-settings {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    width: 100%;
-    max-width: 500px;
-    padding: 1rem;
-    border-radius: 8px;
-    background-color: var(--bg-color-secondary);
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
 }
 
-.timer-settings-header {
+.timer-setting-group {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 1rem;
 }
 
-.timer-settings-title {
-    font-weight: 600;
+.timer-setting-label {
+    font-weight: 500;
     color: var(--text-color);
 }
 
-.timer-setting {
+.timer-setting-control {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 0.5rem;
 }
 
-.timer-setting label {
-    color: var(--text-color);
-}
-
-.timer-setting select {
+.timer-setting-control select {
     padding: 0.5rem;
     border: 1px solid var(--border-color);
-    border-radius: 6px;
-    background-color: var(--input-bg);
+    border-radius: 8px;
+    background: var(--input-bg);
     color: var(--text-color);
+    cursor: pointer;
 }
 
-@media (max-width: 768px) {
-    .timer-circle {
-        width: 220px;
-        height: 220px;
+@media (max-width: 640px) {
+    .timer-container {
+        margin: 1rem;
+        padding: 1rem;
     }
-    
+
     .timer-time {
-        font-size: 2.5rem;
+        font-size: 3rem;
     }
-    
-    .timer-btn {
-        min-width: 80px;
+
+    .timer-inputs {
+        grid-template-columns: 1fr;
     }
-    
-    .timer-input-field {
-        min-width: 70px;
+
+    .timer-actions {
+        flex-direction: column;
     }
 } 
