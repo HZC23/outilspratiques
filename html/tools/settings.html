@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<div class="tool-container" id="settingsTool">
+    <div class="tool-header">
+        <h2><i class="fas fa-cog"></i> Paramètres</h2>
+        <div class="tool-actions">
+            <button type="button" class="btn-icon" id="settingsHelp" aria-label="Aide">
+                <i class="fas fa-question-circle"></i>
+            </button>
+        </div>
+    </div>
+    
+    <div class="tool-content">
+        <div class="settings-container">
+            <!-- Navigation des paramètres -->
+            <div class="settings-navigation">
+                <button class="settings-nav-item active" data-tab="general">
+                    <i class="fas fa-sliders-h"></i>
+                    <span>Général</span>
+                </button>
+                <button class="settings-nav-item" data-tab="appearance">
+                    <i class="fas fa-palette"></i>
+                    <span>Apparence</span>
+                </button>
+                <button class="settings-nav-item" data-tab="accessibility">
+                    <i class="fas fa-universal-access"></i>
+                    <span>Accessibilité</span>
+                </button>
+                <button class="settings-nav-item" data-tab="privacy">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Confidentialité</span>
+                </button>
+                <button class="settings-nav-item" data-tab="data">
+                    <i class="fas fa-database"></i>
+                    <span>Données</span>
+                </button>
+                <button class="settings-nav-item" data-tab="about">
+                    <i class="fas fa-info-circle"></i>
+                    <span>À propos</span>
+                </button>
+            </div>
+            
+            <!-- Contenu des paramètres -->
+            <div class="settings-content">
+                <!-- Paramètres généraux -->
+                <div class="settings-tab active" id="generalTab">
+                    <h3>Paramètres généraux</h3>
+                    
+                    <div class="settings-group">
+                        <h4>Langue</h4>
+                        <div class="settings-item">
+                            <label for="languageSelect">Langue de l'interface</label>
+                            <select id="languageSelect" class="settings-select">
+                                <option value="fr" selected>Français</option>
+                                <option value="en">English</option>
+                                <option value="es">Español</option>
+                                <option value="de">Deutsch</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <h4>Démarrage</h4>
+                        <div class="settings-item">
+                            <label for="startupToolSelect">Outil au démarrage</label>
+                            <select id="startupToolSelect" class="settings-select">
+                                <option value="home">Page d'accueil</option>
+                                <option value="calculatorTool">Calculatrice</option>
+                                <option value="noteTool">Bloc-notes</option>
+                                <option value="todoTool">Liste de tâches</option>
+                                <option value="timerTool">Minuteur</option>
+                                <option value="lastTool">Dernier outil utilisé</option>
+                            </select>
+                        </div>
+                        
+                        <div class="settings-item checkbox">
+                            <label for="rememberSession">
+                                <input type="checkbox" id="rememberSession" checked>
+                                <span>Se souvenir de la session précédente</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <h4>Comportement</h4>
+                        <div class="settings-item checkbox">
+                            <label for="autoSave">
+                                <input type="checkbox" id="autoSave" checked>
+                                <span>Sauvegarde automatique</span>
+                            </label>
+                        </div>
+                        
+                        <div class="settings-item">
+                            <label for="autoSaveInterval">Intervalle de sauvegarde (secondes)</label>
+                            <input type="number" id="autoSaveInterval" min="10" max="300" value="60" class="settings-input">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Paramètres d'apparence -->
+                <div class="settings-tab" id="appearanceTab">
+                    <h3>Apparence</h3>
+                    
+                    <div class="settings-group">
+                        <h4>Thème</h4>
+                        <div class="settings-item radio">
+                            <label>
+                                <input type="radio" name="theme" value="light" id="themeLight">
+                                <span>Clair</span>
+                            </label>
+                            
+                            <label>
+                                <input type="radio" name="theme" value="dark" id="themeDark">
+                                <span>Sombre</span>
+                            </label>
+                            
+                            <label>
+                                <input type="radio" name="theme" value="system" id="themeSystem" checked>
+                                <span>Système</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <h4>Couleur principale</h4>
+                        <div class="settings-item">
+                            <div class="color-options">
+                                <button class="color-option" data-color="#4a90e2" style="background-color: #4a90e2;"></button>
+                                <button class="color-option" data-color="#50c878" style="background-color: #50c878;"></button>
+                                <button class="color-option" data-color="#f39c12" style="background-color: #f39c12;"></button>
+                                <button class="color-option" data-color="#e74c3c" style="background-color: #e74c3c;"></button>
+                                <button class="color-option" data-color="#9b59b6" style="background-color: #9b59b6;"></button>
+                                <button class="color-option custom" data-color="custom">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <input type="color" id="customAccentColor" class="custom-color-input" value="#4a90e2">
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <h4>Interface</h4>
+                        <div class="settings-item checkbox">
+                            <label for="compactMode">
+                                <input type="checkbox" id="compactMode">
+                                <span>Mode compact</span>
+                            </label>
+                        </div>
+                        
+                        <div class="settings-item">
+                            <label for="fontSizeSelect">Taille de police</label>
+                            <select id="fontSizeSelect" class="settings-select">
+                                <option value="small">Petite</option>
+                                <option value="medium" selected>Moyenne</option>
+                                <option value="large">Grande</option>
+                                <option value="x-large">Très grande</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Paramètres d'accessibilité -->
+                <div class="settings-tab" id="accessibilityTab">
+                    <h3>Accessibilité</h3>
+                    
+                    <div class="settings-group">
+                        <h4>Animations</h4>
+                        <div class="settings-item checkbox">
+                            <label for="reduceMotion">
+                                <input type="checkbox" id="reduceMotion">
+                                <span>Réduire les animations</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <h4>Contraste</h4>
+                        <div class="settings-item checkbox">
+                            <label for="highContrast">
+                                <input type="checkbox" id="highContrast">
+                                <span>Contraste élevé</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <h4>Texte</h4>
+                        <div class="settings-item">
+                            <label for="fontFamilySelect">Police de caractères</label>
+                            <select id="fontFamilySelect" class="settings-select">
+                                <option value="system">Police système</option>
+                                <option value="poppins" selected>Poppins</option>
+                                <option value="opensans">Open Sans</option>
+                                <option value="roboto">Roboto</option>
+                                <option value="dyslexic">OpenDyslexic</option>
+                            </select>
+                        </div>
+                        
+                        <div class="settings-item">
+                            <label for="lineSpacingSelect">Espacement des lignes</label>
+                            <select id="lineSpacingSelect" class="settings-select">
+                                <option value="normal" selected>Normal</option>
+                                <option value="wide">Large</option>
+                                <option value="very-wide">Très large</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Paramètres de confidentialité -->
+                <div class="settings-tab" id="privacyTab">
+                    <h3>Confidentialité</h3>
+                    
+                    <div class="settings-group">
+                        <h4>Stockage local</h4>
+                        <div class="settings-item checkbox">
+                            <label for="storeDataLocally">
+                                <input type="checkbox" id="storeDataLocally" checked>
+                                <span>Stocker les données localement</span>
+                            </label>
+                            <small class="settings-description">Vos données sont uniquement stockées sur votre appareil et ne sont jamais envoyées à nos serveurs.</small>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <h4>Chiffrement</h4>
+                        <div class="settings-item checkbox">
+                            <label for="encryptSensitiveData">
+                                <input type="checkbox" id="encryptSensitiveData">
+                                <span>Chiffrer les données sensibles</span>
+                            </label>
+                        </div>
+                        
+                        <div class="settings-item" id="encryptionPasswordContainer" style="display: none;">
+                            <label for="encryptionPassword">Mot de passe de chiffrement</label>
+                            <div class="password-input-container">
+                                <input type="password" id="encryptionPassword" class="settings-input" placeholder="Mot de passe">
+                                <button type="button" class="btn-icon toggle-password">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <small class="settings-warning">⚠️ Ce mot de passe ne peut pas être récupéré. Si vous le perdez, vos données chiffrées ne pourront plus être déchiffrées.</small>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <h4>Nettoyage</h4>
+                        <div class="settings-item checkbox">
+                            <label for="clearOnExit">
+                                <input type="checkbox" id="clearOnExit">
+                                <span>Effacer les données en quittant</span>
+                            </label>
+                        </div>
+                        
+                        <div class="settings-action">
+                            <button type="button" id="clearAllDataBtn" class="btn btn-danger">
+                                <i class="fas fa-trash-alt"></i> Effacer toutes les données
+                            </button>
+                            <small class="settings-description">Cette action est irréversible.</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Gestion des données -->
+                <div class="settings-tab" id="dataTab">
+                    <h3>Gestion des données</h3>
+                    
+                    <div class="settings-group">
+                        <h4>Sauvegarde</h4>
+                        <div class="settings-action">
+                            <button type="button" id="exportDataBtn" class="btn">
+                                <i class="fas fa-download"></i> Exporter toutes les données
+                            </button>
+                            <small class="settings-description">Télécharge toutes vos données dans un fichier JSON.</small>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <h4>Restauration</h4>
+                        <div class="settings-action">
+                            <button type="button" id="importDataBtn" class="btn">
+                                <i class="fas fa-upload"></i> Importer des données
+                            </button>
+                            <small class="settings-description">Restaure vos données à partir d'une sauvegarde.</small>
+                            <input type="file" id="importDataFile" accept=".json" style="display: none;">
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <h4>Synchronisation</h4>
+                        <div class="settings-item checkbox">
+                            <label for="enableSync">
+                                <input type="checkbox" id="enableSync">
+                                <span>Activer la synchronisation entre appareils</span>
+                            </label>
+                            <small class="settings-description">Coming soon - Cette fonctionnalité sera disponible prochainement.</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- À propos -->
+                <div class="settings-tab" id="aboutTab">
+                    <h3>À propos</h3>
+                    
+                    <div class="settings-group">
+                        <h4>Outils Pratiques</h4>
+                        <p>Version: <span id="appVersion">1.0.0</span></p>
+                        <p>Outils Pratiques est une collection d'outils conçus pour simplifier votre quotidien. L'application fonctionne entièrement dans votre navigateur et est utilisable même hors ligne.</p>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <h4>Stockage utilisé</h4>
+                        <div class="storage-meter">
+                            <div class="storage-progress">
+                                <div class="storage-bar" id="storageBar" style="width: 0%"></div>
+                            </div>
+                            <div class="storage-info">
+                                <span id="storageUsed">0 KB</span> / <span id="storageQuota">5 MB</span>
+                            </div>
+                        </div>
+                        <button type="button" id="clearCacheBtn" class="btn">
+                            <i class="fas fa-broom"></i> Vider le cache
+                        </button>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <h4>Raccourcis clavier</h4>
+                        <div class="keyboard-shortcuts">
+                            <div class="shortcut-item">
+                                <span class="shortcut-keys"><kbd>Ctrl</kbd> + <kbd>S</kbd></span>
+                                <span class="shortcut-desc">Sauvegarder</span>
+                            </div>
+                            <div class="shortcut-item">
+                                <span class="shortcut-keys"><kbd>Ctrl</kbd> + <kbd>E</kbd></span>
+                                <span class="shortcut-desc">Exporter</span>
+                            </div>
+                            <div class="shortcut-item">
+                                <span class="shortcut-keys"><kbd>Ctrl</kbd> + <kbd>,</kbd></span>
+                                <span class="shortcut-desc">Paramètres</span>
+                            </div>
+                            <div class="shortcut-item">
+                                <span class="shortcut-keys"><kbd>Echap</kbd></span>
+                                <span class="shortcut-desc">Fermer les dialogues</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group contact-section">
+                        <h4>Contact et Feedback</h4>
+                        <p>Des suggestions ou des problèmes à signaler ?</p>
+                        <a href="mailto:contact@outilspratiques.com" class="btn">
+                            <i class="fas fa-envelope"></i> Contactez-nous
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Panneau d'aide -->
+    <div class="help-panel" id="settingsHelpPanel">
+        <div class="help-panel-header">
+            <h3>Aide - Paramètres</h3>
+            <button type="button" class="btn-icon" id="closeSettingsHelp">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="help-panel-content">
+            <h4>Paramètres généraux</h4>
+            <p>Configurez la langue, les options de démarrage et le comportement général de l'application.</p>
+            
+            <h4>Apparence</h4>
+            <p>Personnalisez le thème, les couleurs et la disposition de l'interface utilisateur selon vos préférences.</p>
+            
+            <h4>Accessibilité</h4>
+            <p>Ajustez les options pour rendre l'application plus accessible, comme la taille du texte, les animations réduites et le contraste élevé.</p>
+            
+            <h4>Confidentialité</h4>
+            <p>Gérez comment vos données sont stockées et protégées, avec des options pour le chiffrement et l'effacement automatique.</p>
+            
+            <h4>Gestion des données</h4>
+            <p>Exportez vos données pour les sauvegarder, ou importez-les pour les restaurer sur un autre appareil.</p>
+        </div>
+    </div>
+    
+    <!-- Modals -->
+    <div class="modal" id="clearDataModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirmation</h3>
+                <button type="button" class="btn-icon" id="closeClearDataModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Êtes-vous sûr de vouloir effacer toutes vos données ?</p>
+                <p class="warning-text">Cette action est irréversible ! Toutes vos notes, tâches et préférences seront perdues.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" id="cancelClearData">Annuler</button>
+                <button type="button" class="btn btn-danger" id="confirmClearData">Effacer mes données</button>
+            </div>
+        </div>
+    </div>
+</div> 

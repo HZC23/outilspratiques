@@ -9,6 +9,7 @@ import { SchedulerManager } from './tools/scheduler.js';
 import { StyleTextManager } from './tools/styletext.js';
 import { ColorManager } from './tools/color.js';
 import { QRCodeManager } from './tools/qrcode.js';
+import { TodoManager } from './tools/todo.js';
 
 /**
  * Classe principale de l'application
@@ -185,6 +186,11 @@ class App {
             });
         });
         
+        // Initialiser les gestionnaires d'outils spécifiques si nécessaire
+        if (document.getElementById('todoTool')) {
+            TodoManager.init();
+        }
+        
         console.log('Gestionnaires d\'outils configurés pour initialisation à la demande');
     }
     
@@ -340,7 +346,7 @@ class App {
         toolsContainer.innerHTML = '<div class="loading-indicator"><div class="spinner"></div><p>Chargement de l\'outil...</p></div>';
         
         // Charger le contenu de l'outil
-        const toolContentUrl = `./tools/${toolId.toLowerCase().replace('tool', '')}.html`;
+        const toolContentUrl = `./html/tools/${toolId.toLowerCase().replace('tool', '')}.html`;
         
         fetch(toolContentUrl)
             .then(response => {
@@ -383,24 +389,63 @@ class App {
     }
     
     /**
-     * Charge le script spécifique à l'outil
-     * @param {string} toolId - Identifiant de l'outil
+     * Charge le script d'un outil
      */
     loadToolScript(toolId) {
-        const toolName = toolId.replace('Tool', '');
-        const scriptPath = `js/tools/${toolName}.js`;
-        
-        // Vérifier si le script est déjà chargé
-        const scriptExists = document.querySelector(`script[src="${scriptPath}"]`);
-        if (scriptExists) return;
-        
-        // Créer et ajouter le script
-        const script = document.createElement('script');
-        script.type = 'module';
-        script.src = scriptPath;
-        document.head.appendChild(script);
-        
-        console.log(`Script chargé dynamiquement: ${scriptPath}`);
+        // Liste des correspondances entre ID d'outil et leurs managers
+        const toolManagers = {
+            'calculatorTool': () => import('./tools/calculator.js').then(module => module.CalculatorManager.init()),
+            'timerTool': () => import('./tools/timer.js').then(module => module.TimerManager.init()),
+            'stopwatchTool': () => import('./tools/stopwatch.js').then(module => module.StopwatchManager.init()),
+            'noteTool': () => import('./tools/notes.js').then(module => module.NotesManager.init()),
+            'todoTool': () => import('./tools/todo.js').then(module => module.TodoManager.init()),
+            'translatorTool': () => import('./tools/translator.js').then(module => module.TranslatorManager.init()),
+            'colorTool': () => import('./tools/color.js').then(module => module.ColorManager.init()),
+            'qrcodeTool': () => import('./tools/qrcode.js').then(module => module.QRCodeManager.init()),
+            'passwordTool': () => import('./tools/password.js').then(module => module.PasswordManager.init()),
+            'styletext': () => import('./tools/styletext.js').then(module => module.StyleTextManager.init()),
+            'metronomeTool': () => import('./tools/metronome.js').then(module => module.MetronomeManager.init()),
+            'currencyTool': () => import('./tools/currency.js').then(module => module.CurrencyManager.init()),
+            'unitTool': () => import('./tools/unit.js').then(module => {
+                console.log('Module unitTool chargé:', module);
+                if (module.initUnitConverter) {
+                    console.log('Initialisation du convertisseur avec initUnitConverter');
+                    module.initUnitConverter();
+                } else if (module.UnitManager && module.UnitManager.init) {
+                    console.log('Initialisation du convertisseur avec UnitManager.init');
+                    module.UnitManager.init();
+                } else {
+                    console.error('Impossible de trouver une méthode d\'initialisation pour le convertisseur d\'unités');
+                }
+            })
+        };
+
+        // Ajout spécial pour unitTool qui peut être aussi 'unit'
+        const normalizedId = toolId.toLowerCase();
+        if (normalizedId === 'unit' && !toolManagers[toolId]) {
+            import('./tools/unit.js').then(module => {
+                console.log('Module unit chargé via normalisation d\'ID:', module);
+                if (module.initUnitConverter) {
+                    module.initUnitConverter();
+                } else {
+                    console.error('Méthode d\'initialisation non trouvée pour unit');
+                }
+            }).catch(error => {
+                console.error('Erreur lors du chargement du module unit:', error);
+            });
+            return;
+        }
+
+        // Charger le gestionnaire correspondant
+        if (toolManagers[toolId]) {
+            toolManagers[toolId]()
+                .catch(error => {
+                    console.error(`Erreur lors du chargement de l'outil ${toolId}:`, error);
+                    Utils.showNotification(`Impossible de charger l'outil`, 'error');
+                });
+        } else {
+            console.log(`Pas de gestionnaire défini pour l'outil ${toolId}`);
+        }
     }
     
     /**
@@ -453,4 +498,68 @@ class App {
 // Initialiser l'application lorsque le DOM est chargé
 document.addEventListener('DOMContentLoaded', function() {
     window.app = new App();
-}); 
+});
+
+// Fonction pour charger dynamiquement les outils
+function loadTool(toolName) {
+    console.log(`Chargement de l'outil: ${toolName}`);
+    
+    // Vérifier si l'outil est déjà chargé
+    if (document.querySelector(`#${toolName}Tool`)) {
+        console.log(`L'outil ${toolName} est déjà chargé.`);
+        return Promise.resolve();
+    }
+
+    // Chemin vers les fichiers de l'outil
+    const htmlPath = `html/tools/${toolName}.html`;
+    const jsPath = `js/tools/${toolName}.js`;
+
+    // Charger le HTML de l'outil
+    return fetch(htmlPath)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Erreur lors du chargement du HTML de l'outil ${toolName}: ${response.status}`);
+            }
+            return response.text();
+        })
+        .then(html => {
+            // Insérer le HTML dans le conteneur d'outils
+            const toolsContainer = document.getElementById('toolsContainer');
+            
+            if (!toolsContainer) {
+                throw new Error("Conteneur d'outils non trouvé");
+            }
+            
+            toolsContainer.innerHTML = html;
+            console.log(`HTML de l'outil ${toolName} chargé avec succès.`);
+            
+            // Charger et exécuter le JS de l'outil
+            return import(jsPath)
+                .then(module => {
+                    console.log(`Module JS de l'outil ${toolName} chargé avec succès:`, module);
+                    
+                    // Si le module a une fonction d'initialisation, l'exécuter
+                    if (module.init) {
+                        console.log(`Initialisation de l'outil ${toolName} via module.init()`);
+                        module.init();
+                    } else if (module.initUnitConverter && toolName === 'unit') {
+                        console.log(`Initialisation du convertisseur d'unités via module.initUnitConverter()`);
+                        module.initUnitConverter();
+                    } else {
+                        console.log(`Pas de fonction d'initialisation trouvée pour l'outil ${toolName}`);
+                    }
+                    
+                    // Dispatcher un événement pour signaler que l'outil est chargé
+                    const event = new CustomEvent('toolLoaded', { detail: { toolName } });
+                    document.dispatchEvent(event);
+                })
+                .catch(error => {
+                    console.error(`Erreur lors du chargement du JS de l'outil ${toolName}:`, error);
+                    throw error;
+                });
+        })
+        .catch(error => {
+            console.error(`Erreur lors du chargement de l'outil ${toolName}:`, error);
+            throw error;
+        });
+} 

@@ -288,19 +288,5 @@ function calculateFunction(func, value) {
     }
 }
 
-// Exporter les fonctions pour utilisation dans d'autres fichiers
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-        isNumeric,
-        isOperator,
-        isFunction,
-        isConstant,
-        getConstantValue,
-        formatNumber,
-        calculate,
-        calculateFunction,
-        OPERATORS,
-        FUNCTIONS,
-        CONSTANTS
-    };
-} 
+// Export uniquement les fonctions nécessaires pour unit.js
+export { formatNumber }; 

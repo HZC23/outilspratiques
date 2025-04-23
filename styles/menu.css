@@ -389,6 +389,7 @@ header h1 {
 @media (max-width: 768px) {
     .menu-toggle {
         display: block;
+        filter: invert(1);
     }
     
     header {

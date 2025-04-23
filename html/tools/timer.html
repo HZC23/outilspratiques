@@ -42,40 +42,16 @@
                 <div class="time-input-group">
                     <label for="inputHours">Heures</label>
                     <input type="number" id="inputHours" min="0" max="23" value="0" class="time-input">
-                    <div class="input-arrows">
-                        <button type="button" class="arrow-up" data-input="inputHours" aria-label="Augmenter les heures">
-                            <i class="fas fa-chevron-up"></i>
-                        </button>
-                        <button type="button" class="arrow-down" data-input="inputHours" aria-label="Diminuer les heures">
-                            <i class="fas fa-chevron-down"></i>
-                        </button>
-                    </div>
                 </div>
                 
                 <div class="time-input-group">
                     <label for="inputMinutes">Minutes</label>
                     <input type="number" id="inputMinutes" min="0" max="59" value="0" class="time-input">
-                    <div class="input-arrows">
-                        <button type="button" class="arrow-up" data-input="inputMinutes" aria-label="Augmenter les minutes">
-                            <i class="fas fa-chevron-up"></i>
-                        </button>
-                        <button type="button" class="arrow-down" data-input="inputMinutes" aria-label="Diminuer les minutes">
-                            <i class="fas fa-chevron-down"></i>
-                        </button>
-                    </div>
                 </div>
                 
                 <div class="time-input-group">
                     <label for="inputSeconds">Secondes</label>
                     <input type="number" id="inputSeconds" min="0" max="59" value="0" class="time-input">
-                    <div class="input-arrows">
-                        <button type="button" class="arrow-up" data-input="inputSeconds" aria-label="Augmenter les secondes">
-                            <i class="fas fa-chevron-up"></i>
-                        </button>
-                        <button type="button" class="arrow-down" data-input="inputSeconds" aria-label="Diminuer les secondes">
-                            <i class="fas fa-chevron-down"></i>
-                        </button>
-                    </div>
                 </div>
             </div>
             
@@ -98,6 +74,7 @@
                         <option value="bell">Cloche</option>
                         <option value="digital">Digital</option>
                         <option value="gentle">Doux</option>
+                        <option value="notification">Notification</option>
                         <option value="none">Aucun</option>
                     </select>
                     <button type="button" class="btn-icon" id="testSound" aria-label="Tester le son">
@@ -124,6 +101,31 @@
                     </label>
                 </div>
             </div>
+            
+            <!-- Section d'aide intégrée directement dans la page -->
+            <div class="timer-help-section">
+                <h3>Aide - Minuteur</h3>
+                <div class="help-panel-content">
+                    <h4>Comment utiliser</h4>
+                    <ol>
+                        <li>Réglez la durée souhaitée en utilisant les champs heures, minutes et secondes</li>
+                        <li>Cliquez sur "Démarrer" pour lancer le minuteur</li>
+                        <li>Vous pouvez mettre en pause, réinitialiser ou annuler le minuteur à tout moment</li>
+                        <li>À la fin du minuteur, une alerte sonore sera émise et une notification s'affichera</li>
+                    </ol>
+                    
+                    <h4>Fonctionnalités</h4>
+                    <ul>
+                        <li><strong>Préréglages</strong> : durées courantes prédéfinies pour un accès rapide</li>
+                        <li><strong>Sons personnalisables</strong> : choisissez parmi différentes alarmes</li>
+                        <li><strong>Répétition automatique</strong> : redémarre automatiquement à la fin</li>
+                        <li><strong>Notifications</strong> : alerte même si le navigateur est en arrière-plan</li>
+                        <li><strong>Mode plein écran</strong> : pour une meilleure visibilité</li>
+                    </ul>
+                    
+                    <p class="help-note">Note: Les notifications peuvent nécessiter votre permission pour s'afficher.</p>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -135,35 +137,6 @@
         <div class="complete-actions">
             <button type="button" class="btn" id="dismissTimer">Fermer</button>
             <button type="button" class="btn btn-primary" id="restartTimer">Redémarrer</button>
-        </div>
-    </div>
-    
-    <div class="help-panel" id="timerHelpPanel">
-        <div class="help-panel-header">
-            <h3>Aide - Minuteur</h3>
-            <button type="button" class="btn-icon" id="closeTimerHelp">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="help-panel-content">
-            <h4>Comment utiliser</h4>
-            <ol>
-                <li>Réglez la durée souhaitée en utilisant les champs heures, minutes et secondes</li>
-                <li>Cliquez sur "Démarrer" pour lancer le minuteur</li>
-                <li>Vous pouvez mettre en pause, réinitialiser ou annuler le minuteur à tout moment</li>
-                <li>À la fin du minuteur, une alerte sonore sera émise et une notification s'affichera</li>
-            </ol>
-            
-            <h4>Fonctionnalités</h4>
-            <ul>
-                <li><strong>Préréglages</strong> : durées courantes prédéfinies pour un accès rapide</li>
-                <li><strong>Sons personnalisables</strong> : choisissez parmi différentes alarmes</li>
-                <li><strong>Répétition automatique</strong> : redémarre automatiquement à la fin</li>
-                <li><strong>Notifications</strong> : alerte même si le navigateur est en arrière-plan</li>
-                <li><strong>Mode plein écran</strong> : pour une meilleure visibilité</li>
-            </ul>
-            
-            <p class="help-note">Note: Les notifications peuvent nécessiter votre permission pour s'afficher.</p>
         </div>
     </div>
 </div> 

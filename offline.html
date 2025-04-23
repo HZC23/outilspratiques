@@ -32,9 +32,6 @@
 </head>
 <body>
     <div class="offline-container">
-        <svg class="offline-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 1 1 5.82 2.16M1 8v8h8M21 12v4h-4"></path>
-        </svg>
         <h1>Vous êtes hors ligne</h1>
         <p>Il semble que vous n'ayez pas de connexion internet. Certaines fonctionnalités peuvent être limitées.</p>
         <button class="button offline-button" onclick="checkConnection()">
@@ -67,7 +64,7 @@
         }
 
         // Vérifier automatiquement la connexion toutes les 30 secondes
-        setInterval(checkConnection, 30000);
+        setInterval(checkConnection, 3000);
 
         // Écouter les changements de connexion
         window.addEventListener('online', () => {
