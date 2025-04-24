@@ -6,14 +6,7 @@
   top: 50%; /* Centrer verticalement */
   transform: translateY(-50%); /* Parfait centrage vertical */
   margin: 0;
-  @media screen and (max-width: 768px) {
-    --toggle-size: 16px;
-  }
-
-  @media screen and (max-width: 480px) {
-    --toggle-size: 14px;
-  }
-   --toggle-size: 20px;
+  --toggle-size: 20px;
   /* the size is adjusted using font-size,
      this is not transform scale,
      so you can choose any size */
@@ -35,6 +28,58 @@
   --transition: .5s cubic-bezier(0, -0.02, 0.4, 1.25);
   --circle-transition: .3s cubic-bezier(0, -0.02, 0.35, 1.17);
   z-index: 10; /* S'assurer qu'il est au-dessus des autres éléments */
+}
+
+/* Style pour mobile */
+@media screen and (max-width: 768px) {
+  .theme-switch {
+    --toggle-size: 16px;
+  }
+  
+  /* Masquer les éléments complexes sur mobile */
+  .theme-switch__clouds, 
+  .theme-switch__stars-container {
+    display: none;
+  }
+  
+  /* Simplifier le bouton */
+  .theme-switch__container {
+    width: 3.5em;
+    height: 1.8em;
+  }
+  
+  .theme-switch__circle-container {
+    width: 2.5em;
+    height: 2.5em;
+  }
+  
+  .theme-switch__sun-moon-container {
+    width: 1.5em;
+    height: 1.5em;
+  }
+}
+
+/* Style encore plus compact pour les très petits écrans */
+@media screen and (max-width: 480px) {
+  .theme-switch {
+    --toggle-size: 14px;
+    left: 10px;
+  }
+  
+  .theme-switch__container {
+    width: 3em;
+    height: 1.5em;
+  }
+  
+  .theme-switch__circle-container {
+    width: 2.2em;
+    height: 2.2em;
+  }
+  
+  .theme-switch__sun-moon-container {
+    width: 1.2em;
+    height: 1.2em;
+  }
 }
 
 .theme-switch, .theme-switch *, .theme-switch *::before, .theme-switch *::after {

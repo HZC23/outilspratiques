@@ -42,73 +42,17 @@
             </div>
             
             <div class="note-editor">
-                <div class="note-toolbar">
-                    <div class="toolbar-group">
-                        <button type="button" class="toolbar-btn" data-command="bold" aria-label="Gras">
-                            <i class="fas fa-bold"></i>
-                        </button>
-                        <button type="button" class="toolbar-btn" data-command="italic" aria-label="Italique">
-                            <i class="fas fa-italic"></i>
-                        </button>
-                        <button type="button" class="toolbar-btn" data-command="underline" aria-label="Souligné">
-                            <i class="fas fa-underline"></i>
-                        </button>
-                        <button type="button" class="toolbar-btn" data-command="strikeThrough" aria-label="Barré">
-                            <i class="fas fa-strikethrough"></i>
-                        </button>
-                    </div>
-                    
-                    <div class="toolbar-group">
-                        <button type="button" class="toolbar-btn" data-command="justifyLeft" aria-label="Aligner à gauche">
-                            <i class="fas fa-align-left"></i>
-                        </button>
-                        <button type="button" class="toolbar-btn" data-command="justifyCenter" aria-label="Centrer">
-                            <i class="fas fa-align-center"></i>
-                        </button>
-                        <button type="button" class="toolbar-btn" data-command="justifyRight" aria-label="Aligner à droite">
-                            <i class="fas fa-align-right"></i>
-                        </button>
-                    </div>
-                    
-                    <div class="toolbar-group">
-                        <button type="button" class="toolbar-btn" data-command="insertUnorderedList" aria-label="Liste à puces">
-                            <i class="fas fa-list-ul"></i>
-                        </button>
-                        <button type="button" class="toolbar-btn" data-command="insertOrderedList" aria-label="Liste numérotée">
-                            <i class="fas fa-list-ol"></i>
-                        </button>
-                        <button type="button" class="toolbar-btn" data-command="indent" aria-label="Augmenter l'indentation">
-                            <i class="fas fa-indent"></i>
-                        </button>
-                        <button type="button" class="toolbar-btn" data-command="outdent" aria-label="Diminuer l'indentation">
-                            <i class="fas fa-outdent"></i>
-                        </button>
-                    </div>
-                    
-                    <div class="toolbar-group">
-                        <button type="button" class="toolbar-btn" data-command="createLink" aria-label="Insérer un lien">
-                            <i class="fas fa-link"></i>
-                        </button>
-                        <button type="button" class="toolbar-btn" data-command="insertImage" aria-label="Insérer une image">
-                            <i class="fas fa-image"></i>
-                        </button>
-                    </div>
-                    
-                    <div class="toolbar-group">
-                        <button type="button" class="toolbar-btn" data-command="undo" aria-label="Annuler">
-                            <i class="fas fa-undo"></i>
-                        </button>
-                        <button type="button" class="toolbar-btn" data-command="redo" aria-label="Rétablir">
-                            <i class="fas fa-redo"></i>
-                        </button>
-                    </div>
-                </div>
-                
                 <div class="note-title-container">
                     <input type="text" id="noteTitle" placeholder="Titre de la note" class="note-title">
                 </div>
                 
-                <div class="note-content" id="noteContent" contenteditable="true"></div>
+                <!-- Quill Editor Container -->
+                <div id="quill-editor-container">
+                    <div id="quill-toolbar">
+                        <!-- Les outils seront automatiquement ajoutés par Quill -->
+                    </div>
+                    <div id="quill-editor"></div>
+                </div>
                 
                 <div class="note-status-bar">
                     <div class="word-count">

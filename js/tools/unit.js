@@ -31,7 +31,9 @@ const unitCategories = {
     
     // Volume (litre comme unité de base)
     volume: {
-        kl: { name: 'Kilolitre', toBase: value => value * 1000, fromBase: value => value / 1000 },
+        m3: { name: 'Mètre cube', toBase: value => value * 1000, fromBase: value => value / 1000 },
+        dm3: { name: 'Décimètre cube', toBase: value => value, fromBase: value => value },
+        cm3: { name: 'Centimètre cube', toBase: value => value / 1000, fromBase: value => value * 1000 },
         l: { name: 'Litre', toBase: value => value, fromBase: value => value },
         ml: { name: 'Millilitre', toBase: value => value / 1000, fromBase: value => value * 1000 },
         gal: { name: 'Gallon (US)', toBase: value => value * 3.78541178, fromBase: value => value / 3.78541178 },

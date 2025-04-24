@@ -13,7 +13,7 @@ let state = {
  */
 function initNoteApp() {
     // Vérifier si l'outil de notes est présent dans la page
-    const noteContainer = document.getElementById('noteApp');
+    const noteContainer = document.getElementById('noteTool');
     
     if (!noteContainer) {
         console.log('L\'application de notes n\'est pas présente dans la page actuelle');
@@ -24,12 +24,14 @@ function initNoteApp() {
     const notesList = document.getElementById('notesList');
     const noteTitle = document.getElementById('noteTitle');
     const noteContent = document.getElementById('noteContent');
-    const addNoteBtn = document.getElementById('addNote');
+    const addNoteBtn = document.getElementById('addNewNote');
     const saveNoteBtn = document.getElementById('saveNote');
-    const deleteNoteBtn = document.getElementById('deleteNote');
+    const deleteNoteBtn = document.getElementById('deleteAllNotes');
     
     if (!notesList || !noteTitle || !noteContent || !addNoteBtn || !saveNoteBtn || !deleteNoteBtn) {
         console.log('Éléments de l\'application de notes manquants dans la page');
+        console.log('notesList:', !!notesList, 'noteTitle:', !!noteTitle, 'noteContent:', !!noteContent);
+        console.log('addNoteBtn:', !!addNoteBtn, 'saveNoteBtn:', !!saveNoteBtn, 'deleteNoteBtn:', !!deleteNoteBtn);
         return;
     }
     
@@ -42,41 +44,121 @@ function initNoteApp() {
     // Configurer les écouteurs d'événements
     setupEventListeners();
     
-    console.log('Application de notes initialisée');
+    console.log('Application de notes initialisée avec succès');
 }
 
 /**
  * Configure les écouteurs d'événements
  */
 function setupEventListeners() {
-    const addNoteBtn = document.getElementById('addNote');
+    console.log('Configuration des écouteurs d\'événements...');
+    
+    const addNoteBtn = document.getElementById('addNewNote');
     const saveNoteBtn = document.getElementById('saveNote');
-    const deleteNoteBtn = document.getElementById('deleteNote');
+    const deleteNoteBtn = document.getElementById('deleteAllNotes');
+    const clearNoteBtn = document.getElementById('clearNote');
+    const downloadNoteBtn = document.getElementById('downloadNote');
     const noteTitle = document.getElementById('noteTitle');
     const noteContent = document.getElementById('noteContent');
     
+    console.log('Éléments récupérés:',
+        'addNewNote:', !!addNoteBtn,
+        'saveNote:', !!saveNoteBtn,
+        'deleteAllNotes:', !!deleteNoteBtn,
+        'clearNote:', !!clearNoteBtn,
+        'downloadNote:', !!downloadNoteBtn
+    );
+    
     if (!addNoteBtn || !saveNoteBtn || !deleteNoteBtn || !noteTitle || !noteContent) {
+        console.error('Certains éléments sont manquants, impossible de configurer les écouteurs d\'événements');
         return;
     }
     
     // Écouteur pour le bouton d'ajout de note
-    addNoteBtn.addEventListener('click', createNewNote);
+    addNoteBtn.addEventListener('click', () => {
+        console.log('Bouton addNewNote cliqué');
+        createNewNote();
+    });
     
     // Écouteur pour le bouton de sauvegarde
-    saveNoteBtn.addEventListener('click', saveCurrentNote);
+    saveNoteBtn.addEventListener('click', () => {
+        console.log('Bouton saveNote cliqué');
+        saveCurrentNote();
+    });
     
     // Écouteur pour le bouton de suppression
-    deleteNoteBtn.addEventListener('click', deleteCurrentNote);
+    deleteNoteBtn.addEventListener('click', () => {
+        console.log('Bouton deleteAllNotes cliqué');
+        if (confirm('Êtes-vous sûr de vouloir supprimer TOUTES les notes ?')) {
+            state.notes = [];
+            state.currentNoteId = null;
+            saveNotes();
+            renderNotesList();
+            clearEditor();
+            console.log('Toutes les notes ont été supprimées');
+        }
+    });
+    
+    // Écouteur pour le bouton de nettoyage
+    if (clearNoteBtn) {
+        clearNoteBtn.addEventListener('click', () => {
+            console.log('Bouton clearNote cliqué');
+            if (state.currentNoteId) {
+                if (confirm('Êtes-vous sûr de vouloir effacer le contenu de cette note ?')) {
+                    const noteIndex = state.notes.findIndex(n => n.id === state.currentNoteId);
+                    if (noteIndex !== -1) {
+                        state.notes[noteIndex].content = '';
+                        state.notes[noteIndex].updated = new Date().toISOString();
+                        saveNotes();
+                        displayNote(state.notes[noteIndex]);
+                        console.log('Contenu de la note effacé');
+                    }
+                }
+            }
+        });
+    }
+    
+    // Écouteur pour le bouton de téléchargement
+    if (downloadNoteBtn) {
+        downloadNoteBtn.addEventListener('click', () => {
+            console.log('Bouton downloadNote cliqué');
+            if (state.currentNoteId) {
+                const note = state.notes.find(n => n.id === state.currentNoteId);
+                if (note) {
+                    const content = note.content || '';
+                    const title = note.title || 'Note sans titre';
+                    
+                    // Créer un élément a temporaire
+                    const element = document.createElement('a');
+                    const file = new Blob([content], {type: 'text/plain'});
+                    element.href = URL.createObjectURL(file);
+                    element.download = `${title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.txt`;
+                    
+                    // Simuler un clic
+                    document.body.appendChild(element);
+                    element.click();
+                    
+                    // Nettoyer
+                    document.body.removeChild(element);
+                    console.log('Note téléchargée');
+                }
+            }
+        });
+    }
     
     // Écouteurs pour les champs de saisie
     noteTitle.addEventListener('input', autoSaveNote);
     noteContent.addEventListener('input', autoSaveNote);
+    
+    console.log('Écouteurs d\'événements configurés avec succès');
 }
 
 /**
  * Crée une nouvelle note
  */
 function createNewNote() {
+    console.log('Création d\'une nouvelle note');
+    
     // Créer un identifiant unique
     const noteId = Date.now().toString();
     
@@ -89,6 +171,8 @@ function createNewNote() {
         updated: new Date().toISOString()
     };
     
+    console.log('Nouvelle note créée avec ID:', noteId);
+    
     // Ajouter la note à la liste
     state.notes.unshift(newNote);
     
@@ -98,9 +182,13 @@ function createNewNote() {
     // Enregistrer les notes
     saveNotes();
     
+    console.log('Notes sauvegardées, nombre total de notes:', state.notes.length);
+    
     // Mettre à jour l'affichage
     renderNotesList();
     displayNote(newNote);
+    
+    console.log('Nouvelle note affichée et rendue dans la liste');
 }
 
 /**
@@ -221,7 +309,7 @@ function displayNote(note) {
     
     // Activer les boutons
     const saveButton = document.getElementById('saveNote');
-    const deleteButton = document.getElementById('deleteNote');
+    const deleteButton = document.getElementById('deleteAllNotes');
     
     if (saveButton) saveButton.disabled = false;
     if (deleteButton) deleteButton.disabled = false;
@@ -274,12 +362,18 @@ function autoSaveNote() {
  * Supprime la note courante
  */
 function deleteCurrentNote() {
-    if (!state.currentNoteId) return;
+    if (!state.currentNoteId) {
+        console.log('Aucune note sélectionnée pour la suppression');
+        return;
+    }
     
     // Demander confirmation
     if (!confirm('Êtes-vous sûr de vouloir supprimer cette note ?')) {
+        console.log('Suppression annulée par l\'utilisateur');
         return;
     }
+    
+    console.log('Suppression de la note', state.currentNoteId);
     
     // Filtrer la note à supprimer
     state.notes = state.notes.filter(n => n.id !== state.currentNoteId);
@@ -296,8 +390,10 @@ function deleteCurrentNote() {
     // Afficher la première note ou vider l'éditeur
     if (state.currentNoteId) {
         displayNote(state.notes[0]);
+        console.log('Affichage de la première note après suppression');
     } else {
         clearEditor();
+        console.log('Éditeur vidé après suppression');
     }
 }
 
@@ -315,7 +411,7 @@ function clearEditor() {
     
     // Désactiver les boutons
     const saveButton = document.getElementById('saveNote');
-    const deleteButton = document.getElementById('deleteNote');
+    const deleteButton = document.getElementById('deleteAllNotes');
     
     if (saveButton) saveButton.disabled = true;
     if (deleteButton) deleteButton.disabled = true;
@@ -340,7 +436,10 @@ function showSaveNotification() {
 // Initialiser l'application de notes seulement quand le DOM est complètement chargé
 // et seulement si nous sommes sur la page de l'application de notes
 document.addEventListener('DOMContentLoaded', () => {
-    if (document.getElementById('noteApp')) {
+    if (document.getElementById('noteTool')) {
+        console.log('Element noteTool trouvé, initialisation de l\'application de notes...');
         initNoteApp();
+    } else {
+        console.log('Element noteTool non trouvé dans la page');
     }
 }); 

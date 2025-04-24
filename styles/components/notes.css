@@ -266,4 +266,333 @@
         padding-right: 0;
         padding-bottom: 1rem;
     }
+}
+
+/* Styles pour le composant de notes */
+.note-editor-container {
+    display: flex;
+    height: 100%;
+    overflow: hidden;
+}
+
+.notes-sidebar {
+    width: 250px;
+    background-color: var(--sidebar-bg);
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border-color);
+}
+
+.notes-header {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.notes-header h3 {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.notes-search {
+    padding: 10px 15px;
+    position: relative;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.notes-search input {
+    width: 100%;
+    padding: 8px 10px 8px 30px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 0.9rem;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+}
+
+.notes-search .search-icon {
+    position: absolute;
+    left: 25px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+}
+
+.notes-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0;
+}
+
+.note-item {
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.note-item:hover {
+    background-color: var(--hover-bg);
+}
+
+.note-item.active {
+    background-color: var(--primary-color-light);
+}
+
+.note-item-title {
+    font-weight: 500;
+    margin: 0 0 5px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.95rem;
+}
+
+.note-item-date {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.note-item-excerpt {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 3px;
+}
+
+.notes-actions {
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--border-color);
+}
+
+.note-editor {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.note-title-container {
+    padding: 15px 15px 5px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.note-title {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 1.2rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+}
+
+/* Styles pour l'intégration de Quill */
+#quill-editor-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+#quill-toolbar {
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--toolbar-bg, var(--background-secondary));
+}
+
+#quill-editor {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+    background-color: var(--editor-bg, var(--background-primary));
+}
+
+/* Personnalisation des styles de Quill pour correspondre au thème */
+.ql-toolbar.ql-snow {
+    border: none !important;
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
+.ql-container.ql-snow {
+    border: none !important;
+}
+
+.ql-editor {
+    font-family: var(--font-family);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-color);
+    min-height: 200px;
+}
+
+.ql-editor:focus {
+    outline: none;
+}
+
+.ql-editor p, .ql-editor ol, .ql-editor ul, .ql-editor pre, .ql-editor blockquote, .ql-editor h1, .ql-editor h2, .ql-editor h3 {
+    margin-bottom: 1em;
+}
+
+.ql-snow .ql-editor pre.ql-syntax {
+    background-color: var(--code-bg, #23241f);
+    color: var(--code-color, #f8f8f2);
+    border-radius: 4px;
+}
+
+.ql-snow .ql-picker {
+    color: var(--text-color);
+}
+
+.ql-snow .ql-stroke {
+    stroke: var(--text-color);
+}
+
+.ql-snow .ql-fill {
+    fill: var(--text-color);
+}
+
+.ql-snow .ql-picker-options {
+    background-color: var(--dropdown-bg, var(--background-secondary));
+    border-color: var(--border-color);
+}
+
+.ql-snow .ql-tooltip {
+    background-color: var(--tooltip-bg, var(--background-secondary));
+    border-color: var(--border-color);
+    color: var(--text-color);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Styles pour la barre d'état en bas de l'éditeur */
+.note-status-bar {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px;
+    background-color: var(--background-secondary);
+    border-top: 1px solid var(--border-color);
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.note-actions {
+    padding: 10px 15px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Styles pour le panneau d'aide */
+.help-panel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    background-color: var(--background-primary);
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    display: none;
+    flex-direction: column;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.help-panel.show {
+    display: flex;
+}
+
+.help-panel-header {
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.help-panel-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.help-panel-content {
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.help-panel-content h4 {
+    margin: 0 0 10px 0;
+    font-size: 1rem;
+}
+
+.help-panel-content p, .help-panel-content ul, .help-panel-content ol {
+    margin-bottom: 15px;
+}
+
+.help-panel-content ul, .help-panel-content ol {
+    padding-left: 20px;
+}
+
+.help-panel-content li {
+    margin-bottom: 5px;
+}
+
+/* Style pour les notifications */
+.note-notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+}
+
+.note-notification.show {
+    opacity: 1;
+}
+
+/* Styles pour le mode plein écran */
+#noteTool.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    background-color: var(--background-primary);
+    border-radius: 0;
+    box-shadow: none;
+}
+
+/* Styles pour les périphériques mobiles */
+@media (max-width: 768px) {
+    .note-editor-container {
+        flex-direction: column;
+    }
+    
+    .notes-sidebar {
+        width: 100%;
+        height: auto;
+        max-height: 40%;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .note-editor {
+        max-height: 60%;
+    }
 } 

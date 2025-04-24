@@ -43,7 +43,7 @@ const SECONDARY_ASSETS = [
     'js/tools/text.js',
     'js/tools/timer.js',
     'js/tools/stopwatch.js',
-    'js/tools/notes.js',
+    'js/tools/notes_utf8.js',
     'js/tools/translator.js',
     'js/tools/scheduler.js',
     'js/tools/metronome.js',

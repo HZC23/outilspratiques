@@ -86,12 +86,6 @@
     <!-- Lien d'accessibilité "Skip to content" -->
     <a href="#main-content" class="skip-link">Aller au contenu</a>
 
-    <!-- Horloge en haut à droite -->
-    <div class="top-clock" role="complementary" aria-label="Horloge">
-        <div class="time" id="topTime">00:00:00</div>
-        <div class="date" id="topDate">01 Janvier 2024</div>
-    </div>
-
     <header>
         <div class="header-container">
             <!-- Bouton de thème en haut à gauche -->
@@ -120,95 +114,33 @@
             </div>
             
             <h1>Outils Pratiques</h1>
-            <button id="menuToggle" class="menu-toggle" aria-label="Menu principal">
-                <i class="fas fa-bars"></i>
-            </button>
+                <!-- Horloge en haut à droite -->
+    <div class="top-clock" role="complementary" aria-label="Horloge">
+        <div class="time" id="topTime">00:00:00</div>
+        <div class="date" id="topDate">01 Janvier 2024</div>
+    </div>
+    
+    <script>
+        // Script pour masquer l'horloge sur les petits écrans et l'afficher sur les grands écrans
+        (function() {
+            function checkScreenSize() {
+                var clock = document.querySelector('.top-clock');
+                if (window.innerWidth <= 600) {
+                    clock.style.display = 'none';
+                } else {
+                    clock.style.display = '';
+                }
+            }
+            
+            // Exécuter au chargement
+            checkScreenSize();
+            
+            // Exécuter à chaque redimensionnement
+            window.addEventListener('resize', checkScreenSize);
+        })();
+    </script>
         </div>
     </header>
-
-    <nav id="mainMenu" class="menu" role="navigation" aria-label="Menu principal">
-        <div class="menu-category">
-            <button class="menu-trigger" data-menu-id="calculationsMenu" aria-expanded="false">
-                <i class="fas fa-calculator"></i>
-                <span>Calculs</span>
-                <i class="fas fa-chevron-down submenu-icon"></i>
-            </button>
-            <div id="calculationsMenu" class="submenu" aria-hidden="true">
-                <button class="submenu-item" data-tool-id="calculatorTool">
-                    <i class="fas fa-calculator"></i>
-                    <span>Calculatrice</span>
-                </button>
-                <button class="submenu-item" data-tool-id="unitTool">
-                    <i class="fas fa-exchange-alt"></i>
-                    <span>Convertisseur</span>
-                </button>
-            </div>
-        </div>
-
-        <div class="menu-category">
-            <button class="menu-trigger" data-menu-id="timeMenu" aria-expanded="false">
-                <i class="fas fa-clock"></i>
-                <span>Temps</span>
-                <i class="fas fa-chevron-down submenu-icon"></i>
-            </button>
-            <div id="timeMenu" class="submenu" aria-hidden="true">
-                <button class="submenu-item" data-tool-id="timerTool">
-                    <i class="fas fa-hourglass-start"></i>
-                    <span>Minuteur</span>
-                </button>
-                <button class="submenu-item" data-tool-id="stopwatchTool">
-                    <i class="fas fa-stopwatch"></i>
-                    <span>Chronomètre</span>
-                </button>
-            </div>
-        </div>
-
-        <div class="menu-category">
-            <button class="menu-trigger" data-menu-id="organizationMenu" aria-expanded="false">
-                <i class="fas fa-tasks"></i>
-                <span>Organisation</span>
-                <i class="fas fa-chevron-down submenu-icon"></i>
-            </button>
-            <div id="organizationMenu" class="submenu" aria-hidden="true">
-                <button class="submenu-item" data-tool-id="noteTool">
-                    <i class="fas fa-sticky-note"></i>
-                    <span>Bloc-notes</span>
-                </button>
-                <button class="submenu-item" data-tool-id="todoTool">
-                    <i class="fas fa-clipboard-list"></i>
-                    <span>Liste de tâches</span>
-                </button>
-            </div>
-        </div>
-
-        <div class="menu-category">
-            <button class="menu-trigger" data-menu-id="textMenu" aria-expanded="false">
-                <i class="fas fa-font"></i>
-                <span>Texte</span>
-                <i class="fas fa-chevron-down submenu-icon"></i>
-            </button>
-            <div id="textMenu" class="submenu" aria-hidden="true">
-                <button class="submenu-item" data-tool-id="translatorTool">
-                    <i class="fas fa-language"></i>
-                    <span>Traducteur</span>
-                </button>
-            </div>
-        </div>
-
-        <div class="menu-category">
-            <button class="menu-trigger" data-menu-id="utilitiesMenu" aria-expanded="false">
-                <i class="fas fa-tools"></i>
-                <span>Utilitaires</span>
-                <i class="fas fa-chevron-down submenu-icon"></i>
-            </button>
-            <div id="utilitiesMenu" class="submenu" aria-hidden="true">
-                <button class="submenu-item" data-tool-id="passwordTool">
-                    <i class="fas fa-key"></i>
-                    <span>Générateur de mot de passe</span>
-                </button>
-            </div>
-        </div>
-    </nav>
 
     <main id="main-content">
         <!-- Grille d'outils -->
@@ -244,7 +176,7 @@
                     <p class="tool-card-description">Convertissez facilement des unités de mesure, de temps, de volume et plus encore.</p>
                 </div>
                 <div class="tool-card-footer">
-                    <a href="#unitTool" class="tool-card-button" data-tool-id="unitTool">
+                    <a href="outils.html#unitTool" class="tool-card-button" data-tool-id="unitTool">
                         <span>Utiliser</span>
                         <i class="fas fa-arrow-right"></i>
                     </a>
@@ -263,7 +195,7 @@
                     <p class="tool-card-description">Minuteur simple avec alarme personnalisable et notification visuelle.</p>
                 </div>
                 <div class="tool-card-footer">
-                    <a href="#timerTool" class="tool-card-button" data-tool-id="timerTool">
+                    <a href="outils.html#timerTool" class="tool-card-button" data-tool-id="timerTool">
                         <span>Utiliser</span>
                         <i class="fas fa-arrow-right"></i>
                     </a>
@@ -281,7 +213,7 @@
                     <p class="tool-card-description">Chronomètre précis avec fonction tour et enregistrement des performances.</p>
                 </div>
                 <div class="tool-card-footer">
-                    <a href="#stopwatchTool" class="tool-card-button" data-tool-id="stopwatchTool">
+                    <a href="outils.html#stopwatchTool" class="tool-card-button" data-tool-id="stopwatchTool">
                         <span>Utiliser</span>
                         <i class="fas fa-arrow-right"></i>
                     </a>
@@ -300,7 +232,7 @@
                     <p class="tool-card-description">Prenez des notes avec mise en forme, sauvegarde automatique et exportation facile.</p>
                 </div>
                 <div class="tool-card-footer">
-                    <a href="#noteTool" class="tool-card-button" data-tool-id="noteTool">
+                    <a href="outils.html#noteTool" class="tool-card-button" data-tool-id="noteTool">
                         <span>Utiliser</span>
                         <i class="fas fa-arrow-right"></i>
                     </a>
@@ -318,7 +250,7 @@
                     <p class="tool-card-description">Organisez vos tâches par catégorie, priorité et échéance avec rappels visuels.</p>
                 </div>
                 <div class="tool-card-footer">
-                    <a href="#todoTool" class="tool-card-button" data-tool-id="todoTool">
+                    <a href="outils.html#todoTool" class="tool-card-button" data-tool-id="todoTool">
                         <span>Utiliser</span>
                         <i class="fas fa-arrow-right"></i>
                     </a>
@@ -337,7 +269,7 @@
                     <p class="tool-card-description">Traduisez du texte entre plusieurs langues avec conversion vocale intégrée.</p>
                 </div>
                 <div class="tool-card-footer">
-                    <a href="#translatorTool" class="tool-card-button" data-tool-id="translatorTool">
+                    <a href="outils.html#translatorTool" class="tool-card-button" data-tool-id="translatorTool">
                         <span>Utiliser</span>
                         <i class="fas fa-arrow-right"></i>
                     </a>
@@ -356,7 +288,7 @@
                     <p class="tool-card-description">Créez des mots de passe sécurisés et personnalisés avec évaluation de force.</p>
                 </div>
                 <div class="tool-card-footer">
-                    <a href="#passwordTool" class="tool-card-button" data-tool-id="passwordTool">
+                    <a href="outils.html#passwordTool" class="tool-card-button" data-tool-id="passwordTool">
                         <span>Utiliser</span>
                         <i class="fas fa-arrow-right"></i>
                     </a>
@@ -403,7 +335,7 @@
         <section class="cta-section">
             <h2>Prêt à simplifier votre quotidien ?</h2>
             <p>Explorez notre collection d'outils pratiques et découvrez comment ils peuvent vous faire gagner du temps.</p>
-            <a href="#" class="cta-button">
+            <a href="outils.html" class="cta-button">
                 <span>Accéder aux outils</span>
                 <i class="fas fa-arrow-right"></i>
             </a>
@@ -415,6 +347,7 @@
             <div class="footer-section">
                 <h3>Outils Pratiques</h3>
                 <p>Des outils simples pour simplifier votre quotidien</p>
+                <p class="footer-copyright">&copy; 2025 Outils Pratiques - Tous droits réservés</p>
             </div>
             <div class="footer-section">
                 <h3>Liens utiles</h3>
@@ -426,11 +359,9 @@
             </div>
             <div class="footer-section">
                 <h3>Contact</h3>
-                <p>Des suggestions ? <a href="mailto:contact@outilspratiques.com">Contactez-nous</a></p>
+                <p>Des suggestions ?</p>
+                <a href="mailto:contact@outilspratiques.com">Contactez-nous</a>
             </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 Outils Pratiques. Tous droits réservés.</p>
         </div>
     </footer>
 
@@ -462,5 +393,8 @@
             });
         });
     </script>
+    
+    <!-- Script pour la calculatrice du footer -->
+    <script type="module" src="js/tools/calculator.js"></script>
 </body>
 </html> 

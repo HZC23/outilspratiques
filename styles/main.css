@@ -116,13 +116,31 @@ p {
 
 /* Header styles */
 header {
-    background-color: var(--primary-color);
+    background: linear-gradient(135deg, var(--primary-color), #1e40af, #3730a3);
     color: var(--text-on-primary);
-    padding: var(--spacing-sm) var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-md);
     position: sticky;
     top: 0;
     z-index: 1000;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    animation: headerGlow 8s infinite alternate;
+    transition: all 0.3s ease;
+    background-size: 300% 300%;
+}
+
+@keyframes headerGlow {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 .header-container {
@@ -132,12 +150,77 @@ header {
     max-width: var(--breakpoint-desktop);
     margin: 0 auto;
     width: 100%;
+    position: relative;
+}
+
+/* Styles pour les actions de l'en-tête (boutons et horloge) */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-left: auto;
+}
+
+/* Style des boutons dans le header */
+.btn-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.btn-icon:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.btn-icon i {
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.menu-toggle {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.menu-toggle:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.menu-toggle i {
+    font-size: 1.2rem;
+    margin: 0;
 }
 
 .theme-switch-wrapper {
     margin-right: var(--spacing-md);
     display: flex;
     align-items: center;
+    z-index: 10;
 }
 
 .theme-switch {
@@ -151,6 +234,87 @@ h1 {
     font-weight: 700;
     text-align: center;
     flex-grow: 1;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    letter-spacing: 1px;
+    background: linear-gradient(to right, #ffffff, #f0f0f0, #ffffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer 3s infinite;
+    transform: perspective(500px) translateZ(0);
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -100% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Effet supplémentaire pour le header au survol */
+header:hover {
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Ajustement pour la top-clock dans le header */
+.top-clock {
+    padding: 10px 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.top-clock:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.top-clock .time {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: white;
+    text-align: center;
+    margin-bottom: 2px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.top-clock .date {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    header {
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+    
+    h1 {
+        font-size: calc(var(--font-size-lg) - 0.2rem);
+    }
+    
+    .top-clock {
+        padding: 8px 12px;
+    }
+    
+    .top-clock .time {
+        font-size: 1.1rem;
+    }
+    
+    .top-clock .date {
+        font-size: 0.7rem;
+    }
 }
 
 /* Container principal du contenu */
@@ -158,8 +322,32 @@ h1 {
     display: flex;
     max-width: var(--breakpoint-desktop);
     margin: 0 auto;
-    padding: var(--spacing-md);
+    padding: 0;
     gap: var(--spacing-md);
+}
+
+/* Pour les outils spécifiques, nous pouvons ajouter du padding au niveau de l'outil */
+.tools:not(.calculator-container) {
+    padding: var(--spacing-xs);
+}
+
+.calculator-container {
+    max-width: 320px;
+    margin: 0 auto;
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 24px;
+    box-shadow: var(--box-shadow);
+    box-sizing: border-box;
+}
+
+@media (max-width: 480px) {
+    .calculator-container {
+        padding: var(--spacing-xs);
+        max-width: 100%;
+        width: 100%;
+        margin: 0;
+    }
 }
 
 /* Système de grille responsive */
@@ -186,10 +374,25 @@ h1 {
 /* Toolbox container */
 .tools {
     flex: 1;
-    padding: var(--spacing-md);
+    padding: var(--spacing-xs);
     background-color: var(--card-bg);
     border-radius: var(--border-radius-lg);
     box-shadow: var(--box-shadow);
+}
+
+/* Ajustement pour les outils comme la calculatrice */
+.tools .calculator-container {
+    box-shadow: none;
+    background-color: transparent;
+}
+
+@media (max-width: 480px) {
+    .tools {
+        padding: 0;
+        border-radius: 0;
+        box-shadow: none;
+        background-color: transparent;
+    }
 }
 
 /* Icône avec couleur du texte */
@@ -410,6 +613,7 @@ input:focus, select:focus, textarea:focus {
 @media (max-width: 1024px) {
     .container {
         flex-direction: column;
+        padding: 0;
     }
     
     .grid {
@@ -555,14 +759,16 @@ footer {
     color: #fff;
     padding: var(--spacing-xl) var(--spacing-md);
     margin-top: var(--spacing-xl);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .footer-container {
     max-width: var(--breakpoint-desktop);
     margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: var(--spacing-xl);
+    padding: 0 var(--spacing-md);
 }
 
 .footer-section h3 {
@@ -570,6 +776,9 @@ footer {
     font-size: var(--font-size-md);
     margin-bottom: var(--spacing-md);
     position: relative;
+    font-weight: 500;
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .footer-section p, 
@@ -577,6 +786,7 @@ footer {
     color: rgba(255, 255, 255, 0.7);
     line-height: var(--line-height-relaxed);
     margin-bottom: var(--spacing-md);
+    font-size: var(--font-size-sm);
 }
 
 .footer-section ul {
@@ -592,12 +802,30 @@ footer {
 .footer-section a {
     color: rgba(255, 255, 255, 0.7);
     text-decoration: none;
-    transition: color 0.3s ease;
+    transition: all 0.3s ease;
+    font-size: var(--font-size-sm);
+    display: inline-block;
+    position: relative;
 }
 
 .footer-section a:hover {
     color: #fff;
-    text-decoration: underline;
+    transform: translateX(3px);
+}
+
+.footer-section a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: #fff;
+    transition: width 0.3s ease;
+}
+
+.footer-section a:hover::after {
+    width: 100%;
 }
 
 .footer-bottom {
@@ -607,17 +835,131 @@ footer {
     text-align: center;
     color: rgba(255, 255, 255, 0.5);
     font-size: var(--font-size-sm);
+    max-width: var(--breakpoint-desktop);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+}
+
+/* Styles pour la calculatrice dans le footer */
+.footer-calculator {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: var(--spacing-sm);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.calc-display {
+    background-color: #f8f9fa;
+    border-radius: var(--border-radius-sm);
+    padding: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+    text-align: right;
+    font-size: 1.5rem;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    border: 1px solid #dee2e6;
+}
+
+.calc-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-xs);
+}
+
+.calc-btn {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: var(--border-radius-sm);
+    padding: var(--spacing-sm);
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.calc-btn:hover {
+    background-color: #e9ecef;
+}
+
+.calc-btn.operator {
+    background-color: #e9ecef;
+}
+
+.calc-btn.equals {
+    background-color: #0d6efd;
+    color: white;
+    grid-column: span 1;
+}
+
+.calc-btn.equals:hover {
+    background-color: #0b5ed7;
+}
+
+.calc-btn.zero {
+    grid-column: span 2;
 }
 
 /* Responsive footer */
 @media (max-width: 1024px) {
     .footer-container {
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--spacing-lg);
+    }
+}
+
+@media (max-width: 768px) {
+    .footer-container {
         grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-md);
+    }
+    
+    .footer-section h3 {
+        font-size: var(--font-size);
     }
 }
 
 @media (max-width: 640px) {
     .footer-container {
         grid-template-columns: 1fr;
+        gap: var(--spacing-md);
     }
+    
+    footer {
+        padding: var(--spacing-lg) var(--spacing-sm);
+    }
+    
+    .footer-section {
+        padding-bottom: var(--spacing-md);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .footer-section:last-child {
+        border-bottom: none;
+    }
+}
+
+.footer-copyright {
+    font-size: var(--font-size-xs);
+    color: rgba(255, 255, 255, 0.4);
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-sm);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-section:first-child {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.footer-copyright {
+    margin-top: auto;
 } 

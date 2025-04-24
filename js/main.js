@@ -10,6 +10,7 @@ import { StyleTextManager } from './tools/styletext.js';
 import { ColorManager } from './tools/color.js';
 import { QRCodeManager } from './tools/qrcode.js';
 import { TodoManager } from './tools/todo.js';
+import { StopwatchManager } from './tools/stopwatch.js';
 
 /**
  * Classe principale de l'application
@@ -397,7 +398,7 @@ class App {
             'calculatorTool': () => import('./tools/calculator.js').then(module => module.CalculatorManager.init()),
             'timerTool': () => import('./tools/timer.js').then(module => module.TimerManager.init()),
             'stopwatchTool': () => import('./tools/stopwatch.js').then(module => module.StopwatchManager.init()),
-            'noteTool': () => import('./tools/notes.js').then(module => module.NotesManager.init()),
+            'noteTool': () => import('./tools/notes_utf8.js').then(module => module.NotesManager.init()),
             'todoTool': () => import('./tools/todo.js').then(module => module.TodoManager.init()),
             'translatorTool': () => import('./tools/translator.js').then(module => module.TranslatorManager.init()),
             'colorTool': () => import('./tools/color.js').then(module => module.ColorManager.init()),
@@ -417,24 +418,12 @@ class App {
                 } else {
                     console.error('Impossible de trouver une méthode d\'initialisation pour le convertisseur d\'unités');
                 }
-            })
+            }),
+            'parameterTool': () => {
+                console.error(`Erreur lors du chargement de l'outil: L'outil "${toolId}" n'existe pas.`);
+                Utils.showNotification(`L'outil "${toolId}" n'existe pas.`, 'error');
+            }
         };
-
-        // Ajout spécial pour unitTool qui peut être aussi 'unit'
-        const normalizedId = toolId.toLowerCase();
-        if (normalizedId === 'unit' && !toolManagers[toolId]) {
-            import('./tools/unit.js').then(module => {
-                console.log('Module unit chargé via normalisation d\'ID:', module);
-                if (module.initUnitConverter) {
-                    module.initUnitConverter();
-                } else {
-                    console.error('Méthode d\'initialisation non trouvée pour unit');
-                }
-            }).catch(error => {
-                console.error('Erreur lors du chargement du module unit:', error);
-            });
-            return;
-        }
 
         // Charger le gestionnaire correspondant
         if (toolManagers[toolId]) {
@@ -562,4 +551,15 @@ function loadTool(toolName) {
             console.error(`Erreur lors du chargement de l'outil ${toolName}:`, error);
             throw error;
         });
-} 
+}
+
+// Attendre que le DOM soit chargé
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM chargé, initialisation des outils...');
+    
+    // Initialiser le chronomètre si présent dans la page
+    if (document.getElementById('stopwatchTool')) {
+        StopwatchManager.init();
+        console.log('Chronomètre initialisé');
+    }
+}); 

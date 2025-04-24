@@ -1,38 +1,153 @@
 <!DOCTYPE html>
+<div class="tool-header">
+    <h2><i class="fas fa-calculator"></i> Calculatrice</h2>
+    <div class="tool-actions">
+        <button type="button" class="btn-icon" id="calculatorHelp" aria-label="Aide">
+            <i class="fas fa-question-circle"></i>
+        </button>
+        <button type="button" class="btn-icon" id="calculatorFullscreen" aria-label="Plein écran">
+            <i class="fas fa-expand"></i>
+        </button>
+    </div>
+</div>
+
+
 <div class="calculator-container">
-    <div class="calculator-display">
-        <div class="calculator-previous" id="previous"></div>
-        <div class="calculator-current" id="current">0</div>
+    <!-- Navigation entre les calculatrices -->
+    <div class="calculator-nav">
+        <button type="button" class="calculator-nav-btn active" data-calc-type="standard">Standard</button>
+        <button type="button" class="calculator-nav-btn" data-calc-type="scientific">Scientifique</button>
+    </div>
+
+    <!-- Calculatrice standard -->
+    <div class="calculator-view" id="standard-calculator">
+        <div class="calculator-display">
+            <div class="calculator-previous" id="previous"></div>
+            <div class="calculator-current" id="current">0</div>
+        </div>
+        
+        <div class="calculator-grid">
+            <!-- Première rangée -->
+            <button type="button" class="calculator-button function" data-action="clear">AC</button>
+            <button type="button" class="calculator-button function" data-action="toggle-sign">±</button>
+            <button type="button" class="calculator-button function" data-action="percent">%</button>
+            <button type="button" class="calculator-button operator" data-action="divide">÷</button>
+            
+            <!-- Deuxième rangée -->
+            <button type="button" class="calculator-button" data-value="7">7</button>
+            <button type="button" class="calculator-button" data-value="8">8</button>
+            <button type="button" class="calculator-button" data-value="9">9</button>
+            <button type="button" class="calculator-button operator" data-action="multiply">×</button>
+            
+            <!-- Troisième rangée -->
+            <button type="button" class="calculator-button" data-value="4">4</button>
+            <button type="button" class="calculator-button" data-value="5">5</button>
+            <button type="button" class="calculator-button" data-value="6">6</button>
+            <button type="button" class="calculator-button operator" data-action="subtract">−</button>
+            
+            <!-- Quatrième rangée -->
+            <button type="button" class="calculator-button" data-value="1">1</button>
+            <button type="button" class="calculator-button" data-value="2">2</button>
+            <button type="button" class="calculator-button" data-value="3">3</button>
+            <button type="button" class="calculator-button operator" data-action="add">+</button>
+            
+            <!-- Cinquième rangée -->
+            <button type="button" class="calculator-button" data-value="0" style="grid-column: span 2;">0</button>
+            <button type="button" class="calculator-button" data-value=".">.</button>
+            <button type="button" class="calculator-button equals" data-action="calculate">=</button>
+        </div>
     </div>
     
-    <div class="calculator-grid">
-        <!-- Première rangée -->
-        <button type="button" class="calculator-button function" data-action="clear">AC</button>
-        <button type="button" class="calculator-button function" data-action="toggle-sign">±</button>
-        <button type="button" class="calculator-button function" data-action="percent">%</button>
-        <button type="button" class="calculator-button operator" data-action="divide">÷</button>
+    <!-- Calculatrice scientifique -->
+    <div class="calculator-view" id="scientific-calculator" style="display: none;">
+        <div class="calculator-display">
+            <div class="calculator-previous" id="sci-previous"></div>
+            <div class="calculator-current" id="sci-current">0</div>
+        </div>
         
-        <!-- Deuxième rangée -->
-        <button type="button" class="calculator-button" data-value="7">7</button>
-        <button type="button" class="calculator-button" data-value="8">8</button>
-        <button type="button" class="calculator-button" data-value="9">9</button>
-        <button type="button" class="calculator-button operator" data-action="multiply">×</button>
-        
-        <!-- Troisième rangée -->
-        <button type="button" class="calculator-button" data-value="4">4</button>
-        <button type="button" class="calculator-button" data-value="5">5</button>
-        <button type="button" class="calculator-button" data-value="6">6</button>
-        <button type="button" class="calculator-button operator" data-action="subtract">−</button>
-        
-        <!-- Quatrième rangée -->
-        <button type="button" class="calculator-button" data-value="1">1</button>
-        <button type="button" class="calculator-button" data-value="2">2</button>
-        <button type="button" class="calculator-button" data-value="3">3</button>
-        <button type="button" class="calculator-button operator" data-action="add">+</button>
-        
-        <!-- Cinquième rangée -->
-        <button type="button" class="calculator-button" data-value="0" style="grid-column: span 2;">0</button>
-        <button type="button" class="calculator-button" data-value=".">.</button>
-        <button type="button" class="calculator-button equals" data-action="calculate">=</button>
+        <div class="calculator-grid scientific-grid">
+            <!-- Rangée supérieure - fonctions spéciales -->
+            <button type="button" class="calculator-button function mobile-small" data-action="clear">C</button>
+            <button type="button" class="calculator-button function mobile-small" data-action="backspace">⌫</button>
+            <button type="button" class="calculator-button function mobile-small" data-action="rad-deg">DEG</button>
+            <button type="button" class="calculator-button function mobile-small" data-value="π">π</button>
+            <button type="button" class="calculator-button function mobile-small" data-value="e">e</button>
+            
+            <!-- Rangée fonctions -->
+            <button type="button" class="calculator-button function mobile-small" data-action="sin">sin</button>
+            <button type="button" class="calculator-button function mobile-small" data-action="cos">cos</button>
+            <button type="button" class="calculator-button function mobile-small" data-action="tan">tan</button>
+            <button type="button" class="calculator-button function mobile-small" data-value="(">(</button>
+            <button type="button" class="calculator-button function mobile-small" data-value=")">)</button>
+            
+            <!-- Rangée opérations avancées -->
+            <button type="button" class="calculator-button function mobile-small" data-action="log">log</button>
+            <button type="button" class="calculator-button function mobile-small" data-action="ln">ln</button>
+            <button type="button" class="calculator-button function mobile-small" data-action="sqrt">√</button>
+            <button type="button" class="calculator-button function mobile-small" data-action="square">x²</button>
+            <button type="button" class="calculator-button function mobile-small" data-action="power">x^y</button>
+            
+            <!-- Rangée 7-8-9 -->
+            <button type="button" class="calculator-button" data-value="7">7</button>
+            <button type="button" class="calculator-button" data-value="8">8</button>
+            <button type="button" class="calculator-button" data-value="9">9</button>
+            <button type="button" class="calculator-button operator mobile-small" data-action="divide">÷</button>
+            <button type="button" class="calculator-button function mobile-small" data-action="1/x">1/x</button>
+            
+            <!-- Rangée 4-5-6 -->
+            <button type="button" class="calculator-button" data-value="4">4</button>
+            <button type="button" class="calculator-button" data-value="5">5</button>
+            <button type="button" class="calculator-button" data-value="6">6</button>
+            <button type="button" class="calculator-button operator mobile-small" data-action="multiply">×</button>
+            <button type="button" class="calculator-button operator mobile-small" data-action="percent">%</button>
+            
+            <!-- Rangée 1-2-3 -->
+            <button type="button" class="calculator-button" data-value="1">1</button>
+            <button type="button" class="calculator-button" data-value="2">2</button>
+            <button type="button" class="calculator-button" data-value="3">3</button>
+            <button type="button" class="calculator-button operator mobile-small" data-action="subtract">−</button>
+            <button type="button" class="calculator-button function mobile-small" data-action="toggle-sign">±</button>
+            
+            <!-- Dernière rangée -->
+            <button type="button" class="calculator-button" data-value="0">0</button>
+            <button type="button" class="calculator-button" data-value=".">.</button>
+            <button type="button" class="calculator-button equals" data-action="calculate" style="grid-column: span 2;">=</button>
+            <button type="button" class="calculator-button operator mobile-small" data-action="add">+</button>
+        </div>
     </div>
-</div> 
+    
+    <!-- Historique des calculs -->
+    <div class="calculator-history">
+        <div class="history-header">
+            <h3>Historique</h3>
+            <button type="button" class="clear-history-btn" id="clearHistoryBtn">
+                <i class="fas fa-trash-alt"></i> Effacer
+            </button>
+        </div>
+        <div class="history-list" id="calculatorHistory"></div>
+    </div>
+</div>
+
+<!-- Template pour la mini-calculatrice (utilisée dans le footer) -->
+<template id="mini-calculator-template">
+    <div class="footer-calculator">
+        <div class="calc-display">0</div>
+        <div class="calc-buttons">
+            <button class="calc-btn">7</button>
+            <button class="calc-btn">8</button>
+            <button class="calc-btn">9</button>
+            <button class="calc-btn operator">-</button>
+            <button class="calc-btn">4</button>
+            <button class="calc-btn">5</button>
+            <button class="calc-btn">6</button>
+            <button class="calc-btn operator">+</button>
+            <button class="calc-btn">1</button>
+            <button class="calc-btn">2</button>
+            <button class="calc-btn">3</button>
+            <button class="calc-btn operator">×</button>
+            <button class="calc-btn zero">0</button>
+            <button class="calc-btn">.</button>
+            <button class="calc-btn equals">=</button>
+        </div>
+    </div>
+</template> 

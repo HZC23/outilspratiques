@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<div class="tool-container" id="textEditorTool">
+    <div class="tool-header">
+        <h2><i class="fas fa-file-word"></i> Traitement de texte</h2>
+        <div class="tool-actions">
+            <button type="button" class="btn-icon" id="textEditorHelp" aria-label="Aide">
+                <i class="fas fa-question-circle"></i>
+            </button>
+            <button type="button" class="btn-icon" id="textEditorFullscreen" aria-label="Plein écran">
+                <i class="fas fa-expand"></i>
+            </button>
+        </div>
+    </div>
+    
+    <div class="tool-content">
+        <div class="text-editor-container">
+            <div class="text-editor-options">
+                <div class="filename-container">
+                    <input type="text" id="textEditorFilename" placeholder="Nom du document" value="document.html" class="filename-input">
+                </div>
+                
+                <div class="format-options">
+                    <label for="textEditorFormat">Format:</label>
+                    <select id="textEditorFormat" class="format-select">
+                        <option value="txt">Texte (.txt)</option>
+                        <option value="html" selected>HTML (.html)</option>
+                        <option value="docx">Word (.docx)</option>
+                    </select>
+                    
+                    <button id="textEditorThemeToggle" class="theme-toggle-btn" title="Changer le thème">
+                        <i class="fas fa-adjust"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Tabs navigation -->
+            <div class="text-editor-tabs">
+                <button class="tab-btn active" data-tab="editor">Éditer</button>
+                <button class="tab-btn" data-tab="preview">Aperçu</button>
+                <button class="tab-btn" data-tab="split">Vue divisée</button>
+            </div>
+            
+            <!-- Quill Editor Container -->
+            <div id="text-editor-tab-content">
+                <div id="editor-tab" class="tab-content active">
+                    <div id="texteditor-container">
+                        <!-- Quill will attach here -->
+                    </div>
+                </div>
+                
+                <div id="preview-tab" class="tab-content">
+                    <div id="texteditor-preview"></div>
+                </div>
+                
+                <div id="split-tab" class="tab-content">
+                    <div class="split-view">
+                        <div id="texteditor-container-split"></div>
+                        <div id="texteditor-preview-split"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-editor-status-bar">
+                <div class="text-stats">
+                    <span id="textEditorWordCount">0 mots</span>
+                    <span class="separator">|</span>
+                    <span id="textEditorCharCount">0 caractères</span>
+                </div>
+                
+                <div class="editor-mode">
+                    <select id="editorTheme" title="Thème de l'éditeur">
+                        <option value="snow">Standard</option>
+                        <option value="bubble">Minimaliste</option>
+                        <option value="office">Office</option>
+                        <option value="modern">Moderne</option>
+                    </select>
+                </div>
+                
+                <div class="text-actions">
+                    <button type="button" class="btn" id="clearTextEditor">
+                        <i class="fas fa-eraser"></i> Effacer
+                    </button>
+                    <button type="button" class="btn btn-outline" id="downloadTextEditor">
+                        <i class="fas fa-download"></i> Télécharger
+                    </button>
+                    <button type="button" class="btn btn-outline" id="printTextEditor">
+                        <i class="fas fa-print"></i> Imprimer
+                    </button>
+                    <button type="button" class="btn btn-primary" id="copyTextEditor">
+                        <i class="fas fa-copy"></i> Copier
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="help-panel" id="textEditorHelpPanel">
+        <div class="help-panel-header">
+            <h3>Aide - Traitement de texte</h3>
+            <button type="button" class="btn-icon" id="closeTextEditorHelp">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="help-panel-content">
+            <h4>Comment utiliser</h4>
+            <ol>
+                <li>Saisissez votre texte dans la zone d'édition</li>
+                <li>Utilisez la barre d'outils pour mettre en forme votre texte</li>
+                <li>Utilisez les onglets pour basculer entre l'édition et l'aperçu</li>
+                <li>Téléchargez ou imprimez votre document quand il est terminé</li>
+            </ol>
+            
+            <h4>Fonctionnalités</h4>
+            <ul>
+                <li><strong>Formatage de texte</strong> : Polices, tailles, gras, italique, souligné, couleurs, etc.</li>
+                <li><strong>Paragraphes</strong> : Alignement, indentation, listes à puces et numérotées</li>
+                <li><strong>Insertion</strong> : Images, liens, tableaux, vidéos</li>
+                <li><strong>Vue divisée</strong> : Édition et aperçu simultanés</li>
+                <li><strong>Export</strong> : Formats HTML et texte brut</li>
+            </ul>
+            
+            <h4>Raccourcis clavier</h4>
+            <ul>
+                <li><strong>Ctrl+B</strong> : Gras</li>
+                <li><strong>Ctrl+I</strong> : Italique</li>
+                <li><strong>Ctrl+U</strong> : Souligné</li>
+                <li><strong>Ctrl+Z</strong> : Annuler</li>
+                <li><strong>Ctrl+Y</strong> : Rétablir</li>
+                <li><strong>Ctrl+K</strong> : Insérer un lien</li>
+                <li><strong>Alt+P</strong> : Basculer en mode aperçu</li>
+            </ul>
+        </div>
+    </div>
+</div> 

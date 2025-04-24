@@ -3,6 +3,9 @@
  * Gère la conversion entre différentes devises avec des taux de change
  */
 
+// Dernière mise à jour des taux
+let lastUpdateDate = '2024-03-15';
+
 // Taux de change (dernière mise à jour: 2024-03-15)
 const exchangeRates = {
     EUR: 1.00,     // Euro (base)
@@ -67,7 +70,12 @@ let state = {
     toCurrency: 'USD',
     result: 0,
     history: [],
-    currentRegion: 'popular'
+    currentRegion: 'popular',
+    rates: { ...exchangeRates },
+    lastUpdate: new Date().toISOString(),
+    isOffline: false,
+    historicalData: {},
+    chartInstance: null
 };
 
 // Liste des devises principales
@@ -94,6 +102,10 @@ const MAIN_CURRENCIES = [
     { code: 'NOK', name: 'Couronne norvégienne', symbol: 'kr', flag: '🇳🇴' }
 ];
 
+// URL de l'API pour les taux de change (utiliser votre propre clé API si nécessaire)
+const EXCHANGE_API_URL = 'https://open.er-api.com/v6/latest/EUR';
+const HISTORICAL_API_BASE = 'https://open.er-api.com/v6/historical/';
+
 /**
  * Initialise le convertisseur de devises
  */
@@ -106,15 +118,11 @@ function initCurrencyConverter() {
         return;
     }
     
-    const fromSelect = document.getElementById('fromCurrency');
-    const toSelect = document.getElementById('toCurrency');
-    const amountInput = document.getElementById('amount');
-    const resultDisplay = document.getElementById('result');
+    // Charger les taux sauvegardés
+    loadSavedRates();
     
-    if (!fromSelect || !toSelect || !amountInput || !resultDisplay) {
-        console.log('Éléments du convertisseur de devises manquants dans la page');
-        return;
-    }
+    // Charger l'historique des conversions
+    loadConversionHistory();
     
     // Initialiser les sélecteurs de devises
     initCurrencySelects();
@@ -122,11 +130,20 @@ function initCurrencyConverter() {
     // Configurer les écouteurs d'événements
     setupEventListeners();
     
+    // Vérifier si une mise à jour est nécessaire
+    checkAndUpdateRates();
+    
     // Charger les conversions populaires
     loadPopularConversions();
     
+    // Initialiser le graphique
+    initCurrencyChart();
+    
     // Effectuer une conversion initiale
     convertCurrency();
+    
+    // Vérifier la connectivité et afficher le mode hors ligne si nécessaire
+    checkOfflineStatus();
     
     console.log('Convertisseur de devises initialisé');
 }
@@ -169,47 +186,179 @@ function initCurrencySelects() {
  */
 function setupEventListeners() {
     // Éléments
-    const amountInput = document.getElementById('amount');
+    const amountInput = document.getElementById('fromAmount');
     const fromSelect = document.getElementById('fromCurrency');
     const toSelect = document.getElementById('toCurrency');
     const swapButton = document.getElementById('swapCurrencies');
-    const tabs = document.querySelectorAll('.tab');
+    const refreshButton = document.getElementById('refreshRates');
+    const chartPeriodButtons = document.querySelectorAll('.chart-period button');
+    const helpButton = document.getElementById('currencyHelp');
+    const closeHelpButton = document.getElementById('closeCurrencyHelp');
+    const fullscreenButton = document.getElementById('currencyFullscreen');
     
-    if (!amountInput || !fromSelect || !toSelect || !swapButton || tabs.length === 0) {
+    if (amountInput) amountInput.addEventListener('input', convertCurrency);
+    if (fromSelect) fromSelect.addEventListener('change', handleCurrencyChange);
+    if (toSelect) toSelect.addEventListener('change', handleCurrencyChange);
+    if (swapButton) swapButton.addEventListener('click', swapCurrencies);
+    if (refreshButton) refreshButton.addEventListener('click', forceUpdateRates);
+    
+    // Écouteurs pour les périodes du graphique
+    if (chartPeriodButtons) {
+        chartPeriodButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const period = parseInt(button.dataset.period);
+                if (!isNaN(period)) {
+                    updateChartPeriod(period);
+                }
+            });
+        });
+    }
+    
+    // Écouteurs pour l'aide
+    if (helpButton) {
+        helpButton.addEventListener('click', () => {
+            document.getElementById('currencyHelpPanel').classList.toggle('visible');
+        });
+    }
+    
+    if (closeHelpButton) {
+        closeHelpButton.addEventListener('click', () => {
+            document.getElementById('currencyHelpPanel').classList.remove('visible');
+        });
+    }
+    
+    // Écouteur pour le mode plein écran
+    if (fullscreenButton) {
+        fullscreenButton.addEventListener('click', toggleFullscreen);
+    }
+    
+    // Écouteur pour détecter les changements de connectivité
+    window.addEventListener('online', handleOnlineStatus);
+    window.addEventListener('offline', handleOfflineStatus);
+}
+
+/**
+ * Gère les changements de devise pour mettre à jour le graphique
+ */
+function handleCurrencyChange() {
+    convertCurrency();
+    
+    // Mettre à jour le graphique avec les nouvelles devises
+    const fromCurrency = document.getElementById('fromCurrency').value;
+    const toCurrency = document.getElementById('toCurrency').value;
+    
+    if (fromCurrency && toCurrency) {
+        fetchHistoricalData(fromCurrency, toCurrency);
+    }
+}
+
+/**
+ * Vérifie si les taux de change doivent être mis à jour
+ */
+function checkAndUpdateRates() {
+    // Si pas de taux ou pas de date de dernière mise à jour, mettre à jour
+    if (!state.rates || !state.lastUpdate) {
+        updateRates();
         return;
     }
     
-    // Écouteurs pour les entrées
-    amountInput.addEventListener('input', convertCurrency);
-    fromSelect.addEventListener('change', convertCurrency);
-    toSelect.addEventListener('change', convertCurrency);
+    // Mettre à jour si la dernière mise à jour date de plus de 24 heures
+    const now = new Date();
+    const lastUpdate = new Date(state.lastUpdate);
+    const hoursDiff = (now - lastUpdate) / (1000 * 60 * 60);
     
-    // Écouteur pour le bouton d'échange
-    swapButton.addEventListener('click', swapCurrencies);
+    if (hoursDiff > 24) {
+        updateRates();
+    } else {
+        // Afficher la date de dernière mise à jour
+        document.getElementById('lastUpdate').textContent = `${formatDate(lastUpdate)}`;
+    }
+}
+
+/**
+ * Force une mise à jour des taux de change
+ */
+function forceUpdateRates() {
+    updateRates(true);
+}
+
+/**
+ * Met à jour les taux de change depuis une API
+ * @param {boolean} force - Force la mise à jour même si ce n'est pas nécessaire
+ */
+function updateRates(force = false) {
+    if (!navigator.onLine) {
+        showNotification('Vous êtes hors ligne. Impossible de mettre à jour les taux.', 'warning');
+        return;
+    }
     
-    // Écouteurs pour les onglets de région
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            // Mettre à jour l'onglet actif
-            tabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
+    // Afficher un message de chargement
+    const lastUpdateElement = document.getElementById('lastUpdate');
+    if (lastUpdateElement) {
+        lastUpdateElement.innerHTML = '<span class="loading-indicator">Mise à jour en cours...</span>';
+    }
+    
+    // Requête à l'API de taux de change
+    fetch(EXCHANGE_API_URL)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erreur réseau lors de la récupération des taux de change');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data && data.rates) {
+                // Mettre à jour l'état avec les nouveaux taux
+                state.rates = data.rates;
+                state.lastUpdate = new Date().toISOString();
+                
+                // Sauvegarder les taux
+                saveRates();
+                
+                // Afficher la date de mise à jour
+                if (lastUpdateElement) {
+                    lastUpdateElement.textContent = formatDate(new Date());
+                }
+                
+                // Mettre à jour la conversion
+                convertCurrency();
+                
+                // Rafraîchir les conversions populaires
+                loadPopularConversions();
+                
+                // Notification de succès
+                showNotification('Taux de change mis à jour avec succès', 'success');
+            }
+        })
+        .catch(error => {
+            console.error('Erreur lors de la mise à jour des taux de change:', error);
+            showNotification('Impossible de mettre à jour les taux de change', 'error');
             
-            // Changer la région sélectionnée
-            state.currentRegion = tab.dataset.region;
-            
-            // Charger les conversions pour cette région
-            loadRegionConversions(state.currentRegion);
+            // Rétablir l'affichage normal si erreur
+            if (lastUpdateElement && state.lastUpdate) {
+                lastUpdateElement.textContent = formatDate(new Date(state.lastUpdate));
+            }
         });
-    });
 }
 
 /**
  * Convertit la devise
  */
 function convertCurrency() {
-    const amount = parseFloat(document.getElementById('amount').value);
-    const fromCurrency = document.getElementById('fromCurrency').value;
-    const toCurrency = document.getElementById('toCurrency').value;
+    const amountInput = document.getElementById('fromAmount');
+    const fromSelect = document.getElementById('fromCurrency');
+    const toSelect = document.getElementById('toCurrency');
+    const toAmount = document.getElementById('toAmount');
+    const conversionRate = document.getElementById('conversionRate');
+    const inverseRate = document.getElementById('inverseRate');
+    
+    if (!amountInput || !fromSelect || !toSelect || !toAmount) {
+        return;
+    }
+    
+    const amount = parseFloat(amountInput.value);
+    const fromCurrency = fromSelect.value;
+    const toCurrency = toSelect.value;
     
     if (isNaN(amount) || !fromCurrency || !toCurrency) {
         return;
@@ -225,7 +374,29 @@ function convertCurrency() {
     state.result = result;
     
     // Afficher le résultat
-    updateResultDisplay(result);
+    if (toAmount) {
+        toAmount.value = result.toFixed(2);
+    }
+    
+    // Mettre à jour l'affichage des taux
+    if (conversionRate) {
+        const rate = calculateConversion(1, fromCurrency, toCurrency);
+        conversionRate.textContent = `1 ${fromCurrency} = ${rate.toFixed(4)} ${toCurrency}`;
+    }
+    
+    if (inverseRate) {
+        const rate = calculateConversion(1, toCurrency, fromCurrency);
+        inverseRate.textContent = `1 ${toCurrency} = ${rate.toFixed(4)} ${fromCurrency}`;
+    }
+    
+    // Ajouter à l'historique
+    addToConversionHistory({
+        fromAmount: amount,
+        fromCurrency: fromCurrency,
+        toCurrency: toCurrency,
+        toAmount: result,
+        timestamp: new Date().toISOString()
+    });
 }
 
 /**
@@ -236,29 +407,24 @@ function convertCurrency() {
  * @returns {number} - Montant converti
  */
 function calculateConversion(amount, fromCurrency, toCurrency) {
-    // Convertir en EUR d'abord (la devise de base)
-    const amountInEUR = fromCurrency === 'EUR' ? amount : amount / exchangeRates[fromCurrency];
-    
-    // Puis convertir de EUR vers la devise cible
-    return toCurrency === 'EUR' ? amountInEUR : amountInEUR * exchangeRates[toCurrency];
-}
-
-/**
- * Mettre à jour l'affichage du résultat
- * @param {number} result - Résultat de la conversion
- */
-function updateResultDisplay(result) {
-    const resultInput = document.getElementById('result');
-    const resultText = document.getElementById('conversionResult');
-    
-    if (!resultInput || !resultText) {
-        return;
+    if (!state.rates) {
+        console.warn('Taux de change non disponibles');
+        return 0;
     }
     
-    const formatted = result.toFixed(2);
-    resultInput.value = formatted;
+    // Si c'est la même devise, renvoyer le même montant
+    if (fromCurrency === toCurrency) {
+        return amount;
+    }
     
-    resultText.textContent = `${state.amount} ${state.fromCurrency} = ${formatted} ${state.toCurrency}`;
+    // Taux de conversion pour la devise source (vers EUR)
+    const fromRate = state.rates[fromCurrency] || 1;
+    
+    // Taux de conversion pour la devise cible (depuis EUR)
+    const toRate = state.rates[toCurrency] || 1;
+    
+    // Convertir en devise de base (EUR) puis vers la devise cible
+    return amount * (toRate / fromRate);
 }
 
 /**
@@ -279,20 +445,24 @@ function swapCurrencies() {
     
     // Mettre à jour la conversion
     convertCurrency();
+    
+    // Mettre à jour le graphique avec les nouvelles devises
+    fetchHistoricalData(fromSelect.value, toSelect.value);
+    
+    // Animation du bouton
+    const swapButton = document.getElementById('swapCurrencies');
+    if (swapButton) {
+        swapButton.classList.add('active');
+        setTimeout(() => {
+            swapButton.classList.remove('active');
+        }, 500);
+    }
 }
 
 /**
  * Charge les conversions populaires
  */
 function loadPopularConversions() {
-    loadRegionConversions('popular');
-}
-
-/**
- * Charge les conversions pour une région donnée
- * @param {string} region - Région à charger
- */
-function loadRegionConversions(region) {
     const popularDiv = document.getElementById('popularConversions');
     
     if (!popularDiv) {
@@ -302,25 +472,74 @@ function loadRegionConversions(region) {
     // Vider la div
     popularDiv.innerHTML = '';
     
-    // Récupérer les devises de la région
-    const currencies = currencyRegions[region] || currencyRegions.popular;
+    // Récupérer les devises populaires
+    const currencies = ['USD', 'EUR', 'GBP', 'JPY', 'CHF', 'CAD', 'AUD', 'CNY'];
     
-    // Pour chaque devise, afficher la conversion par rapport à l'euro
-    currencies.forEach(currency => {
-        if (currency === 'EUR') return; // Éviter EUR vers EUR
-        
-        const conversionItem = document.createElement('div');
-        conversionItem.className = 'conversion-item';
-        
-        const rate = calculateConversion(1, 'EUR', currency).toFixed(2);
-        
-        conversionItem.innerHTML = `
-            <div class="from">1 EUR = ${rate} ${currency}</div>
-            <div class="to">1 ${currency} = ${calculateConversion(1, currency, 'EUR').toFixed(2)} EUR</div>
-        `;
-        
-        popularDiv.appendChild(conversionItem);
-    });
+    // Créer un conteneur flex pour l'affichage en grille
+    const gridContainer = document.createElement('div');
+    gridContainer.className = 'conversion-grid';
+    
+    // Pour chaque paire de devises populaires
+    for (let i = 0; i < currencies.length; i++) {
+        for (let j = i + 1; j < currencies.length; j++) {
+            // Éviter les paires de même devise
+            if (currencies[i] === currencies[j]) continue;
+            
+            // Limiter à 8 paires pour éviter de surcharger l'interface
+            if (gridContainer.children.length >= 8) break;
+            
+            const fromCurrency = currencies[i];
+            const toCurrency = currencies[j];
+            
+            // Calculer les taux
+            const directRate = calculateConversion(1, fromCurrency, toCurrency);
+            
+            // Créer l'élément de conversion
+            const conversionItem = document.createElement('div');
+            conversionItem.className = 'conversion-item';
+            
+            // Ajouter les drapeaux et symboles
+            const fromCurrencyInfo = MAIN_CURRENCIES.find(c => c.code === fromCurrency) || { flag: '', symbol: '' };
+            const toCurrencyInfo = MAIN_CURRENCIES.find(c => c.code === toCurrency) || { flag: '', symbol: '' };
+            
+            conversionItem.innerHTML = `
+                <div class="conversion-header">
+                    <span class="currency-flag">${fromCurrencyInfo.flag}</span>
+                    <span class="currency-code">${fromCurrency}</span>
+                    <span class="conversion-arrow">→</span>
+                    <span class="currency-flag">${toCurrencyInfo.flag}</span>
+                    <span class="currency-code">${toCurrency}</span>
+                </div>
+                <div class="conversion-rate">${directRate.toFixed(4)}</div>
+                <button class="use-conversion" data-from="${fromCurrency}" data-to="${toCurrency}">
+                    <i class="fas fa-exchange-alt"></i>
+                </button>
+            `;
+            
+            // Ajouter un écouteur pour utiliser cette conversion
+            const useButton = conversionItem.querySelector('.use-conversion');
+            if (useButton) {
+                useButton.addEventListener('click', function() {
+                    const fromCurrency = this.dataset.from;
+                    const toCurrency = this.dataset.to;
+                    
+                    // Mettre à jour les sélecteurs
+                    document.getElementById('fromCurrency').value = fromCurrency;
+                    document.getElementById('toCurrency').value = toCurrency;
+                    
+                    // Mettre à jour la conversion
+                    convertCurrency();
+                    
+                    // Mettre à jour le graphique
+                    fetchHistoricalData(fromCurrency, toCurrency);
+                });
+            }
+            
+            gridContainer.appendChild(conversionItem);
+        }
+    }
+    
+    popularDiv.appendChild(gridContainer);
 }
 
 /**
@@ -333,80 +552,37 @@ function capitalizeFirstLetter(str) {
 }
 
 /**
- * Vérifie si les taux de change doivent être mis à jour
- * @returns {boolean} - True si les taux doivent être mis à jour
- */
-function shouldUpdateRates() {
-    // Si pas de taux ou pas de date de dernière mise à jour, mettre à jour
-    if (!state.rates || !state.lastUpdate) {
-        return true;
-    }
-    
-    // Mettre à jour si la dernière mise à jour date de plus de 24 heures
-    const now = new Date();
-    const lastUpdate = new Date(state.lastUpdate);
-    const hoursDiff = (now - lastUpdate) / (1000 * 60 * 60);
-    
-    return hoursDiff > 24;
-}
-
-/**
- * Met à jour les taux de change depuis une API
- */
-function updateRates() {
-    // Afficher un message de chargement
-    document.getElementById('lastUpdate').textContent = 'Mise à jour en cours...';
-    
-    // Simuler une requête API (à remplacer par une vraie API)
-    setTimeout(() => {
-        // Taux de change simulés (à remplacer par des taux réels)
-        const mockRates = {
-            EUR: 1,
-            USD: 1.09,
-            GBP: 0.85,
-            JPY: 160.23,
-            CAD: 1.47,
-            AUD: 1.63,
-            CHF: 0.97,
-            CNY: 7.86,
-            INR: 90.82,
-            BRL: 5.42
-        };
-        
-        // Mettre à jour l'état
-        state.rates = mockRates;
-        state.lastUpdate = new Date().toISOString();
-        
-        // Sauvegarder les taux
-        saveRates();
-        
-        // Afficher les taux et convertir
-        displayRates();
-        convertCurrency();
-        
-        // Afficher une notification
-        showNotification('Taux de change mis à jour', 'success');
-    }, 1000);
-}
-
-/**
  * Sauvegarde les taux de change dans le stockage local
  */
 function saveRates() {
-    localStorage.setItem('currencyRates', JSON.stringify(state.rates));
-    localStorage.setItem('ratesLastUpdate', state.lastUpdate);
+    try {
+        localStorage.setItem('currencyRates', JSON.stringify(state.rates));
+        localStorage.setItem('ratesLastUpdate', state.lastUpdate);
+    } catch (e) {
+        console.error('Erreur lors de l\'enregistrement des taux:', e);
+    }
 }
 
 /**
  * Charge les taux de change depuis le stockage local
  */
 function loadSavedRates() {
-    const savedRates = localStorage.getItem('currencyRates');
-    const lastUpdate = localStorage.getItem('ratesLastUpdate');
-    
-    if (savedRates && lastUpdate) {
-        state.rates = JSON.parse(savedRates);
-        state.lastUpdate = lastUpdate;
+    try {
+        const savedRates = localStorage.getItem('currencyRates');
+        const lastUpdate = localStorage.getItem('ratesLastUpdate');
+        
+        if (savedRates && lastUpdate) {
+            state.rates = JSON.parse(savedRates);
+            state.lastUpdate = lastUpdate;
+            
+            // Afficher la date de dernière mise à jour
+            const lastUpdateElement = document.getElementById('lastUpdate');
+            if (lastUpdateElement) {
+                lastUpdateElement.textContent = formatDate(new Date(lastUpdate));
+            }
+        }
+    } catch (e) {
+        console.error('Erreur lors du chargement des taux sauvegardés:', e);
     }
 }
 
@@ -479,9 +655,9 @@ function selectCurrencyGroup(groupName) {
  * @param {Object} conversion - La conversion à ajouter
  */
 function addToConversionHistory(conversion) {
-    // Éviter les doublons
+    // Éviter les doublons ou les conversions trop similaires
     const isDuplicate = state.history.some(item => 
-        item.fromAmount === conversion.fromAmount && 
+        Math.abs(item.fromAmount - conversion.fromAmount) < 0.01 && 
         item.fromCurrency === conversion.fromCurrency &&
         item.toCurrency === conversion.toCurrency
     );
@@ -499,8 +675,11 @@ function addToConversionHistory(conversion) {
     // Sauvegarder l'historique
     saveConversionHistory();
     
-    // Mettre à jour l'affichage
-    updateConversionHistoryDisplay();
+    // Mettre à jour l'affichage si l'élément existe
+    const historyContainer = document.getElementById('currencyHistory');
+    if (historyContainer) {
+        updateConversionHistoryDisplay();
+    }
 }
 
 /**
@@ -508,6 +687,8 @@ function addToConversionHistory(conversion) {
  */
 function updateConversionHistoryDisplay() {
     const historyContainer = document.getElementById('currencyHistory');
+    if (!historyContainer) return;
+    
     historyContainer.innerHTML = '';
     
     if (state.history.length === 0) {
@@ -525,7 +706,12 @@ function updateConversionHistoryDisplay() {
         
         const content = document.createElement('div');
         content.className = 'history-content';
-        content.textContent = `${conversion.fromAmount} ${conversion.fromCurrency} = ${conversion.toAmount.toFixed(2)} ${conversion.toCurrency}`;
+        content.innerHTML = `
+            ${conversion.fromAmount.toFixed(2)} 
+            <span class="currency-code">${conversion.fromCurrency}</span> = 
+            ${conversion.toAmount.toFixed(2)} 
+            <span class="currency-code">${conversion.toCurrency}</span>
+        `;
         
         const useBtn = document.createElement('button');
         useBtn.className = 'use-btn';
@@ -550,17 +736,24 @@ function updateConversionHistoryDisplay() {
  * Sauvegarde l'historique des conversions dans le stockage local
  */
 function saveConversionHistory() {
-    localStorage.setItem('currencyHistory', JSON.stringify(state.history));
+    try {
+        localStorage.setItem('currencyHistory', JSON.stringify(state.history));
+    } catch (e) {
+        console.error('Erreur lors de l\'enregistrement de l\'historique:', e);
+    }
 }
 
 /**
  * Charge l'historique des conversions depuis le stockage local
  */
 function loadConversionHistory() {
-    const savedHistory = localStorage.getItem('currencyHistory');
-    if (savedHistory) {
-        state.history = JSON.parse(savedHistory);
-        updateConversionHistoryDisplay();
+    try {
+        const savedHistory = localStorage.getItem('currencyHistory');
+        if (savedHistory) {
+            state.history = JSON.parse(savedHistory);
+        }
+    } catch (e) {
+        console.error('Erreur lors du chargement de l\'historique:', e);
     }
 }
 
@@ -580,6 +773,8 @@ function clearCurrencyHistory() {
  * @returns {string} - La date formatée
  */
 function formatDate(date) {
+    if (!date) return 'N/A';
+    
     return date.toLocaleDateString('fr-FR', {
         day: '2-digit',
         month: '2-digit',
@@ -595,11 +790,351 @@ function formatDate(date) {
  * @param {string} type - Le type de notification (info, success, warning, error)
  */
 function showNotification(message, type = 'info') {
-    // Vérifier si la fonction est disponible globalement
-    if (typeof window.showNotification === 'function') {
-        window.showNotification(message, type);
+    // Créer l'élément de notification s'il n'existe pas déjà
+    let notificationContainer = document.getElementById('currencyNotifications');
+    
+    if (!notificationContainer) {
+        notificationContainer = document.createElement('div');
+        notificationContainer.id = 'currencyNotifications';
+        notificationContainer.className = 'notification-container';
+        document.body.appendChild(notificationContainer);
+    }
+    
+    // Créer la notification
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    
+    // Ajouter une icône selon le type
+    let icon = '';
+    switch (type) {
+        case 'success': icon = '<i class="fas fa-check-circle"></i>'; break;
+        case 'warning': icon = '<i class="fas fa-exclamation-triangle"></i>'; break;
+        case 'error': icon = '<i class="fas fa-times-circle"></i>'; break;
+        default: icon = '<i class="fas fa-info-circle"></i>';
+    }
+    
+    notification.innerHTML = `
+        <div class="notification-icon">${icon}</div>
+        <div class="notification-message">${message}</div>
+        <button class="notification-close"><i class="fas fa-times"></i></button>
+    `;
+    
+    // Ajouter au conteneur
+    notificationContainer.appendChild(notification);
+    
+    // Bouton de fermeture
+    const closeButton = notification.querySelector('.notification-close');
+    if (closeButton) {
+        closeButton.addEventListener('click', () => {
+            notification.classList.add('closing');
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
+        });
+    }
+    
+    // Auto-fermeture après 5 secondes
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.classList.add('closing');
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
+        }
+    }, 5000);
+}
+
+/**
+ * Vérifie et gère le statut hors ligne
+ */
+function checkOfflineStatus() {
+    const offlineMessage = document.getElementById('currencyOfflineMessage');
+    const cachedTime = document.getElementById('cachedTime');
+    
+    if (!navigator.onLine) {
+        handleOfflineStatus();
     } else {
-        console.log(`Notification (${type}): ${message}`);
+        // Cacher le message hors ligne
+        if (offlineMessage) {
+            offlineMessage.classList.remove('visible');
+        }
+        state.isOffline = false;
+    }
+}
+
+/**
+ * Gère le passage en mode hors ligne
+ */
+function handleOfflineStatus() {
+    const offlineMessage = document.getElementById('currencyOfflineMessage');
+    const cachedTime = document.getElementById('cachedTime');
+    
+    state.isOffline = true;
+    
+    if (offlineMessage) {
+        offlineMessage.classList.add('visible');
+    }
+    
+    if (cachedTime && state.lastUpdate) {
+        cachedTime.textContent = formatDate(new Date(state.lastUpdate));
+    }
+    
+    showNotification('Vous êtes hors ligne. Utilisation des taux enregistrés.', 'warning');
+}
+
+/**
+ * Gère le retour en ligne
+ */
+function handleOnlineStatus() {
+    const offlineMessage = document.getElementById('currencyOfflineMessage');
+    
+    if (offlineMessage) {
+        offlineMessage.classList.remove('visible');
+    }
+    
+    state.isOffline = false;
+    
+    showNotification('Connexion rétablie', 'success');
+    
+    // Vérifier si une mise à jour des taux est nécessaire
+    checkAndUpdateRates();
+}
+
+/**
+ * Initialise le graphique des taux de change
+ */
+function initCurrencyChart() {
+    const chartCanvas = document.getElementById('currencyChart');
+    
+    if (!chartCanvas) {
+        return;
+    }
+    
+    // Vérifier si Chart.js est disponible
+    if (typeof Chart === 'undefined') {
+        // Charger Chart.js dynamiquement s'il n'est pas déjà chargé
+        loadChartJS().then(() => {
+            createChart(chartCanvas);
+            fetchHistoricalData(state.fromCurrency, state.toCurrency);
+        }).catch(err => {
+            console.error('Impossible de charger Chart.js:', err);
+        });
+    } else {
+        createChart(chartCanvas);
+        fetchHistoricalData(state.fromCurrency, state.toCurrency);
+    }
+}
+
+/**
+ * Charge dynamiquement Chart.js si nécessaire
+ * @returns {Promise} - Promise résolue quand Chart.js est chargé
+ */
+function loadChartJS() {
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+        script.onload = () => resolve();
+        script.onerror = () => reject(new Error('Impossible de charger Chart.js'));
+        document.head.appendChild(script);
+    });
+}
+
+/**
+ * Crée le graphique initial
+ * @param {HTMLCanvasElement} canvas - L'élément canvas pour le graphique
+ */
+function createChart(canvas) {
+    // Détruire l'instance précédente si elle existe
+    if (state.chartInstance) {
+        state.chartInstance.destroy();
+    }
+    
+    // Créer un nouveau graphique vide
+    state.chartInstance = new Chart(canvas, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Taux de change',
+                data: [],
+                fill: false,
+                borderColor: 'rgb(75, 128, 240)',
+                tension: 0.1,
+                pointBackgroundColor: 'rgb(75, 128, 240)',
+                pointRadius: 3,
+                pointHoverRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const date = new Date(tooltipItems[0].label);
+                            return date.toLocaleDateString('fr-FR', {
+                                day: '2-digit',
+                                month: 'short',
+                                year: 'numeric'
+                            });
+                        }
+                    }
+                },
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                x: {
+                    display: true,
+                    title: {
+                        display: false
+                    },
+                    ticks: {
+                        maxRotation: 45,
+                        minRotation: 45
+                    }
+                },
+                y: {
+                    display: true,
+                    beginAtZero: false
+                }
+            }
+        }
+    });
+}
+
+/**
+ * Met à jour la période du graphique
+ * @param {number} days - Nombre de jours d'historique à afficher
+ */
+function updateChartPeriod(days) {
+    // Mettre à jour l'apparence des boutons
+    document.querySelectorAll('.chart-period button').forEach(btn => {
+        if (parseInt(btn.dataset.period) === days) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+    
+    // Obtenir les devises actuelles
+    const fromCurrency = document.getElementById('fromCurrency').value;
+    const toCurrency = document.getElementById('toCurrency').value;
+    
+    // Charger les données historiques pour la période
+    fetchHistoricalData(fromCurrency, toCurrency, days);
+}
+
+/**
+ * Récupère les données historiques des taux de change
+ * @param {string} fromCurrency - Devise source
+ * @param {string} toCurrency - Devise cible
+ * @param {number} days - Nombre de jours d'historique (défaut: 30)
+ */
+function fetchHistoricalData(fromCurrency, toCurrency, days = 30) {
+    if (!navigator.onLine) {
+        showNotification('Vous êtes hors ligne. Impossible de charger les données historiques.', 'warning');
+        return;
+    }
+    
+    // Calculer les dates
+    const endDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - days);
+    
+    // Formater les dates pour l'API (YYYY-MM-DD)
+    const formatAPIDate = (date) => {
+        return date.toISOString().split('T')[0];
+    };
+    
+    // URL de l'API pour les données historiques
+    const endDateStr = formatAPIDate(endDate);
+    const startDateStr = formatAPIDate(startDate);
+    
+    // Pour cet exemple, on utilise une API simple ou simulation
+    // En production, utiliser une vraie API avec authentification
+    // Exemples: EXCHANGERATE-API, Alpha Vantage, Fixer.io
+    
+    // Simuler des données historiques pour la démo
+    const simulateHistoricalData = () => {
+        const data = {
+            labels: [],
+            rates: []
+        };
+        
+        // Générer des données pour chaque jour
+        let currentDate = new Date(startDate);
+        const baseCurrencyRate = 1;
+        
+        while (currentDate <= endDate) {
+            // Formater la date pour l'affichage
+            const dateStr = formatAPIDate(currentDate);
+            data.labels.push(dateStr);
+            
+            // Simuler une fluctuation aléatoire autour de la valeur actuelle
+            const currentRate = calculateConversion(1, fromCurrency, toCurrency);
+            const randomFactor = 0.98 + (Math.random() * 0.04); // Entre 0.98 et 1.02
+            data.rates.push(currentRate * randomFactor);
+            
+            // Passer au jour suivant
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+        
+        return data;
+    };
+    
+    // Simuler le chargement des données
+    const simulatedData = simulateHistoricalData();
+    
+    // Mettre à jour le graphique
+    updateChart(fromCurrency, toCurrency, simulatedData);
+}
+
+/**
+ * Met à jour le graphique avec de nouvelles données
+ * @param {string} fromCurrency - Devise source
+ * @param {string} toCurrency - Devise cible
+ * @param {Object} data - Données historiques
+ */
+function updateChart(fromCurrency, toCurrency, data) {
+    if (!state.chartInstance) {
+        console.warn('Le graphique n\'est pas initialisé');
+        return;
+    }
+    
+    // Mettre à jour les labels et les données
+    state.chartInstance.data.labels = data.labels;
+    state.chartInstance.data.datasets[0].data = data.rates;
+    
+    // Mettre à jour le titre du dataset
+    state.chartInstance.data.datasets[0].label = `${fromCurrency} vers ${toCurrency}`;
+    
+    // Rafraîchir le graphique
+    state.chartInstance.update();
+}
+
+/**
+ * Bascule le mode plein écran pour le convertisseur
+ */
+function toggleFullscreen() {
+    const container = document.getElementById('currencyTool');
+    const button = document.getElementById('currencyFullscreen');
+    
+    if (!container || !button) return;
+    
+    container.classList.toggle('fullscreen');
+    
+    // Changer l'icône selon l'état
+    if (container.classList.contains('fullscreen')) {
+        button.innerHTML = '<i class="fas fa-compress"></i>';
+    } else {
+        button.innerHTML = '<i class="fas fa-expand"></i>';
     }
 }
 
