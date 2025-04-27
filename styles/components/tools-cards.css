@@ -1,0 +1,193 @@
+/**
+ * Styles pour les cartes d'outils
+ * Design moderne et accessible selon la nouvelle conception
+ */
+
+/* Container pour la grille d'outils */
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+/* Carte d'outil individuelle */
+.tool-card {
+    background: var(--card-bg);
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08), 0 1.5px 4px rgba(0,0,0,0.04);
+    overflow: hidden;
+    transition: transform 0.25s var(--ease-out-back), box-shadow 0.25s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border: 1px solid var(--border-color, #e0e6ed);
+}
+
+.tool-card:hover {
+    transform: translateY(-8px) scale(1.025);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.08);
+    border-color: var(--primary-color, #4a90e2);
+}
+
+/* Bannière colorée en haut de la carte */
+.tool-card::before {
+    display: none;
+}
+
+/* En-tête de la carte avec icône */
+.tool-card-header {
+    padding: var(--spacing-md) var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    border-bottom: none;
+}
+
+.tool-card-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--primary-light, #e3f0fc) 60%, var(--primary-color, #4a90e2) 100%);
+    border-radius: 12px;
+    font-size: 1.5rem;
+    color: var(--primary-color, #4a90e2);
+    box-shadow: 0 2px 8px rgba(74,144,226,0.08);
+}
+
+.tool-card-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--primary-color, #4a90e2);
+    letter-spacing: 0.01em;
+}
+
+/* Corps de la carte */
+.tool-card-body {
+    padding: var(--spacing-md) var(--spacing-lg);
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.tool-card-description {
+    color: var(--text-secondary, #6b7280);
+    margin-bottom: var(--spacing-md);
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* Pied de la carte avec bouton */
+.tool-card-footer {
+    padding: var(--spacing-md) var(--spacing-lg);
+    display: flex;
+    justify-content: flex-end;
+    background: transparent;
+    border-radius: 0 0 18px 18px;
+}
+
+.tool-card-button {
+    padding: 10px 22px;
+    background: linear-gradient(90deg, var(--primary-color, #4a90e2) 60%, var(--primary-color-hover, #1d5fa8) 100%);
+    color: var(--text-on-primary, #fff);
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.18s, box-shadow 0.18s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 2px 8px rgba(74,144,226,0.08);
+    font-size: 1rem;
+}
+
+.tool-card-button:hover {
+    background: linear-gradient(90deg, var(--primary-color-hover, #1d5fa8) 60%, var(--primary-color, #4a90e2) 100%);
+    box-shadow: 0 4px 16px rgba(74,144,226,0.16);
+}
+
+.tool-card-button i {
+    font-size: 1rem;
+}
+
+/* Variantes de cartes pour différentes catégories */
+.tool-card.calculation {
+    border-left: none;
+}
+
+.tool-card.conversion {
+    border-left: none;
+}
+
+.tool-card.utility {
+    border-left: none;
+}
+
+.tool-card.text {
+    border-left: none;
+}
+
+/* États des cartes */
+.tool-card.new::after {
+    content: 'Nouveau';
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: var(--success-color, #22c55e);
+    color: #fff;
+    font-size: 0.8rem;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 600;
+    box-shadow: 0 1px 4px rgba(34,197,94,0.08);
+}
+
+.tool-card.popular::after {
+    content: 'Populaire';
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: var(--warning-color, #f59e42);
+    color: #fff;
+    font-size: 0.8rem;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 600;
+    box-shadow: 0 1px 4px rgba(245,158,66,0.08);
+}
+
+/* Adaptation mobile */
+@media (max-width: 768px) {
+    .tools-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: var(--spacing-md);
+    }
+    
+    .tool-card-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 1.1rem;
+    }
+    
+    .tool-card-title {
+        font-size: 1.05rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .tools-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-sm);
+    }
+    .tool-card {
+        border-radius: 12px;
+    }
+    .tool-card-footer {
+        border-radius: 0 0 12px 12px;
+    }
+} 

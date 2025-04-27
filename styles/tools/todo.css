@@ -9,7 +9,11 @@
     padding: 2rem;
     background: var(--card-bg);
     border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--box-shadow);
+}
+
+[data-theme="dark"] .todo-container {
+    background: #111;
 }
 
 .todo-header {
@@ -23,6 +27,10 @@
     font-size: 1.5rem;
     font-weight: 600;
     color: var(--text-color);
+}
+
+[data-theme="dark"] .todo-title {
+    color: #fff;
 }
 
 .todo-input-container {
@@ -46,7 +54,7 @@
     border: none;
     border-radius: 8px;
     background: var(--primary-color);
-    color: white;
+    color: var(--text-on-primary);
     cursor: pointer;
     transition: all 0.2s ease;
 }
@@ -82,7 +90,7 @@
 
 .todo-filter.active {
     background: var(--primary-color);
-    color: white;
+    color: var(--text-on-primary);
 }
 
 .todo-list {
@@ -96,13 +104,14 @@
     align-items: center;
     gap: 1rem;
     padding: 1rem;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--todo-item-border);
     border-radius: 8px;
-    background: var(--input-bg);
+    background: var(--todo-item-bg);
     transition: all 0.2s ease;
 }
 
 .todo-item:hover {
+    background: var(--todo-item-bg-hover);
     transform: translateX(5px);
 }
 
@@ -143,7 +152,7 @@
 
 .todo-action.delete {
     background: var(--danger-color);
-    color: white;
+    color: var(--text-on-primary);
 }
 
 .todo-action.delete:hover {
@@ -184,11 +193,11 @@
 
 /* Dark theme */
 [data-theme="dark"] .todo-item {
-    background-color: var(--todo-item-bg);
+    background: var(--todo-item-bg);
 }
 
 [data-theme="dark"] .todo-item:hover {
-    background-color: var(--todo-item-bg-hover);
+    background: var(--todo-item-bg-hover);
 }
 
 /* Responsive styles */

@@ -3,6 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' https: data:; font-src 'self' https: data:; connect-src 'self' https:;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
+    <meta name="description" content="Collection d'outils pratiques gratuits pour le calcul, la gestion du temps, l'organisation et plus encore. Calculatrice, minuteur, bloc-notes et traducteur en ligne.">
+    <meta name="theme-color" content="#4a90e2" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    <meta name="color-scheme" content="light dark">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Outils Pratiques">
+    <meta name="application-name" content="Outils Pratiques">
+    <meta name="keywords" content="outils en ligne, calculatrice scientifique, minuteur, chronomètre, bloc-notes, todo list, traducteur, convertisseur, gratuit">
+    <meta name="author" content="Outils Pratiques">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Outils Pratiques - Collection d'outils en ligne gratuits">
+    <meta property="og:description" content="Collection d'outils pratiques gratuits pour le calcul, la gestion du temps, l'organisation et plus encore. Calculatrice, minuteur, bloc-notes et traducteur en ligne.">
+    <meta property="og:image" content=" /icons/icon-512x512.png">
+    <meta property="og:url" content=" /">
+    <meta property="og:site_name" content="Outils Pratiques">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Outils Pratiques - Collection d'outils en ligne gratuits">
+    <meta name="twitter:description" content="Collection d'outils pratiques gratuits pour le calcul, la gestion du temps, l'organisation et plus encore.">
+    <meta name="twitter:image" content=" /icons/icon-512x512.png">
+    <link rel="canonical" href=" /">
     <title>Outils Pratiques</title>
     
     <!-- Favicon -->
@@ -29,26 +57,31 @@
     <link rel="stylesheet" href="styles/variables.css">
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/menu.css">
-    <link rel="stylesheet" href="styles/header.css">
-    <link rel="stylesheet" href="styles/components/clock.css">
-    <link rel="stylesheet" href="styles/tools-cards.css">
     <link rel="stylesheet" href="styles/home.css">
-    <link rel="stylesheet" href="styles/notification.css">
-    <link rel="stylesheet" href="styles/theme-switch.css">
-    <link rel="stylesheet" href="styles/components/color.css">
-    <link rel="stylesheet" href="styles/components/currency.css">
-    <link rel="stylesheet" href="styles/components/calculator.css">
-    <link rel="stylesheet" href="styles/components/unit.css">
+    <link rel="stylesheet" href="styles/components/notification.css">
+    <link rel="stylesheet" href="styles/components/theme-switch.css">
+    <link rel="stylesheet" href="styles/components/buttons.css">
+    <link rel="stylesheet" href="styles/components/header.css">
+    <link rel="stylesheet" href="styles/components/clock.css">
+    <link rel="stylesheet" href="styles/components/theme-switch.css">
+    <link rel="stylesheet" href="styles/components/notification.css">
+    <link rel="stylesheet" href="styles/tools/calculator.css">
+    <link rel="stylesheet" href="styles/tools/color.css">
+    <link rel="stylesheet" href="styles/tools/unit.css">
     <link rel="stylesheet" href="styles/components/text.css">
-    <link rel="stylesheet" href="styles/components/styletext.css">
-    <link rel="stylesheet" href="styles/components/timer.css">
-    <link rel="stylesheet" href="styles/components/stopwatch.css">
-    <link rel="stylesheet" href="styles/components/notes.css">
-    <link rel="stylesheet" href="styles/components/translator.css">
-    <link rel="stylesheet" href="styles/components/scheduler.css">
-    <link rel="stylesheet" href="styles/components/metronome.css">
-    <link rel="stylesheet" href="styles/components/qrcode.css">
-    <link rel="stylesheet" href="styles/components/texteditor.css">
+    <link rel="stylesheet" href="styles/tools/styletext.css">
+    <link rel="stylesheet" href="styles/tools/timer.css">
+    <link rel="stylesheet" href="styles/tools/stopwatch.css">
+    <link rel="stylesheet" href="styles/tools/notes.css">
+    <link rel="stylesheet" href="styles/tools/translator.css">
+    <link rel="stylesheet" href="styles/tools/scheduler.css">
+    <link rel="stylesheet" href="styles/tools/metronome.css">
+    <link rel="stylesheet" href="styles/tools/qrcode.css">
+    <link rel="stylesheet" href="styles/tools/todo.css">
+    <link rel="stylesheet" href="styles/tools/password.css">
+    <link rel="stylesheet" href="styles/tools/currency.css">
+    <link rel="stylesheet" href="styles/tools/textEditor.css">
+    
     <!-- Quill.js CSS -->
     <link rel="stylesheet" href="https://cdn.quilljs.com/1.3.7/quill.snow.css" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" 
@@ -71,15 +104,14 @@
     
     <!-- JavaScript Modules -->
     <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/clock.js"></script>
     <script type="module" src="js/menu.js"></script>
-    <script type="module" src="js/tools/color.js"></script>
     <script type="module" src="js/tools/calculator.js"></script>
     <script type="module" src="js/tools/converter.js"></script>
     <script type="module" src="js/tools/text.js"></script>
     <script type="module" src="js/tools/timer.js"></script>
     <script type="module" src="js/tools/stopwatch.js"></script>
-    <script type="module" src="js/tools/notes_utf8.js"></script>
-    <script type="module" src="js/notes-init.js"></script>
+    <script type="module" src="js/tools/notes.js"></script>
     <script type="module" src="js/tools/translator.js"></script>
     <script type="module" src="js/tools/scheduler.js"></script>
     <script type="module" src="js/tools/metronome.js"></script>
@@ -89,9 +121,11 @@
     <script type="module" src="js/tools/texteditor.js"></script>
     <script type="module" src="js/texteditor-init.js"></script>
     <script type="module" src="js/theme.js"></script>
+    <script type="module" src="js/tools/color.js"></script>
+    <script type="module" src="js/tools/percentage.js"></script>
     
     <!-- Scripts non-modules pour les fonctions globales -->
-    <script src="js/calculator-global.js"></script>
+    <!-- <script src="js/calculator-global.js"></script> -->
 </head>
 <body>
 
@@ -121,7 +155,6 @@
                     </div>
                 </label>
             </div>
-            
             <h1>Outils Pratiques</h1>
             
             <div class="header-actions">
@@ -264,6 +297,10 @@
                     <i class="fas fa-chevron-down submenu-icon" aria-hidden="true"></i>
                 </button>
                 <div id="textMenu" class="submenu" role="menu" aria-hidden="true">
+                    <button type="button" data-tool-id="textEditorTool" class="submenu-item" role="menuitem">
+                        <i class="fas fa-file-word" aria-hidden="true"></i>
+                        <span>Traitement de texte</span>
+                    </button>
                     <button type="button" data-tool-id="translatorTool" class="submenu-item" role="menuitem">
                         <i class="fas fa-language" aria-hidden="true"></i>
                         <span>Traducteur</span>
@@ -271,10 +308,6 @@
                     <button type="button" data-tool-id="styletext" class="submenu-item" role="menuitem">
                         <i class="fas fa-feather-alt" aria-hidden="true"></i>
                         <span>Styliseur de texte</span>
-                    </button>
-                    <button type="button" data-tool-id="textEditorTool" class="submenu-item" role="menuitem">
-                        <i class="fas fa-edit" aria-hidden="true"></i>
-                        <span>Éditeur de texte</span>
                     </button>
                 </div>
             </div>
@@ -366,6 +399,27 @@
             loadTool(toolId);
         });
     });
+
+    // Filtrage dynamique des outils du menu avec message si aucun résultat
+    (function() {
+      var searchInput = document.getElementById('toolsSearch');
+      var noToolsFound = document.getElementById('noToolsFound');
+      if (!searchInput) return;
+      // On cible tous les boutons d'outils du menu (hors catégories)
+      var toolButtons = Array.from(document.querySelectorAll('.submenu-item[data-tool-id]'));
+      function filterMenuTools() {
+        var query = searchInput.value.trim().toLowerCase();
+        var visibleCount = 0;
+        toolButtons.forEach(function(btn) {
+          var text = btn.textContent.toLowerCase();
+          var match = text.includes(query);
+          btn.style.display = match ? '' : 'none';
+          if (match) visibleCount++;
+        });
+        if (noToolsFound) noToolsFound.style.display = (visibleCount === 0) ? '' : 'none';
+      }
+      searchInput.addEventListener('input', filterMenuTools);
+    })();
     </script>
     
     <!-- Quill.js Script -->

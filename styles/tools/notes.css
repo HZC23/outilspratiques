@@ -595,4 +595,244 @@
     .note-editor {
         max-height: 60%;
     }
-} 
+}
+
+[data-theme="dark"] .ql-editor h2 {
+    color: #fff;
+}
+
+/* ====== Début de la fusion avec note.css ====== */
+.note-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.note-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.note-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.note-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.note-button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--primary-color);
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.note-button:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+.note-button:active {
+    transform: translateY(0);
+}
+
+.note-button.secondary {
+    background: var(--button-bg);
+    color: var(--text-color);
+}
+
+.note-button.secondary:hover {
+    background: var(--button-hover-bg);
+}
+
+.note-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.note-card {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--input-bg);
+    transition: all 0.2s ease;
+}
+
+.note-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.note-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.note-card-title {
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.note-card-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.note-card-action {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 6px;
+    background: var(--button-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.note-card-action:hover {
+    background: var(--button-hover-bg);
+}
+
+.note-card-action.delete {
+    background: var(--danger-color);
+    color: white;
+}
+
+.note-card-action.delete:hover {
+    background: var(--danger-hover);
+}
+
+.note-card-content {
+    flex: 1;
+    color: var(--text-color);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.note-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.note-card-date {
+    font-size: 0.875rem;
+    color: var(--text-color-secondary);
+}
+
+.note-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.note-modal-content {
+    width: 100%;
+    max-width: 600px;
+    padding: 2rem;
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.note-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.note-modal-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.note-modal-close {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 6px;
+    background: var(--button-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.note-modal-close:hover {
+    background: var(--button-hover-bg);
+}
+
+.note-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.note-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.note-form-group label {
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.note-form-group input,
+.note-form-group textarea {
+    padding: 0.8rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--input-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+}
+
+.note-form-group textarea {
+    min-height: 200px;
+    resize: vertical;
+}
+
+@media (max-width: 768px) {
+    .note-container {
+        margin: 1rem;
+        padding: 1rem;
+    }
+
+    .note-content {
+        grid-template-columns: 1fr;
+    }
+
+    .note-modal-content {
+        margin: 1rem;
+        padding: 1rem;
+    }
+}
+/* ====== Fin de la fusion avec note.css ====== */ 

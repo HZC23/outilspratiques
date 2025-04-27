@@ -1,32 +1,32 @@
-// Importer le gestionnaire d'éditeur de texte
-import { TextEditorManager } from './tools/texteditor.js';
+// Importer la fonction d'initialisation de l'éditeur de texte
+import { init } from './tools/textEditor.js';
 
-// Variable globale pour l'instance du gestionnaire
-let textEditorManager = null;
+// Variable globale pour l'instance de l'éditeur
+let textEditorInstance = null;
 
-// Initialiser le gestionnaire d'éditeur de texte quand le DOM est complètement chargé
+// Initialiser l'éditeur de texte quand le DOM est complètement chargé
 document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('textEditorTool')) {
-        textEditorManager = TextEditorManager.init();
+        textEditorInstance = init();
         console.log('Gestionnaire d\'éditeur de texte initialisé avec succès');
     }
 });
 
-// Exposer les fonctions globalement
+// Exposer les fonctions globalement si besoin
 window.TextEditorManager = {
     clearContent: () => {
-        if (textEditorManager) {
-            textEditorManager.clearContent();
+        if (textEditorInstance) {
+            clearContent();
         }
     },
     downloadContent: () => {
-        if (textEditorManager) {
-            textEditorManager.downloadContent();
+        if (textEditorInstance) {
+            downloadContent();
         }
     },
     copyToClipboard: () => {
-        if (textEditorManager) {
-            textEditorManager.copyToClipboard();
+        if (textEditorInstance) {
+            copyToClipboard();
         }
     }
 }; 

@@ -132,7 +132,7 @@ input[type="submit"]:hover {
 .todo-button.primary,
 .calculator-button.primary {
     color: var(--text-on-primary);
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-color) 70%, #0D93F0);
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-color) 70%, var(--primary-color-hover, #0D93F0));
     border-color: var(--primary-color);
 }
 
@@ -140,7 +140,7 @@ input[type="submit"]:hover {
 .btn.primary:hover,
 .todo-button.primary:hover,
 .calculator-button.primary:hover {
-    background: linear-gradient(135deg, #0D93F0, var(--primary-color));
+    background: linear-gradient(135deg, var(--primary-color-hover, #0D93F0), var(--primary-color));
     box-shadow: 0 5px 15px rgba(var(--primary-color-rgb), 0.4);
 }
 
@@ -150,7 +150,7 @@ input[type="submit"]:hover {
 .todo-button.secondary,
 .calculator-button.secondary {
     color: var(--text-on-primary);
-    background: linear-gradient(135deg, var(--secondary-color), var(--secondary-color) 70%, #43A047);
+    background: linear-gradient(135deg, var(--secondary-color), var(--secondary-color) 70%, var(--secondary-color-dark, #43A047));
     border-color: var(--secondary-color);
 }
 
@@ -158,7 +158,7 @@ input[type="submit"]:hover {
 .btn.secondary:hover,
 .todo-button.secondary:hover,
 .calculator-button.secondary:hover {
-    background: linear-gradient(135deg, #43A047, var(--secondary-color));
+    background: linear-gradient(135deg, var(--secondary-color-dark, #43A047), var(--secondary-color));
     box-shadow: 0 5px 15px rgba(var(--secondary-color-rgb), 0.4);
 }
 
@@ -169,7 +169,7 @@ input[type="submit"]:hover {
 .todo-button.delete-all,
 .calculator-button.clear {
     color: var(--text-on-primary);
-    background: linear-gradient(135deg, var(--error-color), var(--error-color) 70%, #E53935);
+    background: linear-gradient(135deg, var(--error-color), var(--error-color) 70%, var(--danger-color-hover, #E53935));
     border-color: var(--error-color);
 }
 
@@ -178,25 +178,25 @@ input[type="submit"]:hover {
 .btn.delete-all:hover,
 .todo-button.delete-all:hover,
 .calculator-button.clear:hover {
-    background: linear-gradient(135deg, #E53935, var(--error-color));
+    background: linear-gradient(135deg, var(--danger-color-hover, #E53935), var(--error-color));
     box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
 }
 
 /* Bouton opérateur (calculatrice) */
 .calculator-button.operator {
-    background: linear-gradient(to bottom, var(--calc-button-operator), #D4E6FC);
+    background: linear-gradient(to bottom, var(--calc-button-operator), var(--calc-button-operator-hover, #D4E6FC));
     color: var(--primary-color);
-    border-color: #D4E6FC;
+    border-color: var(--calc-button-operator-hover, #D4E6FC);
     font-weight: 600;
 }
 
 .calculator-button.operator:hover {
-    background: linear-gradient(to bottom, #D4E6FC, var(--calc-button-operator));
+    background: linear-gradient(to bottom, var(--calc-button-operator-hover, #D4E6FC), var(--calc-button-operator));
 }
 
 /* Bouton égal (calculatrice) */
 .calculator-button.equals {
-    background: linear-gradient(135deg, var(--calc-button-equals), var(--calc-button-equals) 60%, #0D93F0);
+    background: linear-gradient(135deg, var(--calc-button-equals), var(--calc-button-equals) 60%, var(--primary-color-hover, #0D93F0));
     color: var(--text-on-primary);
     border-color: var(--calc-button-equals);
     font-weight: 600;
@@ -231,22 +231,32 @@ input[type="submit"]:hover {
 /* Bouton icône */
 .btn-icon,
 .btn.icon {
-    width: 36px;
-    height: 36px;
-    padding: 0;
-    border-radius: var(--border-radius-circle);
-    background-color: transparent;
-    color: var(--text-secondary);
-    border: none;
-    box-shadow: none;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
 }
 
 .btn-icon:hover,
 .btn.icon:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-    color: var(--primary-color);
-    transform: translateY(0) scale(1.1);
-    box-shadow: none;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.btn-icon i,
+.btn.icon i {
+    font-size: 1.2rem;
+    margin: 0;
 }
 
 /* Bouton avec icône + texte */

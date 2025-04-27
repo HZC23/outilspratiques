@@ -25,7 +25,6 @@ export const CalculatorManager = {
         this.setupListeners();
         this.updateDisplay();
         this.initCalculatorNav();
-        this.initMiniCalculator();
         this.setupResponsiveLayout();
         window.addEventListener('resize', () => this.setupResponsiveLayout());
     },
@@ -510,110 +509,13 @@ export const CalculatorManager = {
             currentCalculator: this.state.currentCalculator
         });
     },
-    
-    /**
-     * Initialise la mini-calculatrice pour le footer
-     */
-    initMiniCalculator() {
-        // Cette fonction sera appelée globalement via DOMContentLoaded
-        if (typeof window !== 'undefined') {
-            window.initMiniCalculator = function() {
-                const displays = document.querySelectorAll('.footer-calculator .calc-display');
-                const buttons = document.querySelectorAll('.footer-calculator .calc-btn');
-                
-                displays.forEach(display => {
-                    let currentValue = '0';
-                    let operator = null;
-                    let previousValue = null;
-                    let waitingForSecondOperand = false;
-                    
-                    // Fonction pour mettre à jour l'affichage
-                    function updateDisplay() {
-                        display.textContent = currentValue;
-                    }
-                    
-                    // Récupérer les boutons associés à ce display
-                    const parentCalculator = display.closest('.footer-calculator');
-                    const calculatorButtons = parentCalculator.querySelectorAll('.calc-btn');
-                    
-                    calculatorButtons.forEach(button => {
-                        button.addEventListener('click', () => {
-                            const buttonText = button.textContent;
-                            
-                            // Si le bouton est un chiffre
-                            if (/[0-9]/.test(buttonText)) {
-                                if (waitingForSecondOperand) {
-                                    currentValue = buttonText;
-                                    waitingForSecondOperand = false;
-                                } else {
-                                    currentValue = currentValue === '0' ? buttonText : currentValue + buttonText;
-                                }
-                                updateDisplay();
-                            }
-                            // Si le bouton est un opérateur
-                            else if (['+', '-', '×', '÷'].includes(buttonText)) {
-                                const inputValue = parseFloat(currentValue);
-                                
-                                if (previousValue === null) {
-                                    previousValue = inputValue;
-                                } else if (operator) {
-                                    const result = calculate(previousValue, inputValue, operator);
-                                    currentValue = String(result);
-                                    previousValue = result;
-                                }
-                                
-                                waitingForSecondOperand = true;
-                                operator = buttonText;
-                                updateDisplay();
-                            }
-                            // Si le bouton est un point décimal
-                            else if (buttonText === '.') {
-                                if (waitingForSecondOperand) {
-                                    currentValue = '0.';
-                                    waitingForSecondOperand = false;
-                                } else if (!currentValue.includes('.')) {
-                                    currentValue += '.';
-                                }
-                                updateDisplay();
-                            }
-                            // Si le bouton est égal
-                            else if (buttonText === '=') {
-                                if (operator && previousValue !== null) {
-                                    const inputValue = parseFloat(currentValue);
-                                    const result = calculate(previousValue, inputValue, operator);
-                                    currentValue = String(result);
-                                    operator = null;
-                                    previousValue = null;
-                                    waitingForSecondOperand = false;
-                                    updateDisplay();
-                                }
-                            }
-                        });
-                    });
-                    
-                    // Fonction de calcul pour mini-calculatrice
-                    function calculate(firstOperand, secondOperand, op) {
-                        switch (op) {
-                            case '+': return firstOperand + secondOperand;
-                            case '-': return firstOperand - secondOperand;
-                            case '×': return firstOperand * secondOperand;
-                            case '÷': return secondOperand === 0 ? 'Err' : firstOperand / secondOperand;
-                            default: return secondOperand;
-                        }
-                    }
-                    
-                    // Initialisation de l'affichage
-                    updateDisplay();
-                });
-            };
-        }
-    },
 
     /**
      * Nettoie les ressources
      */
     destroy() {
         this.saveState();
+        window.__calculatorAlreadyInitialized = false;
     },
 
     /**

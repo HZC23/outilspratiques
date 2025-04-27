@@ -188,6 +188,46 @@
     --form-checkbox-color: var(--primary-color);
     --help-panel-bg: #FFFFFF;
     --help-panel-header-bg: #F5F5F5;
+    
+    /* Harmonisation - Variables ajoutées */
+    --primary-gradient-blue: #1e40af; /* Pour les dégradés header, etc. */
+    --primary-gradient-purple: #3730a3;
+    --primary-blue: #0063b1;
+    --primary-dark-blue: #004c8c;
+    --success-color-dark: #388e3c;
+    --warning-color-dark: #FFA000;
+    --info-color-dark: #0288D1;
+    --primary-color-hover: #1d5fa8;
+    --danger-color-hover: #c0392b;
+    --menu-min-width: 200px;
+    --menu-max-width: 250px;
+    --header-height: 70px;
+    --container-max-width: 1800px;
+    --menu-min-width-md: 180px;
+    --menu-max-width-md: 250px;
+    --menu-min-width-sm: 160px;
+    --menu-max-width-sm: 230px;
+    --menu-max-width-mobile: 320px;
+    --scrollbar-width: 6px;
+    --border-radius-sm: 6px;
+    --icon-width: 1.5rem;
+    --toggle-width: 24px;
+    --toggle-height: 18px;
+    --hamburger-bar-height: 2px;
+    --border-radius-xs: 2px;
+    --notification-close-hover-bg: rgba(0, 0, 0, 0.1);
+    --notification-close-hover-bg-dark: rgba(255, 255, 255, 0.1);
+    --header-title-gradient-1: #ffffff;
+    --header-title-gradient-2: #f0f0f0;
+
+    /* Ajouts pour harmonisation des outils */
+    --input-bg: #FFFFFF;
+    --button-bg: #F5F5F5;
+    --button-hover-bg: #E3F2FD;
+    --primary-hover: #1d5fa8;
+    --danger-hover: #c0392b;
+    --text-color-secondary: #666666;
+    --todo-item-bg-hover: #F0F0F0;
 }
 
 /* Variables pour le thème sombre */
@@ -270,6 +310,15 @@
     /* Password Generator en mode sombre */
     --password-bg: #333333;
     --password-text: #E0E0E0;
+
+    /* Ajouts pour harmonisation des outils en mode sombre */
+    --input-bg: #262626;
+    --button-bg: #2C2C2C;
+    --button-hover-bg: #404040;
+    --primary-hover: #0a6ecf;
+    --danger-hover: #a93226;
+    --text-color-secondary: #AAAAAA;
+    --todo-item-bg-hover: #333333;
 }
 
 /* Adaptation mobile */

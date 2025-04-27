@@ -19,6 +19,7 @@ class App {
     constructor() {
         this.init();
         this.initErrorHandling();
+        this.initOfflineBadge();
     }
 
     /**
@@ -29,8 +30,8 @@ class App {
         // Initialiser les polyfills
         this.initPolyfills();
         
-        // Initialiser le service worker
-        this.initServiceWorker();
+        // Initialiser le service worker selon le paramètre offlineMode
+        this.initServiceWorkerBySettings();
         
         // Initialiser le gestionnaire de thème
         ThemeManager.init();
@@ -88,28 +89,70 @@ class App {
     }
     
     /**
-     * Initialise le service worker
+     * Active/désactive le Service Worker selon le paramètre offlineMode
      */
-    initServiceWorker() {
+    initServiceWorkerBySettings() {
+        const settings = JSON.parse(localStorage.getItem('appSettings'));
+        const offlineMode = settings && settings.sync && settings.sync.offlineMode;
+        if (offlineMode) {
+            this.registerServiceWorker();
+        } else {
+            this.unregisterServiceWorker();
+        }
+    }
+    
+    /**
+     * Enregistre le Service Worker si non déjà actif
+     */
+    registerServiceWorker() {
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js').then(registration => {
-                    console.log('ServiceWorker registration successful');
-                }).catch(err => {
-                    console.log('ServiceWorker registration failed: ', err);
-                });
+            navigator.serviceWorker.getRegistration('/sw.js').then(reg => {
+                if (!reg) {
+                    navigator.serviceWorker.register('/sw.js').then(registration => {
+                        this.showSWUpdateNotification(registration);
+                    });
+                } else {
+                    this.showSWUpdateNotification(reg);
+                }
             });
         }
-        
-        window.addEventListener('online', () => {
-            document.body.classList.remove('offline');
-            NotificationManager.show('Connexion rétablie', 'success');
-        });
-        
-        window.addEventListener('offline', () => {
-            document.body.classList.add('offline');
-            NotificationManager.show('Vous êtes hors ligne', 'warning');
-        });
+    }
+    
+    /**
+     * Désenregistre le Service Worker et vide le cache
+     */
+    unregisterServiceWorker() {
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistration('/sw.js').then(reg => {
+                if (reg) {
+                    reg.unregister().then(() => {
+                        if (window.caches) {
+                            caches.keys().then(keys => {
+                                Promise.all(keys.map(key => caches.delete(key)));
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    }
+    
+    /**
+     * Affiche une notification si une nouvelle version du SW est disponible
+     */
+    showSWUpdateNotification(registration) {
+        if (!registration) return;
+        if (registration.waiting) {
+            this.showNotification('Nouvelle version disponible. Rechargez la page pour mettre à jour.', 'info');
+        }
+        registration.onupdatefound = () => {
+            const newWorker = registration.installing;
+            newWorker.onstatechange = () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    this.showNotification('Nouvelle version disponible. Rechargez la page pour mettre à jour.', 'info');
+                }
+            };
+        };
     }
     
     /**
@@ -398,7 +441,7 @@ class App {
             'calculatorTool': () => import('./tools/calculator.js').then(module => module.CalculatorManager.init()),
             'timerTool': () => import('./tools/timer.js').then(module => module.TimerManager.init()),
             'stopwatchTool': () => import('./tools/stopwatch.js').then(module => module.StopwatchManager.init()),
-            'noteTool': () => import('./tools/notes_utf8.js').then(module => module.NotesManager.init()),
+            'noteTool': () => import('./tools/notes.js').then(module => module.NotesManager.init()),
             'todoTool': () => import('./tools/todo.js').then(module => module.TodoManager.init()),
             'translatorTool': () => import('./tools/translator.js').then(module => module.TranslatorManager.init()),
             'colorTool': () => import('./tools/color.js').then(module => module.ColorManager.init()),
@@ -422,7 +465,8 @@ class App {
             'parameterTool': () => {
                 console.error(`Erreur lors du chargement de l'outil: L'outil "${toolId}" n'existe pas.`);
                 Utils.showNotification(`L'outil "${toolId}" n'existe pas.`, 'error');
-            }
+            },
+            'textEditorTool': () => import('./tools/textEditor.js').then(module => module.init()),
         };
 
         // Charger le gestionnaire correspondant
@@ -481,6 +525,69 @@ class App {
             console.error('Error: ' + msg + '\nURL: ' + url + '\nLine: ' + lineNo + '\nColumn: ' + columnNo + '\nError object: ' + JSON.stringify(error));
             return false;
         };
+    }
+
+    /**
+     * Badge visuel d'état du mode hors ligne
+     */
+    initOfflineBadge() {
+        const badge = document.createElement('div');
+        badge.id = 'offline-badge';
+        badge.style.position = 'fixed';
+        badge.style.bottom = '16px';
+        badge.style.left = '16px';
+        badge.style.zIndex = 99999;
+        badge.style.background = '#4a90e2';
+        badge.style.color = '#fff';
+        badge.style.padding = '8px 16px';
+        badge.style.borderRadius = '20px';
+        badge.style.fontWeight = 'bold';
+        badge.style.boxShadow = '0 2px 8px rgba(0,0,0,0.12)';
+        badge.style.fontSize = '15px';
+        badge.style.display = 'none';
+        badge.setAttribute('aria-live', 'polite');
+        document.body.appendChild(badge);
+        this.updateOfflineBadge();
+        window.addEventListener('storage', () => this.updateOfflineBadge());
+    }
+    updateOfflineBadge() {
+        const badge = document.getElementById('offline-badge');
+        const settings = JSON.parse(localStorage.getItem('appSettings'));
+        const offlineMode = settings && settings.sync && settings.sync.offlineMode;
+        if (offlineMode) {
+            badge.textContent = 'Mode hors ligne actif';
+            badge.style.display = 'block';
+        } else {
+            badge.textContent = '';
+            badge.style.display = 'none';
+        }
+    }
+
+    /**
+     * Affiche une notification accessible
+     */
+    showNotification(message, type = 'success') {
+        const notif = document.createElement('div');
+        notif.textContent = message;
+        notif.style.position = 'fixed';
+        notif.style.bottom = '30px';
+        notif.style.right = '30px';
+        notif.style.background = type === 'info' ? '#2196F3' : (type === 'success' ? '#4CAF50' : '#e74c3c');
+        notif.style.color = '#fff';
+        notif.style.padding = '14px 24px';
+        notif.style.borderRadius = '8px';
+        notif.style.fontWeight = 'bold';
+        notif.style.zIndex = 9999;
+        notif.style.boxShadow = '0 4px 16px rgba(0,0,0,0.15)';
+        notif.style.opacity = '0.95';
+        notif.setAttribute('role', 'status');
+        notif.setAttribute('aria-live', 'polite');
+        document.body.appendChild(notif);
+        setTimeout(() => {
+            notif.style.transition = 'opacity 0.5s';
+            notif.style.opacity = '0';
+            setTimeout(() => notif.remove(), 500);
+        }, 3200);
     }
 }
 

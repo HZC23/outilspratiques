@@ -228,8 +228,40 @@ function setupEventListeners() {
     }
     
     // Écouteur pour le mode plein écran
-    if (fullscreenButton) {
-        fullscreenButton.addEventListener('click', toggleFullscreen);
+    if (fullscreenButton && container) {
+        fullscreenButton.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                if (container.requestFullscreen) {
+                    container.requestFullscreen();
+                } else if (container.webkitRequestFullscreen) {
+                    container.webkitRequestFullscreen();
+                } else if (container.msRequestFullscreen) {
+                    container.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
+        });
+        function updateCurrencyFullscreenIcon() {
+            const icon = fullscreenButton.querySelector('i');
+            if (document.fullscreenElement === container) {
+                icon.classList.remove('fa-expand');
+                icon.classList.add('fa-compress');
+            } else {
+                icon.classList.remove('fa-compress');
+                icon.classList.add('fa-expand');
+            }
+        }
+        document.addEventListener('fullscreenchange', updateCurrencyFullscreenIcon);
+        document.addEventListener('webkitfullscreenchange', updateCurrencyFullscreenIcon);
+        document.addEventListener('mozfullscreenchange', updateCurrencyFullscreenIcon);
+        document.addEventListener('MSFullscreenChange', updateCurrencyFullscreenIcon);
     }
     
     // Écouteur pour détecter les changements de connectivité
@@ -1117,25 +1149,6 @@ function updateChart(fromCurrency, toCurrency, data) {
     
     // Rafraîchir le graphique
     state.chartInstance.update();
-}
-
-/**
- * Bascule le mode plein écran pour le convertisseur
- */
-function toggleFullscreen() {
-    const container = document.getElementById('currencyTool');
-    const button = document.getElementById('currencyFullscreen');
-    
-    if (!container || !button) return;
-    
-    container.classList.toggle('fullscreen');
-    
-    // Changer l'icône selon l'état
-    if (container.classList.contains('fullscreen')) {
-        button.innerHTML = '<i class="fas fa-compress"></i>';
-    } else {
-        button.innerHTML = '<i class="fas fa-expand"></i>';
-    }
 }
 
 // Initialiser le convertisseur de devises seulement quand le DOM est complètement chargé

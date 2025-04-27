@@ -1,4 +1,4 @@
-`${BASE_PATH}/js/tools/notes_utf8.js`,
+`${BASE_PATH}/js/tools/notes.js`,
 `${BASE_PATH}/js/tools/translator.js`, 
 `${BASE_PATH}/js/tools/scheduler.js`,
 `${BASE_PATH}/js/tools/metronome.js`,

@@ -17,15 +17,17 @@
             <div class="color-picker-main">
                 <div class="color-canvas-wrapper">
                     <div class="color-canvas" id="colorCanvas">
-                        <div class="color-thumb" id="colorThumb"></div>
-                    </div>
-                    <div class="hue-slider-container">
-                        <input type="range" id="hueSlider" min="0" max="360" value="0" class="hue-slider">
+                        
                     </div>
                 </div>
                 
                 <div class="color-preview-container">
-                    <div class="color-preview" id="colorPreview"></div>
+                    <div class="color-preview-fav-wrapper">
+                        <input type="color" name="colorThumb" id="colorThumb">
+                        <button type="button" class="btn-fav" id="favoriteBtn" aria-label="Ajouter/Retirer des favoris">
+                            <i class="fas fa-star" id="favoriteIcon"></i>
+                        </button>
+                    </div>
                     <div class="color-values">
                         <div class="color-value-group">
                             <label for="hexValue">HEX</label>
@@ -40,7 +42,7 @@
                         <div class="color-value-group">
                             <label for="rgbValue">RGB</label>
                             <div class="color-value-input">
-                                <input type="text" id="rgbValue" class="color-input" readonly value="rgb(255, 0, 0)">
+                                <input type="text" id="rgbValue" class="color-input" value="rgb(255, 0, 0)">
                                 <button type="button" class="btn-copy" data-value="rgb" aria-label="Copier">
                                     <i class="fas fa-copy"></i>
                                 </button>
@@ -50,7 +52,7 @@
                         <div class="color-value-group">
                             <label for="hslValue">HSL</label>
                             <div class="color-value-input">
-                                <input type="text" id="hslValue" class="color-input" readonly value="hsl(0, 100%, 50%)">
+                                <input type="text" id="hslValue" class="color-input" value="hsl(0, 100%, 50%)">
                                 <button type="button" class="btn-copy" data-value="hsl" aria-label="Copier">
                                     <i class="fas fa-copy"></i>
                                 </button>
@@ -60,182 +62,10 @@
                         <div class="color-value-group">
                             <label for="cmykValue">CMYK</label>
                             <div class="color-value-input">
-                                <input type="text" id="cmykValue" class="color-input" readonly value="cmyk(0%, 100%, 100%, 0%)">
+                                <input type="text" id="cmykValue" class="color-input" value="cmyk(0%, 100%, 100%, 0%)">
                                 <button type="button" class="btn-copy" data-value="cmyk" aria-label="Copier">
                                     <i class="fas fa-copy"></i>
                                 </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="color-alpha-container">
-                        <label for="alphaSlider">Opacité</label>
-                        <div class="alpha-slider-container">
-                            <input type="range" id="alphaSlider" min="0" max="100" value="100" class="alpha-slider">
-                            <span id="alphaValue">100%</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="color-tools">
-                <div class="tool-tabs">
-                    <button type="button" class="tab-button active" data-tab="palettes">Palettes</button>
-                    <button type="button" class="tab-button" data-tab="harmonies">Harmonies</button>
-                    <button type="button" class="tab-button" data-tab="adjustment">Ajustement</button>
-                    <button type="button" class="tab-button" data-tab="accessibility">Accessibilité</button>
-                </div>
-                
-                <div class="tab-content">
-                    <div class="tab-pane active" id="palettes">
-                        <div class="color-palettes">
-                            <div class="palette-type">
-                                <h3>Teintes</h3>
-                                <div class="palette-colors" id="tintsPalette"></div>
-                            </div>
-                            
-                            <div class="palette-type">
-                                <h3>Nuances</h3>
-                                <div class="palette-colors" id="shadesPalette"></div>
-                            </div>
-                            
-                            <div class="palette-type">
-                                <h3>Tons</h3>
-                                <div class="palette-colors" id="tonesPalette"></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="tab-pane" id="harmonies">
-                        <div class="color-harmonies">
-                            <div class="harmony-type">
-                                <h3>Complémentaire</h3>
-                                <div class="harmony-colors" id="complementaryHarmony"></div>
-                            </div>
-                            
-                            <div class="harmony-type">
-                                <h3>Analogue</h3>
-                                <div class="harmony-colors" id="analogousHarmony"></div>
-                            </div>
-                            
-                            <div class="harmony-type">
-                                <h3>Triadique</h3>
-                                <div class="harmony-colors" id="triadicHarmony"></div>
-                            </div>
-                            
-                            <div class="harmony-type">
-                                <h3>Split-complémentaire</h3>
-                                <div class="harmony-colors" id="splitComplementaryHarmony"></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="tab-pane" id="adjustment">
-                        <div class="color-adjustment">
-                            <div class="adjustment-control">
-                                <label for="hueAdjust">Teinte</label>
-                                <input type="range" id="hueAdjust" min="0" max="360" value="0" class="adjust-slider">
-                                <span id="hueAdjustValue">0°</span>
-                            </div>
-                            
-                            <div class="adjustment-control">
-                                <label for="satAdjust">Saturation</label>
-                                <input type="range" id="satAdjust" min="0" max="100" value="100" class="adjust-slider">
-                                <span id="satAdjustValue">100%</span>
-                            </div>
-                            
-                            <div class="adjustment-control">
-                                <label for="lightAdjust">Luminosité</label>
-                                <input type="range" id="lightAdjust" min="0" max="100" value="50" class="adjust-slider">
-                                <span id="lightAdjustValue">50%</span>
-                            </div>
-                            
-                            <div class="adjustment-control">
-                                <label for="tempAdjust">Température</label>
-                                <input type="range" id="tempAdjust" min="-100" max="100" value="0" class="adjust-slider">
-                                <span id="tempAdjustValue">0</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="tab-pane" id="accessibility">
-                        <div class="color-accessibility">
-                            <div class="contrast-check">
-                                <h3>Vérification du contraste</h3>
-                                <div class="contrast-preview">
-                                    <div class="contrast-bg" id="contrastBg">
-                                        <div class="contrast-text" id="contrastText">Exemple de texte</div>
-                                    </div>
-                                </div>
-                                
-                                <div class="contrast-controls">
-                                    <div class="contrast-control">
-                                        <label>Couleur de texte</label>
-                                        <div class="color-button" id="textColorBtn">
-                                            <span class="color-preview-small" id="textColorPreview"></span>
-                                            <span id="textColorValue">#000000</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="contrast-control">
-                                        <label>Couleur de fond</label>
-                                        <div class="color-button" id="bgColorBtn">
-                                            <span class="color-preview-small" id="bgColorPreview"></span>
-                                            <span id="bgColorValue">#FFFFFF</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="contrast-control">
-                                        <label>Taille de texte</label>
-                                        <select id="textSizeSelect" class="form-select">
-                                            <option value="small">Petit (< 18px)</option>
-                                            <option value="large">Grand (≥ 18px)</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                
-                                <div class="contrast-results">
-                                    <div class="contrast-ratio">
-                                        <span>Ratio de contraste:</span>
-                                        <span id="contrastRatio">21:1</span>
-                                    </div>
-                                    <div class="contrast-wcag">
-                                        <div class="wcag-item">
-                                            <span>AA (petit texte):</span>
-                                            <span id="wcagAA"><i class="fas fa-check-circle"></i> Réussi</span>
-                                        </div>
-                                        <div class="wcag-item">
-                                            <span>AAA (petit texte):</span>
-                                            <span id="wcagAAA"><i class="fas fa-check-circle"></i> Réussi</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="color-blindness">
-                                <h3>Simulation de daltonisme</h3>
-                                <div class="blindness-previews">
-                                    <div class="blindness-item">
-                                        <div class="blindness-preview" id="normalVision"></div>
-                                        <span>Normal</span>
-                                    </div>
-                                    <div class="blindness-item">
-                                        <div class="blindness-preview" id="protanopiaVision"></div>
-                                        <span>Protanopie</span>
-                                    </div>
-                                    <div class="blindness-item">
-                                        <div class="blindness-preview" id="deuteranopiaVision"></div>
-                                        <span>Deutéranopie</span>
-                                    </div>
-                                    <div class="blindness-item">
-                                        <div class="blindness-preview" id="tritanopiaVision"></div>
-                                        <span>Tritanopie</span>
-                                    </div>
-                                    <div class="blindness-item">
-                                        <div class="blindness-preview" id="achromatopsiaVision"></div>
-                                        <span>Achromatopsie</span>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -245,9 +75,13 @@
             <div class="color-history">
                 <h3>Historique</h3>
                 <div class="history-colors" id="colorHistory"></div>
-                <button type="button" class="btn btn-outline" id="clearHistory">
+                <button type="button" class="btn btn-outline" id="clearHistory" onclick="clearColorHistory()">
                     <i class="fas fa-trash-alt"></i> Effacer l'historique
                 </button>
+                <div class="color-favorites">
+                    <h3>Favoris</h3>
+                    <div class="favorites-colors" id="colorFavorites"></div>
+                </div>
             </div>
         </div>
     </div>

@@ -1,78 +1,13 @@
 /* styles/components/stopwatch.css */
 /* Styles pour le composant de chronomètre */
-
-.tool-container {
-    font-family: 'Roboto', 'Segoe UI', sans-serif;
-    --primary-color: #3a86ff;
-    --primary-light: #5a96ff;
-    --primary-hover: #1a66ff;
-    --danger-color: #ff4d4d;
-    --danger-hover: #ff3333;
-    --success-color: #2ecc71;
-    --border-color: rgba(0, 0, 0, 0.1);
-    --card-bg: #ffffff;
-    --input-bg: #f5f7fa;
-    --text-color: #333;
-    --text-color-secondary: #666;
-}
-
-.dark-mode .tool-container {
-    --primary-color: #3a86ff;
-    --primary-light: #5a96ff;
-    --primary-hover: #5a96ff;
-    --danger-color: #ff4d4d;
-    --danger-hover: #ff6b6b;
-    --success-color: #2ecc71;
-    --border-color: rgba(255, 255, 255, 0.1);
-    --card-bg: #2a2a2a;
-    --input-bg: #3a3a3a;
-    --text-color: #f1f1f1;
-    --text-color-secondary: #aaa;
-}
-
-.tool-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.tool-header h2 {
-    font-size: 1.5rem;
-    color: var(--text-color);
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
 .tool-actions {
     display: flex;
     gap: 0.5rem;
 }
 
-.btn-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: transparent;
-    border: none;
-    color: var(--text-color-secondary);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-}
-
-.btn-icon:hover {
-    background: var(--input-bg);
-    color: var(--primary-color);
-}
-
 .tool-content {
     padding: 1.5rem;
+    background: var(--tool-container-bg);
 }
 
 .stopwatch-container {
@@ -518,4 +453,11 @@ body:-moz-full-screen .btn-circle {
 
 .dark-mode .stat-item {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .tool-header h2 {
+    color: var(--tool-header-text);
+}
+[data-theme="dark"] .tool-content {
+    background: var(--tool-container-bg);
 } 

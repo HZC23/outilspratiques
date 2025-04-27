@@ -622,3 +622,31 @@ export const MenuManager = {
         });
     },
 }; 
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.querySelector('.search-input');
+    const toolCards = document.querySelectorAll('.tools-grid .tool-card');
+    if (!searchInput) return;
+    searchInput.addEventListener('input', function() {
+        const query = searchInput.value.trim().toLowerCase();
+        let visibleCount = 0;
+        toolCards.forEach(function(card) {
+            const text = card.textContent.toLowerCase();
+            const match = text.includes(query);
+            card.style.display = match ? '' : 'none';
+            if (match) visibleCount++;
+        });
+        // Optionnel : afficher un message si aucun résultat
+        let noResult = document.getElementById('noToolsFound');
+        if (!noResult && visibleCount === 0) {
+            noResult = document.createElement('div');
+            noResult.id = 'noToolsFound';
+            noResult.style.textAlign = 'center';
+            noResult.style.color = '#888';
+            noResult.style.fontSize = '1.1em';
+            noResult.style.margin = '2rem 0';
+            noResult.textContent = 'Aucun outil trouvé';
+            document.querySelector('.tools-grid').parentNode.insertBefore(noResult, document.querySelector('.tools-grid').nextSibling);
+        }
+        if (noResult) noResult.style.display = (visibleCount === 0) ? '' : 'none';
+    });
+});

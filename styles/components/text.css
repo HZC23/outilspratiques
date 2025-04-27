@@ -2,23 +2,23 @@
 /* Styles pour le composant de manipulation de texte */
 
 .text-tool {
-    padding: 1rem;
+    padding: var(--spacing-md, 1rem);
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: var(--spacing-xl, 1.5rem);
 }
 
 .text-controls {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
-    margin-bottom: 1rem;
+    gap: var(--spacing-lg, 1rem);
+    margin-bottom: var(--spacing-lg, 1rem);
 }
 
 .text-control-group {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: var(--spacing-sm, 0.5rem);
     min-width: 200px;
     flex: 1;
 }
@@ -30,9 +30,9 @@
 
 .text-control-group select,
 .text-control-group input {
-    padding: 0.75rem;
+    padding: var(--spacing-md, 0.75rem);
     border: 1px solid var(--border-color);
-    border-radius: 6px;
+    border-radius: var(--border-radius-sm, 6px);
     background-color: var(--input-bg);
     color: var(--text-color);
 }
@@ -40,14 +40,14 @@
 .text-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
+    gap: var(--spacing-sm, 0.5rem);
+    margin-bottom: var(--spacing-lg, 1rem);
 }
 
 .text-action-btn {
-    padding: 0.75rem 1rem;
+    padding: var(--spacing-md, 0.75rem) var(--spacing-lg, 1rem);
     border: none;
-    border-radius: 6px;
+    border-radius: var(--border-radius-sm, 6px);
     background-color: var(--bg-color-secondary);
     color: var(--text-color);
     font-weight: 500;
@@ -61,11 +61,11 @@
 
 .text-action-btn.primary {
     background-color: var(--primary-color);
-    color: white;
+    color: var(--text-on-primary, white);
 }
 
 .text-action-btn.primary:hover {
-    background-color: var(--primary-color-dark);
+    background-color: var(--primary-color-hover, var(--primary-color-dark));
 }
 
 .text-editor {
@@ -93,22 +93,22 @@
 .text-input,
 .text-output {
     min-height: 200px;
-    padding: 1rem;
+    padding: var(--spacing-md, 1rem);
     border: 1px solid var(--border-color);
-    border-radius: 6px;
+    border-radius: var(--border-radius-sm, 6px);
     background-color: var(--input-bg);
     color: var(--text-color);
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-family, 'Poppins', sans-serif);
     resize: vertical;
 }
 
 .text-stats {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
-    margin-top: 1rem;
-    padding: 1rem;
-    border-radius: 8px;
+    gap: var(--spacing-lg, 1rem);
+    margin-top: var(--spacing-lg, 1rem);
+    padding: var(--spacing-md, 1rem);
+    border-radius: var(--border-radius, 8px);
     background-color: var(--bg-color-secondary);
 }
 
@@ -138,9 +138,9 @@
 }
 
 .button-group button {
-    padding: 0.25rem 0.5rem;
+    padding: var(--spacing-xs, 0.25rem) var(--spacing-sm, 0.5rem);
     border: none;
-    border-radius: 4px;
+    border-radius: var(--border-radius-xs, 4px);
     background-color: var(--bg-color-secondary);
     color: var(--text-color);
     cursor: pointer;

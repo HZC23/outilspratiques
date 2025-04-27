@@ -54,11 +54,9 @@
     <!-- CSS -->
     <link rel="stylesheet" href="styles/variables.css">
     <link rel="stylesheet" href="styles/main.css">
-    <link rel="stylesheet" href="styles/components/translator.css">
-    <link rel="stylesheet" href="styles/components/stopwatch.css">
-    <link rel="stylesheet" href="styles/components/timer.css">
-    <link rel="stylesheet" href="styles/components/styletext.css">
     <link rel="stylesheet" href="styles/components/clock.css">
+    <link rel="stylesheet" href="styles/components/theme-switch.css">
+    <link rel="stylesheet" href="styles/components/tools-cards.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" 
           media="print" 
           onload="this.media='all'" 
@@ -79,8 +77,14 @@
     
     <!-- JavaScript Modules -->
     <script type="module" src="js/main.js"></script>
-    <script type="module" src="js/menu.js"></script>
     <script type="module" src="js/theme.js"></script>
+
+    <style>
+      /* Remplacez .menu-btn par la classe ou l'ID réel du bouton menu */
+      .menu-toggle {
+        display: none !important;
+      }
+    </style>
 </head>
 <body>
     <!-- Lien d'accessibilité "Skip to content" -->
@@ -141,9 +145,14 @@
     </script>
         </div>
     </header>
-
     <main id="main-content">
-        <!-- Grille d'outils -->
+        <div class="search-bar-container">
+            <form class="search-form" autocomplete="off">
+              <input type="search" class="search-input" placeholder="Rechercher un outil...">
+              <i class="fa fa-search search-icon"></i>
+            </form>
+          </div>
+        <!-- Grille d'outils (mise à jour pour ne garder que les outils du menu) -->
         <h2 class="section-title">Nos outils</h2>
         <div class="tools-grid">
             <!-- Catégorie Calculs -->
@@ -152,31 +161,64 @@
                     <div class="tool-card-icon">
                         <i class="fas fa-calculator"></i>
                     </div>
-                    <h3 class="tool-card-title">Calculatrice</h3>
+                    <h3 class="tool-card-title">Calculatrice scientifique</h3>
                 </div>
                 <div class="tool-card-body">
                     <p class="tool-card-description">Calculatrice scientifique complète avec historique et fonctions avancées.</p>
                 </div>
                 <div class="tool-card-footer">
-                    <a href="outils.html#calculatorTool"class="tool-card-button" data-tool-id="calculatorTool">
+                    <a href="outils.html#calculatorTool" class="tool-card-button" data-tool-id="calculatorTool">
                         <span>Utiliser</span>
                         <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
             </div>
-
+            <div class="tool-card calculation">
+                <div class="tool-card-header">
+                    <div class="tool-card-icon">
+                        <i class="fas fa-percent"></i>
+                    </div>
+                    <h3 class="tool-card-title">Pourcentages</h3>
+                </div>
+                <div class="tool-card-body">
+                    <p class="tool-card-description">Calculez rapidement des pourcentages, remises et augmentations.</p>
+                </div>
+                <div class="tool-card-footer">
+                    <a href="outils.html#percentageTool" class="tool-card-button" data-tool-id="percentageTool">
+                        <span>Utiliser</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
             <div class="tool-card conversion">
                 <div class="tool-card-header">
                     <div class="tool-card-icon">
                         <i class="fas fa-exchange-alt"></i>
                     </div>
-                    <h3 class="tool-card-title">Convertisseur</h3>
+                    <h3 class="tool-card-title">Convertisseur d'unités</h3>
                 </div>
                 <div class="tool-card-body">
                     <p class="tool-card-description">Convertissez facilement des unités de mesure, de temps, de volume et plus encore.</p>
                 </div>
                 <div class="tool-card-footer">
                     <a href="outils.html#unitTool" class="tool-card-button" data-tool-id="unitTool">
+                        <span>Utiliser</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="tool-card conversion">
+                <div class="tool-card-header">
+                    <div class="tool-card-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <h3 class="tool-card-title">Convertisseur de devises</h3>
+                </div>
+                <div class="tool-card-body">
+                    <p class="tool-card-description">Convertissez les principales devises du monde en temps réel.</p>
+                </div>
+                <div class="tool-card-footer">
+                    <a href="outils.html#currencyTool" class="tool-card-button" data-tool-id="currencyTool">
                         <span>Utiliser</span>
                         <i class="fas fa-arrow-right"></i>
                     </a>
@@ -214,6 +256,24 @@
                 </div>
                 <div class="tool-card-footer">
                     <a href="outils.html#stopwatchTool" class="tool-card-button" data-tool-id="stopwatchTool">
+                        <span>Utiliser</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-card-header">
+                    <div class="tool-card-icon">
+                        <i class="fas fa-drum"></i>
+                    </div>
+                    <h3 class="tool-card-title">Métronome</h3>
+                </div>
+                <div class="tool-card-body">
+                    <p class="tool-card-description">Gardez le rythme avec un métronome simple et efficace.</p>
+                </div>
+                <div class="tool-card-footer">
+                    <a href="outils.html#metronomeTool" class="tool-card-button" data-tool-id="metronomeTool">
                         <span>Utiliser</span>
                         <i class="fas fa-arrow-right"></i>
                     </a>
@@ -275,9 +335,43 @@
                     </a>
                 </div>
             </div>
+            <div class="tool-card text">
+                <div class="tool-card-header">
+                    <div class="tool-card-icon">
+                        <i class="fas fa-feather-alt"></i>
+                    </div>
+                    <h3 class="tool-card-title">Styliseur de texte</h3>
+                </div>
+                <div class="tool-card-body">
+                    <p class="tool-card-description">Transformez et stylisez vos textes pour les réseaux sociaux ou le web.</p>
+                </div>
+                <div class="tool-card-footer">
+                    <a href="outils.html#styletext" class="tool-card-button" data-tool-id="styletext">
+                        <span>Utiliser</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="tool-card text">
+                <div class="tool-card-header">
+                    <div class="tool-card-icon">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                    <h3 class="tool-card-title">Éditeur de texte</h3>
+                </div>
+                <div class="tool-card-body">
+                    <p class="tool-card-description">Un éditeur de texte complet pour rédiger, formater et exporter vos contenus.</p>
+                </div>
+                <div class="tool-card-footer">
+                    <a href="outils.html#textEditorTool" class="tool-card-button" data-tool-id="textEditorTool">
+                        <span>Utiliser</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
 
             <!-- Catégorie Utilitaires -->
-            <div class="tool-card utility new">
+            <div class="tool-card utility">
                 <div class="tool-card-header">
                     <div class="tool-card-icon">
                         <i class="fas fa-key"></i>
@@ -289,6 +383,40 @@
                 </div>
                 <div class="tool-card-footer">
                     <a href="outils.html#passwordTool" class="tool-card-button" data-tool-id="passwordTool">
+                        <span>Utiliser</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="tool-card utility">
+                <div class="tool-card-header">
+                    <div class="tool-card-icon">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h3 class="tool-card-title">Sélecteur de couleur</h3>
+                </div>
+                <div class="tool-card-body">
+                    <p class="tool-card-description">Choisissez et copiez des couleurs pour vos projets web ou graphiques.</p>
+                </div>
+                <div class="tool-card-footer">
+                    <a href="outils.html#colorTool" class="tool-card-button" data-tool-id="colorTool">
+                        <span>Utiliser</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="tool-card utility">
+                <div class="tool-card-header">
+                    <div class="tool-card-icon">
+                        <i class="fas fa-qrcode"></i>
+                    </div>
+                    <h3 class="tool-card-title">Générateur de QR code</h3>
+                </div>
+                <div class="tool-card-body">
+                    <p class="tool-card-description">Créez facilement des QR codes personnalisés pour vos liens, textes ou contacts.</p>
+                </div>
+                <div class="tool-card-footer">
+                    <a href="outils.html#qrcodeTool" class="tool-card-button" data-tool-id="qrcodeTool">
                         <span>Utiliser</span>
                         <i class="fas fa-arrow-right"></i>
                     </a>
@@ -386,11 +514,6 @@
             
             updateClock();
             setInterval(updateClock, 1000);
-
-            // Initialisation du menu
-            import('./js/menu.js').then(module => {
-                module.MenuManager.init();
-            });
         });
     </script>
     

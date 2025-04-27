@@ -1,0 +1,301 @@
+/* styles/components/color.css */
+/* Styles pour le composant de sélecteur de couleur */
+
+.color-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.color-picker {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.color-input {
+    width: 100%;
+    height: 200px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.color-values {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.color-value-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.color-value-group label {
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.color-value-input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--input-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+}
+
+.color-palette {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.color-swatch {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.color-swatch:hover {
+    transform: scale(1.05);
+}
+
+.color-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.color-button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--primary-color);
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.color-button:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+.color-button:active {
+    transform: translateY(0);
+}
+
+.color-button.secondary {
+    background: var(--button-bg);
+    color: var(--text-color);
+}
+
+.color-button.secondary:hover {
+    background: var(--button-hover-bg);
+}
+
+.color-copy {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 6px;
+    background: var(--button-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.2s ease;
+}
+
+.color-swatch:hover .color-copy {
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .color-container {
+        margin: 1rem;
+        padding: 1rem;
+    }
+
+    .color-picker {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .color-input {
+        height: 150px;
+    }
+}
+
+/* Modernisation des champs de saisie couleur */
+.color-value-input input.color-input {
+    border: 1.5px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    font-size: 1.05rem;
+    background: var(--input-bg);
+    color: var(--text-color);
+    transition: border 0.2s, box-shadow 0.2s;
+    outline: none;
+    max-height: 50px;
+}
+.color-value-input input.color-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--primary-color-20, #007bff33);
+}
+
+/* Boutons de copie modernisés */
+.btn-copy {
+    margin-left: 0.5rem;
+    background: var(--button-bg);
+    border: none;
+    border-radius: 6px;
+    color: var(--text-color);
+    padding: 0.4rem 0.6rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, transform 0.1s;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+}
+.btn-copy:hover {
+    background: var(--primary-color);
+    color: #fff;
+    transform: scale(1.08);
+}
+
+/* Notification de copie */
+.copy-notification {
+    position: fixed;
+    top: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%) scale(0.95);
+    background: var(--primary-color);
+    color: #fff;
+    padding: 0.8rem 2rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1000;
+    transition: opacity 0.3s, transform 0.3s;
+}
+.copy-notification.show {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+}
+
+/* Prévisualisation de couleur */
+.color-preview {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    border: 2px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    margin-bottom: 0.7rem;
+    transition: border 0.2s;
+}
+.color-preview:active {
+    border-color: var(--primary-color);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .color-preview {
+        width: 40px;
+        height: 40px;
+    }
+    .color-value-input input.color-input {
+        font-size: 0.95rem;
+        padding: 0.4rem 0.5rem;
+    }
+    .copy-notification {
+        font-size: 1rem;
+        padding: 0.6rem 1.2rem;
+    }
+}
+
+/* Amélioration de l'affichage de l'historique */
+.history-item {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.5rem 0.7rem;
+    border-radius: 8px;
+    background: var(--input-bg);
+    margin-bottom: 0.3rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.history-item:hover {
+    background: var(--primary-hover, #f0f4ff);
+}
+.history-color {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: 1.5px solid var(--border-color);
+}
+.history-info {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.97rem;
+}
+.history-hex {
+    font-weight: 500;
+    color: var(--text-color);
+}
+.history-date {
+    color: var(--text-muted);
+    font-size: 0.85em;
+}
+
+/* Style personnalisé pour le color picker natif */
+#colorThumb {
+  width: 48px;
+  height: 48px;
+  border: 2px solid var(--primary, #0066cc);
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  background: #fff;
+  cursor: pointer;
+  padding: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+  transition: box-shadow 0.2s, border-color 0.2s;
+  display: inline-block;
+  vertical-align: middle;
+}
+#colorThumb:hover, #colorThumb:focus {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  border-color: var(--primary-dark, #004080);
+}
+
+/* Pour masquer le carré natif sur certains navigateurs */
+#colorThumb::-webkit-color-swatch-wrapper {
+  padding: 0;
+  border-radius: 50%;
+}
+#colorThumb::-webkit-color-swatch {
+  border-radius: 50%;
+  border: none;
+}
+#colorThumb::-moz-color-swatch {
+  border-radius: 50%;
+  border: none;
+} 

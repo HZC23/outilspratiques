@@ -46,14 +46,7 @@
 }
 
 /* Masquer l'horloge sur mobile */
-@media (max-width: 600px) {
-    .top-clock {
-        display: none !important;
-    }
-}
-
-/* Masquer l'horloge sur les petits écrans */
-@media screen and (max-width: 500px) {
+@media (max-width: 700px) {
     .top-clock {
         display: none !important;
     }

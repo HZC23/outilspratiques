@@ -12,25 +12,32 @@
 /* Import du système de base et de la mise en page */
 @import url('menu.css');
 @import url('home.css');
-@import url('tools-cards.css');
-@import url('theme-switch.css');
-@import url('notification.css');
+@import url('components/theme-switch.css');
+@import url('components/notification.css');
 
 /* Import des styles pour les composants */
 @import url('components/buttons.css');
-@import url('components/color.css');
-@import url('components/calculator.css');
-@import url('components/unit.css');
+@import url('components/clock.css');
+/*/ Import des styles pour les composants supplémentaires */
+@import url('components/header.css');
 @import url('components/text.css');
-@import url('components/styletext.css');
-@import url('components/timer.css');
-@import url('components/stopwatch.css');
-@import url('components/notes.css');
-@import url('components/translator.css');
-@import url('components/scheduler.css');
-@import url('components/metronome.css');
-@import url('components/qrcode.css');
-@import url('components/todo.css');
+
+/*/ Import des styles pour les outils */
+@import url('tools/calculator.css');
+@import url('tools/color.css');
+@import url('tools/unit.css');
+@import url('tools/styletext.css');
+@import url('tools/timer.css');
+@import url('tools/stopwatch.css');
+@import url('tools/notes.css');
+@import url('tools/translator.css');
+@import url('tools/scheduler.css');
+@import url('tools/metronome.css');
+@import url('tools/qrcode.css');
+@import url('tools/todo.css');
+@import url('tools/password.css');
+@import url('tools/currency.css');
+@import url('tools/textEditor.css');
 
 /* Styles de base */
 html, body {
@@ -85,7 +92,7 @@ a {
 }
 
 a:hover, a:focus {
-    color: #1d5fa8;
+    color: var(--primary-color);
     text-decoration: underline;
 }
 
@@ -116,13 +123,13 @@ p {
 
 /* Header styles */
 header {
-    background: linear-gradient(135deg, var(--primary-color), #1e40af, #3730a3);
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-gradient-blue, #1e40af), var(--primary-gradient-purple, #3730a3));
     color: var(--text-on-primary);
     padding: var(--spacing-md) var(--spacing-md);
     position: sticky;
     top: 0;
     z-index: 1000;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--box-shadow);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -159,61 +166,6 @@ header {
     align-items: center;
     gap: var(--spacing-sm);
     margin-left: auto;
-}
-
-/* Style des boutons dans le header */
-.btn-icon {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-}
-
-.btn-icon:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-}
-
-.btn-icon i {
-    font-size: 1.2rem;
-    margin: 0;
-}
-
-.menu-toggle {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-}
-
-.menu-toggle:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-}
-
-.menu-toggle i {
-    font-size: 1.2rem;
-    margin: 0;
 }
 
 .theme-switch-wrapper {
@@ -651,48 +603,6 @@ input:focus, select:focus, textarea:focus {
     .d-sm-flex { display: flex; }
 }
 
-/* Barre de recherche */
-.search-wrapper {
-    margin-bottom: var(--spacing-lg);
-    position: relative;
-}
-
-.search-form {
-    display: flex;
-    align-items: center;
-}
-
-.search-form input[type="search"] {
-    flex-grow: 1;
-    padding: var(--spacing-sm) var(--spacing-lg);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    font-size: var(--font-size);
-    box-shadow: var(--inset-shadow);
-    background-color: var(--card-bg);
-    color: var(--text-color);
-}
-
-.search-form input[type="search"]::placeholder {
-    color: var(--text-muted);
-    opacity: 0.7;
-}
-
-.search-form input[type="search"]:focus {
-    border-color: var(--primary-color);
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.2);
-}
-
-.search-form .btn-icon {
-    margin-left: var(--spacing-sm);
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 /* Hero section */
 .hero {
     background: linear-gradient(135deg, var(--primary-color), #1d5fa8);
@@ -755,9 +665,10 @@ input:focus, select:focus, textarea:focus {
 
 /* Footer */
 footer {
-    background-color: #333;
-    color: #fff;
-    padding: var(--spacing-xl) var(--spacing-md);
+    background-color: var(--bg-color-dark, #333);
+    color: var(--text-on-primary, #fff);
+    padding: var(--spacing-lg) 0 var(--spacing-md) 0;
+    box-shadow: var(--box-shadow);
     margin-top: var(--spacing-xl);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -772,7 +683,7 @@ footer {
 }
 
 .footer-section h3 {
-    color: #fff;
+    color: var(--text-on-primary, #fff);
     font-size: var(--font-size-md);
     margin-bottom: var(--spacing-md);
     position: relative;
@@ -783,7 +694,7 @@ footer {
 
 .footer-section p, 
 .footer-section address {
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-on-primary, #fff);
     line-height: var(--line-height-relaxed);
     margin-bottom: var(--spacing-md);
     font-size: var(--font-size-sm);
@@ -800,7 +711,7 @@ footer {
 }
 
 .footer-section a {
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-on-primary, #fff);
     text-decoration: none;
     transition: all 0.3s ease;
     font-size: var(--font-size-sm);
@@ -809,7 +720,7 @@ footer {
 }
 
 .footer-section a:hover {
-    color: #fff;
+    color: var(--primary-color);
     transform: translateX(3px);
 }
 
@@ -820,7 +731,7 @@ footer {
     left: 0;
     width: 0;
     height: 1px;
-    background-color: #fff;
+    background-color: var(--primary-color);
     transition: width 0.3s ease;
 }
 
@@ -829,11 +740,11 @@ footer {
 }
 
 .footer-bottom {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    margin-top: var(--spacing-lg);
-    padding-top: var(--spacing-md);
+    background-color: var(--bg-color, #fff);
+    color: var(--text-color, #333);
+    border-top: 1px solid var(--border-color, #e0e0e0);
+    padding: var(--spacing-sm) 0;
     text-align: center;
-    color: rgba(255, 255, 255, 0.5);
     font-size: var(--font-size-sm);
     max-width: var(--breakpoint-desktop);
     margin-left: auto;
@@ -853,7 +764,7 @@ footer {
 }
 
 .calc-display {
-    background-color: #f8f9fa;
+    background-color: var(--calc-display-bg, #f8f9fa);
     border-radius: var(--border-radius-sm);
     padding: var(--spacing-sm);
     margin-bottom: var(--spacing-sm);
@@ -863,7 +774,7 @@ footer {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    border: 1px solid #dee2e6;
+    border: 1px solid var(--border-color, #dee2e6);
 }
 
 .calc-buttons {
@@ -873,8 +784,8 @@ footer {
 }
 
 .calc-btn {
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
+    background-color: var(--calc-button-bg, #f8f9fa);
+    border: 1px solid var(--border-color, #dee2e6);
     border-radius: var(--border-radius-sm);
     padding: var(--spacing-sm);
     font-size: 1.2rem;
@@ -886,21 +797,21 @@ footer {
 }
 
 .calc-btn:hover {
-    background-color: #e9ecef;
+    background-color: var(--hover-color, #e9ecef);
 }
 
 .calc-btn.operator {
-    background-color: #e9ecef;
+    background-color: var(--calc-button-operator, #e9ecef);
 }
 
 .calc-btn.equals {
-    background-color: #0d6efd;
+    background-color: var(--calc-button-equals, #0d6efd);
     color: white;
     grid-column: span 1;
 }
 
 .calc-btn.equals:hover {
-    background-color: #0b5ed7;
+    background-color: var(--calc-button-equals-hover, #0b5ed7);
 }
 
 .calc-btn.zero {
@@ -948,7 +859,7 @@ footer {
 
 .footer-copyright {
     font-size: var(--font-size-xs);
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--text-color, #333);
     margin-top: var(--spacing-lg);
     padding-top: var(--spacing-sm);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -962,4 +873,75 @@ footer {
 
 .footer-copyright {
     margin-top: auto;
+}
+
+.search-bar-container {
+    position: relative;
+    width: 100vw;
+    height: 55px;
+    min-height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+.search-form {
+    position: relative;
+    transition: all 1s;
+    width: 50px;
+    height: 50px;
+    background: var(--bg-color);
+    box-sizing: border-box;
+    border-radius: 25px;
+    border: 4px solid var(--border-color);
+    padding: 5px;
+    display: flex;
+    align-items: center;
+}
+.search-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 42.5px;
+    line-height: 30px;
+    outline: 0;
+    border: 0;
+    display: none;
+    font-size: 1em;
+    border-radius: 20px;
+    padding: 0 20px;
+    background: transparent;
+    color: var(--text-color);
+}
+.search-icon {
+    box-sizing: border-box;
+    padding: 10px;
+    width: 42.5px;
+    height: 42.5px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-radius: 50%;
+    color: white;
+    text-align: center;
+    font-size: 1.2em;
+    transition: all 1s;
+    background: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.search-form:hover {
+    width: 300px;
+    cursor: pointer;
+}
+.search-form:hover .search-input {
+    display: block;
+    background: transparent;
+}
+.search-form:hover .search-icon {
+    background: var(--primary-color, #8c52ff);
+    color: white;
 } 

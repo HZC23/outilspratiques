@@ -1,9 +1,9 @@
 .menu {
     width: auto;
-    min-width: 200px;
-    max-width: 250px;
-    height: calc(100vh - 70px);
-    background-color: var(--card-bg);
+    min-width: var(--menu-min-width, 200px);
+    max-width: var(--menu-max-width, 250px);
+    height: calc(100vh - var(--header-height, 70px));
+    background-color: transparent;
     border-right: 1px solid var(--border-color);
     padding: var(--spacing-md);
     overflow-y: auto;
@@ -12,7 +12,7 @@
     left: 0;
     z-index: 5;
     transition: all 0.3s var(--ease-out-back);
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--box-shadow, 2px 0 10px rgba(0, 0, 0, 0.05));
     scrollbar-width: thin;
     scrollbar-color: var(--border-color) transparent;
     will-change: width, transform;
@@ -20,7 +20,7 @@
 }
 
 .menu::-webkit-scrollbar {
-    width: 6px;
+    width: var(--scrollbar-width, 6px);
 }
 
 .menu::-webkit-scrollbar-track {
@@ -29,7 +29,7 @@
 
 .menu::-webkit-scrollbar-thumb {
     background-color: var(--border-color);
-    border-radius: 6px;
+    border-radius: var(--border-radius-sm, 6px);
 }
 
 .container {
@@ -38,8 +38,8 @@
     gap: var(--spacing-md);
     padding: 0;
     min-height: calc(100vh - 70px);
-    margin-top: 70px;
-    max-width: 1800px;
+    margin-top: var(--header-height, 70px);
+    max-width: var(--container-max-width, 1800px);
     margin-left: auto;
     margin-right: auto;
 }
@@ -48,38 +48,38 @@
     background-color: var(--bg-color);
     border-radius: var(--border-radius);
     padding: var(--spacing-xs);
-    min-height: calc(100vh - 70px - 2rem);
+    min-height: calc(100vh - var(--header-height, 70px) - 2rem);
     flex: 1;
     position: relative;
     overflow-y: auto;
     z-index: 1;
     transition: all 0.3s var(--ease-out-back);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--box-shadow, 0 4px 12px rgba(0, 0, 0, 0.08));
     border: 1px solid var(--border-color);
 }
 
 /* Adaptations pour les écrans de différentes tailles */
 @media (max-width: 1200px) {
     .menu {
-        min-width: 180px;
-        max-width: 250px;
+        min-width: var(--menu-min-width-md, 180px);
+        max-width: var(--menu-max-width-md, 250px);
     }
 }
 
 @media (max-width: 992px) {
     .menu {
-        min-width: 160px;
-        max-width: 230px;
+        min-width: var(--menu-min-width-sm, 160px);
+        max-width: var(--menu-max-width-sm, 230px);
     }
     
     .menu-trigger {
-        padding: 0.6rem 0.8rem;
-        font-size: 0.95rem;
+        padding: var(--spacing-sm, 0.6rem) var(--spacing-md, 0.8rem);
+        font-size: var(--font-size-sm, 0.95rem);
     }
     
     .submenu-item {
-        padding: 0.4rem 0.8rem;
-        font-size: 0.9rem;
+        padding: var(--spacing-xs, 0.4rem) var(--spacing-md, 0.8rem);
+        font-size: var(--font-size-xs, 0.9rem);
     }
 }
 
@@ -89,11 +89,11 @@
         left: 0;
         width: 85%;
         min-width: unset;
-        max-width: 320px;
+        max-width: var(--menu-max-width-mobile, 320px);
         height: 100vh;
         top: 0;
         margin-top: 0;
-        padding-top: calc(70px + var(--spacing-md));
+        padding-top: calc(var(--header-height, 70px) + var(--spacing-md));
         transition: transform var(--transition-duration) var(--ease-out-back), 
                     box-shadow var(--transition-duration) var(--ease-in-out);
         box-shadow: none;
@@ -115,7 +115,7 @@
 
     .container {
         grid-template-columns: 1fr;
-        margin-top: 70px;
+        margin-top: var(--header-height, 70px);
         padding: 0;
     }
 
@@ -132,22 +132,22 @@
 
 /* Styles pour le menu et les sous-menus */
 .menu-category {
-    margin-bottom: 1rem;
+    margin-bottom: var(--spacing-md, 1rem);
     contain: content;
 }
 
 .menu-trigger {
     width: 100%;
-    padding: 0.75rem 1rem;
+    padding: var(--spacing-md, 0.75rem) var(--spacing-lg, 1rem);
     background: none;
     border: none;
     border-radius: var(--border-radius);
     color: var(--text-color);
-    font-size: 1rem;
+    font-size: var(--font-size, 1rem);
     text-align: left;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--spacing-sm, 0.5rem);
     cursor: pointer;
     transition: all 0.2s ease;
     overflow: visible;
@@ -174,7 +174,7 @@
 }
 
 .menu-trigger i {
-    width: 1.5rem;
+    width: var(--icon-width, 1.5rem);
     text-align: center;
     flex-shrink: 0;
     transition: transform 0.2s var(--ease-out-back);
@@ -183,7 +183,7 @@
 
 .submenu-icon {
     margin-left: auto;
-    font-size: 0.8rem;
+    font-size: var(--font-size-xs, 0.8rem);
     transition: transform 0.3s var(--ease-out-back);
     flex-shrink: 0;
     will-change: transform;
@@ -347,24 +347,43 @@ header h1 {
 
 /* Style du bouton hamburger */
 .menu-toggle {
-    display: none;
-    background: none;
-    border: none;
-    color: var(--text-on-primary);
-    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     cursor: pointer;
-    padding: 0.5rem;
-    margin-left: auto;
-    transition: transform 0.3s var(--ease-out-back);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    line-height: 0;
+    padding: 0;
 }
 
 .menu-toggle:hover {
-    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.menu-toggle i {
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.menu-toggle i.fas.fa-bars {
+    display: block;
+    margin: 0 auto;
+    line-height: 1;
 }
 
 .hamburger {
-    width: 24px;
-    height: 18px;
+    width: var(--toggle-width, 24px);
+    height: var(--toggle-height, 18px);
     position: relative;
     margin: 0 auto;
 }
@@ -372,10 +391,10 @@ header h1 {
 .hamburger span {
     display: block;
     position: absolute;
-    height: 2px;
+    height: var(--hamburger-bar-height, 2px);
     width: 100%;
     background: var(--text-color);
-    border-radius: 2px;
+    border-radius: var(--border-radius-xs, 2px);
     opacity: 1;
     left: 0;
     transform: rotate(0deg);
@@ -418,16 +437,12 @@ header h1 {
 @media (max-width: 768px) {
     .menu-toggle {
         display: block;
-        filter: invert(1);
     }
-    
-    header {
-        padding: 0 1rem;
-        height: 60px;
-    }
-    
-    header h1 {
-        font-size: 1.2rem;
+}
+
+@media (min-width: 769px) {
+    .menu-toggle {
+        display: none;
     }
 }
 

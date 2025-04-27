@@ -12,8 +12,8 @@
 .hero-banner {
     display: flex;
     align-items: center;
-    background: linear-gradient(135deg, var(--primary-color), #0063b1, #004c8c);
-    color: white;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-blue, #0063b1), var(--primary-dark-blue, #004c8c));
+    color: var(--text-on-primary, white);
     border-radius: var(--border-radius-lg);
     padding: var(--spacing-xl);
     margin-bottom: var(--spacing-lg);
@@ -163,15 +163,15 @@
 }
 
 .tool-card.popular::before {
-    background: linear-gradient(90deg, var(--success-color), #4CAF50);
+    background: linear-gradient(90deg, var(--success-color), var(--success-color-dark, #4CAF50));
 }
 
 .tool-card.new::before {
-    background: linear-gradient(90deg, var(--warning-color), #FFC107);
+    background: linear-gradient(90deg, var(--warning-color), var(--warning-color-dark, #FFC107));
 }
 
 .tool-card.text::before {
-    background: linear-gradient(90deg, var(--info-color), #03A9F4);
+    background: linear-gradient(90deg, var(--info-color), var(--info-color-dark, #03A9F4));
 }
 
 .tool-card-header {
