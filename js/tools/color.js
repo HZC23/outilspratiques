@@ -11,7 +11,11 @@ export const ColorManager = {
     state: {
         currentColor: '#0066cc',
         history: [],
-        isColorPickerOpen: false
+        isColorPickerOpen: false,
+        format: 'hex',
+        scheme: 'monochrome',
+        favorites: [],
+        palette: []
     },
 
     /**
@@ -34,11 +38,106 @@ export const ColorManager = {
      * Configure les écouteurs d'événements
      */
     setupEventListeners() {
-        // Écouteur pour le sélecteur de couleur
         const colorPicker = document.getElementById('colorPicker');
         if (colorPicker) {
             colorPicker.addEventListener('input', (e) => {
                 this.updateColorPicker(e.target.value);
+            });
+        }
+
+        // Sliders HSL/Température
+        const hueSlider = document.getElementById('hueAdjust');
+        const satSlider = document.getElementById('satAdjust');
+        const lightSlider = document.getElementById('lightAdjust');
+        const tempSlider = document.getElementById('tempAdjust');
+        const hueValue = document.getElementById('hueAdjustValue');
+        const satValue = document.getElementById('satAdjustValue');
+        const lightValue = document.getElementById('lightAdjustValue');
+        const tempValue = document.getElementById('tempAdjustValue');
+
+        // Fonction de mise à jour de la couleur à partir des sliders
+        const updateFromSliders = () => {
+            // Prend la couleur actuelle, la convertit en HSL
+            const rgb = this.hexToRgb(this.state.currentColor);
+            let hsl = this.rgbToHsl(rgb.r, rgb.g, rgb.b);
+            // Remplace les valeurs par celles des sliders
+            if (hueSlider) hsl.h = parseInt(hueSlider.value, 10);
+            if (satSlider) hsl.s = parseInt(satSlider.value, 10);
+            if (lightSlider) hsl.l = parseInt(lightSlider.value, 10);
+            // Température : simple ajustement sur la teinte (pour l'exemple)
+            if (tempSlider) hsl.h = (hsl.h + parseInt(tempSlider.value, 10) + 360) % 360;
+            // Met à jour la couleur courante
+            const hex = this.hslToHex(hsl.h, hsl.s, hsl.l);
+            this.updateColorPicker(hex);
+            // Met à jour l'affichage des valeurs
+            if (hueValue) hueValue.textContent = hsl.h + '°';
+            if (satValue) satValue.textContent = hsl.s + '%';
+            if (lightValue) lightValue.textContent = hsl.l + '%';
+            if (tempValue) tempValue.textContent = tempSlider ? tempSlider.value : '0';
+        };
+
+        if (hueSlider) {
+            hueSlider.addEventListener('input', updateFromSliders);
+        }
+        if (satSlider) {
+            satSlider.addEventListener('input', updateFromSliders);
+        }
+        if (lightSlider) {
+            lightSlider.addEventListener('input', updateFromSliders);
+        }
+        if (tempSlider) {
+            tempSlider.addEventListener('input', updateFromSliders);
+        }
+
+        // Synchronise les sliders avec la couleur courante à chaque changement
+        this.syncSlidersWithColor = () => {
+            const rgb = this.hexToRgb(this.state.currentColor);
+            const hsl = this.rgbToHsl(rgb.r, rgb.g, rgb.b);
+            if (hueSlider) hueSlider.value = Math.round(hsl.h);
+            if (satSlider) satSlider.value = Math.round(hsl.s);
+            if (lightSlider) lightSlider.value = Math.round(hsl.l);
+            if (tempSlider) tempSlider.value = 0;
+            if (hueValue) hueValue.textContent = Math.round(hsl.h) + '°';
+            if (satValue) satValue.textContent = Math.round(hsl.s) + '%';
+            if (lightValue) lightValue.textContent = Math.round(hsl.l) + '%';
+            if (tempValue) tempValue.textContent = '0';
+        };
+
+        // Appelle la synchronisation à chaque updateColorPicker
+        const originalUpdateColorPicker = this.updateColorPicker.bind(this);
+        this.updateColorPicker = (color) => {
+            originalUpdateColorPicker(color);
+            this.syncSlidersWithColor();
+        };
+
+        // Ajout des écouteurs pour les champs HEX, RGB, HSL, CMYK
+        const hexInput = document.getElementById('hexValue');
+        const rgbInput = document.getElementById('rgbValue');
+        const hslInput = document.getElementById('hslValue');
+        const cmykInput = document.getElementById('cmykValue');
+
+        if (hexInput) {
+            hexInput.addEventListener('blur', () => this.handleHexInput(hexInput.value));
+            hexInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') this.handleHexInput(hexInput.value);
+            });
+        }
+        if (rgbInput) {
+            rgbInput.addEventListener('blur', () => this.handleRgbInput(rgbInput.value));
+            rgbInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') this.handleRgbInput(rgbInput.value);
+            });
+        }
+        if (hslInput) {
+            hslInput.addEventListener('blur', () => this.handleHslInput(hslInput.value));
+            hslInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') this.handleHslInput(hslInput.value);
+            });
+        }
+        if (cmykInput) {
+            cmykInput.addEventListener('blur', () => this.handleCmykInput(cmykInput.value));
+            cmykInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') this.handleCmykInput(cmykInput.value);
             });
         }
 
@@ -47,6 +146,20 @@ export const ColorManager = {
         if (colorPreview) {
             colorPreview.addEventListener('click', () => {
                 this.copyColorValue('Hex');
+            });
+        }
+
+        // Écouteur pour le bouton favori (étoile)
+        const favoriteBtn = document.getElementById('favoriteBtn');
+        if (favoriteBtn) {
+            favoriteBtn.addEventListener('click', () => {
+                if (this.isFavorite(this.state.currentColor)) {
+                    this.removeFavorite(this.state.currentColor);
+                } else {
+                    this.addFavorite(this.state.currentColor);
+                }
+                this.updateAllDisplays();
+                this.saveState();
             });
         }
 
@@ -66,6 +179,46 @@ export const ColorManager = {
         window.updateColorPicker = (color) => this.updateColorPicker(color);
         window.copyColorValue = (format) => this.copyColorValue(format);
         window.clearColorHistory = () => this.clearColorHistory();
+
+        // Ajout des écouteurs pour les boutons de copie
+        setTimeout(() => {
+            document.querySelectorAll('.btn-copy').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const type = btn.getAttribute('data-value');
+                    let value = '';
+                    if (type === 'hex') {
+                        value = document.getElementById('hexValue')?.value || '';
+                    } else if (type === 'rgb') {
+                        value = document.getElementById('rgbValue')?.value || '';
+                    } else if (type === 'hsl') {
+                        value = document.getElementById('hslValue')?.value || '';
+                    } else if (type === 'cmyk') {
+                        value = document.getElementById('cmykValue')?.value || '';
+                    }
+                    if (value) {
+                        this.copyToClipboard(value);
+                        this.showCopyNotification(`${type.toUpperCase()} copié : ${value}`);
+                    }
+                });
+            }); 
+        }, 0);
+
+        // Gestion des onglets (Palettes, Harmonies, Ajustement, Accessibilité)
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabPanes = document.querySelectorAll('.tab-pane');
+        tabButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Retirer la classe active de tous les boutons et onglets
+                tabButtons.forEach(b => b.classList.remove('active'));
+                tabPanes.forEach(p => p.classList.remove('active'));
+                // Ajouter la classe active au bouton et à l'onglet correspondant
+                btn.classList.add('active');
+                const tab = btn.getAttribute('data-tab');
+                const pane = document.getElementById(tab);
+                if (pane) pane.classList.add('active');
+            });
+        });
     },
 
     /**
@@ -101,6 +254,9 @@ export const ColorManager = {
         
         // Ajouter à l'historique
         this.addToColorHistory(color);
+        
+        // Synchroniser tout l'UI
+        this.updateAllDisplays();
     },
 
     /**
@@ -109,23 +265,30 @@ export const ColorManager = {
      */
     updateColorValues(color) {
         // Valeur hexadécimale
-        const colorHex = document.getElementById('colorHex');
+        const colorHex = document.getElementById('hexValue');
         if (colorHex) {
             colorHex.value = color.toUpperCase();
         }
         
         // Valeur RGB
         const rgb = this.hexToRgb(color);
-        const colorRgb = document.getElementById('colorRgb');
+        const colorRgb = document.getElementById('rgbValue');
         if (colorRgb && rgb) {
             colorRgb.value = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
         }
         
         // Valeur HSL
         const hsl = this.rgbToHsl(rgb.r, rgb.g, rgb.b);
-        const colorHsl = document.getElementById('colorHsl');
+        const colorHsl = document.getElementById('hslValue');
         if (colorHsl && hsl) {
             colorHsl.value = `hsl(${Math.round(hsl.h)}, ${Math.round(hsl.s)}%, ${Math.round(hsl.l)}%)`;
+        }
+        
+        // Valeur CMYK
+        const cmyk = this.rgbToCmyk(rgb.r, rgb.g, rgb.b);
+        const colorCmyk = document.getElementById('cmykValue');
+        if (colorCmyk && cmyk) {
+            colorCmyk.value = `cmyk(${Math.round(cmyk[0]*100)}%, ${Math.round(cmyk[1]*100)}%, ${Math.round(cmyk[2]*100)}%, ${Math.round(cmyk[3]*100)}%)`;
         }
     },
 
@@ -499,7 +662,7 @@ export const ColorManager = {
     clearColorHistory() {
         this.state.history = [];
         this.saveColorHistory();
-        this.updateColorHistoryDisplay();
+        this.updateAllDisplays();
         Utils.showNotification('Historique des couleurs effacé', 'info');
     },
 
@@ -797,15 +960,309 @@ export const ColorManager = {
         l = Math.max(0, Math.min(100, l));
         
         return this.hslToHex(hsl.h, hsl.s, l);
-    }
+    },
+
+    // Gestion des entrées utilisateur pour chaque format
+    handleHexInput(value) {
+        let hex = value.trim();
+        if (!hex.startsWith('#')) hex = '#' + hex;
+        if (/^#[0-9a-fA-F]{6}$/.test(hex)) {
+            this.updateColorPicker(hex);
+        } else {
+            this.showCopyNotification('Format HEX invalide');
+        }
+    },
+    handleRgbInput(value) {
+        const match = value.match(/^rgb\s*\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/i);
+        if (match) {
+            const r = parseInt(match[1], 10);
+            const g = parseInt(match[2], 10);
+            const b = parseInt(match[3], 10);
+            if ([r, g, b].every(v => v >= 0 && v <= 255)) {
+                this.updateColorPicker(this.rgbToHex(r, g, b));
+                return;
+            }
+        }
+        this.showCopyNotification('Format RGB invalide');
+    },
+    handleHslInput(value) {
+        const match = value.match(/^hsl\s*\(\s*(\d{1,3})\s*,\s*(\d{1,3})%\s*,\s*(\d{1,3})%\s*\)$/i);
+        if (match) {
+            const h = parseInt(match[1], 10);
+            const s = parseInt(match[2], 10);
+            const l = parseInt(match[3], 10);
+            if (h >= 0 && h <= 360 && s >= 0 && s <= 100 && l >= 0 && l <= 100) {
+                this.updateColorPicker(this.hslToHex(h, s, l));
+                return;
+            }
+        }
+        this.showCopyNotification('Format HSL invalide');
+    },
+    handleCmykInput(value) {
+        const match = value.match(/^cmyk\s*\(\s*(\d{1,3})%\s*,\s*(\d{1,3})%\s*,\s*(\d{1,3})%\s*,\s*(\d{1,3})%\s*\)$/i);
+        if (match) {
+            const c = parseInt(match[1], 10) / 100;
+            const m = parseInt(match[2], 10) / 100;
+            const y = parseInt(match[3], 10) / 100;
+            const k = parseInt(match[4], 10) / 100;
+            if ([c, m, y, k].every(v => v >= 0 && v <= 1)) {
+                const rgb = this.cmykToRgb(c, m, y, k);
+                this.updateColorPicker(this.rgbToHex(rgb.r, rgb.g, rgb.b));
+                return;
+            }
+        }
+        this.showCopyNotification('Format CMYK invalide');
+    },
+
+    // Conversion CMYK -> RGB
+    cmykToRgb(c, m, y, k) {
+        const r = Math.round(255 * (1 - c) * (1 - k));
+        const g = Math.round(255 * (1 - m) * (1 - k));
+        const b = Math.round(255 * (1 - y) * (1 - k));
+        return { r, g, b };
+    },
+    // Conversion RGB -> CMYK
+    rgbToCmyk(r, g, b) {
+        r /= 255; g /= 255; b /= 255;
+        const k = 1 - Math.max(r, g, b);
+        const c = (1 - r - k) / (1 - k) || 0;
+        const m = (1 - g - k) / (1 - k) || 0;
+        const y = (1 - b - k) / (1 - k) || 0;
+        return [c, m, y, k];
+    },
+    // Conversion HEX -> CMYK
+    hexToCmyk(hex) {
+        const rgb = this.hexToRgb(hex);
+        return this.rgbToCmyk(rgb.r, rgb.g, rgb.b);
+    },
+
+    // Conversion RGB -> HSV
+    rgbToHsv(r, g, b) {
+        r /= 255; g /= 255; b /= 255;
+        const max = Math.max(r, g, b);
+        const min = Math.min(r, g, b);
+        let h, s, v = max;
+        const d = max - min;
+        s = max === 0 ? 0 : d / max;
+        if (max === min) {
+            h = 0;
+        } else {
+            switch (max) {
+                case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                case g: h = (b - r) / d + 2; break;
+                case b: h = (r - g) / d + 4; break;
+            }
+            h /= 6;
+        }
+        return [h * 360, s, v];
+    },
+    hexToHsv(hex) {
+        const rgb = this.hexToRgb(hex);
+        return this.rgbToHsv(rgb.r, rgb.g, rgb.b);
+    },
+
+    // Ajout des schémas de couleurs et de la gestion avancée de palette et favoris (fusion color.js)
+    schemes: {
+        monochrome: {
+            name: 'Monochrome',
+            generate: (h, s, l) => [
+                [h, s, l],
+                [h, s, l * 0.8],
+                [h, s * 0.8, l],
+                [h, s * 0.8, l * 0.8],
+                [h, s * 0.6, l * 0.6]
+            ]
+        },
+        analogous: {
+            name: 'Analogue',
+            generate: (h, s, l) => [
+                [h, s, l],
+                [(h + 30) % 360, s, l],
+                [(h + 60) % 360, s, l],
+                [(h - 30 + 360) % 360, s, l],
+                [(h - 60 + 360) % 360, s, l]
+            ]
+        },
+        complementary: {
+            name: 'Complémentaire',
+            generate: (h, s, l) => [
+                [h, s, l],
+                [(h + 180) % 360, s, l],
+                [h, s * 0.8, l],
+                [(h + 180) % 360, s * 0.8, l],
+                [h, s * 0.6, l * 0.6]
+            ]
+        },
+        triadic: {
+            name: 'Triadique',
+            generate: (h, s, l) => [
+                [h, s, l],
+                [(h + 120) % 360, s, l],
+                [(h + 240) % 360, s, l],
+                [h, s * 0.8, l],
+                [(h + 120) % 360, s * 0.8, l]
+            ]
+        },
+        tetradic: {
+            name: 'Tétradique',
+            generate: (h, s, l) => [
+                [h, s, l],
+                [(h + 90) % 360, s, l],
+                [(h + 180) % 360, s, l],
+                [(h + 270) % 360, s, l],
+                [h, s * 0.8, l]
+            ]
+        },
+        split: {
+            name: 'Complémentaire divisé',
+            generate: (h, s, l) => [
+                [h, s, l],
+                [(h + 150) % 360, s, l],
+                [(h + 210) % 360, s, l],
+                [h, s * 0.8, l],
+                [(h + 180) % 360, s * 0.8, l]
+            ]
+        }
+    },
+
+    // Ajout de la gestion des favoris et de l'état avancé
+    defaultState: {
+        format: 'hex',
+        scheme: 'monochrome',
+        history: [],
+        favorites: []
+    },
+
+    saveState() {
+        localStorage.setItem('colorState', JSON.stringify({
+            currentColor: this.state.currentColor,
+            format: this.state.format,
+            scheme: this.state.scheme,
+            history: this.state.history,
+            favorites: this.state.favorites
+        }));
+    },
+
+    loadState() {
+        const saved = localStorage.getItem('colorState');
+        if (saved) {
+            try {
+                const state = JSON.parse(saved);
+                this.state.currentColor = state.currentColor || '#0066cc';
+                this.state.format = state.format || 'hex';
+                this.state.scheme = state.scheme || 'monochrome';
+                this.state.history = state.history || [];
+                this.state.favorites = state.favorites || [];
+            } catch (e) {
+                // Valeurs par défaut
+            }
+        }
+    },
+
+    // Génération de palette avancée
+    generatePalette() {
+        const [h, s, l] = this.hexToHsl(this.state.currentColor || '#000000');
+        const scheme = this.state.scheme || 'monochrome';
+        this.state.palette = this.schemes[scheme]
+            .generate(h, s, l)
+            .map(([h, s, l]) => this.hslToHex(h, s, l));
+        this.updatePaletteDisplay && this.updatePaletteDisplay();
+    },
+
+    updatePaletteDisplay() {
+        const container = document.getElementById('colorPalette');
+        if (!container) return;
+        container.innerHTML = (this.state.palette || [])
+            .map(color => `
+                <div class="color-item" 
+                     style="background-color: ${color}"
+                     onclick="updateColorPicker('${color}')">
+                    <div class="color-value">${color.toUpperCase()}</div>
+                </div>
+            `)
+            .join('');
+    },
+
+    // Ajout/Retrait des favoris
+    addFavorite(color) {
+        if (!this.state.favorites) this.state.favorites = [];
+        if (!this.state.favorites.includes(color)) {
+            this.state.favorites.push(color);
+            this.saveState();
+        }
+    },
+    removeFavorite(color) {
+        if (!this.state.favorites) return;
+        this.state.favorites = this.state.favorites.filter(c => c !== color);
+        this.saveState();
+    },
+
+    updateAllDisplays() {
+        this.updateColorValues(this.state.currentColor);
+        this.updatePaletteDisplay && this.updatePaletteDisplay();
+        this.updateColorHistoryDisplay && this.updateColorHistoryDisplay();
+        this.updateFavoritesDisplay && this.updateFavoritesDisplay();
+        this.updateFavoriteIcon && this.updateFavoriteIcon();
+    },
+
+    /**
+     * Affiche dynamiquement les favoris dans la section dédiée
+     */
+    updateFavoritesDisplay() {
+        const container = document.getElementById('colorFavorites');
+        if (!container) return;
+        container.innerHTML = '';
+        if (!this.state.favorites || this.state.favorites.length === 0) {
+            const empty = document.createElement('div');
+            empty.textContent = 'Aucun favori';
+            empty.style.padding = '1rem';
+            empty.style.textAlign = 'center';
+            empty.style.color = 'var(--text-muted)';
+            container.appendChild(empty);
+            return;
+        }
+        this.state.favorites.forEach(color => {
+            const favDiv = document.createElement('div');
+            favDiv.className = 'favorite-item';
+            favDiv.style.backgroundColor = color;
+            favDiv.title = color.toUpperCase();
+            favDiv.addEventListener('click', () => {
+                this.updateColorPicker(color);
+            });
+            container.appendChild(favDiv);
+        });
+    },
+
+    /**
+     * Met à jour l'icône étoile selon l'état favori
+     */
+    updateFavoriteIcon() {
+        const icon = document.getElementById('favoriteIcon');
+        if (!icon) return;
+        if (this.isFavorite(this.state.currentColor)) {
+            icon.classList.add('is-favorite');
+            icon.classList.add('fas');
+            icon.classList.remove('far');
+        } else {
+            icon.classList.remove('is-favorite');
+            icon.classList.remove('fas');
+            icon.classList.add('far');
+        }
+    },
+
+    /**
+     * Vérifie si une couleur est dans les favoris
+     */
+    isFavorite(color) {
+        return this.state.favorites && this.state.favorites.includes(color);
+    },
 };
 
 // Initialiser le gestionnaire de couleurs au chargement du document
 document.addEventListener('DOMContentLoaded', () => {
-    // Exposer les fonctions globalement pour les appels HTML
+    ColorManager.loadState();
     window.updateColorPicker = (color) => ColorManager.updateColorPicker(color);
     window.copyColorValue = (format) => ColorManager.copyColorValue(format);
     window.clearColorHistory = () => ColorManager.clearColorHistory();
-
     ColorManager.init();
 });

@@ -1,0 +1,145 @@
+/* styles/components/translator.css */
+/* Styles pour le composant de traduction */
+
+.translator-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.translator-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.translator-languages {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.translator-select {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--input-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.translator-swap {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--button-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.translator-swap:hover {
+    background: var(--button-hover-bg);
+    transform: rotate(180deg);
+}
+
+.translator-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.translator-textarea {
+    width: 100%;
+    min-height: 200px;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--input-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+    resize: vertical;
+}
+
+.translator-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.translator-button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--primary-color);
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.translator-button:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+.translator-button:active {
+    transform: translateY(0);
+}
+
+.translator-button.secondary {
+    background: var(--button-bg);
+    color: var(--text-color);
+}
+
+.translator-button.secondary:hover {
+    background: var(--button-hover-bg);
+}
+
+.translator-result {
+    position: relative;
+}
+
+.translator-copy {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 6px;
+    background: var(--button-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.translator-copy:hover {
+    background: var(--button-hover-bg);
+}
+
+@media (max-width: 768px) {
+    .translator-container {
+        margin: 1rem;
+        padding: 1rem;
+    }
+
+    .translator-content {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .translator-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .translator-languages {
+        width: 100%;
+        justify-content: space-between;
+    }
+} 

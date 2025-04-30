@@ -1,0 +1,373 @@
+/* styles/components/scheduler.css */
+/* Styles pour le composant de planificateur/agenda */
+
+.scheduler-tool {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.scheduler-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.scheduler-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.scheduler-controls {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.scheduler-nav-btn {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--bg-color-secondary);
+    color: var(--text-color);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.scheduler-nav-btn:hover {
+    background-color: var(--bg-color-hover);
+}
+
+.scheduler-current-date {
+    font-weight: 500;
+    min-width: 150px;
+    text-align: center;
+}
+
+.scheduler-view-selector {
+    display: flex;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: var(--bg-color-secondary);
+}
+
+.scheduler-view-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    background-color: transparent;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.scheduler-view-btn:hover {
+    background-color: var(--bg-color-hover);
+}
+
+.scheduler-view-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.scheduler-add-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--primary-color);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.2s;
+}
+
+.scheduler-add-btn:hover {
+    background-color: var(--primary-color-dark);
+}
+
+/* Calendar View */
+.scheduler-calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.calendar-weekday {
+    text-align: center;
+    font-weight: 600;
+    padding: 0.5rem;
+    color: var(--text-color);
+}
+
+.calendar-day {
+    min-height: 100px;
+    padding: 0.5rem;
+    border-radius: 6px;
+    background-color: var(--bg-color-secondary);
+    transition: background-color 0.2s;
+}
+
+.calendar-day:hover {
+    background-color: var(--bg-color-hover);
+}
+
+.calendar-day.today {
+    border: 2px solid var(--primary-color);
+}
+
+.calendar-day.other-month {
+    opacity: 0.5;
+}
+
+.calendar-day-number {
+    text-align: right;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
+
+.calendar-events {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.calendar-event {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.calendar-event:hover {
+    transform: translateY(-2px);
+}
+
+.calendar-event.priority-high {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.calendar-event.priority-medium {
+    background-color: var(--warning-color);
+    color: var(--text-color-dark);
+}
+
+.calendar-event.priority-low {
+    background-color: var(--success-color);
+    color: white;
+}
+
+/* List View */
+.scheduler-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.list-date {
+    font-weight: 600;
+    padding: 0.5rem;
+    color: var(--text-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.list-events {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem;
+}
+
+.list-event {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 6px;
+    background-color: var(--bg-color-secondary);
+    transition: transform 0.2s;
+}
+
+.list-event:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.list-event-time {
+    min-width: 80px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.list-event-content {
+    flex: 1;
+}
+
+.list-event-title {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+    color: var(--text-color);
+}
+
+.list-event-description {
+    font-size: 0.875rem;
+    color: var(--text-color-secondary);
+}
+
+.list-event-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.list-event-btn {
+    padding: 0.25rem;
+    border: none;
+    border-radius: 4px;
+    background-color: transparent;
+    color: var(--text-color-secondary);
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.list-event-btn:hover {
+    color: var(--text-color);
+}
+
+.list-event-btn.edit:hover {
+    color: var(--primary-color);
+}
+
+.list-event-btn.delete:hover {
+    color: var(--danger-color);
+}
+
+/* Event Modal */
+.event-modal {
+    background-color: var(--bg-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    max-width: 500px;
+    width: 100%;
+}
+
+.event-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.event-modal-title {
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.event-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+}
+
+.event-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.event-modal-btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.event-modal-btn.cancel {
+    background-color: var(--bg-color-secondary);
+    color: var(--text-color);
+}
+
+.event-modal-btn.cancel:hover {
+    background-color: var(--bg-color-hover);
+}
+
+.event-modal-btn.save {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.event-modal-btn.save:hover {
+    background-color: var(--primary-color-dark);
+}
+
+@media (max-width: 768px) {
+    .scheduler-calendar {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    
+    .calendar-weekday {
+        display: none;
+    }
+    
+    .calendar-day {
+        min-height: auto;
+    }
+    
+    .calendar-day-number {
+        text-align: left;
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .calendar-day-number::after {
+        content: attr(data-weekday);
+        font-weight: normal;
+        color: var(--text-color-secondary);
+    }
+    
+    .list-event {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .list-event-time {
+        text-align: left;
+    }
+} 

@@ -1,0 +1,142 @@
+.translate-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.translate-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.translate-languages {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.translate-select {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--input-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.translate-swap {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--button-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.translate-swap:hover {
+    background: var(--button-hover-bg);
+    transform: rotate(180deg);
+}
+
+.translate-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.translate-textarea {
+    width: 100%;
+    min-height: 200px;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--input-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+    resize: vertical;
+}
+
+.translate-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.translate-button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--primary-color);
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.translate-button:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+.translate-button:active {
+    transform: translateY(0);
+}
+
+.translate-button.secondary {
+    background: var(--button-bg);
+    color: var(--text-color);
+}
+
+.translate-button.secondary:hover {
+    background: var(--button-hover-bg);
+}
+
+.translate-result {
+    position: relative;
+}
+
+.translate-copy {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 6px;
+    background: var(--button-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.translate-copy:hover {
+    background: var(--button-hover-bg);
+}
+
+@media (max-width: 768px) {
+    .translate-container {
+        margin: 1rem;
+        padding: 1rem;
+    }
+
+    .translate-content {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .translate-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .translate-languages {
+        width: 100%;
+        justify-content: space-between;
+    }
+} 

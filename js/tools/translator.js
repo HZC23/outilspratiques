@@ -18,13 +18,23 @@ let state = {
  * Initialise le traducteur
  */
 function initTranslator() {
+    // Vérifier si les éléments du traducteur existent dans la page
+    const sourceTextElement = document.getElementById('sourceText');
+    const sourceLanguageElement = document.getElementById('sourceLanguage');
+    const targetLanguageElement = document.getElementById('targetLanguage');
+    
+    if (!sourceTextElement || !sourceLanguageElement || !targetLanguageElement) {
+        console.log('Éléments du traducteur non présents dans la page actuelle');
+        return;
+    }
+    
     // Charger l'historique depuis le stockage local
     loadTranslationHistory();
     
     // Initialiser les écouteurs d'événements
-    document.getElementById('sourceText').addEventListener('input', autoTranslate);
-    document.getElementById('sourceLanguage').addEventListener('change', autoTranslate);
-    document.getElementById('targetLanguage').addEventListener('change', autoTranslate);
+    sourceTextElement.addEventListener('input', autoTranslate);
+    sourceLanguageElement.addEventListener('change', autoTranslate);
+    targetLanguageElement.addEventListener('change', autoTranslate);
     
     // Mettre à jour les compteurs de caractères
     updateCharCount();
@@ -418,8 +428,13 @@ function showNotification(message, type = 'info') {
     }
 }
 
-// Initialiser le traducteur au chargement du document
-document.addEventListener('DOMContentLoaded', initTranslator);
+// Initialiser le traducteur seulement quand le DOM est chargé
+// et seulement si nous sommes sur la page du traducteur
+document.addEventListener('DOMContentLoaded', () => {
+    if (document.getElementById('sourceText')) {
+        initTranslator();
+    }
+});
 
 // Exposer les fonctions globalement
 window.autoTranslate = autoTranslate;

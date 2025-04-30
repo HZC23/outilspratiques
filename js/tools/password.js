@@ -11,37 +11,90 @@ const CHARS = {
     special: '!@#$%^&*()_+-=[]{}|;:,.<>?'
 };
 
+// Configuration par défaut
+const DEFAULT_CONFIG = {
+    length: 12,
+    uppercase: true,
+    lowercase: true,
+    numbers: true,
+    symbols: true,
+    excludeSimilar: false,
+    excludeAmbiguous: false
+};
+
 // État du générateur
 let state = {
-    history: [],
-    lastPassword: '',
-    options: {
-        length: 16,
-        useUppercase: true,
-        useLowercase: true,
-        useNumbers: true,
-        useSpecial: true
-    }
+    config: {...DEFAULT_CONFIG},
+    generatedPassword: '',
+    passwordStrength: 0,
+    history: []
 };
 
 /**
  * Initialise le générateur de mots de passe
  */
 function initPasswordGenerator() {
+    // Vérifier si les éléments existent
+    const container = document.getElementById('passwordGenerator');
+    
+    if (!container) {
+        console.log('Le générateur de mot de passe n\'est pas présent dans la page actuelle');
+        return;
+    }
+    
+    const lengthSlider = document.getElementById('passwordLength');
+    const lengthValue = document.getElementById('lengthValue');
+    const generateBtn = document.getElementById('generatePassword');
+    const passwordOutput = document.getElementById('generatedPassword');
+    
+    if (!lengthSlider || !lengthValue || !generateBtn || !passwordOutput) {
+        console.log('Éléments du générateur de mot de passe manquants dans la page');
+        return;
+    }
+    
     // Charger l'historique depuis le stockage local
     loadPasswordHistory();
     
-    // Initialiser les écouteurs d'événements
-    document.getElementById('passwordLength').addEventListener('input', updateLengthValue);
-    document.getElementById('useUppercase').addEventListener('change', updateOptions);
-    document.getElementById('useLowercase').addEventListener('change', updateOptions);
-    document.getElementById('useNumbers').addEventListener('change', updateOptions);
-    document.getElementById('useSpecial').addEventListener('change', updateOptions);
+    // Configurer les écouteurs d'événements
+    setupEventListeners();
     
     // Générer un mot de passe initial
     generatePassword();
     
-    console.log('Générateur de mots de passe initialisé');
+    console.log('Générateur de mot de passe initialisé');
+}
+
+/**
+ * Configure les écouteurs d'événements
+ */
+function setupEventListeners() {
+    const lengthSlider = document.getElementById('passwordLength');
+    const uppercaseCheck = document.getElementById('useUppercase');
+    const lowercaseCheck = document.getElementById('useLowercase');
+    const numbersCheck = document.getElementById('useNumbers');
+    const symbolsCheck = document.getElementById('useSpecial');
+    const generateBtn = document.getElementById('generatePassword');
+    const copyBtn = document.getElementById('copyPassword');
+    
+    if (!lengthSlider || !uppercaseCheck || !lowercaseCheck || !numbersCheck || 
+        !symbolsCheck || !generateBtn || !copyBtn) {
+        return;
+    }
+    
+    // Écouteur pour le slider de longueur
+    lengthSlider.addEventListener('input', updateLengthValue);
+    
+    // Écouteurs pour les options
+    uppercaseCheck.addEventListener('change', updateOptions);
+    lowercaseCheck.addEventListener('change', updateOptions);
+    numbersCheck.addEventListener('change', updateOptions);
+    symbolsCheck.addEventListener('change', updateOptions);
+    
+    // Écouteur pour le bouton de génération
+    generateBtn.addEventListener('click', generatePassword);
+    
+    // Écouteur pour le bouton de copie
+    copyBtn.addEventListener('click', copyPassword);
 }
 
 /**
@@ -49,24 +102,37 @@ function initPasswordGenerator() {
  */
 function updateLengthValue() {
     const length = document.getElementById('passwordLength').value;
-    document.getElementById('lengthValue').textContent = `${length} caractères`;
-    state.options.length = parseInt(length);
+    const display = document.getElementById('lengthValue');
+    
+    if (!display) return;
+    
+    display.textContent = `${length} caractères`;
+    state.config.length = parseInt(length);
 }
 
 /**
  * Met à jour les options du générateur
  */
 function updateOptions() {
-    state.options.useUppercase = document.getElementById('useUppercase').checked;
-    state.options.useLowercase = document.getElementById('useLowercase').checked;
-    state.options.useNumbers = document.getElementById('useNumbers').checked;
-    state.options.useSpecial = document.getElementById('useSpecial').checked;
+    const uppercaseCheck = document.getElementById('useUppercase');
+    const lowercaseCheck = document.getElementById('useLowercase');
+    const numbersCheck = document.getElementById('useNumbers');
+    const symbolsCheck = document.getElementById('useSpecial');
+    
+    if (!uppercaseCheck || !lowercaseCheck || !numbersCheck || !symbolsCheck) {
+        return;
+    }
+    
+    state.config.uppercase = uppercaseCheck.checked;
+    state.config.lowercase = lowercaseCheck.checked;
+    state.config.numbers = numbersCheck.checked;
+    state.config.symbols = symbolsCheck.checked;
     
     // S'assurer qu'au moins une option est sélectionnée
-    if (!state.options.useUppercase && !state.options.useLowercase && 
-        !state.options.useNumbers && !state.options.useSpecial) {
-        document.getElementById('useLowercase').checked = true;
-        state.options.useLowercase = true;
+    if (!state.config.uppercase && !state.config.lowercase && 
+        !state.config.numbers && !state.config.symbols) {
+        lowercaseCheck.checked = true;
+        state.config.lowercase = true;
     }
 }
 
@@ -80,24 +146,24 @@ function generatePassword() {
     
     // Construire la chaîne de caractères disponibles
     let availableChars = '';
-    if (state.options.useUppercase) availableChars += CHARS.uppercase;
-    if (state.options.useLowercase) availableChars += CHARS.lowercase;
-    if (state.options.useNumbers) availableChars += CHARS.numbers;
-    if (state.options.useSpecial) availableChars += CHARS.special;
+    if (state.config.uppercase) availableChars += CHARS.uppercase;
+    if (state.config.lowercase) availableChars += CHARS.lowercase;
+    if (state.config.numbers) availableChars += CHARS.numbers;
+    if (state.config.symbols) availableChars += CHARS.special;
     
     // Générer le mot de passe
     let password = '';
-    for (let i = 0; i < state.options.length; i++) {
+    for (let i = 0; i < state.config.length; i++) {
         const randomIndex = Math.floor(Math.random() * availableChars.length);
         password += availableChars[randomIndex];
     }
     
     // Vérifier que le mot de passe contient au moins un caractère de chaque type sélectionné
     let isValid = true;
-    if (state.options.useUppercase && !/[A-Z]/.test(password)) isValid = false;
-    if (state.options.useLowercase && !/[a-z]/.test(password)) isValid = false;
-    if (state.options.useNumbers && !/[0-9]/.test(password)) isValid = false;
-    if (state.options.useSpecial && !/[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]/.test(password)) isValid = false;
+    if (state.config.uppercase && !/[A-Z]/.test(password)) isValid = false;
+    if (state.config.lowercase && !/[a-z]/.test(password)) isValid = false;
+    if (state.config.numbers && !/[0-9]/.test(password)) isValid = false;
+    if (state.config.symbols && !/[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]/.test(password)) isValid = false;
     
     // Régénérer si le mot de passe n'est pas valide
     if (!isValid) {
@@ -105,8 +171,11 @@ function generatePassword() {
     }
     
     // Afficher le mot de passe
-    document.getElementById('generatedPassword').value = password;
-    state.lastPassword = password;
+    const passwordOutput = document.getElementById('generatedPassword');
+    if (passwordOutput) {
+        passwordOutput.value = password;
+        state.generatedPassword = password;
+    }
     
     // Évaluer la force du mot de passe
     evaluatePasswordStrength(password);
@@ -122,54 +191,84 @@ function generatePassword() {
  * @param {string} password - Le mot de passe à évaluer
  */
 function evaluatePasswordStrength(password) {
+    const strengthMeter = document.getElementById('passwordStrength');
+    const strengthText = document.getElementById('strengthText');
+    
+    if (!strengthMeter || !strengthText) return;
+    
+    // Critères
+    const length = password.length;
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasLowercase = /[a-z]/.test(password);
+    const hasNumbers = /[0-9]/.test(password);
+    const hasSymbols = /[^A-Za-z0-9]/.test(password);
+    const hasRepeatingChars = /(.).*\1/.test(password);
+    
+    // Calcul du score (0-100)
     let score = 0;
     
-    // Longueur (jusqu'à 40 points)
-    score += Math.min(40, password.length * 2.5);
+    // Longueur
+    score += Math.min(length * 4, 40);
     
-    // Variété de caractères (jusqu'à 60 points)
-    if (/[A-Z]/.test(password)) score += 10;
-    if (/[a-z]/.test(password)) score += 10;
-    if (/[0-9]/.test(password)) score += 10;
-    if (/[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]/.test(password)) score += 15;
+    // Diversité de caractères
+    if (hasUppercase) score += 10;
+    if (hasLowercase) score += 10;
+    if (hasNumbers) score += 10;
+    if (hasSymbols) score += 20;
     
-    // Complexité supplémentaire
-    if (/[A-Z].*[A-Z]/.test(password)) score += 5;
-    if (/[a-z].*[a-z]/.test(password)) score += 5;
-    if (/[0-9].*[0-9]/.test(password)) score += 5;
-    if (/[!@#$%^&*()_+\-=\[\]{}|;:,.<>?].*[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]/.test(password)) score += 5;
+    // Pénalités
+    if (hasRepeatingChars) score -= 10;
     
-    // Mettre à jour la barre de progression
-    const strengthBar = document.getElementById('passwordStrength');
-    strengthBar.value = score;
+    // Ajuster le score final
+    score = Math.max(0, Math.min(score, 100));
     
-    // Mettre à jour le texte
-    const strengthText = document.getElementById('strengthText');
-    if (score < 40) {
-        strengthText.textContent = 'Faible';
-        strengthText.style.color = '#ff4d4d';
+    // Mettre à jour l'affichage
+    strengthMeter.value = score;
+    
+    // Définir le niveau de force
+    let strengthLevel;
+    if (score < 30) {
+        strengthLevel = 'Très faible';
+        strengthText.style.color = '#ff4136';
+    } else if (score < 50) {
+        strengthLevel = 'Faible';
+        strengthText.style.color = '#ff851b';
     } else if (score < 70) {
-        strengthText.textContent = 'Moyen';
-        strengthText.style.color = '#ffa64d';
+        strengthLevel = 'Moyen';
+        strengthText.style.color = '#ffdc00';
     } else if (score < 90) {
-        strengthText.textContent = 'Fort';
-        strengthText.style.color = '#4dff4d';
+        strengthLevel = 'Fort';
+        strengthText.style.color = '#2ecc40';
     } else {
-        strengthText.textContent = 'Très fort';
+        strengthLevel = 'Très fort';
         strengthText.style.color = '#4d4dff';
     }
+    
+    strengthText.textContent = strengthLevel;
+    state.passwordStrength = score;
 }
 
 /**
  * Copie le mot de passe généré dans le presse-papiers
  */
 function copyPassword() {
-    const passwordField = document.getElementById('generatedPassword');
-    passwordField.select();
+    const passwordOutput = document.getElementById('generatedPassword');
+    
+    if (!passwordOutput) return;
+    
+    passwordOutput.select();
     document.execCommand('copy');
     
     // Afficher une notification
-    showNotification('Mot de passe copié dans le presse-papiers', 'success');
+    const notification = document.querySelector('.password-notification');
+    if (notification) {
+        notification.textContent = 'Mot de passe copié dans le presse-papiers';
+        notification.classList.add('show');
+        
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, 2000);
+    }
 }
 
 /**
@@ -271,8 +370,13 @@ function showNotification(message, type = 'info') {
     }
 }
 
-// Initialiser le générateur au chargement du document
-document.addEventListener('DOMContentLoaded', initPasswordGenerator);
+// Initialiser le générateur de mot de passe seulement quand le DOM est complètement chargé
+// et seulement si nous sommes sur la page du générateur
+document.addEventListener('DOMContentLoaded', () => {
+    if (document.getElementById('passwordGenerator')) {
+        initPasswordGenerator();
+    }
+});
 
 // Exposer les fonctions globalement
 window.generatePassword = generatePassword;

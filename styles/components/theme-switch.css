@@ -1,0 +1,216 @@
+/*
+  Theme Switch Component
+  Ce composant permet de basculer entre les thèmes clair et sombre
+*/
+
+:root {
+  --theme-switch-size: 16px;
+  --theme-switch-icon-size: 12px;
+  --theme-switch-padding: 3px;
+}
+
+/* Commutateur de thème */
+.theme-switch-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.theme-switch {
+    display: inline-block;
+    height: 24px;
+    position: relative;
+    width: 48px;
+}
+
+/* Style pour mobile */
+@media screen and (max-width: 768px) {
+  .theme-switch {
+    --toggle-size: 16px;
+  }
+  
+  /* Masquer les éléments complexes sur mobile */
+  .theme-switch__clouds, 
+  .theme-switch__stars-container {
+    display: none;
+  }
+  
+  /* Simplifier le bouton */
+  .theme-switch__container {
+    width: 3.5em;
+    height: 1.8em;
+  }
+  
+  .theme-switch__circle-container {
+    width: 2.5em;
+    height: 2.5em;
+  }
+  
+  .theme-switch__sun-moon-container {
+    width: 1.5em;
+    height: 1.5em;
+  }
+}
+
+/* Style encore plus compact pour les très petits écrans */
+@media screen and (max-width: 480px) {
+  .theme-switch {
+    --toggle-size: 14px;
+    left: 10px;
+  }
+  
+  .theme-switch__container {
+    width: 3em;
+    height: 1.5em;
+  }
+  
+  .theme-switch__circle-container {
+    width: 2.2em;
+    height: 2.2em;
+  }
+  
+  .theme-switch__sun-moon-container {
+    width: 1.2em;
+    height: 1.2em;
+  }
+}
+
+.theme-switch, .theme-switch *, .theme-switch *::before, .theme-switch *::after {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-size: var(--toggle-size);
+}
+
+.slider {
+    background-color: #ccc;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: var(--transition-medium);
+    border-radius: 24px;
+}
+
+.theme-switch__container::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  -webkit-box-shadow: 0em 0.05em 0.187em rgba(0, 0, 0, 0.25) inset, 0em 0.05em 0.187em rgba(0, 0, 0, 0.25) inset;
+  box-shadow: 0em 0.05em 0.187em rgba(0, 0, 0, 0.25) inset, 0em 0.05em 0.187em rgba(0, 0, 0, 0.25) inset;
+  border-radius: var(--container-radius)
+}
+
+input:checked + .slider {
+    background-color: var(--primary-color);
+}
+
+.theme-switch__circle-container {
+  width: var(--circle-container-diameter);
+  height: var(--circle-container-diameter);
+  background-color: rgba(255, 255, 255, 0.1);
+  position: absolute;
+  left: var(--circle-container-offset);
+  top: var(--circle-container-offset);
+  border-radius: var(--container-radius);
+  -webkit-box-shadow: inset 0 0 0 3.375em rgba(255, 255, 255, 0.1), inset 0 0 0 3.375em rgba(255, 255, 255, 0.1), 0 0 0 0.625em rgba(255, 255, 255, 0.1), 0 0 0 1.25em rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 0 0 3.375em rgba(255, 255, 255, 0.1), inset 0 0 0 3.375em rgba(255, 255, 255, 0.1), 0 0 0 0.625em rgba(255, 255, 255, 0.1), 0 0 0 1.25em rgba(255, 255, 255, 0.1);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-transition: var(--circle-transition);
+  -o-transition: var(--circle-transition);
+  transition: var(--circle-transition);
+  pointer-events: none;
+}
+
+.theme-switch__sun-moon-container {
+  pointer-events: auto;
+  position: relative;
+  z-index: 2;
+  width: var(--sun-moon-diameter);
+  height: var(--sun-moon-diameter);
+  margin: auto;
+  border-radius: var(--container-radius);
+  background-color: var(--sun-bg);
+  -webkit-box-shadow: 0.062em 0.062em 0.062em 0em rgba(254, 255, 239, 0.61) inset, 0em -0.062em 0.062em 0em #a1872a inset;
+  box-shadow: 0.062em 0.062em 0.062em 0em rgba(254, 255, 239, 0.61) inset, 0em -0.062em 0.062em 0em #a1872a inset;
+  -webkit-filter: drop-shadow(0.062em 0.125em 0.125em rgba(0, 0, 0, 0.25)) drop-shadow(0em 0.062em 0.125em rgba(0, 0, 0, 0.25));
+  filter: drop-shadow(0.062em 0.125em 0.125em rgba(0, 0, 0, 0.25)) drop-shadow(0em 0.062em 0.125em rgba(0, 0, 0, 0.25));
+  overflow: hidden;
+  -webkit-transition: var(--transition);
+  -o-transition: var(--transition);
+  transition: var(--transition);
+}
+
+.theme-switch__moon {
+  -webkit-transform: translateX(100%);
+  -ms-transform: translateX(100%);
+  transform: translateX(100%);
+  width: 100%;
+  height: 100%;
+  background-color: var(--moon-bg);
+  border-radius: inherit;
+  -webkit-box-shadow: 0.062em 0.062em 0.062em 0em rgba(254, 255, 239, 0.61) inset, 0em -0.062em 0.062em 0em #969696 inset;
+  box-shadow: 0.062em 0.062em 0.062em 0em rgba(254, 255, 239, 0.61) inset, 0em -0.062em 0.062em 0em #969696 inset;
+  -webkit-transition: var(--transition);
+  -o-transition: var(--transition);
+  transition: var(--transition);
+  position: relative;
+}
+
+.theme-switch__spot {
+  position: absolute;
+  top: 0.75em;
+  left: 0.312em;
+  width: 0.75em;
+  height: 0.75em;
+  border-radius: var(--container-radius);
+  background-color: var(--spot-color);
+  -webkit-box-shadow: 0em 0.0312em 0.062em rgba(0, 0, 0, 0.25) inset;
+  box-shadow: 0em 0.0312em 0.062em rgba(0, 0, 0, 0.25) inset;
+}
+
+/* Mode sombre spécifique */
+[data-theme="dark"] .theme-switch-toggle::before {
+  background-color: var(--primary-color);
+}
+
+[data-theme="dark"] .theme-switch-toggle {
+  background-color: rgba(var(--rgb-primary), 0.25);
+}
+
+[data-theme="dark"] .moon-icon .moon-crater {
+  fill: var(--text-color);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .theme-switch-wrapper {
+        margin-left: auto;
+    }
+}
+
+/* Version extra-compacte pour très petits écrans */
+@media (max-width: 480px) {
+  .theme-switch {
+    gap: 4px;
+    margin-right: 0;
+    height: 24px;
+  }
+  
+  :root {
+    --theme-switch-size: 12px;
+    --theme-switch-icon-size: 9px;
+    --theme-switch-padding: 2px;
+  }
+  
+  .theme-switch-label {
+    font-size: 0.7rem;
+    display: none; /* Cacher le texte sur très petits écrans */
+  }
+}

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <title>Super éditeur de texte</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans:ital,wght@0,400;0,600;1,400;1,600&family=Material+Icons&display=swap" rel="stylesheet">
+    <link href="../../styles/tools/texteditor.css" rel="stylesheet" />
+</head>
+<body>
+<div class="tool-container" id="textEditorTool">
+    <div class="tool-header">
+        <h2><i class="fas fa-keyboard"></i> Éditeur de texte</h2>
+        <div class="tool-actions">
+            <button type="button" class="btn-icon" id="textEditorHelp" aria-label="Aide">
+                <i class="fas fa-question-circle"></i>
+            </button>
+            <button type="button" class="btn-icon" id="textEditorFullscreen" aria-label="Plein écran">
+                <i class="fas fa-expand"></i>
+            </button>
+        </div>
+    </div>
+    <div class="tool-content">
+        <div class="text-editor-container">
+            <div class="text-editor-options">
+                <div class="filename-container">
+                    <input type="text" id="textEditorFilename" placeholder="Nom du document" value="document.txt" class="filename-input">
+                </div>
+                <div class="format-options">
+                    <label for="textEditorFormat">Format :</label>
+                    <select id="textEditorFormat" class="format-select">
+                        <option value="txt">Texte (.txt)</option>
+                        <option value="odt" selected>Open document (.odt)</option>
+                        <option value="docx">Word (.docx)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="toolbar">
+                <div class="toolbar-group alignments" aria-label="Alignement du texte">
+                    <button class="btn btn-icon btn-text-left active" title="Aligner à gauche" aria-label="Aligner à gauche">
+                        <span class="material-icons">format_align_left</span>
+                    </button>
+                    <button class="btn btn-icon btn-text-center" title="Centrer" aria-label="Centrer">
+                        <span class="material-icons">format_align_center</span>
+                    </button>
+                    <button class="btn btn-icon btn-text-right" title="Aligner à droite" aria-label="Aligner à droite">
+                        <span class="material-icons">format_align_right</span>
+                    </button>
+                </div>
+                <div class="toolbar-group colors" aria-label="Couleur du texte">
+                    <button class="color color-red" data-color="red" title="Rouge" aria-label="Rouge"></button>
+                    <button class="color color-blue" data-color="blue" title="Bleu" aria-label="Bleu"></button>
+                    <button class="color color-green" data-color="green" title="Vert" aria-label="Vert"></button>
+                    <button class="color color-black active" data-color="black" title="Noir" aria-label="Noir"></button>
+                </div>
+                <div class="toolbar-group fonts" aria-label="Police">
+                    <select title="Police" aria-label="Police">
+                        <option value="">Time New Roman</option>
+                        <option value="Lato">Lato</option>
+                        <option value="Merriweather">Merriweather</option>
+                        <option value="Open Sans">Open Sans</option>
+                    </select>
+                </div>
+                <div class="toolbar-group font-decoration" aria-label="Décoration de police">
+                    <button class="btn btn-icon btn-bold" title="Gras (Ctrl+B)" aria-label="Gras">
+                        <span class="material-icons">format_bold</span>
+                    </button>
+                    <button class="btn btn-icon btn-italic" title="Italique (Ctrl+I)" aria-label="Italique">
+                        <span class="material-icons">format_italic</span>
+                    </button>
+                </div>
+            </div>
+            <div class="text-editor-tabs">
+                <button class="tab-btn active" data-tab="editor">Éditer</button>
+                <button class="tab-btn" data-tab="preview">Aperçu</button>
+            </div>
+            <div id="text-editor-tab-content">
+                <div id="editor-tab" class="tab-content active">
+                    <div class="text-editor" contenteditable="true" spellcheck="true" aria-label="Zone d'édition">
+                        Commencez à écrire ici...
+                    </div>
+                </div>
+                <div id="preview-tab" class="tab-content">
+                    <div id="texteditor-preview"></div>
+                </div>
+            </div>
+            <div class="text-editor-status-bar">
+                <div class="text-stats">
+                    <span id="textEditorWordCount">0 mots</span>
+                    <span class="separator">|</span>
+                    <span id="textEditorCharCount">0 caractères</span>
+                </div>
+                <div class="text-actions">
+                    <button type="button" class="btn" id="clearTextEditor">
+                        <span class="material-icons">delete</span> Effacer
+                    </button>
+                    <button type="button" class="btn btn-outline" id="downloadTextEditor">
+                        <span class="material-icons">download</span> Télécharger
+                    </button>
+                    <button type="button" class="btn btn-outline" id="printTextEditor">
+                        <span class="material-icons">print</span> Imprimer
+                    </button>
+                    <button type="button" class="btn btn-primary" id="copyTextEditor">
+                        <span class="material-icons">content_copy</span> Copier
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="help-panel" id="textEditorHelpPanel">
+        <div class="help-panel-header">
+            <h3>Aide - Super éditeur de texte</h3>
+            <button type="button" class="btn-icon" id="closeTextEditorHelp">
+                <span class="material-icons">close</span>
+            </button>
+        </div>
+        <div class="help-panel-content">
+            <h4>Comment utiliser</h4>
+            <ol>
+                <li>Saisissez votre texte dans la zone d'édition</li>
+                <li>Utilisez la barre d'outils pour mettre en forme votre texte</li>
+                <li>Utilisez les onglets pour basculer entre l'édition et l'aperçu</li>
+                <li>Téléchargez ou imprimez votre document quand il est terminé</li>
+            </ol>
+            <h4>Fonctionnalités</h4>
+            <ul>
+                <li><strong>Formatage de texte</strong> : Polices, tailles, gras, italique, couleurs, etc.</li>
+                <li><strong>Paragraphes</strong> : Alignement, indentation, listes à puces et numérotées</li>
+                <li><strong>Insertion</strong> : Images, liens, tableaux, vidéos</li>
+                <li><strong>Export</strong> : Formats HTML, texte brut, Word</li>
+            </ul>
+            <h4>Raccourcis clavier</h4>
+            <ul>
+                <li><strong>Ctrl+B</strong> : Gras</li>
+                <li><strong>Ctrl+I</strong> : Italique</li>
+                <li><strong>Ctrl+U</strong> : Souligné</li>
+                <li><strong>Ctrl+Z</strong> : Annuler</li>
+                <li><strong>Ctrl+Y</strong> : Rétablir</li>
+                <li><strong>Ctrl+K</strong> : Insérer un lien</li>
+                <li><strong>Alt+P</strong> : Basculer en mode aperçu</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script type="module" src="../../js/textEditor-init.js"></script>
+</body>
+</html> 

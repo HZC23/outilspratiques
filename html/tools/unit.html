@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<div class="tool-container" id="unitTool">
+    <div class="tool-header">
+        <h2><i class="fas fa-ruler"></i> Convertisseur d'unités</h2>
+        <div class="tool-actions">
+            <button type="button" class="btn-icon" id="unitHelp" aria-label="Aide">
+                <i class="fas fa-question-circle"></i>
+            </button>
+            <button type="button" class="btn-icon" id="unitFullscreen" aria-label="Plein écran">
+                <i class="fas fa-expand"></i>
+            </button>
+        </div>
+    </div>
+    
+    <div class="tool-content">
+        <div class="unit-converter">
+            <div class="conversion-category">
+                <select id="conversionCategory" class="form-select">
+                    <option value="length">Longueur</option>
+                    <option value="area">Surface</option>
+                    <option value="volume">Volume</option>
+                    <option value="mass">Masse</option>
+                    <option value="temperature">Température</option>
+                    <option value="speed">Vitesse</option>
+                    <option value="time">Temps</option>
+                    <option value="pressure">Pression</option>
+                    <option value="energy">Énergie</option>
+                    <option value="power">Puissance</option>
+                    <option value="data">Données</option>
+                </select>
+            </div>
+            
+            <div class="conversion-input">
+                <div class="input-group">
+                    <input type="number" id="fromValue" class="form-input" value="1" step="any">
+                    <select id="fromUnit" class="form-select unit-select"></select>
+                </div>
+                
+                <button type="button" id="swapUnits" class="swap-btn">
+                    <i class="fas fa-exchange-alt"></i>
+                </button>
+                
+                <div class="input-group">
+                    <input type="number" id="toValue" class="form-input" readonly>
+                    <select id="toUnit" class="form-select unit-select"></select>
+                </div>
+            </div>
+            
+            <div class="conversion-formula">
+                <p>Formule: <span id="conversionFormula">1 mètre = 100 centimètres</span></p>
+            </div>
+            
+            <div class="conversion-history">
+                <h3>Historique de conversion</h3>
+                <div class="history-list" id="conversionHistory"></div>
+                <button type="button" class="btn btn-outline" id="clearConversionHistory">
+                    <i class="fas fa-trash-alt"></i> Effacer l'historique
+                </button>
+            </div>
+            
+            <div class="common-conversions">
+                <h3>Conversions courantes</h3>
+                <div class="common-conversions-grid" id="commonConversions">
+                    <!-- Les conversions courantes seront générées dynamiquement -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="help-panel" id="unitHelpPanel">
+        <div class="help-panel-header">
+            <h3>Aide - Convertisseur d'unités</h3>
+            <button type="button" class="btn-icon" id="closeUnitHelp">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="help-panel-content">
+            <h4>Comment utiliser</h4>
+            <ol>
+                <li>Sélectionnez une catégorie de conversion (longueur, masse, etc.)</li>
+                <li>Entrez une valeur dans le champ de gauche</li>
+                <li>Sélectionnez l'unité de départ et l'unité d'arrivée</li>
+                <li>Le résultat s'affiche automatiquement dans le champ de droite</li>
+            </ol>
+            
+            <h4>Fonctionnalités</h4>
+            <ul>
+                <li><strong>Bouton d'échange</strong> : permet d'inverser les unités</li>
+                <li><strong>Historique</strong> : garde une trace de vos conversions récentes</li>
+                <li><strong>Formule</strong> : affiche la relation entre les unités sélectionnées</li>
+                <li><strong>Conversions courantes</strong> : accès rapide aux conversions fréquentes</li>
+            </ul>
+        </div>
+    </div>
+</div> 

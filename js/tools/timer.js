@@ -36,51 +36,147 @@ export const TimerManager = {
         this.setupListeners();
         this.updateDisplay();
         this.loadSoundPreference();
+        this.requestNotificationPermission();
+        
+        // Initialiser la source audio par défaut
+        const sound = document.getElementById('timerAlarm');
+        if (sound && (!sound.src || sound.src === '')) {
+            // Utiliser le son "bell" par défaut
+            sound.src = 'sounds/bell.mp3';
+        }
+    },
+
+    /**
+     * Demande la permission pour les notifications
+     */
+    requestNotificationPermission() {
+        // Vérifier si le navigateur supporte les notifications
+        if (!("Notification" in window)) {
+            console.log("Ce navigateur ne prend pas en charge les notifications");
+            return;
+        }
+        
+        // Ne demander que si la permission n'a pas déjà été accordée ou refusée
+        if (Notification.permission !== "granted" && Notification.permission !== "denied") {
+            // Attendre un peu pour ne pas demander immédiatement au chargement de la page
+            setTimeout(() => {
+                Notification.requestPermission().then(permission => {
+                    console.log(`Permission de notification: ${permission}`);
+                });
+            }, 3000);
+        }
     },
 
     /**
      * Configure les écouteurs d'événements
      */
     setupListeners() {
-        // Minuteur
-        document.getElementById('timerStartBtn')?.addEventListener('click', () => {
+        // Minuteur - Corrigé pour correspondre aux ID dans le HTML
+        document.getElementById('startTimer')?.addEventListener('click', () => {
             this.startTimer();
         });
 
-        document.getElementById('timerPauseBtn')?.addEventListener('click', () => {
+        document.getElementById('pauseTimer')?.addEventListener('click', () => {
             this.pauseTimer();
         });
 
         document.getElementById('resetTimer')?.addEventListener('click', () => {
             this.resetTimer();
         });
-
-        document.getElementById('soundToggle')?.addEventListener('click', () => {
-            this.toggleSound();
+        
+        document.getElementById('cancelTimer')?.addEventListener('click', () => {
+            this.resetTimer(); // Utiliser resetTimer pour l'instant
         });
 
-        document.getElementById('timerSound')?.addEventListener('change', (e) => {
+        document.getElementById('testSound')?.addEventListener('click', () => {
+            this.testTimerSound();
+        });
+
+        document.getElementById('alarmSound')?.addEventListener('change', (e) => {
             this.changeTimerSound(e.target.value);
         });
-
-        // Chronomètre
-        document.getElementById('startStopwatch')?.addEventListener('click', () => {
-            this.toggleStopwatch();
+        
+        // Modifier le comportement du bouton d'aide pour faire défiler vers la section d'aide
+        document.getElementById('timerHelp')?.addEventListener('click', () => {
+            const helpSection = document.querySelector('.help-panel-content');
+            if (helpSection) {
+                helpSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+        
+        // Écouter les changements de volume
+        document.getElementById('alarmVolume')?.addEventListener('input', (e) => {
+            const volume = e.target.value / 100;
+            const sound = document.getElementById('timerAlarm');
+            if (sound) {
+                sound.volume = volume;
+            }
+        });
+        
+        // Écouter les changements de la case à cocher des notifications
+        document.getElementById('notifications')?.addEventListener('change', (e) => {
+            if (e.target.checked && Notification.permission !== "granted" && Notification.permission !== "denied") {
+                this.requestNotificationPermission();
+            }
         });
 
-        document.getElementById('lapStopwatch')?.addEventListener('click', () => {
-            this.recordLap();
+        // Gérer les préréglages
+        document.querySelectorAll('.preset-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const seconds = parseInt(e.target.dataset.time);
+                if (isNaN(seconds)) return;
+                
+                // Convertir en heures, minutes, secondes
+                const hours = Math.floor(seconds / 3600);
+                const minutes = Math.floor((seconds % 3600) / 60);
+                const remainingSeconds = seconds % 60;
+                
+                // Mettre à jour l'état et l'affichage
+                this.state.timer.hours = hours;
+                this.state.timer.minutes = minutes;
+                this.state.timer.seconds = remainingSeconds;
+                
+                // Mettre à jour les champs d'entrée
+                const inputHours = document.getElementById('inputHours');
+                const inputMinutes = document.getElementById('inputMinutes');
+                const inputSeconds = document.getElementById('inputSeconds');
+                
+                if (inputHours) inputHours.value = hours;
+                if (inputMinutes) inputMinutes.value = minutes;
+                if (inputSeconds) inputSeconds.value = remainingSeconds;
+                
+                this.updateDisplay();
+                
+                // Ajouter la classe active au bouton cliqué et la retirer des autres
+                document.querySelectorAll('.preset-btn').forEach(b => {
+                    b.classList.remove('active');
+                });
+                e.target.classList.add('active');
+            });
         });
 
-        document.getElementById('resetStopwatch')?.addEventListener('click', () => {
-            this.resetStopwatch();
+        // Gérer le bouton plein écran
+        document.getElementById('timerFullscreen')?.addEventListener('click', () => {
+            this.toggleFullscreen();
+        });
+
+        // Gérer les boutons de fin de minuteur
+        document.getElementById('dismissTimer')?.addEventListener('click', () => {
+            const timerComplete = document.getElementById('timerComplete');
+            if (timerComplete) timerComplete.classList.remove('show');
+        });
+
+        document.getElementById('restartTimer')?.addEventListener('click', () => {
+            const timerComplete = document.getElementById('timerComplete');
+            if (timerComplete) timerComplete.classList.remove('show');
+            this.startTimer();
         });
 
         // Entrées du minuteur
-        ['hours', 'minutes', 'seconds'].forEach(field => {
-            document.getElementById(`${field}Input`)
+        ['Hours', 'Minutes', 'Seconds'].forEach(field => {
+            document.getElementById(`input${field}`)
                 ?.addEventListener('input', (e) => {
-                    this.updateTimerValue(field, e.target.value);
+                    this.updateTimerValue(field.toLowerCase(), e.target.value);
                 });
         });
 
@@ -100,6 +196,138 @@ export const TimerManager = {
                 this.resetTimer();
             }
         });
+
+        // Ajouter les options de sons en ligne et locaux si elles n'existent pas déjà
+        const soundSelect = document.getElementById('alarmSound');
+        if (soundSelect) {
+            // Vérifier si les options en ligne existent déjà
+            const hasOnlineSounds = Array.from(soundSelect.options).some(option => 
+                option.value.includes('-online')
+            );
+            
+            if (!hasOnlineSounds) {
+                // Ajouter un séparateur optgroup pour les sons en ligne
+                const localGroup = document.createElement('optgroup');
+                localGroup.label = 'Sons locaux';
+                
+                // Déplacer les options existantes dans le groupe local
+                while (soundSelect.options.length > 0) {
+                    const option = soundSelect.options[0];
+                    localGroup.appendChild(option);
+                }
+                
+                soundSelect.appendChild(localGroup);
+                
+                // Créer le groupe pour les sons en ligne
+                const onlineGroup = document.createElement('optgroup');
+                onlineGroup.label = 'Sons en ligne';
+                
+                // Ajouter les options pour les sons en ligne
+                [
+                    { value: 'beep-online', text: 'Bip (en ligne)' },
+                    { value: 'bell-online', text: 'Cloche (en ligne)' },
+                    { value: 'digital-online', text: 'Digital (en ligne)' },
+                    { value: 'gentle-online', text: 'Doux (en ligne)' }
+                ].forEach(sound => {
+                    const option = document.createElement('option');
+                    option.value = sound.value;
+                    option.textContent = sound.text;
+                    onlineGroup.appendChild(option);
+                });
+                
+                soundSelect.appendChild(onlineGroup);
+            }
+        }
+    },
+
+    /**
+     * Bascule en mode plein écran
+     */
+    toggleFullscreen() {
+        const timerContainer = document.querySelector('.timer-container');
+        const toolContainer = document.getElementById('timerTool');
+        
+        if (!timerContainer) return;
+        
+        if (!document.body.classList.contains('timer-fullscreen-active')) {
+            // Activer le mode plein écran
+            document.body.classList.add('timer-fullscreen-active');
+            timerContainer.classList.add('timer-fullscreen');
+            
+            // Déplacer le conteneur vers le body pour un vrai plein écran
+            if (toolContainer) {
+                toolContainer.classList.add('timer-tool-fullscreen');
+            }
+            
+            // Bloquer le défilement de la page
+            document.body.style.overflow = 'hidden';
+            
+            // Changer l'icône du bouton
+            const fullscreenBtn = document.getElementById('timerFullscreen');
+            if (fullscreenBtn) {
+                const icon = fullscreenBtn.querySelector('i');
+                if (icon) icon.className = 'fas fa-compress';
+            }
+            
+            // Ajouter un écouteur pour la touche Échap
+            document.addEventListener('keydown', this.escapeFullscreen);
+            
+            // Ajouter un écouteur pour le clic sur la croix de fermeture
+            const closeBtn = document.createElement('div');
+            closeBtn.className = 'fullscreen-close-btn';
+            closeBtn.setAttribute('aria-label', 'Fermer le plein écran');
+            closeBtn.addEventListener('click', () => this.toggleFullscreen());
+            timerContainer.appendChild(closeBtn);
+            
+            // Créer une animation de transition
+            timerContainer.classList.add('fullscreen-transition');
+            setTimeout(() => {
+                timerContainer.classList.remove('fullscreen-transition');
+            }, 500);
+        } else {
+            // Désactiver le mode plein écran
+            document.body.classList.remove('timer-fullscreen-active');
+            timerContainer.classList.remove('timer-fullscreen');
+            
+            if (toolContainer) {
+                toolContainer.classList.remove('timer-tool-fullscreen');
+            }
+            
+            // Rétablir le défilement
+            document.body.style.overflow = '';
+            
+            // Restaurer l'icône du bouton
+            const fullscreenBtn = document.getElementById('timerFullscreen');
+            if (fullscreenBtn) {
+                const icon = fullscreenBtn.querySelector('i');
+                if (icon) icon.className = 'fas fa-expand';
+            }
+            
+            // Retirer l'écouteur de la touche Échap
+            document.removeEventListener('keydown', this.escapeFullscreen);
+            
+            // Supprimer le bouton de fermeture s'il existe
+            const closeBtn = timerContainer.querySelector('.fullscreen-close-btn');
+            if (closeBtn) {
+                closeBtn.removeEventListener('click', () => this.toggleFullscreen());
+                timerContainer.removeChild(closeBtn);
+            }
+            
+            // Animation de transition pour le retour
+            timerContainer.classList.add('fullscreen-exit-transition');
+            setTimeout(() => {
+                timerContainer.classList.remove('fullscreen-exit-transition');
+            }, 500);
+        }
+    },
+
+    /**
+     * Gestionnaire pour quitter le plein écran avec la touche Échap
+     */
+    escapeFullscreen(e) {
+        if (e.key === 'Escape' && document.body.classList.contains('timer-fullscreen-active')) {
+            TimerManager.toggleFullscreen();
+        }
     },
 
     /**
@@ -135,13 +363,24 @@ export const TimerManager = {
 
         this.updateTimerControls();
         this.updateProgressBar(totalSeconds);
+        
+        // Activer/désactiver les boutons appropriés
+        const startBtn = document.getElementById('startTimer');
+        const pauseBtn = document.getElementById('pauseTimer');
+        const resetBtn = document.getElementById('resetTimer');
+        const cancelBtn = document.getElementById('cancelTimer');
+        
+        if (startBtn) startBtn.disabled = true;
+        if (pauseBtn) pauseBtn.disabled = false;
+        if (resetBtn) resetBtn.disabled = false;
+        if (cancelBtn) cancelBtn.disabled = false;
     },
 
     /**
      * Met à jour la barre de progression
      */
     updateProgressBar(totalSeconds) {
-        const progressBar = document.getElementById('timerProgressBar');
+        const progressBar = document.getElementById('timerProgress');
         if (!progressBar) return;
 
         const startTime = Date.now();
@@ -184,6 +423,13 @@ export const TimerManager = {
 
         this.updateTimerControls();
         this.updateDisplay();
+        
+        // Activer/désactiver les boutons appropriés
+        const startBtn = document.getElementById('startTimer');
+        const pauseBtn = document.getElementById('pauseTimer');
+        
+        if (startBtn) startBtn.disabled = false;
+        if (pauseBtn) pauseBtn.disabled = true;
     },
 
     /**
@@ -201,15 +447,16 @@ export const TimerManager = {
         this.state.timer.seconds = this.state.timer.initialTime.seconds;
 
         // Réinitialiser les champs d'entrée avec le temps initial
-        ['hours', 'minutes', 'seconds'].forEach(field => {
-            const input = document.getElementById(`${field}Input`);
-            if (input) {
-                input.value = this.state.timer.initialTime[field];
-            }
-        });
+        const inputHours = document.getElementById('inputHours');
+        const inputMinutes = document.getElementById('inputMinutes');
+        const inputSeconds = document.getElementById('inputSeconds');
+        
+        if (inputHours) inputHours.value = this.state.timer.initialTime.hours;
+        if (inputMinutes) inputMinutes.value = this.state.timer.initialTime.minutes;
+        if (inputSeconds) inputSeconds.value = this.state.timer.initialTime.seconds;
 
         // Réinitialiser la barre de progression
-        const progressBar = document.getElementById('timerProgressBar');
+        const progressBar = document.getElementById('timerProgress');
         if (progressBar) {
             progressBar.style.width = '0%';
             progressBar.setAttribute('aria-valuenow', 0);
@@ -217,6 +464,17 @@ export const TimerManager = {
 
         this.updateDisplay();
         this.updateTimerControls();
+        
+        // Activer/désactiver les boutons appropriés
+        const startBtn = document.getElementById('startTimer');
+        const pauseBtn = document.getElementById('pauseTimer');
+        const resetBtn = document.getElementById('resetTimer');
+        const cancelBtn = document.getElementById('cancelTimer');
+        
+        if (startBtn) startBtn.disabled = false;
+        if (pauseBtn) pauseBtn.disabled = true;
+        if (resetBtn) resetBtn.disabled = true;
+        if (cancelBtn) cancelBtn.disabled = true;
         
         // Supprimer l'état sauvegardé au lieu de le sauvegarder
         localStorage.removeItem('timerState');
@@ -238,6 +496,14 @@ export const TimerManager = {
         this.state.timer.seconds = remaining % 60;
 
         this.updateDisplay();
+        
+        // Ajouter une classe pour animation si on est proche de la fin
+        if (remaining <= 10) {
+            const timerDisplay = document.querySelector('.time-remaining');
+            if (timerDisplay && !timerDisplay.classList.contains('timer-ending')) {
+                timerDisplay.classList.add('timer-ending');
+            }
+        }
     },
 
     /**
@@ -255,22 +521,40 @@ export const TimerManager = {
         this.state.timer.seconds = this.state.timer.initialTime.seconds;
 
         // Réinitialiser les champs d'entrée avec le temps initial
-        ['hours', 'minutes', 'seconds'].forEach(field => {
-            const input = document.getElementById(`${field}Input`);
-            if (input) {
-                input.value = this.state.timer.initialTime[field];
-            }
-        });
+        const inputHours = document.getElementById('inputHours');
+        const inputMinutes = document.getElementById('inputMinutes');
+        const inputSeconds = document.getElementById('inputSeconds');
+        
+        if (inputHours) inputHours.value = this.state.timer.initialTime.hours;
+        if (inputMinutes) inputMinutes.value = this.state.timer.initialTime.minutes;
+        if (inputSeconds) inputSeconds.value = this.state.timer.initialTime.seconds;
 
         // Réinitialiser la barre de progression
-        const progressBar = document.getElementById('timerProgressBar');
+        const progressBar = document.getElementById('timerProgress');
         if (progressBar) {
             progressBar.style.width = '0%';
             progressBar.setAttribute('aria-valuenow', 0);
         }
 
+        // Retirer la classe d'animation de fin
+        const timerDisplay = document.querySelector('.time-remaining');
+        if (timerDisplay) {
+            timerDisplay.classList.remove('timer-ending');
+        }
+
         this.updateDisplay();
         this.updateTimerControls();
+        
+        // Activer/désactiver les boutons appropriés
+        const startBtn = document.getElementById('startTimer');
+        const pauseBtn = document.getElementById('pauseTimer');
+        const resetBtn = document.getElementById('resetTimer');
+        const cancelBtn = document.getElementById('cancelTimer');
+        
+        if (startBtn) startBtn.disabled = false;
+        if (pauseBtn) pauseBtn.disabled = true;
+        if (resetBtn) resetBtn.disabled = true;
+        if (cancelBtn) cancelBtn.disabled = true;
         
         // Supprimer l'état sauvegardé au lieu de le sauvegarder
         localStorage.removeItem('timerState');
@@ -288,7 +572,11 @@ export const TimerManager = {
             }
         }
 
-        Utils.showNotification('Minuteur terminé !', 'success');
+        // Afficher l'écran de fin
+        const timerComplete = document.getElementById('timerComplete');
+        if (timerComplete) {
+            timerComplete.classList.add('show');
+        }
     },
 
     /**
@@ -297,12 +585,74 @@ export const TimerManager = {
     playAlarm() {
         if (!this.state.timer.sound) return;
         
-        const soundId = `timerSound-${this.state.timer.currentSound}`;
-        const sound = document.getElementById(soundId);
+        // Si le son sélectionné est "none", ne pas jouer
+        if (this.state.timer.currentSound === 'none') {
+            console.log('Son désactivé, aucune alarme jouée');
+            return;
+        }
+        
+        // Utiliser l'élément audio timerAlarm existant dans le HTML
+        const sound = document.getElementById('timerAlarm');
         if (sound) {
+            // Définir le volume en fonction du paramètre
+            const volumeSlider = document.getElementById('alarmVolume');
+            if (volumeSlider) {
+                sound.volume = volumeSlider.value / 100;
+            }
+            
             sound.currentTime = 0;
-            sound.play().catch(() => {
-                console.warn('Impossible de jouer l\'alarme');
+            sound.play().catch((error) => {
+                console.warn('Impossible de jouer l\'alarme:', error);
+            });
+            
+            // Essayer d'envoyer une notification
+            this.showNotification();
+        } else {
+            console.warn('Élément audio du minuteur non trouvé');
+        }
+    },
+
+    /**
+     * Affiche une notification
+     */
+    showNotification() {
+        // Vérifier si le navigateur supporte les notifications
+        if (!("Notification" in window)) {
+            console.warn("Ce navigateur ne prend pas en charge les notifications");
+            return;
+        }
+        
+        // Vérifier si l'utilisateur a activé les notifications
+        const notifications = document.getElementById('notifications');
+        if (notifications && !notifications.checked) {
+            return;
+        }
+        
+        // Si la permission est déjà accordée, afficher la notification
+        if (Notification.permission === "granted") {
+            const notification = new Notification("Minuteur terminé !", {
+                body: "Votre minuteur est terminé.",
+                icon: "/icons/icon-144x144.png"
+            });
+            
+            // Fermer la notification après 5 secondes
+            setTimeout(() => {
+                notification.close();
+            }, 5000);
+        } 
+        // Sinon, demander la permission
+        else if (Notification.permission !== "denied") {
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    const notification = new Notification("Minuteur terminé !", {
+                        body: "Votre minuteur est terminé.",
+                        icon: "/icons/icon-144x144.png"
+                    });
+                    
+                    setTimeout(() => {
+                        notification.close();
+                    }, 5000);
+                }
             });
         }
     },
@@ -390,19 +740,17 @@ export const TimerManager = {
      * Met à jour l'affichage du minuteur
      */
     updateTimerDisplay() {
-        const display = document.getElementById('timerDisplay');
-        if (display) {
+        // Mettre à jour l'affichage principal du temps
+        const hoursElement = document.getElementById('hours');
+        const minutesElement = document.getElementById('minutes');
+        const secondsElement = document.getElementById('seconds');
+        
+        if (hoursElement && minutesElement && secondsElement) {
             const { hours, minutes, seconds } = this.state.timer;
-            display.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            hoursElement.textContent = hours.toString().padStart(2, '0');
+            minutesElement.textContent = minutes.toString().padStart(2, '0');
+            secondsElement.textContent = seconds.toString().padStart(2, '0');
         }
-
-        // Mettre à jour les champs d'entrée
-        ['hours', 'minutes', 'seconds'].forEach(field => {
-            const input = document.getElementById(`${field}Input`);
-            if (input) {
-                input.value = this.state.timer[field];
-            }
-        });
     },
 
     /**
@@ -437,12 +785,22 @@ export const TimerManager = {
      * Met à jour les contrôles du minuteur
      */
     updateTimerControls() {
-        const startButton = document.getElementById('timerStartBtn');
-        const pauseButton = document.getElementById('timerPauseBtn');
+        const startButton = document.getElementById('startTimer');
+        const pauseButton = document.getElementById('pauseTimer');
+        const resetButton = document.getElementById('resetTimer');
+        const cancelButton = document.getElementById('cancelTimer');
         
         if (startButton && pauseButton) {
-            startButton.style.display = this.state.timer.isRunning ? 'none' : 'inline-block';
-            pauseButton.style.display = this.state.timer.isRunning ? 'inline-block' : 'none';
+            startButton.disabled = this.state.timer.isRunning;
+            pauseButton.disabled = !this.state.timer.isRunning;
+            
+            if (resetButton) {
+                resetButton.disabled = !this.state.timer.isRunning && this.calculateTotalSeconds() === 0;
+            }
+            
+            if (cancelButton) {
+                cancelButton.disabled = !this.state.timer.isRunning;
+            }
         }
     },
 
@@ -538,10 +896,13 @@ export const TimerManager = {
         const savedSound = localStorage.getItem('timerSound');
         if (savedSound) {
             this.state.timer.currentSound = savedSound;
-            const soundSelect = document.getElementById('timerSound');
+            const soundSelect = document.getElementById('alarmSound');
             if (soundSelect) {
                 soundSelect.value = savedSound;
             }
+            
+            // Mettre à jour la source audio en fonction du son sauvegardé
+            this.changeTimerSound(savedSound);
         }
     },
 
@@ -552,20 +913,56 @@ export const TimerManager = {
     changeTimerSound(soundType) {
         this.state.timer.currentSound = soundType;
         localStorage.setItem('timerSound', soundType);
+        
+        // Définir la carte des sons avec les sources locales et en ligne
+        const soundMap = {
+            // Sons locaux
+            'beep': 'sounds/beep.mp3',
+            'bell': 'sounds/bell.mp3',
+            'digital': 'sounds/alarm.mp3',
+            'gentle': 'sounds/chime.mp3',
+            'notification': 'sounds/notification.mp3',
+            // Sons en ligne
+            'beep-online': 'https://assets.mixkit.co/active_storage/sfx/1867/1867-preview.mp3',
+            'bell-online': 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3',
+            'digital-online': 'https://assets.mixkit.co/active_storage/sfx/2310/2310-preview.mp3',
+            'gentle-online': 'https://assets.mixkit.co/active_storage/sfx/1862/1862-preview.mp3',
+            'none': '' // Aucun son
+        };
+        
+        const sound = document.getElementById('timerAlarm');
+        if (sound && soundType !== 'none') {
+            sound.src = soundMap[soundType] || soundMap['bell']; // Par défaut 'bell'
+        }
+        
         this.testTimerSound();
     },
 
     /**
-     * Teste le son actuellement sélectionné
+     * Teste le son de l'alarme
      */
     testTimerSound() {
-        const soundId = `timerSound-${this.state.timer.currentSound}`;
-        const sound = document.getElementById(soundId);
+        // Utiliser l'élément audio timerAlarm existant
+        const sound = document.getElementById('timerAlarm');
         if (sound) {
+            // Si le son est "none", ne pas jouer
+            if (this.state.timer.currentSound === 'none') {
+                console.log('Son désactivé, aucun test joué');
+                return;
+            }
+            
+            // Définir le volume
+            const volumeSlider = document.getElementById('alarmVolume');
+            if (volumeSlider) {
+                sound.volume = volumeSlider.value / 100;
+            }
+            
             sound.currentTime = 0;
-            sound.play().catch(() => {
-                console.warn('Impossible de jouer le son de test');
+            sound.play().catch(error => {
+                console.warn('Impossible de jouer le son de test:', error);
             });
+        } else {
+            console.warn('Élément audio du minuteur non trouvé');
         }
     }
 };
@@ -580,7 +977,7 @@ window.pauseStopwatch = () => TimerManager.toggleStopwatch();
 window.resetStopwatch = () => TimerManager.resetStopwatch();
 window.lapStopwatch = () => TimerManager.recordLap();
 window.changeTimerSound = () => {
-    const select = document.getElementById('timerSound');
+    const select = document.getElementById('alarmSound');
     if (select) {
         TimerManager.changeTimerSound(select.value);
     }

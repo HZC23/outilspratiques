@@ -1,9 +1,11 @@
 import { Utils } from '../utils.js';
-import { CONFIG } from '../config.js';
 
 /**
- * Gestionnaire de la calculatrice
+ * Script unifié pour toutes les calculatrices
+ * Inclut la calculatrice standard, scientifique et mini
  */
+
+// Structure principale de la calculatrice
 export const CalculatorManager = {
     state: {
         currentExpression: '',
@@ -11,7 +13,8 @@ export const CalculatorManager = {
         memory: 0,
         isScientificMode: false,
         angleUnit: 'deg', // 'deg' | 'rad'
-        precision: 8
+        precision: 8,
+        currentCalculator: 'standard' // 'standard' | 'scientific'
     },
 
     /**
@@ -21,6 +24,9 @@ export const CalculatorManager = {
         this.loadState();
         this.setupListeners();
         this.updateDisplay();
+        this.initCalculatorNav();
+        this.setupResponsiveLayout();
+        window.addEventListener('resize', () => this.setupResponsiveLayout());
     },
 
     /**
@@ -32,10 +38,59 @@ export const CalculatorManager = {
             memory: 0,
             isScientificMode: false,
             angleUnit: 'deg',
-            precision: 8
+            precision: 8,
+            currentCalculator: 'standard'
         });
 
         this.state = { ...this.state, ...savedState };
+    },
+
+    /**
+     * Initialise la navigation entre calculatrices
+     */
+    initCalculatorNav() {
+        const navButtons = document.querySelectorAll('.calculator-nav-btn');
+        
+        // Afficher la calculatrice active
+        this.showCalculator(this.state.currentCalculator);
+        
+        // Mettre le bon bouton en surbrillance
+        navButtons.forEach(btn => {
+            if (btn.dataset.calcType === this.state.currentCalculator) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+        
+        // Ajouter les écouteurs d'événements
+        navButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                navButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const calculatorType = btn.dataset.calcType;
+                this.showCalculator(calculatorType);
+                this.state.currentCalculator = calculatorType;
+                this.saveState();
+            });
+        });
+    },
+
+    /**
+     * Affiche la calculatrice demandée
+     */
+    showCalculator(type) {
+        const standard = document.getElementById('standard-calculator');
+        const scientific = document.getElementById('scientific-calculator');
+        
+        if (type === 'standard') {
+            standard.style.display = 'block';
+            scientific.style.display = 'none';
+        } else {
+            standard.style.display = 'none';
+            scientific.style.display = 'block';
+        }
     },
 
     /**
@@ -43,44 +98,47 @@ export const CalculatorManager = {
      */
     setupListeners() {
         // Touches numériques et opérateurs
-        document.querySelectorAll('.calculator-key').forEach(key => {
+        document.querySelectorAll('.calculator-button[data-value]').forEach(key => {
             key.addEventListener('click', () => {
                 this.appendToExpression(key.dataset.value);
             });
         });
 
         // Fonctions spéciales
-        document.getElementById('clearEntry')?.addEventListener('click', () => {
-            this.clearEntry();
-        });
+        const actions = {
+            'clear': () => this.clearAll(),
+            'backspace': () => this.backspace(),
+            'calculate': () => this.calculate(),
+            'toggle-sign': () => this.toggleSign(),
+            'percent': () => this.handlePercent(),
+            'sin': () => this.handleFunction('sin'),
+            'cos': () => this.handleFunction('cos'),
+            'tan': () => this.handleFunction('tan'),
+            'sqrt': () => this.handleFunction('√'),
+            'log': () => this.handleFunction('log'),
+            'ln': () => this.handleFunction('ln'),
+            'square': () => this.handleFunction('square'),
+            'power': () => this.appendToExpression('^'),
+            '1/x': () => this.handleInverse(),
+            'rad-deg': () => this.toggleAngleUnit(),
+            'divide': () => this.appendToExpression('/'),
+            'multiply': () => this.appendToExpression('*'),
+            'add': () => this.appendToExpression('+'),
+            'subtract': () => this.appendToExpression('-')
+        };
 
-        document.getElementById('clearAll')?.addEventListener('click', () => {
-            this.clearAll();
-        });
-
-        document.getElementById('backspace')?.addEventListener('click', () => {
-            this.backspace();
-        });
-
-        document.getElementById('equals')?.addEventListener('click', () => {
-            this.calculate();
-        });
-
-        // Mémoire
-        ['memoryClear', 'memoryRecall', 'memoryAdd', 'memorySubtract'].forEach(action => {
-            document.getElementById(action)?.addEventListener('click', () => {
-                this.handleMemory(action);
+        // Ajouter des écouteurs pour chaque action
+        Object.keys(actions).forEach(action => {
+            document.querySelectorAll(`.calculator-button[data-action="${action}"]`).forEach(button => {
+                button.addEventListener('click', actions[action]);
             });
         });
 
-        // Mode scientifique
-        document.getElementById('toggleScientific')?.addEventListener('click', () => {
-            this.toggleScientificMode();
-        });
-
-        document.getElementById('toggleAngleUnit')?.addEventListener('click', () => {
-            this.toggleAngleUnit();
-        });
+        // Écouteur pour le bouton d'effacement de l'historique
+        const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+        if (clearHistoryBtn) {
+            clearHistoryBtn.addEventListener('click', () => this.clearHistory());
+        }
 
         // Raccourcis clavier
         document.addEventListener('keydown', (e) => {
@@ -154,11 +212,109 @@ export const CalculatorManager = {
     },
 
     /**
-     * Efface l'entrée courante
+     * Change le signe du nombre actuel
      */
-    clearEntry() {
-        this.state.currentExpression = '';
+    toggleSign() {
+        if (!this.state.currentExpression) return;
+        
+        if (this.state.currentExpression.startsWith('-')) {
+            this.state.currentExpression = this.state.currentExpression.slice(1);
+        } else {
+            this.state.currentExpression = '-' + this.state.currentExpression;
+        }
+        
         this.updateDisplay();
+    },
+
+    /**
+     * Gère le pourcentage
+     */
+    handlePercent() {
+        if (!this.state.currentExpression) return;
+        
+        try {
+            const value = this.evaluateExpression(this.state.currentExpression);
+            this.state.currentExpression = (value / 100).toString();
+            this.updateDisplay();
+        } catch (error) {
+            Utils.showNotification('Expression invalide', 'error');
+        }
+    },
+
+    /**
+     * Gère les fonctions scientifiques (sin, cos, etc.)
+     */
+    handleFunction(func) {
+        if (!this.state.currentExpression && func !== 'sqrt' && func !== '√') return;
+        
+        try {
+            let result;
+            const value = this.state.currentExpression ? 
+                this.evaluateExpression(this.state.currentExpression) : 0;
+            
+            switch (func) {
+                case 'sin':
+                    const angleInRad = this.state.angleUnit === 'deg' ? 
+                        value * Math.PI / 180 : value;
+                    result = Math.sin(angleInRad);
+                    break;
+                case 'cos':
+                    const angleInRadCos = this.state.angleUnit === 'deg' ? 
+                        value * Math.PI / 180 : value;
+                    result = Math.cos(angleInRadCos);
+                    break;
+                case 'tan':
+                    const angleInRadTan = this.state.angleUnit === 'deg' ? 
+                        value * Math.PI / 180 : value;
+                    result = Math.tan(angleInRadTan);
+                    break;
+                case 'sqrt':
+                case '√':
+                    if (value < 0) {
+                        throw new Error('Racine carrée d\'un nombre négatif');
+                    }
+                    result = Math.sqrt(value);
+                    break;
+                case 'log':
+                    if (value <= 0) {
+                        throw new Error('Logarithme d\'un nombre négatif ou nul');
+                    }
+                    result = Math.log10(value);
+                    break;
+                case 'ln':
+                    if (value <= 0) {
+                        throw new Error('Logarithme naturel d\'un nombre négatif ou nul');
+                    }
+                    result = Math.log(value);
+                    break;
+                case 'square':
+                    result = value * value;
+                    break;
+            }
+            
+            this.state.currentExpression = result.toFixed(this.state.precision);
+            this.updateDisplay();
+        } catch (error) {
+            Utils.showNotification(error.message || 'Erreur de calcul', 'error');
+        }
+    },
+
+    /**
+     * Calcule l'inverse (1/x)
+     */
+    handleInverse() {
+        if (!this.state.currentExpression) return;
+        
+        try {
+            const value = this.evaluateExpression(this.state.currentExpression);
+            if (value === 0) {
+                throw new Error('Division par zéro');
+            }
+            this.state.currentExpression = (1 / value).toString();
+            this.updateDisplay();
+        } catch (error) {
+            Utils.showNotification(error.message || 'Erreur de calcul', 'error');
+        }
     },
 
     /**
@@ -166,9 +322,19 @@ export const CalculatorManager = {
      */
     clearAll() {
         this.state.currentExpression = '';
+        this.updateDisplay();
+    },
+
+    /**
+     * Efface l'historique
+     */
+    clearHistory() {
         this.state.history = [];
         this.updateDisplay();
         this.saveState();
+        
+        // Afficher une notification
+        Utils.showNotification('Historique effacé', 'success');
     },
 
     /**
@@ -189,6 +355,11 @@ export const CalculatorManager = {
                 result: result,
                 timestamp: new Date().toISOString()
             });
+
+            // Limite l'historique à 10 entrées
+            if (this.state.history.length > 10) {
+                this.state.history = this.state.history.slice(0, 10);
+            }
 
             // Met à jour l'affichage
             this.state.currentExpression = result.toString();
@@ -275,54 +446,6 @@ export const CalculatorManager = {
     },
 
     /**
-     * Gère les opérations de mémoire
-     */
-    handleMemory(action) {
-        switch (action) {
-            case 'memoryClear':
-                this.state.memory = 0;
-                break;
-            case 'memoryRecall':
-                this.state.currentExpression += this.state.memory.toString();
-                break;
-            case 'memoryAdd':
-                if (this.state.currentExpression) {
-                    try {
-                        const value = this.evaluateExpression(this.state.currentExpression);
-                        this.state.memory += value;
-                    } catch (error) {
-                        Utils.showNotification('Expression invalide', 'error');
-                        return;
-                    }
-                }
-                break;
-            case 'memorySubtract':
-                if (this.state.currentExpression) {
-                    try {
-                        const value = this.evaluateExpression(this.state.currentExpression);
-                        this.state.memory -= value;
-                    } catch (error) {
-                        Utils.showNotification('Expression invalide', 'error');
-                        return;
-                    }
-                }
-                break;
-        }
-
-        this.updateDisplay();
-        this.saveState();
-    },
-
-    /**
-     * Active/désactive le mode scientifique
-     */
-    toggleScientificMode() {
-        this.state.isScientificMode = !this.state.isScientificMode;
-        document.getElementById('scientificKeys')?.classList.toggle('hidden');
-        this.saveState();
-    },
-
-    /**
      * Change l'unité d'angle
      */
     toggleAngleUnit() {
@@ -332,13 +455,29 @@ export const CalculatorManager = {
     },
 
     /**
+     * Met à jour l'affichage de l'unité d'angle
+     */
+    updateAngleUnitDisplay() {
+        const angleUnitButton = document.querySelector('[data-action="rad-deg"]');
+        if (angleUnitButton) {
+            angleUnitButton.textContent = this.state.angleUnit.toUpperCase();
+        }
+    },
+
+    /**
      * Met à jour l'affichage
      */
     updateDisplay() {
-        // Affichage principal
-        const display = document.getElementById('calculatorDisplay');
+        // Affichage principal - standard
+        const display = document.getElementById('current');
         if (display) {
             display.textContent = this.state.currentExpression || '0';
+        }
+        
+        // Affichage principal - scientifique
+        const sciDisplay = document.getElementById('sci-current');
+        if (sciDisplay) {
+            sciDisplay.textContent = this.state.currentExpression || '0';
         }
 
         // Historique
@@ -354,23 +493,7 @@ export const CalculatorManager = {
                 .join('');
         }
 
-        // Mémoire
-        const memoryIndicator = document.getElementById('memoryIndicator');
-        if (memoryIndicator) {
-            memoryIndicator.style.display = this.state.memory !== 0 ? 'block' : 'none';
-        }
-
         this.updateAngleUnitDisplay();
-    },
-
-    /**
-     * Met à jour l'affichage de l'unité d'angle
-     */
-    updateAngleUnitDisplay() {
-        const angleUnitButton = document.getElementById('toggleAngleUnit');
-        if (angleUnitButton) {
-            angleUnitButton.textContent = this.state.angleUnit.toUpperCase();
-        }
     },
 
     /**
@@ -382,7 +505,8 @@ export const CalculatorManager = {
             memory: this.state.memory,
             isScientificMode: this.state.isScientificMode,
             angleUnit: this.state.angleUnit,
-            precision: this.state.precision
+            precision: this.state.precision,
+            currentCalculator: this.state.currentCalculator
         });
     },
 
@@ -391,6 +515,40 @@ export const CalculatorManager = {
      */
     destroy() {
         this.saveState();
+        window.__calculatorAlreadyInitialized = false;
+    },
+
+    /**
+     * Optimise la disposition pour les écrans mobiles
+     */
+    setupResponsiveLayout() {
+        const screenWidth = window.innerWidth;
+        const scientificButtons = document.querySelectorAll('.scientific-grid .calculator-button');
+        
+        // Ajuste les textes des boutons selon la taille de l'écran
+        if (screenWidth <= 350) {
+            // Simplifier certains textes sur les très petits écrans
+            document.querySelectorAll('[data-action="sin"]').forEach(btn => btn.textContent = 'sin');
+            document.querySelectorAll('[data-action="cos"]').forEach(btn => btn.textContent = 'cos');
+            document.querySelectorAll('[data-action="tan"]').forEach(btn => btn.textContent = 'tan');
+            document.querySelectorAll('[data-action="log"]').forEach(btn => btn.textContent = 'log');
+            document.querySelectorAll('[data-action="square"]').forEach(btn => btn.textContent = 'x²');
+            document.querySelectorAll('[data-action="power"]').forEach(btn => btn.textContent = 'x^y');
+            document.querySelectorAll('[data-action="1/x"]').forEach(btn => btn.textContent = '1/x');
+        }
+        
+        // Vérifie si le layout est trop serré et applique des ajustements supplémentaires
+        if (screenWidth <= 320) {
+            document.querySelectorAll('[data-action="sin"]').forEach(btn => btn.textContent = 'sin');
+            document.querySelectorAll('[data-action="cos"]').forEach(btn => btn.textContent = 'cos');
+            document.querySelectorAll('[data-action="tan"]').forEach(btn => btn.textContent = 'tan');
+            document.querySelectorAll('[data-action="ln"]').forEach(btn => btn.textContent = 'ln');
+            document.querySelectorAll('[data-action="log"]').forEach(btn => btn.textContent = 'lg');
+            document.querySelectorAll('[data-action="square"]').forEach(btn => btn.textContent = 'x²');
+            document.querySelectorAll('[data-action="power"]').forEach(btn => btn.textContent = 'x^');
+            document.querySelectorAll('[data-action="1/x"]').forEach(btn => btn.textContent = '1/x');
+            document.querySelectorAll('[data-action="percent"]').forEach(btn => btn.textContent = '%');
+        }
     }
 };
 
@@ -402,7 +560,7 @@ function animateResult(resultElement) {
 }
 
 // Fonction pour calculer le pourcentage de base
-function calculatePercentage() {
+export function calculatePercentage() {
     const percent = parseFloat(document.getElementById('percentValue').value);
     const base = parseFloat(document.getElementById('baseValue').value);
     const result = document.getElementById('percentResult');
@@ -415,7 +573,7 @@ function calculatePercentage() {
 }
 
 // Fonction pour calculer la variation en pourcentage
-function calculateVariation() {
+export function calculateVariation() {
     const initial = parseFloat(document.getElementById('initialValue').value);
     const final = parseFloat(document.getElementById('finalValue').value);
     const result = document.getElementById('variationResult');
@@ -429,7 +587,7 @@ function calculateVariation() {
 }
 
 // Fonction pour calculer la valeur initiale
-function calculateInitial() {
+export function calculateInitial() {
     const final = parseFloat(document.getElementById('finalAmount').value);
     const percent = parseFloat(document.getElementById('percentage').value);
     const result = document.getElementById('initialResult');
@@ -441,22 +599,32 @@ function calculateInitial() {
     }
 }
 
-// Exporter les fonctions pour les rendre disponibles globalement
-window.calculatePercentage = calculatePercentage;
-window.calculateVariation = calculateVariation;
-window.calculateInitial = calculateInitial;
-window.animateResult = animateResult;
-
-// Ajout des écouteurs d'événements pour les touches Entrée
-document.addEventListener('DOMContentLoaded', () => {
-    const inputs = document.querySelectorAll('.percentage-tools input[type="number"]');
+// Initialiser la mini-calculatrice au chargement du DOM
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialiser la mini-calculatrice dans le footer si elle existe
+    if (typeof window.initMiniCalculator === 'function') {
+        window.initMiniCalculator();
+    }
     
+    // Ajouter les écouteurs d'événements pour les touches Entrée dans les outils de pourcentage
+    const inputs = document.querySelectorAll('.percentage-tools input[type="number"]');
     inputs.forEach(input => {
         input.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 const group = input.closest('.calc-group');
-                group.querySelector('.calc-btn').click();
+                if (group) {
+                    const button = group.querySelector('.calc-btn');
+                    if (button) button.click();
+                }
             }
         });
     });
-}); 
+});
+
+// Exporter les fonctions pour les rendre disponibles globalement
+if (typeof window !== 'undefined') {
+    window.calculatePercentage = calculatePercentage;
+    window.calculateVariation = calculateVariation;
+    window.calculateInitial = calculateInitial;
+    window.animateResult = animateResult;
+} 

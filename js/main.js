@@ -9,6 +9,8 @@ import { SchedulerManager } from './tools/scheduler.js';
 import { StyleTextManager } from './tools/styletext.js';
 import { ColorManager } from './tools/color.js';
 import { QRCodeManager } from './tools/qrcode.js';
+import { TodoManager } from './tools/todo.js';
+import { StopwatchManager } from './tools/stopwatch.js';
 
 /**
  * Classe principale de l'application
@@ -17,6 +19,7 @@ class App {
     constructor() {
         this.init();
         this.initErrorHandling();
+        this.initOfflineBadge();
     }
 
     /**
@@ -27,8 +30,8 @@ class App {
         // Initialiser les polyfills
         this.initPolyfills();
         
-        // Initialiser le service worker
-        this.initServiceWorker();
+        // Initialiser le service worker selon le paramètre offlineMode
+        this.initServiceWorkerBySettings();
         
         // Initialiser le gestionnaire de thème
         ThemeManager.init();
@@ -86,28 +89,70 @@ class App {
     }
     
     /**
-     * Initialise le service worker
+     * Active/désactive le Service Worker selon le paramètre offlineMode
      */
-    initServiceWorker() {
+    initServiceWorkerBySettings() {
+        const settings = JSON.parse(localStorage.getItem('appSettings'));
+        const offlineMode = settings && settings.sync && settings.sync.offlineMode;
+        if (offlineMode) {
+            this.registerServiceWorker();
+        } else {
+            this.unregisterServiceWorker();
+        }
+    }
+    
+    /**
+     * Enregistre le Service Worker si non déjà actif
+     */
+    registerServiceWorker() {
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js').then(registration => {
-                    console.log('ServiceWorker registration successful');
-                }).catch(err => {
-                    console.log('ServiceWorker registration failed: ', err);
-                });
+            navigator.serviceWorker.getRegistration('/sw.js').then(reg => {
+                if (!reg) {
+                    navigator.serviceWorker.register('/sw.js').then(registration => {
+                        this.showSWUpdateNotification(registration);
+                    });
+                } else {
+                    this.showSWUpdateNotification(reg);
+                }
             });
         }
-        
-        window.addEventListener('online', () => {
-            document.body.classList.remove('offline');
-            NotificationManager.show('Connexion rétablie', 'success');
-        });
-        
-        window.addEventListener('offline', () => {
-            document.body.classList.add('offline');
-            NotificationManager.show('Vous êtes hors ligne', 'warning');
-        });
+    }
+    
+    /**
+     * Désenregistre le Service Worker et vide le cache
+     */
+    unregisterServiceWorker() {
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistration('/sw.js').then(reg => {
+                if (reg) {
+                    reg.unregister().then(() => {
+                        if (window.caches) {
+                            caches.keys().then(keys => {
+                                Promise.all(keys.map(key => caches.delete(key)));
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    }
+    
+    /**
+     * Affiche une notification si une nouvelle version du SW est disponible
+     */
+    showSWUpdateNotification(registration) {
+        if (!registration) return;
+        if (registration.waiting) {
+            this.showNotification('Nouvelle version disponible. Rechargez la page pour mettre à jour.', 'info');
+        }
+        registration.onupdatefound = () => {
+            const newWorker = registration.installing;
+            newWorker.onstatechange = () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    this.showNotification('Nouvelle version disponible. Rechargez la page pour mettre à jour.', 'info');
+                }
+            };
+        };
     }
     
     /**
@@ -174,7 +219,10 @@ class App {
      * Initialise les outils
      */
     initTools() {
-        // Lazy load les gestionnaires d'outils quand nécessaire
+        // Les gestionnaires d'outils sont maintenant initialisés à la demande
+        // dans leur propre fichier, seulement lorsque les éléments DOM sont présents
+        
+        // Configurer le gestionnaire de chargement des outils
         document.querySelectorAll('[data-tool-id]').forEach(toolBtn => {
             toolBtn.addEventListener('click', () => {
                 const toolId = toolBtn.getAttribute('data-tool-id');
@@ -182,27 +230,12 @@ class App {
             });
         });
         
-        // Initialisation de SchedulerManager
-        if (document.getElementById('schedulerTool')) {
-            SchedulerManager.init();
+        // Initialiser les gestionnaires d'outils spécifiques si nécessaire
+        if (document.getElementById('todoTool')) {
+            TodoManager.init();
         }
         
-        // Initialisation de StyleTextManager
-        if (document.getElementById('styletext')) {
-            StyleTextManager.init();
-        }
-        
-        // Initialisation de ColorManager
-        if (document.getElementById('colorTool')) {
-            ColorManager.init();
-        }
-        
-        // Initialisation de QRCodeManager
-        if (document.getElementById('qrcodeTool')) {
-            QRCodeManager.init();
-            // Rendre le QRCodeManager accessible globalement pour les interactions HTML
-            window.qrcodeManager = QRCodeManager;
-        }
+        console.log('Gestionnaires d\'outils configurés pour initialisation à la demande');
     }
     
     /**
@@ -344,41 +377,108 @@ class App {
     
     /**
      * Affiche un outil spécifique
-     * @param {string} toolId - L'identifiant de l'outil à afficher
+     * @param {string} toolId - Identifiant de l'outil
      */
     showTool(toolId) {
-        // Animation de sortie pour l'outil actuel
-        const currentTool = document.querySelector('.section.active');
-        if (currentTool) {
-            currentTool.style.opacity = '0';
-            currentTool.style.transform = 'translateY(20px)';
-        }
+        console.log(`Affichage de l'outil: ${toolId}`);
         
-        // Masquer tous les outils après l'animation
-        setTimeout(() => {
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.remove('active');
-                section.style.display = 'none';
+        // Récupérer le conteneur des outils
+        const toolsContainer = document.getElementById('toolsContainer');
+        if (!toolsContainer) return;
+        
+        // Afficher l'indicateur de chargement
+        toolsContainer.innerHTML = '<div class="loading-indicator"><div class="spinner"></div><p>Chargement de l\'outil...</p></div>';
+        
+        // Charger le contenu de l'outil
+        const toolContentUrl = `./html/tools/${toolId.toLowerCase().replace('tool', '')}.html`;
+        
+        fetch(toolContentUrl)
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        throw new Error(`L'outil "${toolId}" n'existe pas.`);
+                    }
+                    throw new Error(`Erreur HTTP: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(html => {
+                toolsContainer.innerHTML = html;
+                
+                // Mettre à jour l'URL avec l'ancre
+                history.pushState(null, null, `#${toolId}`);
+                
+                // Animer l'entrée
+                toolsContainer.classList.add('tool-fade-in');
+                setTimeout(() => toolsContainer.classList.remove('tool-fade-in'), 500);
+                
+                // Charger le script spécifique à l'outil si nécessaire
+                this.loadToolScript(toolId);
+            })
+            .catch(error => {
+                console.error('Erreur lors du chargement de l\'outil:', error);
+                const errorMessage = error.message.includes('404') 
+                    ? `L'outil "${toolId}" n'existe pas ou n'est pas disponible.`
+                    : 'Une erreur est survenue lors du chargement de l\'outil. Veuillez réessayer plus tard.';
+                
+                toolsContainer.innerHTML = `
+                    <div class="error-container">
+                        <div class="error-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        <h3>Erreur lors du chargement de l'outil</h3>
+                        <p>${errorMessage}</p>
+                        <button type="button" class="retry-btn" onclick="app.showTool('${toolId}')">Réessayer</button>
+                    </div>
+                `;
             });
-            
-            // Afficher le nouvel outil avec animation
-            const tool = document.getElementById(toolId);
-            if (tool) {
-                tool.classList.add('active');
-                tool.style.display = 'block';
-                
-                requestAnimationFrame(() => {
-                    tool.style.opacity = '1';
-                    tool.style.transform = 'translateY(0)';
+    }
+    
+    /**
+     * Charge le script d'un outil
+     */
+    loadToolScript(toolId) {
+        // Liste des correspondances entre ID d'outil et leurs managers
+        const toolManagers = {
+            'calculatorTool': () => import('./tools/calculator.js').then(module => module.CalculatorManager.init()),
+            'timerTool': () => import('./tools/timer.js').then(module => module.TimerManager.init()),
+            'stopwatchTool': () => import('./tools/stopwatch.js').then(module => module.StopwatchManager.init()),
+            'noteTool': () => import('./tools/notes.js').then(module => module.NotesManager.init()),
+            'todoTool': () => import('./tools/todo.js').then(module => module.TodoManager.init()),
+            'translatorTool': () => import('./tools/translator.js').then(module => module.TranslatorManager.init()),
+            'colorTool': () => import('./tools/color.js').then(module => module.ColorManager.init()),
+            'qrcodeTool': () => import('./tools/qrcode.js').then(module => module.QRCodeManager.init()),
+            'passwordTool': () => import('./tools/password.js').then(module => module.PasswordManager.init()),
+            'styletext': () => import('./tools/styletext.js').then(module => module.StyleTextManager.init()),
+            'metronomeTool': () => import('./tools/metronome.js').then(module => module.MetronomeManager.init()),
+            'currencyTool': () => import('./tools/currency.js').then(module => module.CurrencyManager.init()),
+            'unitTool': () => import('./tools/unit.js').then(module => {
+                console.log('Module unitTool chargé:', module);
+                if (module.initUnitConverter) {
+                    console.log('Initialisation du convertisseur avec initUnitConverter');
+                    module.initUnitConverter();
+                } else if (module.UnitManager && module.UnitManager.init) {
+                    console.log('Initialisation du convertisseur avec UnitManager.init');
+                    module.UnitManager.init();
+                } else {
+                    console.error('Impossible de trouver une méthode d\'initialisation pour le convertisseur d\'unités');
+                }
+            }),
+            'parameterTool': () => {
+                console.error(`Erreur lors du chargement de l'outil: L'outil "${toolId}" n'existe pas.`);
+                Utils.showNotification(`L'outil "${toolId}" n'existe pas.`, 'error');
+            },
+            'textEditorTool': () => import('./tools/textEditor.js').then(module => module.init()),
+        };
+
+        // Charger le gestionnaire correspondant
+        if (toolManagers[toolId]) {
+            toolManagers[toolId]()
+                .catch(error => {
+                    console.error(`Erreur lors du chargement de l'outil ${toolId}:`, error);
+                    Utils.showNotification(`Impossible de charger l'outil`, 'error');
                 });
-                
-                // Mettre à jour l'URL
-                history.pushState({ tool: toolId }, '', `#${toolId}`);
-                
-                // Mettre à jour le menu
-                this.updateMenuState(toolId);
-            }
-        }, 300);
+        } else {
+            console.log(`Pas de gestionnaire défini pour l'outil ${toolId}`);
+        }
     }
     
     /**
@@ -426,9 +526,147 @@ class App {
             return false;
         };
     }
+
+    /**
+     * Badge visuel d'état du mode hors ligne
+     */
+    initOfflineBadge() {
+        const badge = document.createElement('div');
+        badge.id = 'offline-badge';
+        badge.style.position = 'fixed';
+        badge.style.bottom = '16px';
+        badge.style.left = '16px';
+        badge.style.zIndex = 99999;
+        badge.style.background = '#4a90e2';
+        badge.style.color = '#fff';
+        badge.style.padding = '8px 16px';
+        badge.style.borderRadius = '20px';
+        badge.style.fontWeight = 'bold';
+        badge.style.boxShadow = '0 2px 8px rgba(0,0,0,0.12)';
+        badge.style.fontSize = '15px';
+        badge.style.display = 'none';
+        badge.setAttribute('aria-live', 'polite');
+        document.body.appendChild(badge);
+        this.updateOfflineBadge();
+        window.addEventListener('storage', () => this.updateOfflineBadge());
+    }
+    updateOfflineBadge() {
+        const badge = document.getElementById('offline-badge');
+        const settings = JSON.parse(localStorage.getItem('appSettings'));
+        const offlineMode = settings && settings.sync && settings.sync.offlineMode;
+        if (offlineMode) {
+            badge.textContent = 'Mode hors ligne actif';
+            badge.style.display = 'block';
+        } else {
+            badge.textContent = '';
+            badge.style.display = 'none';
+        }
+    }
+
+    /**
+     * Affiche une notification accessible
+     */
+    showNotification(message, type = 'success') {
+        const notif = document.createElement('div');
+        notif.textContent = message;
+        notif.style.position = 'fixed';
+        notif.style.bottom = '30px';
+        notif.style.right = '30px';
+        notif.style.background = type === 'info' ? '#2196F3' : (type === 'success' ? '#4CAF50' : '#e74c3c');
+        notif.style.color = '#fff';
+        notif.style.padding = '14px 24px';
+        notif.style.borderRadius = '8px';
+        notif.style.fontWeight = 'bold';
+        notif.style.zIndex = 9999;
+        notif.style.boxShadow = '0 4px 16px rgba(0,0,0,0.15)';
+        notif.style.opacity = '0.95';
+        notif.setAttribute('role', 'status');
+        notif.setAttribute('aria-live', 'polite');
+        document.body.appendChild(notif);
+        setTimeout(() => {
+            notif.style.transition = 'opacity 0.5s';
+            notif.style.opacity = '0';
+            setTimeout(() => notif.remove(), 500);
+        }, 3200);
+    }
 }
 
 // Initialiser l'application lorsque le DOM est chargé
 document.addEventListener('DOMContentLoaded', function() {
     window.app = new App();
+});
+
+// Fonction pour charger dynamiquement les outils
+function loadTool(toolName) {
+    console.log(`Chargement de l'outil: ${toolName}`);
+    
+    // Vérifier si l'outil est déjà chargé
+    if (document.querySelector(`#${toolName}Tool`)) {
+        console.log(`L'outil ${toolName} est déjà chargé.`);
+        return Promise.resolve();
+    }
+
+    // Chemin vers les fichiers de l'outil
+    const htmlPath = `html/tools/${toolName}.html`;
+    const jsPath = `js/tools/${toolName}.js`;
+
+    // Charger le HTML de l'outil
+    return fetch(htmlPath)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Erreur lors du chargement du HTML de l'outil ${toolName}: ${response.status}`);
+            }
+            return response.text();
+        })
+        .then(html => {
+            // Insérer le HTML dans le conteneur d'outils
+            const toolsContainer = document.getElementById('toolsContainer');
+            
+            if (!toolsContainer) {
+                throw new Error("Conteneur d'outils non trouvé");
+            }
+            
+            toolsContainer.innerHTML = html;
+            console.log(`HTML de l'outil ${toolName} chargé avec succès.`);
+            
+            // Charger et exécuter le JS de l'outil
+            return import(jsPath)
+                .then(module => {
+                    console.log(`Module JS de l'outil ${toolName} chargé avec succès:`, module);
+                    
+                    // Si le module a une fonction d'initialisation, l'exécuter
+                    if (module.init) {
+                        console.log(`Initialisation de l'outil ${toolName} via module.init()`);
+                        module.init();
+                    } else if (module.initUnitConverter && toolName === 'unit') {
+                        console.log(`Initialisation du convertisseur d'unités via module.initUnitConverter()`);
+                        module.initUnitConverter();
+                    } else {
+                        console.log(`Pas de fonction d'initialisation trouvée pour l'outil ${toolName}`);
+                    }
+                    
+                    // Dispatcher un événement pour signaler que l'outil est chargé
+                    const event = new CustomEvent('toolLoaded', { detail: { toolName } });
+                    document.dispatchEvent(event);
+                })
+                .catch(error => {
+                    console.error(`Erreur lors du chargement du JS de l'outil ${toolName}:`, error);
+                    throw error;
+                });
+        })
+        .catch(error => {
+            console.error(`Erreur lors du chargement de l'outil ${toolName}:`, error);
+            throw error;
+        });
+}
+
+// Attendre que le DOM soit chargé
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM chargé, initialisation des outils...');
+    
+    // Initialiser le chronomètre si présent dans la page
+    if (document.getElementById('stopwatchTool')) {
+        StopwatchManager.init();
+        console.log('Chronomètre initialisé');
+    }
 }); 

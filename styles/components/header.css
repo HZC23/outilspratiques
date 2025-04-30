@@ -1,0 +1,121 @@
+/**
+ * Styles de l'en-tête principal
+ * Style moderne avec dégradé et effets glassmorphism
+ */
+
+/* Header principal */
+header {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-gradient-blue, #1e40af), var(--primary-gradient-purple, #3730a3));
+    color: var(--text-on-primary);
+    padding: var(--spacing-md) var(--spacing-md);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: var(--box-shadow, 0 4px 20px rgba(0, 0, 0, 0.15));
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    animation: headerGlow 8s infinite alternate;
+    transition: all 0.3s ease;
+    background-size: 300% 300%;
+}
+@keyframes headerGlow {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: var(--breakpoint-desktop);
+    margin: 0 auto;
+    width: 100%;
+    position: relative;
+}
+
+/* Titre principal */
+header h1 {
+    margin: 0;
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    letter-spacing: 1px;
+    background: linear-gradient(to right, var(--header-title-gradient-1, #ffffff), var(--header-title-gradient-2, #f0f0f0), var(--header-title-gradient-1, #ffffff));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer 3s infinite;
+    z-index: 5;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -100% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Styles pour les actions de l'en-tête (boutons et horloge) */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-left: auto;
+    z-index: 10;
+}
+
+.theme-switch-wrapper {
+    z-index: 10;
+}
+/* Effet supplémentaire pour le header au survol */
+header:hover {
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    header {
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+    
+    header h1 {
+        font-size: calc(var(--font-size-lg) - 0.2rem);
+        width: 60%;
+        text-align: center;
+    }
+    
+    .btn-icon, .menu-toggle {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .btn-icon i, .menu-toggle i {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: calc(var(--font-size-md) + 0.1rem);
+        width: 50%;
+    }
+    
+    .btn-icon, .menu-toggle {
+        width: 32px;
+        height: 32px;
+    }
+} 

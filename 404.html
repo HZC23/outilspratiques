@@ -1,98 +1,36 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page non trouvée - Outils Pratiques</title>
-    <link rel="stylesheet" href="/styles.css">
-    <style>
-        .error-container {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 2rem;
-            background: var(--background-color);
-        }
-
-        .error-code {
-            font-size: 8rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            line-height: 1;
-            margin: 0;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .error-message {
-            font-size: 1.5rem;
-            color: var(--text-color);
-            margin: 1rem 0 2rem;
-            max-width: 600px;
-        }
-
-        .home-button {
-            padding: 1rem 2rem;
-            background: var(--primary-color);
-            color: white;
-            text-decoration: none;
-            border-radius: var(--border-radius);
-            font-weight: 500;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .home-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-
-        .illustration {
-            margin: 2rem 0;
-            max-width: 400px;
-            width: 100%;
-            height: auto;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-20px);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .error-code {
-                font-size: 6rem;
-            }
-
-            .error-message {
-                font-size: 1.2rem;
-            }
-
-            .illustration {
-                max-width: 300px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outils Pratiques - Page non trouvée</title>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Arvo'>
+  <link rel="stylesheet" href="./styles/404.css">
 </head>
 <body>
-    <div class="error-container">
-        <h1 class="error-code">404</h1>
-        <img src="/images/404-illustration.svg" alt="Page non trouvée" class="illustration">
-        <p class="error-message">Oups ! La page que vous recherchez semble avoir disparu dans le cyberespace. :/</p>
-        <a href="/" class="home-button">
-            <i class="fas fa-home"></i>
-            Retour à l'accueil
-        </a>
-    </div>
+<section class="page_404">
+	<div class="container">
+		<div class="row">	
+		<div class="col-sm-12 ">
+		<div class="col-sm-10 col-sm-offset-1  text-center">
+		<div class="four_zero_four_bg">
+			<h1 class="text-center ">404</h1>
+		</div>
+		
+		<div class="contant_box_404">
+		<h3 class="h2">
+		Vous semblez perdu
+		</h3>
+		
+		<p>La page que vous recherchez n'est pas disponible !</p>
+		
+		<a href="index.html" class="link_404">Retour à l'accueil</a>
+	</div>
+		</div>
+		</div>
+		</div>
+	</div>
+</section>
 </body>
-</html> 
+</html>

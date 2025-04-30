@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<div class="tool-container" id="stopwatchTool">
+    <div class="tool-header">
+        <h2><i class="fas fa-stopwatch"></i> Chronomètre</h2>
+        <div class="tool-actions">
+            <button type="button" class="btn-icon" id="stopwatchHelp" aria-label="Aide">
+                <i class="fas fa-question-circle"></i>
+            </button>
+            <button type="button" class="btn-icon" id="stopwatchFullscreen" aria-label="Plein écran">
+                <i class="fas fa-expand"></i>
+            </button>
+        </div>
+    </div>
+    
+    <div class="tool-content">
+        <div class="stopwatch-container">
+            <div class="stopwatch-display">
+                <div class="time-counter" id="timeCounter">
+                    <span id="minutesSW">00</span>:<span id="secondsSW">00</span>.<span id="millisecondsSW">00</span>
+                </div>
+            </div>
+            
+            <div class="stopwatch-controls">
+                <button type="button" class="btn-circle" id="startStopwatch" aria-label="Démarrer">
+                    <i class="fas fa-play"></i>
+                </button>
+                <button type="button" class="btn-circle" id="pauseStopwatch" aria-label="Pause" disabled>
+                    <i class="fas fa-pause"></i>
+                </button>
+                <button type="button" class="btn-circle" id="lapStopwatch" aria-label="Tour" disabled>
+                    <i class="fas fa-flag"></i>
+                </button>
+                <button type="button" class="btn-circle" id="resetStopwatch" aria-label="Réinitialiser" disabled>
+                    <i class="fas fa-redo"></i>
+                </button>
+            </div>
+            
+            <div class="lap-times" id="lapTimesContainer">
+                <h3>Tours <span id="lapCount">(0)</span></h3>
+                <div class="lap-list" id="lapList">
+                    <!-- Les tours seront ajoutés dynamiquement ici -->
+                </div>
+                <div class="lap-controls">
+                    <button type="button" class="btn btn-outline" id="clearLaps" disabled>
+                        <i class="fas fa-trash-alt"></i> Effacer les tours
+                    </button>
+                    <button type="button" class="btn btn-outline" id="exportLaps" disabled>
+                        <i class="fas fa-download"></i> Exporter
+                    </button>
+                </div>
+            </div>
+            
+            <div class="stopwatch-stats" id="stopwatchStats">
+                <h3>Statistiques</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-label">Meilleur tour</div>
+                        <div class="stat-value" id="bestLap">--:--:--</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Tour le plus lent</div>
+                        <div class="stat-value" id="slowestLap">--:--:--</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Tour moyen</div>
+                        <div class="stat-value" id="averageLap">--:--:--</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Temps total</div>
+                        <div class="stat-value" id="totalTime">00:00:00</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="help-panel" id="stopwatchHelpPanel">
+        <div class="help-panel-header">
+            <h3>Aide - Chronomètre</h3>
+            <button type="button" class="btn-icon" id="closeStopwatchHelp">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="help-panel-content">
+            <h4>Comment utiliser</h4>
+            <ol>
+                <li>Cliquez sur le bouton "Démarrer" pour lancer le chronomètre</li>
+                <li>Utilisez le bouton "Tour" pour enregistrer des temps intermédiaires</li>
+                <li>Le bouton "Pause" permet de suspendre temporairement le chronométrage</li>
+                <li>Le bouton "Réinitialiser" remet à zéro le chronomètre</li>
+                <li>Vous pouvez effacer les tours sans réinitialiser le chronomètre</li>
+            </ol>
+            
+            <h4>Raccourcis clavier</h4>
+            <ul class="shortcuts-list">
+                <li><span>Démarrer/Pause</span> <span class="key">Espace</span></li>
+                <li><span>Enregistrer un tour</span> <span class="key">L</span></li>
+                <li><span>Réinitialiser</span> <span class="key">R</span></li>
+                <li><span>Effacer les tours</span> <span class="key">C</span></li>
+                <li><span>Plein écran</span> <span class="key">F</span></li>
+                <li><span>Afficher/Masquer l'aide</span> <span class="key">H</span></li>
+            </ul>
+            
+            <h4>Fonctionnalités</h4>
+            <ul>
+                <li><strong>Tours</strong> : enregistrez des temps intermédiaires pour mesurer vos performances</li>
+                <li><strong>Statistiques</strong> : visualisez votre meilleur tour, tour le plus lent et moyenne</li>
+                <li><strong>Export</strong> : sauvegardez vos résultats en CSV pour analyse</li>
+                <li><strong>Précision</strong> : mesure précise au centième de seconde</li>
+                <li><strong>Mode plein écran</strong> : pour une meilleure visibilité à distance</li>
+            </ul>
+            
+            <h4>Utilisations courantes</h4>
+            <ul>
+                <li>Entraînement sportif</li>
+                <li>Tests de performance</li>
+                <li>Minutage d'activités</li>
+                <li>Expériences scientifiques</li>
+                <li>Présentations chronométrées</li>
+            </ul>
+        </div>
+    </div>
+</div> 

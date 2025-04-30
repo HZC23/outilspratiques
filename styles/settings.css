@@ -1,0 +1,972 @@
+/**
+ * Styles pour la page des paramètres globaux
+ */
+
+/* Layout principal */
+.settings-container {
+    display: flex;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--box-shadow);
+    transition: background-color var(--transition-duration), color var(--transition-duration);
+}
+
+/* Navigation latérale */
+.settings-sidebar {
+    width: var(--menu-max-width);
+    background-color: var(--card-bg);
+    border-right: 1px solid var(--border-color);
+    padding: var(--spacing-lg) 0;
+    overflow-y: auto;
+    flex-shrink: 0;
+    transition: background-color var(--transition-duration);
+}
+
+.settings-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.settings-nav-item {
+    padding: var(--spacing-md) var(--spacing-lg);
+    cursor: pointer;
+    transition: background-color var(--transition-duration), color var(--transition-duration);
+    display: flex;
+    align-items: center;
+    border-left: 3px solid transparent;
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    font-weight: 500;
+}
+
+.settings-nav-item:hover {
+    background-color: var(--hover-color);
+    color: var(--primary-color);
+}
+
+.settings-nav-item.active {
+    background-color: var(--primary-light);
+    color: var(--primary-color);
+    border-left-color: var(--primary-color);
+}
+
+.settings-nav-item i {
+    margin-right: var(--spacing-md);
+    width: var(--icon-width);
+    text-align: center;
+}
+
+/* Contenu principal */
+.settings-content {
+    flex: 1;
+    padding: var(--spacing-xl);
+    overflow-y: auto;
+    background: var(--card-bg);
+    color: var(--text-color);
+    transition: background-color var(--transition-duration), color var(--transition-duration);
+}
+
+.settings-header {
+    margin-bottom: var(--spacing-lg);
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: var(--spacing-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.settings-header h1 {
+    margin: 0;
+    font-size: var(--font-size-xxl);
+    font-weight: 900;
+    color: var(--primary-color);
+    letter-spacing: var(--letter-spacing-tight);
+    text-shadow: 0 2px 8px rgba(var(--primary-color-rgb), 0.08);
+    background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+}
+
+.settings-help-btn {
+    background: var(--button-bg);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-circle);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color var(--transition-duration), color var(--transition-duration), border-color var(--transition-duration);
+    color: var(--text-color-secondary);
+}
+
+.settings-help-btn:hover {
+    background-color: var(--hover-color);
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Onglets de contenu */
+.settings-tab {
+    display: none;
+}
+
+.settings-tab.active {
+    display: block;
+    animation: fadeIn var(--transition-slow) var(--ease-in-out);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Sections de paramètres */
+.settings-section {
+    margin-bottom: var(--spacing-xl);
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--inset-shadow);
+    padding: var(--spacing-lg);
+    transition: background-color var(--transition-duration);
+}
+
+.settings-section-header {
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.settings-section-title, h2.settings-section-title {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 0 0 var(--spacing-xs) 0;
+    letter-spacing: var(--letter-spacing-tight);
+    position: relative;
+    padding-bottom: 4px;
+}
+
+.settings-section-title::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+    border-radius: 2px;
+    margin-top: 4px;
+}
+
+.settings-section-description {
+    margin: var(--spacing-xs) 0 0;
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+}
+
+/* Formulaires et contrôles */
+.form-group {
+    margin-bottom: var(--spacing-md);
+}
+
+.form-label {
+    display: block;
+    margin-bottom: var(--spacing-xs);
+    font-weight: 500;
+    color: var(--form-label-text);
+}
+
+.form-control, .form-select {
+    display: block;
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size);
+    line-height: var(--line-height-normal);
+    color: var(--form-input-text);
+    background-color: var(--form-input-bg);
+    border: 1px solid var(--form-input-border);
+    border-radius: var(--border-radius);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--form-input-focus-border);
+    outline: 0;
+    box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.15);
+}
+
+/* Groupes d'options */
+.settings-options-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-medium); /* Use variable for gap */
+    margin-bottom: var(--margin-medium); /* Use variable for margin */
+}
+
+/* Switches (interrupteurs) */
+.switch-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.switch-label {
+    margin-left: var(--spacing-md);
+    flex: 1;
+    color: var(--text-color);
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--border-color);
+    transition: var(--transition-duration);
+    border-radius: var(--border-radius-xl);
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 2px;
+    bottom: 2px;
+    background-color: var(--card-bg);
+    transition: var(--transition-duration);
+    border-radius: 50%;
+    box-shadow: var(--box-shadow);
+}
+
+input:checked + .slider {
+    background-color: var(--primary-color);
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.15);
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+/* Options de thème */
+.theme-option {
+    display: flex;
+    align-items: center;
+    padding: var(--padding-small) var(--padding-medium); /* Use variables for padding */
+    border: var(--border-width) solid var(--border-color); /* Use variable for border width */
+    border-radius: var(--border-radius-small); /* Use variable for border radius */
+    cursor: pointer;
+    transition: border-color var(--transition-duration), background-color var(--transition-duration); /* Use variable for transition duration */
+    margin-bottom: var(--margin-small); /* Use variable for margin */
+}
+
+.theme-option:hover {
+    background-color: var(--bg-color-hover);
+}
+
+.theme-option input[type="radio"] {
+    margin-right: var(--margin-medium); /* Use variable for margin */
+}
+
+.theme-option.active {
+    border-color: var(--accent-color);
+    background-color: var(--accent-color-transparent);
+}
+
+/* Options de couleur */
+.color-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-small); /* Use variable for gap */
+    margin-top: var(--margin-small); /* Use variable for margin */
+}
+
+.color-option {
+    width: var(--color-option-size); /* Use variable for color option size */
+    height: var(--color-option-size); /* Use variable for color option size */
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform var(--transition-duration); /* Use variable for transition duration */
+    border: var(--border-width) solid var(--border-color); /* Use variable for border width */
+    position: relative;
+}
+
+.color-option:hover {
+    transform: scale(var(--scale-hover)); /* Use variable for scale */
+}
+
+.color-option.active {
+    border-color: var(--accent-color);
+}
+
+.color-option.active::after {
+    content: '\2713';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-shadow: var(--text-shadow); /* Use variable for text shadow */
+}
+
+.color-option.custom {
+    background-color: var(--card-bg, #fff); /* Harmonisation : remplace #fff par la variable */
+    border: 1px solid var(--border-color, #dee2e6);
+}
+
+/* Sélecteur de couleur personnalisée */
+.custom-color-picker {
+    margin-top: var(--margin-large); /* Use variable for margin */
+    display: flex;
+    align-items: center;
+}
+
+.custom-color-picker input[type="color"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: var(--color-picker-size); /* Use variable for color picker size */
+    height: var(--color-picker-size); /* Use variable for color picker size */
+    border: none;
+    border-radius: var(--border-radius-small); /* Use variable for border radius */
+    background: none;
+    cursor: pointer;
+}
+
+.custom-color-picker input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.custom-color-picker input[type="color"]::-webkit-color-swatch {
+    border: var(--border-width) solid var(--border-color); /* Use variable for border width */
+    border-radius: var(--border-radius-small); /* Use variable for border radius */
+}
+
+.custom-color-picker span {
+    margin-left: var(--margin-medium); /* Use variable for margin */
+}
+
+/* Barre de stockage */
+.storage-info {
+    margin-top: var(--margin-large); /* Use variable for margin */
+}
+
+.storage-bar-container {
+    height: var(--storage-bar-height); /* Use variable for storage bar height */
+    background-color: var(--bg-color-secondary);
+    border-radius: var(--border-radius-small); /* Use variable for border radius */
+    overflow: hidden;
+    margin-bottom: var(--margin-small); /* Use variable for margin */
+}
+
+.storage-bar {
+    height: 100%;
+    background-color: var(--accent-color);
+    border-radius: var(--border-radius-small); /* Use variable for border radius */
+    transition: width var(--transition-duration); /* Use variable for transition duration */
+}
+
+.storage-details {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--font-size-small); /* Use variable for font size */
+    color: var(--text-color-secondary);
+}
+
+/* Boutons */
+.settings-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--padding-small) var(--padding-medium); /* Use variables for padding */
+    font-size: var(--font-size-small); /* Use variable for font size */
+    font-weight: var(--font-weight-semibold); /* Use variable for font weight */
+    line-height: var(--line-height); /* Use variable for line height */
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    border: var(--border-width) solid transparent; /* Use variable for border width */
+    border-radius: var(--border-radius-small); /* Use variable for border radius */
+    transition: color var(--transition-duration), background-color var(--transition-duration), border-color var(--transition-duration), box-shadow var(--transition-duration); /* Use variable for transition duration */
+}
+
+.settings-btn i {
+    margin-right: var(--margin-small); /* Use variable for margin */
+}
+
+.btn-primary {
+    color: var(--text-on-primary, #fff);
+    background-color: var(--primary-color, #4a90e2);
+    border-color: var(--primary-color, #4a90e2);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-color-hover, #6ba5e7); /* TODO: Ajouter cette variable dans variables.css si besoin */
+    border-color: var(--primary-color-hover, #6ba5e7);
+}
+
+.btn-secondary {
+    color: var(--text-color, #333);
+    background-color: var(--bg-color-secondary, #f8f9fa);
+    border-color: var(--border-color, #dee2e6);
+}
+
+.btn-secondary:hover {
+    background-color: var(--bg-color-hover, #f0f0f0);
+    border-color: var(--border-color, #dee2e6);
+}
+
+.btn-danger {
+    color: var(--text-on-primary, #fff);
+    background-color: var(--danger-color, #e74c3c);
+    border-color: var(--danger-color, #e74c3c);
+}
+
+.btn-danger:hover {
+    background-color: var(--danger-color-hover, #c0392b); /* TODO: Ajouter cette variable dans variables.css si besoin */
+    border-color: var(--danger-color-hover, #c0392b);
+}
+
+.btn-group {
+    display: flex;
+    gap: var(--gap-medium); /* Use variable for gap */
+    margin-top: var(--margin-large); /* Use variable for margin */
+}
+
+/* Files input */
+.input-file {
+    display: none;
+}
+
+/* Panneau d'aide */
+.help-panel {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: var(--help-panel-width); /* Use variable for help panel width */
+    height: 100%;
+    background-color: var(--bg-color);
+    box-shadow: var(--box-shadow-small); /* Use variable for box shadow */
+    transition: right var(--transition-duration); /* Use variable for transition duration */
+    z-index: 1000;
+    overflow-y: auto;
+    padding: var(--padding-large); /* Use variable for padding */
+}
+
+.help-panel.active {
+    right: 0;
+}
+
+.help-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--margin-large); /* Use variable for margin */
+    padding-bottom: var(--padding-medium); /* Use variable for padding */
+    border-bottom: var(--border-width-thick) solid var(--border-color); /* Use variable for border width */
+}
+
+.help-panel-title {
+    font-size: var(--font-size-medium); /* Use variable for font size */
+    font-weight: var(--font-weight-bold); /* Use variable for font weight */
+    margin: 0;
+}
+
+.close-help-btn {
+    background: none;
+    border: none;
+    font-size: var(--font-size-large); /* Use variable for font size */
+    cursor: pointer;
+    color: var(--text-color-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--button-size-small); /* Use variable for button size */
+    height: var(--button-size-small); /* Use variable for button size */
+    border-radius: var(--border-radius-small); /* Use variable for border radius */
+    transition: background-color var(--transition-duration); /* Use variable for transition duration */
+}
+
+.close-help-btn:hover {
+    background-color: var(--bg-color-hover);
+    color: var(--text-color);
+}
+
+.help-panel-section {
+    margin-bottom: var(--margin-medium); /* Use variable for margin */
+}
+
+.help-panel-section h3 {
+    font-size: var(--font-size-small); /* Use variable for font size */
+    margin-bottom: var(--margin-small); /* Use variable for margin */
+    font-weight: var(--font-weight-semibold); /* Use variable for font weight */
+}
+
+.help-panel-section p {
+    margin-bottom: var(--margin-small); /* Use variable for margin */
+    line-height: var(--line-height); /* Use variable for line height */
+}
+
+/* Modales */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Darker background for better contrast */
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex;
+    animation: fadeIn var(--animation-duration) ease; /* Use variable for animation duration */
+}
+
+.modal-content {
+    background-color: var(--bg-color);
+    border-radius: var(--border-radius-large); /* Use variable for border radius */
+    max-width: var(--modal-max-width); /* Use variable for max width */
+    width: 100%;
+    box-shadow: var(--box-shadow-large); /* Use variable for box shadow */
+    position: relative;
+}
+
+.modal-header {
+    padding: var(--padding-medium) var(--padding-large); /* Use variables for padding */
+    border-bottom: var(--border-width-thick) solid var(--border-color); /* Use variable for border width */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.modal-title {
+    font-size: var(--font-size-medium); /* Use variable for font size */
+    font-weight: var(--font-weight-bold); /* Use variable for font weight */
+    margin: 0;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: var(--font-size-large); /* Use variable for font size */
+    cursor: pointer;
+    color: var(--text-color-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--button-size-small); /* Use variable for button size */
+    height: var(--button-size-small); /* Use variable for button size */
+    border-radius: var(--border-radius-small); /* Use variable for border radius */
+    transition: background-color var(--transition-duration); /* Use variable for transition duration */
+}
+
+.modal-close:hover {
+    background-color: var(--bg-color-hover);
+    color: var(--text-color);
+}
+
+.modal-body {
+    padding: var(--padding-large); /* Use variable for padding */
+}
+
+.modal-footer {
+    padding: var(--padding-medium) var(--padding-large); /* Use variables for padding */
+    border-top: var(--border-width-thick) solid var(--border-color); /* Use variable for border width */
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--gap-medium); /* Use variable for gap */
+}
+
+/* Champ de mot de passe avec bouton de visibilité */
+.password-field {
+    position: relative;
+}
+
+.password-field .toggle-password {
+    position: absolute;
+    right: var(--margin-medium); /* Use variable for margin */
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-color-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--button-size-small); /* Use variable for button size */
+    height: var(--button-size-small); /* Use variable for button size */
+}
+
+.password-field .toggle-password:hover {
+    color: var(--text-color);
+}
+
+/* Badge version */
+.version-badge {
+    display: inline-block;
+    padding: var(--padding-small) var(--padding-medium); /* Use variables for padding */
+    font-size: var(--font-size-small); /* Use variable for font size */
+    font-weight: var(--font-weight-semibold); /* Use variable for font weight */
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: var(--border-radius-small); /* Use variable for border radius */
+    background-color: var(--bg-color-secondary);
+    color: var(--text-color-secondary);
+}
+
+/* Styles réactifs */
+@media (max-width: 900px) {
+    .settings-container {
+        flex-direction: column;
+    }
+    .settings-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: var(--spacing-md) 0;
+    }
+    .settings-content {
+        padding: var(--spacing-lg);
+    }
+}
+
+@media (max-width: 600px) {
+    .settings-content {
+        padding: var(--spacing-md);
+    }
+    .settings-section {
+        padding: var(--spacing-md);
+    }
+    .settings-header h1 {
+        font-size: var(--font-size-lg);
+    }
+}
+
+/* Classes utilitaires */
+.d-none {
+    display: none !important;
+}
+
+.mb-0 {
+    margin-bottom: 0 !important;
+}
+
+.mb-2 {
+    margin-bottom: var(--margin-small) !important; /* Use variable for margin */
+}
+
+.mb-3 {
+    margin-bottom: var(--margin-medium) !important; /* Use variable for margin */
+}
+
+.mt-3 {
+    margin-top: var(--margin-medium) !important; /* Use variable for margin */
+}
+
+.mt-4 {
+    margin-top: var(--margin-large) !important; /* Use variable for margin */
+}
+
+.w-100 {
+    width: 100% !important;
+}
+
+/* Variables CSS modifiables par les paramètres */
+:root {
+    /* Ces variables sont modifiées par le JavaScript en fonction des paramètres utilisateur */
+    --accent-color: #4a90e2;
+    --accent-color-light: #6ba5e7;
+    --accent-color-dark: #3a7bc9;
+    --accent-color-transparent: rgba(74, 144, 226, 0.2);
+    
+    /* Ces variables sont définies dans le CSS principal et sont utilisées ici pour référence */
+    --bg-color: #ffffff;
+    --bg-color-secondary: #f8f9fa;
+    --bg-color-hover: #f0f0f0;
+    --bg-color-active: #e9ecef;
+    --text-color: #333333;
+    --text-color-secondary: #6c757d;
+    --border-color: #dee2e6;
+    --input-bg-color: #ffffff;
+    
+    /* Variables pour les familles de polices et l'espacement des lignes */
+    --font-family: 'Poppins', sans-serif;
+    --line-spacing: 1.5;
+
+    /* New variables */
+    --border-radius-small: 6px;
+    --border-radius-medium: 12px;
+    --border-radius-large: 20px;
+    --border-radius-circle: 50%;
+    --border-width: 1px;
+    --border-width-thick: 2px;
+    --box-shadow-small: 0 2px 10px rgba(0, 0, 0, 0.1);
+    --box-shadow-medium: 0 4px 20px rgba(0, 0, 0, 0.15);
+    --box-shadow-large: 0 6px 30px rgba(0, 0, 0, 0.2);
+    --transition-duration: 0.3s;
+    --animation-duration: 0.4s;
+    --padding-small: 8px;
+    --padding-medium: 12px;
+    --padding-large: 20px;
+    --sidebar-width: 240px;
+    --icon-width: 22px;
+    --button-size: 40px;
+    --button-size-small: 35px;
+    --color-picker-size: 45px;
+    --storage-bar-height: 10px;
+    --scale-hover: 1.1;
+    --gap-small: 10px;
+    --gap-medium: 12px;
+    --margin-small: 8px;
+    --margin-medium: 15px;
+    --margin-large: 25px;
+    --font-size-small: 0.85rem;
+    --font-size-medium: 1rem;
+    --font-size-large: 1.4rem;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --slider-size: 20px;
+    --slider-left: 3px;
+    --slider-bottom: 3px;
+    --slider-translate: 24px;
+    --translate-y: 10px;
+    --text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+    --modal-max-width: 600px;
+    --help-panel-width: 400px;
+}
+
+/* Thème sombre */
+.theme-dark {
+    --bg-color: var(--bg-color-dark, #1e1e1e);
+    --bg-color-secondary: var(--card-bg-dark, #2d2d2d);
+    --bg-color-hover: var(--hover-color-dark, #3a3a3a);
+    --bg-color-active: var(--active-color-dark, #454545); /* TODO: Ajouter cette variable dans variables.css si besoin */
+    --text-color: var(--text-color-dark, #e0e0e0);
+    --text-color-secondary: var(--text-secondary-dark, #a7a7a7);
+    --border-color: var(--border-color-dark, #4d4d4d);
+    --input-bg-color: var(--input-bg-dark, #2d2d2d);
+    --accent-color: var(--primary-color, #0066cc);
+}
+
+/* Classes pour les tailles de police */
+.font-size-small {
+    font-size: 14px;
+}
+
+.font-size-medium {
+    font-size: 16px;
+}
+
+.font-size-large {
+    font-size: 18px;
+}
+
+.font-size-x-large {
+    font-size: 20px;
+}
+
+/* Classes pour le mode compact */
+.compact-mode .form-control,
+.compact-mode .form-select {
+    padding: var(--padding-small) var(--padding-medium); /* Use variables for padding */
+}
+
+.compact-mode .settings-nav-item {
+    padding: var(--padding-small) var(--padding-medium); /* Use variables for padding */
+}
+
+.compact-mode .settings-section {
+    margin-bottom: var(--margin-small); /* Use variable for margin */
+}
+
+.compact-mode .form-group {
+    margin-bottom: var(--margin-small); /* Use variable for margin */
+}
+
+/* Classe pour réduire les animations */
+.reduce-motion * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+}
+
+/* Classe pour le contraste élevé */
+.high-contrast {
+    --text-color: var(--text-on-primary, #f8f8f8);
+    --text-color-secondary: var(--text-secondary, #cccccc);
+    --bg-color: var(--bg-color, #000000);
+    --bg-color-secondary: var(--card-bg, #1a1a1a);
+    --bg-color-hover: var(--hover-color, #333333);
+    --bg-color-active: var(--active-color, #444444);
+    --border-color: var(--border-color, #666666);
+    --accent-color: var(--primary-color, #0066cc);
+}
+
+.high-contrast .form-control,
+.high-contrast .form-select {
+    border-width: var(--border-width-thick); /* Use variable for border width */
+}
+
+.high-contrast .switch input:checked + .slider {
+    background-color: #0066cc;
+}
+
+.color-option.custom {
+    color: var(--text-color, #333);
+}
+
+/* Gestion du cache */
+.cache-category {
+    margin-bottom: var(--spacing-md);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.cache-category-header {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: var(--bg-color-secondary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.cache-category-checkbox {
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.cache-category-checkbox input {
+    margin-right: var(--spacing-sm);
+}
+
+.cache-resources-list {
+    padding: var(--spacing-sm);
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.cache-resource-item {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    cursor: pointer;
+    border-radius: var(--border-radius);
+    transition: background-color var(--transition-duration);
+}
+
+.cache-resource-item:hover {
+    background-color: var(--bg-color-hover);
+}
+
+.cache-resource-item input {
+    margin-right: var(--spacing-sm);
+}
+
+.cache-summary {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background-color: var(--bg-color-secondary);
+    border-radius: var(--border-radius);
+    margin-top: var(--spacing-md);
+}
+
+.cache-progress-container {
+    position: relative;
+    width: 60px;
+    height: 60px;
+}
+
+.cache-progress-container svg {
+    transform: rotate(-90deg);
+}
+
+.cache-progress-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+}
+
+/* Animation de synchronisation */
+@keyframes sync-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.syncing {
+    animation: sync-spin 1s linear infinite;
+}
+
+/* Notification de synchronisation */
+.sync-notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: var(--spacing-md) var(--spacing-lg);
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    z-index: 1000;
+    transform: translateY(100%);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.sync-notification.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.sync-notification i {
+    font-size: 1.2em;
+}
+
+.sync-notification.warning {
+    background-color: var(--warning-color);
+}
+
+.sync-notification.error {
+    background-color: var(--error-color);
+} 

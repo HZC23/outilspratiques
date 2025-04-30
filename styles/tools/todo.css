@@ -1,0 +1,227 @@
+/**
+ * Styles pour la liste de tâches (Todo List)
+ * Utilise les variables CSS définies dans variables.css
+ */
+
+.todo-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: var(--box-shadow);
+}
+
+[data-theme="dark"] .todo-container {
+    background: #111;
+}
+
+.todo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.todo-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .todo-title {
+    color: #fff;
+}
+
+.todo-input-container {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.todo-input {
+    flex: 1;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--input-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+}
+
+.todo-add {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--primary-color);
+    color: var(--text-on-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.todo-add:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+.todo-add:active {
+    transform: translateY(0);
+}
+
+.todo-filters {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.todo-filter {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--button-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.todo-filter:hover {
+    background: var(--button-hover-bg);
+}
+
+.todo-filter.active {
+    background: var(--primary-color);
+    color: var(--text-on-primary);
+}
+
+.todo-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.todo-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--todo-item-border);
+    border-radius: 8px;
+    background: var(--todo-item-bg);
+    transition: all 0.2s ease;
+}
+
+.todo-item:hover {
+    background: var(--todo-item-bg-hover);
+    transform: translateX(5px);
+}
+
+.todo-checkbox {
+    width: 1.2rem;
+    height: 1.2rem;
+    cursor: pointer;
+}
+
+.todo-text {
+    flex: 1;
+    color: var(--text-color);
+}
+
+.todo-text.completed {
+    text-decoration: line-through;
+    color: var(--text-color-secondary);
+}
+
+.todo-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.todo-action {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 6px;
+    background: var(--button-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.todo-action:hover {
+    background: var(--button-hover-bg);
+}
+
+.todo-action.delete {
+    background: var(--danger-color);
+    color: var(--text-on-primary);
+}
+
+.todo-action.delete:hover {
+    background: var(--danger-hover);
+}
+
+.todo-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.todo-stat {
+    color: var(--text-color-secondary);
+}
+
+@media (max-width: 640px) {
+    .todo-container {
+        margin: 1rem;
+        padding: 1rem;
+    }
+
+    .todo-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .todo-input-container {
+        flex-direction: column;
+    }
+
+    .todo-filters {
+        flex-wrap: wrap;
+    }
+}
+
+/* Dark theme */
+[data-theme="dark"] .todo-item {
+    background: var(--todo-item-bg);
+}
+
+[data-theme="dark"] .todo-item:hover {
+    background: var(--todo-item-bg-hover);
+}
+
+/* Responsive styles */
+@media (max-width: 480px) {
+    .todo-container {
+        padding: var(--spacing-sm);
+    }
+    
+    .todo-form {
+        flex-direction: column;
+    }
+    
+    .todo-filters {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .todo-button {
+        width: 100%;
+    }
+    
+    .todo-stats {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        align-items: center;
+    }
+} 

@@ -1,74 +1,74 @@
 /**
  * Variables CSS globales
- * Système de couleurs optimisé pour l'accessibilité et la cohérence visuelle
+ * Nouvelle palette de couleurs et système d'espacement
  */
 
 :root {
-    /* Couleurs principales - système cohérent */
-    --primary-color: #4096E3;
-    --primary-color-rgb: 64, 150, 227;
-    --primary-light: #D9EAFC;
-    --secondary-color: #50B8E8;
-    --secondary-color-rgb: 80, 184, 232;
+    /* Couleurs principales */
+    --primary-color: #0E9CFF;
+    --primary-color-rgb: 14, 156, 255;
+    --primary-light: #E3F2FD;
+    --secondary-color: #4CAF50;
+    --secondary-color-rgb: 76, 175, 80;
     
-    /* Couleurs d'interface - inspirées de l'image mais optimisées */
-    --bg-color: #DAEFFF;
+    /* Couleurs d'interface */
+    --bg-color: #F5F5F5;
     --card-bg: #FFFFFF;
-    --border-color: #E8E8E8;
-    --hover-color: #D9EAFC;
+    --border-color: #E0E0E0;
+    --hover-color: #E3F2FD;
     --text-on-primary: #FFFFFF;
     
-    /* Couleurs pour les textes - optimisées pour la lisibilité */
-    --text-color: #2A2A2A;
-    --text-secondary: #575757;
-    --text-muted: #787878;
+    /* Couleurs pour les textes */
+    --text-color: #333333;
+    --text-secondary: #666666;
+    --text-muted: #999999;
     
-    /* Couleurs fonctionnelles - optimisées pour l'accessibilité */
+    /* Couleurs fonctionnelles */
     --success-color: #4CAF50;
     --warning-color: #FF9800;
-    --error-color: #E74C3C;
-    --info-color: #4096E3;
-    --danger-color: #E74C3C;
+    --error-color: #F44336;
+    --info-color: #2196F3;
+    --danger-color: #F44336;
     
-    /* Système d'espacement - Inchangé */
-    --spacing-xs: 4px;
-    --spacing-sm: 8px;
-    --spacing-md: 16px;
-    --spacing-lg: 24px;
-    --spacing-xl: 32px;
-    --spacing-xxl: 48px;
+    /* Système d'espacement - Scale uniforme */
+    --spacing-xs: 4px;    /* 0.25rem */
+    --spacing-sm: 8px;    /* 0.5rem */
+    --spacing-md: 16px;   /* 1rem */
+    --spacing-lg: 24px;   /* 1.5rem */
+    --spacing-xl: 32px;   /* 2rem */
+    --spacing-xxl: 48px;  /* 3rem */
     
-    /* Bordures et arrondi - comme sur l'image */
-    --border-radius-sm: 6px;
-    --border-radius: 12px;
-    --border-radius-md: 16px;
-    --border-radius-lg: 20px;
-    --border-radius-xl: 28px;
+    /* Bordures et arrondi - Activer les bordures arrondies pour un style moderne */
+    --border-radius-sm: 4px;
+    --border-radius: 8px;
+    --border-radius-md: 12px;
+    --border-radius-lg: 16px;
+    --border-radius-xl: 24px;
     --border-radius-circle: 50%;
     
-    /* Ombres - optimisées pour la profondeur */
-    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    --hover-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-    --inset-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.03);
+    /* Ombres */
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --hover-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    --inset-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
     
-    /* Animation et transitions - Inchangé */
+    /* Animation et transitions */
     --transition-fast: 0.15s ease;
     --transition-duration: 0.3s;
     --transition-slow: 0.5s;
     --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
     --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
     
-    /* Typographie - Inchangé */
+    /* Typographie - Famille de polices cohérente et hiérarchie claire */
     --font-family: 'Poppins', 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-size-xs: 0.75rem;
-    --font-size-sm: 0.85rem;
-    --font-size: 1rem;
-    --font-size-md: 1.2rem;
-    --font-size-lg: 1.5rem;
-    --font-size-xl: 1.8rem;
-    --font-size-xxl: 2.4rem;
+    --font-size-xs: 0.75rem;   /* 12px */
+    --font-size-sm: 0.85rem;   /* 14px */
+    --font-size: 1rem;         /* 16px - base */
+    --font-size-md: 1.2rem;    /* 19px */
+    --font-size-lg: 1.5rem;    /* 24px */
+    --font-size-xl: 1.8rem;    /* 29px */
+    --font-size-xxl: 2.4rem;   /* 38px */
     
-    /* Line height et letter spacing - Inchangé */
+    /* Line height et letter spacing */
     --line-height-tight: 1.2;
     --line-height-normal: 1.5;
     --line-height-relaxed: 1.8;
@@ -76,79 +76,79 @@
     --letter-spacing-normal: 0;
     --letter-spacing-wide: 0.015em;
 
-    /* Breakpoints - Inchangé */
+    /* Breakpoints pour le responsive design */
     --breakpoint-mobile: 640px;
     --breakpoint-tablet: 1024px;
     --breakpoint-desktop: 1280px;
 
     /* Thème sombre optimisé */
-    --bg-color-dark: #101F3D;
-    --text-color-dark: #F0F0F0;
-    --button-bg-dark: #1E2A47;
-    --button-bg-hover-dark: #283654;
-    --button-text-dark: #FFFFFF;
+    --bg-color-dark: #121212;
+    --text-color-dark: #e0e0e0;
+    --button-bg-dark: #2c2c2c;
+    --button-bg-hover-dark: #404040;
+    --button-text-dark: #ffffff;
     
     /* Variables pour les composants communs */
     --button-border-radius: var(--border-radius);
     --button-gap: var(--spacing-sm);
     
-    /* Calculatrice - inspirée de l'image mais optimisée */
+    /* Calculatrice */
     --calc-padding: var(--spacing-md);
     --calc-display-bg: #F8F9FA;
-    --calc-display-text: #2A2A2A;
-    --calc-display-bg-dark: #1E2A47;
+    --calc-display-text: #333333;
+    --calc-display-bg-dark: #333333;
     --calc-button-bg: #FFFFFF;
     --calc-button-bg-hover: #F5F5F5;
-    --calc-button-text: #2A2A2A;
-    --calc-button-primary: #4096E3;
-    --calc-button-secondary: #50B8E8;
-    --calc-button-operator: #D9EAFC;
-    --calc-button-equals: #0075C9;
-    --calc-button-clear: #E74C3C;
+    --calc-button-text: #333333;
+    --calc-button-primary: #4a9eff;
+    --calc-button-secondary: #64b5f6;
+    --calc-button-operator: #E3F2FD;
+    --calc-button-equals: #1a7fff;
+    --calc-button-clear: #ff4d4d;
     
     /* QR Code */
     --qrcode-tab-bg: #FFFFFF;
     --qrcode-tab-active: var(--primary-color);
-    --qrcode-tab-text: #2A2A2A;
+    --qrcode-tab-text: #333333;
     --qrcode-tab-text-active: #FFFFFF;
     --qrcode-output-bg: #FFFFFF;
-    --qrcode-output-border: #E8E8E8;
-    --qrcode-scanner-bg: #F8F9FA;
+    --qrcode-output-border: #E0E0E0;
+    --qrcode-scanner-bg: #F5F5F5;
     --qrcode-marker-color: var(--primary-color);
     
     /* Chronomètre/Timer */
     --timer-display-bg: #F8F9FA;
-    --timer-display-text: #2A2A2A;
+    --timer-display-text: #333333;
     --timer-button-start: #4CAF50;
-    --timer-button-stop: #E74C3C;
+    --timer-button-stop: #F44336;
     --timer-button-lap: var(--primary-color);
-    --timer-progress-bg: #E8E8E8;
+    --timer-progress-bg: #E0E0E0;
     --timer-progress-fill: var(--primary-color);
     
     /* Todo */
     --todo-item-bg: #FFFFFF;
-    --todo-item-border: #E8E8E8;
-    --todo-item-completed-bg: #F8F9FA;
+    --todo-item-border: #E0E0E0;
+    --todo-item-completed-bg: #F5F5F5;
     --todo-checkbox-color: var(--primary-color);
-    --todo-priority-high: #E74C3C;
+    --todo-priority-high: #F44336;
     --todo-priority-medium: #FF9800;
     --todo-priority-low: #4CAF50;
     
     /* Notes */
     --note-bg: #FFFFFF;
-    --note-border: #E8E8E8;
-    --note-toolbar-bg: #F8F9FA;
-    --note-toolbar-button: #575757;
-    --note-toolbar-button-hover: #2A2A2A;
+    --note-border: #E0E0E0;
+    --note-toolbar-bg: #F5F5F5;
+    --note-toolbar-button: #666666;
+    --note-toolbar-button-hover: #333333;
     
     /* Métronome */
     --metronome-pendulum-color: var(--primary-color);
     --metronome-bg: #FFFFFF;
-    --metronome-marker-color: #E74C3C;
-    --metronome-tempo-bg: #F8F9FA;
+    --metronome-marker-color: #F44336;
+    --metronome-tempo-bg: #F5F5F5;
     
     /* Traducteur */
-    --translator-lang-bg: #F8F9FA;
+    --translator-lang-bg: #F5F5F5;
     --translator-arrow-color: var(--primary-color);
     --translator-input-bg: #FFFFFF;
     --translator-swap-button: var(--primary-color);
@@ -159,46 +159,46 @@
     --converter-select-bg: #FFFFFF;
     
     /* Sélecteur de couleur */
-    --color-picker-slider-bg: linear-gradient(to right, #E74C3C, #FF9800, #8BC34A, #50B8E8, #4096E3, #3F51B5, #E74C3C);
+    --color-picker-slider-bg: linear-gradient(to right, #FF0000, #FFFF00, #00FF00, #00FFFF, #0000FF, #FF00FF, #FF0000);
     --color-picker-hue-thumb: #FFFFFF;
-    --color-picker-saturation-bg: #4096E3;
+    --color-picker-saturation-bg: #FF0000;
     --color-picker-alpha-bg: transparent;
-    --color-picker-alpha-pattern: #D6D6D6;
+    --color-picker-alpha-pattern: #CCCCCC;
     
     /* Password Generator */
     --password-bg: #F8F9FA;
-    --password-text: #2A2A2A;
-    --password-strength-weak: #E74C3C;
+    --password-text: #333333;
+    --password-strength-weak: #F44336;
     --password-strength-medium: #FF9800;
     --password-strength-strong: #4CAF50;
     
     /* Containers et formulaires communs */
     --tool-container-bg: #FFFFFF;
-    --tool-header-bg: #F8F9FA;
-    --tool-header-text: #2A2A2A;
+    --tool-header-bg: #F5F5F5;
+    --tool-header-text: #333333;
     --form-input-bg: #FFFFFF;
-    --form-input-border: #E8E8E8;
+    --form-input-border: #E0E0E0;
     --form-input-focus-border: var(--primary-color);
-    --form-input-text: #2A2A2A;
-    --form-label-text: #575757;
+    --form-input-text: #333333;
+    --form-label-text: #666666;
     --form-select-bg: #FFFFFF;
-    --form-range-bg: #E8E8E8;
+    --form-range-bg: #E0E0E0;
     --form-range-thumb: var(--primary-color);
-    --form-file-bg: #F8F9FA;
+    --form-file-bg: #F5F5F5;
     --form-checkbox-color: var(--primary-color);
     --help-panel-bg: #FFFFFF;
-    --help-panel-header-bg: #F8F9FA;
+    --help-panel-header-bg: #F5F5F5;
     
-    /* Harmonisation - Variables optimisées */
-    --primary-gradient-blue: #0075C9;
-    --primary-gradient-purple: #3F51B5;
-    --primary-blue: #0075C9;
-    --primary-dark-blue: #00579B;
-    --success-color-dark: #3D8B40;
-    --warning-color-dark: #E68300;
-    --info-color-dark: #0075C9;
-    --primary-color-hover: #0075C9;
-    --danger-color-hover: #D32F2F;
+    /* Harmonisation - Variables ajoutées */
+    --primary-gradient-blue: #1e40af; /* Pour les dégradés header, etc. */
+    --primary-gradient-purple: #3730a3;
+    --primary-blue: #0063b1;
+    --primary-dark-blue: #004c8c;
+    --success-color-dark: #388e3c;
+    --warning-color-dark: #FFA000;
+    --info-color-dark: #0288D1;
+    --primary-color-hover: #1d5fa8;
+    --danger-color-hover: #c0392b;
     --menu-min-width: 200px;
     --menu-max-width: 250px;
     --header-height: 70px;
@@ -215,110 +215,110 @@
     --toggle-height: 18px;
     --hamburger-bar-height: 2px;
     --border-radius-xs: 2px;
-    --notification-close-hover-bg: rgba(0, 0, 0, 0.05);
-    --notification-close-hover-bg-dark: rgba(255, 255, 255, 0.08);
-    --header-title-gradient-1: #FFFFFF;
-    --header-title-gradient-2: #F5F5F5;
+    --notification-close-hover-bg: rgba(0, 0, 0, 0.1);
+    --notification-close-hover-bg-dark: rgba(255, 255, 255, 0.1);
+    --header-title-gradient-1: #ffffff;
+    --header-title-gradient-2: #f0f0f0;
 
     /* Ajouts pour harmonisation des outils */
     --input-bg: #FFFFFF;
-    --button-bg: #F8F9FA;
-    --button-hover-bg: #D9EAFC;
-    --primary-hover: #0075C9;
-    --danger-hover: #D32F2F;
-    --text-color-secondary: #575757;
-    --todo-item-bg-hover: #F5F5F5;
+    --button-bg: #F5F5F5;
+    --button-hover-bg: #E3F2FD;
+    --primary-hover: #1d5fa8;
+    --danger-hover: #c0392b;
+    --text-color-secondary: #666666;
+    --todo-item-bg-hover: #F0F0F0;
 }
 
-/* Variables pour le thème sombre - optimisé pour l'accessibilité */
+/* Variables pour le thème sombre */
 [data-theme="dark"] {
     /* Couleurs principales en mode sombre */
-    --primary-color: #2196F3;
-    --secondary-color: #42A5F5;
+    --primary-color: #0E9CFF;
+    --secondary-color: #66BB69;
     
     /* Couleurs d'interface en mode sombre */
-    --bg-color: #101F3D;
-    --card-bg: #1E2A47;
-    --border-color: #283654;
-    --hover-color: #283654;
+    --bg-color: #121212;
+    --card-bg: #1E1E1E;
+    --border-color: #333333;
+    --hover-color: #2A3747;
     
     /* Couleurs pour les textes en mode sombre */
-    --text-color: #F0F0F0;
-    --text-secondary: #B0BEC5;
-    --text-muted: #78909C;
+    --text-color: #E0E0E0;
+    --text-secondary: #AAAAAA;
+    --text-muted: #777777;
     
     /* Ombres en mode sombre */
-    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    --hover-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-    --inset-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    --hover-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    --inset-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
     
     /* Calculatrice en mode sombre */
-    --calc-display-bg: #1E2A47;
-    --calc-display-text: #F0F0F0;
-    --calc-button-bg: #283654;
-    --calc-button-bg-hover: #344266;
-    --calc-button-text: #F0F0F0;
-    --calc-button-operator: #344266;
+    --calc-display-bg: #333333;
+    --calc-display-text: #E0E0E0;
+    --calc-button-bg: #2C2C2C;
+    --calc-button-bg-hover: #404040;
+    --calc-button-text: #E0E0E0;
+    --calc-button-operator: #505050;
     
     /* Containers et formulaires communs en mode sombre */
-    --tool-container-bg: #1E2A47;
-    --tool-header-bg: #283654;
-    --tool-header-text: #F0F0F0;
-    --form-input-bg: #283654;
-    --form-input-border: #344266;
-    --form-input-text: #F0F0F0;
-    --form-label-text: #B0BEC5;
-    --form-select-bg: #283654;
-    --form-range-bg: #344266;
-    --form-file-bg: #283654;
+    --tool-container-bg: #1E1E1E;
+    --tool-header-bg: #262626;
+    --tool-header-text: #E0E0E0;
+    --form-input-bg: #2C2C2C;
+    --form-input-border: #333333;
+    --form-input-text: #E0E0E0;
+    --form-label-text: #AAAAAA;
+    --form-select-bg: #2C2C2C;
+    --form-range-bg: #333333;
+    --form-file-bg: #2C2C2C;
     --form-checkbox-color: var(--primary-color);
-    --help-panel-bg: #283654;
-    --help-panel-header-bg: #344266;
+    --help-panel-bg: #262626;
+    --help-panel-header-bg: #333333;
     
     /* QR Code en mode sombre */
-    --qrcode-tab-bg: #283654;
-    --qrcode-tab-text: #F0F0F0;
-    --qrcode-output-bg: #1E2A47;
-    --qrcode-output-border: #344266;
-    --qrcode-scanner-bg: #283654;
+    --qrcode-tab-bg: #262626;
+    --qrcode-tab-text: #E0E0E0;
+    --qrcode-output-bg: #333333;
+    --qrcode-output-border: #444444;
+    --qrcode-scanner-bg: #262626;
     
     /* Chronomètre/Timer en mode sombre */
-    --timer-display-bg: #1E2A47;
-    --timer-display-text: #F0F0F0;
-    --timer-progress-bg: #344266;
+    --timer-display-bg: #333333;
+    --timer-display-text: #E0E0E0;
+    --timer-progress-bg: #444444;
     
     /* Todo en mode sombre */
-    --todo-item-bg: #283654;
-    --todo-item-border: #344266;
-    --todo-item-completed-bg: #1E2A47;
+    --todo-item-bg: #262626;
+    --todo-item-border: #333333;
+    --todo-item-completed-bg: #333333;
     
     /* Notes en mode sombre */
-    --note-bg: #283654;
-    --note-border: #344266;
-    --note-toolbar-bg: #1E2A47;
-    --note-toolbar-button: #B0BEC5;
-    --note-toolbar-button-hover: #F0F0F0;
+    --note-bg: #262626;
+    --note-border: #333333;
+    --note-toolbar-bg: #333333;
+    --note-toolbar-button: #AAAAAA;
+    --note-toolbar-button-hover: #E0E0E0;
     
     /* Traducteur en mode sombre */
-    --translator-lang-bg: #283654;
-    --translator-input-bg: #1E2A47;
+    --translator-lang-bg: #262626;
+    --translator-input-bg: #333333;
     
     /* Convertisseur en mode sombre */
-    --converter-result-bg: #1E2A47;
-    --converter-select-bg: #283654;
+    --converter-result-bg: #333333;
+    --converter-select-bg: #262626;
     
     /* Password Generator en mode sombre */
-    --password-bg: #1E2A47;
-    --password-text: #F0F0F0;
+    --password-bg: #333333;
+    --password-text: #E0E0E0;
 
     /* Ajouts pour harmonisation des outils en mode sombre */
-    --input-bg: #283654;
-    --button-bg: #344266;
-    --button-hover-bg: #3F4E78;
-    --primary-hover: #1976D2;
-    --danger-hover: #C62828;
-    --text-color-secondary: #B0BEC5;
-    --todo-item-bg-hover: #344266;
+    --input-bg: #262626;
+    --button-bg: #2C2C2C;
+    --button-hover-bg: #404040;
+    --primary-hover: #0a6ecf;
+    --danger-hover: #a93226;
+    --text-color-secondary: #AAAAAA;
+    --todo-item-bg-hover: #333333;
 }
 
 /* Adaptation mobile */

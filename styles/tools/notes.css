@@ -1,0 +1,838 @@
+/* styles/components/notes.css */
+/* Styles pour le composant de bloc-notes */
+
+.notes-tool {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    height: 100%;
+}
+
+.notes-container {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 1.5rem;
+    height: 100%;
+}
+
+.notes-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: 100%;
+    border-right: 1px solid var(--border-color);
+    padding-right: 1rem;
+}
+
+.notes-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notes-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.add-note-btn {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--primary-color);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.add-note-btn:hover {
+    background-color: var(--primary-color-dark);
+}
+
+.notes-search {
+    position: relative;
+}
+
+.notes-search input {
+    width: 100%;
+    padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+}
+
+.notes-search i {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-color-secondary);
+}
+
+.notes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    overflow-y: auto;
+    flex: 1;
+    padding-right: 0.5rem;
+}
+
+.note-item {
+    padding: 0.75rem;
+    border-radius: 6px;
+    background-color: var(--bg-color-secondary);
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.note-item:hover {
+    background-color: var(--bg-color-hover);
+}
+
+.note-item.active {
+    background-color: var(--primary-color-lighter);
+    border-left: 3px solid var(--primary-color);
+}
+
+.note-item-title {
+    font-weight: 500;
+    color: var(--text-color);
+    margin-bottom: 0.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.note-item-preview {
+    font-size: 0.875rem;
+    color: var(--text-color-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.note-item-date {
+    font-size: 0.75rem;
+    color: var(--text-color-lighter);
+    margin-top: 0.25rem;
+}
+
+.notes-editor {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: 100%;
+}
+
+.editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.editor-title input {
+    padding: 0.5rem;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background-color: transparent;
+    color: var(--text-color);
+    font-size: 1.25rem;
+    font-weight: 600;
+    width: 100%;
+}
+
+.editor-title input:focus {
+    border-color: var(--border-color);
+    background-color: var(--input-bg);
+}
+
+.editor-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.editor-btn {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--bg-color-secondary);
+    color: var(--text-color);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    transition: background-color 0.2s;
+}
+
+.editor-btn:hover {
+    background-color: var(--bg-color-hover);
+}
+
+.editor-btn.save {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.editor-btn.save:hover {
+    background-color: var(--primary-color-dark);
+}
+
+.editor-btn.delete {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.editor-btn.delete:hover {
+    background-color: var(--danger-color-dark);
+}
+
+.editor-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    padding: 0.5rem;
+    border-radius: 6px;
+    background-color: var(--bg-color-secondary);
+}
+
+.toolbar-btn {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 4px;
+    background-color: transparent;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.toolbar-btn:hover {
+    background-color: var(--bg-color-hover);
+}
+
+.toolbar-btn.active {
+    background-color: var(--primary-color-lighter);
+    color: var(--primary-color);
+}
+
+.toolbar-separator {
+    width: 1px;
+    background-color: var(--border-color);
+    margin: 0 0.25rem;
+}
+
+.editor-content {
+    flex: 1;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    overflow-y: auto;
+    min-height: 300px;
+}
+
+.editor-content[contenteditable=true]:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.editor-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.875rem;
+    color: var(--text-color-secondary);
+}
+
+@media (max-width: 768px) {
+    .notes-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .notes-sidebar {
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding-right: 0;
+        padding-bottom: 1rem;
+    }
+}
+
+/* Styles pour le composant de notes */
+.note-editor-container {
+    display: flex;
+    height: 100%;
+    overflow: hidden;
+}
+
+.notes-sidebar {
+    width: 250px;
+    background-color: var(--sidebar-bg);
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border-color);
+}
+
+.notes-header {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.notes-header h3 {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.notes-search {
+    padding: 10px 15px;
+    position: relative;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.notes-search input {
+    width: 100%;
+    padding: 8px 10px 8px 30px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 0.9rem;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+}
+
+.notes-search .search-icon {
+    position: absolute;
+    left: 25px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+}
+
+.notes-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0;
+}
+
+.note-item {
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.note-item:hover {
+    background-color: var(--hover-bg);
+}
+
+.note-item.active {
+    background-color: var(--primary-color-light);
+}
+
+.note-item-title {
+    font-weight: 500;
+    margin: 0 0 5px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.95rem;
+}
+
+.note-item-date {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.note-item-excerpt {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 3px;
+}
+
+.notes-actions {
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--border-color);
+}
+
+.note-editor {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.note-title-container {
+    padding: 15px 15px 5px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.note-title {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 1.2rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+}
+
+/* Styles pour l'intégration de Quill */
+#quill-editor-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+#quill-toolbar {
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--toolbar-bg, var(--background-secondary));
+}
+
+#quill-editor {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+    background-color: var(--editor-bg, var(--background-primary));
+}
+
+/* Personnalisation des styles de Quill pour correspondre au thème */
+.ql-toolbar.ql-snow {
+    border: none !important;
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
+.ql-container.ql-snow {
+    border: none !important;
+}
+
+.ql-editor {
+    font-family: var(--font-family);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-color);
+    min-height: 200px;
+}
+
+.ql-editor:focus {
+    outline: none;
+}
+
+.ql-editor p, .ql-editor ol, .ql-editor ul, .ql-editor pre, .ql-editor blockquote, .ql-editor h1, .ql-editor h2, .ql-editor h3 {
+    margin-bottom: 1em;
+}
+
+.ql-snow .ql-editor pre.ql-syntax {
+    background-color: var(--code-bg, #23241f);
+    color: var(--code-color, #f8f8f2);
+    border-radius: 4px;
+}
+
+.ql-snow .ql-picker {
+    color: var(--text-color);
+}
+
+.ql-snow .ql-stroke {
+    stroke: var(--text-color);
+}
+
+.ql-snow .ql-fill {
+    fill: var(--text-color);
+}
+
+.ql-snow .ql-picker-options {
+    background-color: var(--dropdown-bg, var(--background-secondary));
+    border-color: var(--border-color);
+}
+
+.ql-snow .ql-tooltip {
+    background-color: var(--tooltip-bg, var(--background-secondary));
+    border-color: var(--border-color);
+    color: var(--text-color);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Styles pour la barre d'état en bas de l'éditeur */
+.note-status-bar {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px;
+    background-color: var(--background-secondary);
+    border-top: 1px solid var(--border-color);
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.note-actions {
+    padding: 10px 15px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Styles pour le panneau d'aide */
+.help-panel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    background-color: var(--background-primary);
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    display: none;
+    flex-direction: column;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.help-panel.show {
+    display: flex;
+}
+
+.help-panel-header {
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.help-panel-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.help-panel-content {
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.help-panel-content h4 {
+    margin: 0 0 10px 0;
+    font-size: 1rem;
+}
+
+.help-panel-content p, .help-panel-content ul, .help-panel-content ol {
+    margin-bottom: 15px;
+}
+
+.help-panel-content ul, .help-panel-content ol {
+    padding-left: 20px;
+}
+
+.help-panel-content li {
+    margin-bottom: 5px;
+}
+
+/* Style pour les notifications */
+.note-notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+}
+
+.note-notification.show {
+    opacity: 1;
+}
+
+/* Styles pour le mode plein écran */
+#noteTool.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    background-color: var(--background-primary);
+    border-radius: 0;
+    box-shadow: none;
+}
+
+/* Styles pour les périphériques mobiles */
+@media (max-width: 768px) {
+    .note-editor-container {
+        flex-direction: column;
+    }
+    
+    .notes-sidebar {
+        width: 100%;
+        height: auto;
+        max-height: 40%;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .note-editor {
+        max-height: 60%;
+    }
+}
+
+[data-theme="dark"] .ql-editor h2 {
+    color: #fff;
+}
+
+/* ====== Début de la fusion avec note.css ====== */
+.note-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.note-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.note-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.note-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.note-button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--primary-color);
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.note-button:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+.note-button:active {
+    transform: translateY(0);
+}
+
+.note-button.secondary {
+    background: var(--button-bg);
+    color: var(--text-color);
+}
+
+.note-button.secondary:hover {
+    background: var(--button-hover-bg);
+}
+
+.note-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.note-card {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--input-bg);
+    transition: all 0.2s ease;
+}
+
+.note-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.note-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.note-card-title {
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.note-card-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.note-card-action {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 6px;
+    background: var(--button-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.note-card-action:hover {
+    background: var(--button-hover-bg);
+}
+
+.note-card-action.delete {
+    background: var(--danger-color);
+    color: white;
+}
+
+.note-card-action.delete:hover {
+    background: var(--danger-hover);
+}
+
+.note-card-content {
+    flex: 1;
+    color: var(--text-color);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.note-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.note-card-date {
+    font-size: 0.875rem;
+    color: var(--text-color-secondary);
+}
+
+.note-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.note-modal-content {
+    width: 100%;
+    max-width: 600px;
+    padding: 2rem;
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.note-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.note-modal-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.note-modal-close {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 6px;
+    background: var(--button-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.note-modal-close:hover {
+    background: var(--button-hover-bg);
+}
+
+.note-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.note-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.note-form-group label {
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.note-form-group input,
+.note-form-group textarea {
+    padding: 0.8rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--input-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+}
+
+.note-form-group textarea {
+    min-height: 200px;
+    resize: vertical;
+}
+
+@media (max-width: 768px) {
+    .note-container {
+        margin: 1rem;
+        padding: 1rem;
+    }
+
+    .note-content {
+        grid-template-columns: 1fr;
+    }
+
+    .note-modal-content {
+        margin: 1rem;
+        padding: 1rem;
+    }
+}
+/* ====== Fin de la fusion avec note.css ====== */ 

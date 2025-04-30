@@ -1,0 +1,760 @@
+/* styles/components/timer.css */
+/* Style incroyable pour le composant de minuteur */
+
+.timer-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2.5rem;
+    background: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.timer-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color, #6a11cb));
+    z-index: 1;
+}
+
+.timer-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+/* Affichage du temps élégant */
+.timer-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.time-remaining {
+    font-size: 5rem;
+    font-weight: 700;
+    color: var(--text-color);
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(to right, var(--primary-color), var(--accent-color, #6a11cb));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1.5rem;
+    position: relative;
+    perspective: 400px;
+    transition: all 0.3s ease;
+}
+
+.time-remaining span {
+    display: inline-block;
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.time-remaining span:hover {
+    transform: translateY(-2px) scale(1.1);
+}
+
+/* Barre de progression améliorée */
+.progress-container {
+    width: 100%;
+    height: 12px;
+    background: var(--input-bg);
+    border-radius: 100px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color, #6a11cb));
+    border-radius: 100px;
+    transition: width 0.1s linear;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0.2) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255, 255, 255, 0.2) 50%,
+        rgba(255, 255, 255, 0.2) 75%,
+        transparent 75%
+    );
+    background-size: 20px 20px;
+    animation: progressStripes 1s linear infinite;
+    z-index: 1;
+}
+
+@keyframes progressStripes {
+    0% { background-position: 0 0; }
+    100% { background-position: 20px 0; }
+}
+
+/* Contrôles du minuteur */
+.timer-controls {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.btn-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    background: var(--card-bg);
+    color: var(--text-color);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-circle::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--primary-color);
+    border-radius: 50%;
+    transform: scale(0);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: -1;
+}
+
+.btn-circle:hover {
+    transform: translateY(-5px) scale(1.05);
+    color: white;
+}
+
+.btn-circle:hover::before {
+    transform: scale(1);
+    opacity: 0.8;
+}
+
+.btn-circle:active {
+    transform: translateY(0) scale(0.95);
+}
+
+#startTimer {
+    background: var(--primary-color);
+    color: white;
+}
+
+#startTimer:hover {
+    background: var(--primary-hover);
+    box-shadow: 0 8px 15px rgba(var(--primary-rgb), 0.4);
+}
+
+#pauseTimer, #resetTimer, #cancelTimer {
+    opacity: 0.8;
+}
+
+#pauseTimer:hover, #resetTimer:hover, #cancelTimer:hover {
+    opacity: 1;
+}
+
+#pauseTimer:disabled, #resetTimer:disabled, #cancelTimer:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Entrées de temps stylisées */
+.timer-input {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    position: relative;
+}
+
+.time-input-group {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.time-input-group label {
+    font-weight: 500;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    opacity: 0.8;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.time-input {
+    padding: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    background: var(--input-bg);
+    color: var(--text-color);
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.time-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.2);
+    outline: none;
+}
+
+.input-arrows {
+    display: none;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.arrow-up, .arrow-down {
+    display: none;
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    opacity: 0.5;
+    transition: all 0.2s ease;
+}
+
+.arrow-up:hover, .arrow-down:hover {
+    opacity: 1;
+    color: var(--primary-color);
+}
+
+/* Préréglages stylisés */
+.timer-presets {
+    margin-bottom: 2.5rem;
+}
+
+.timer-presets h3 {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-color);
+    opacity: 0.9;
+}
+
+.preset-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.preset-btn {
+    padding: 0.7rem 1.2rem;
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    background: var(--input-bg);
+    color: var(--text-color);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.preset-btn:hover {
+    background: var(--button-hover-bg);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.preset-btn:active {
+    transform: translateY(0);
+}
+
+.preset-btn.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 8px rgba(var(--primary-rgb), 0.3);
+}
+
+/* Options de minuteur améliorées */
+.timer-options {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+}
+
+.option-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    gap: 1rem;
+}
+
+.option-group label {
+    font-weight: 500;
+    color: var(--text-color);
+    flex: 1;
+}
+
+.form-select {
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--input-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 1;
+}
+
+.form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.2);
+    outline: none;
+}
+
+.volume-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--input-bg);
+    outline: none;
+    flex: 1;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.volume-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.volume-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 0 5px rgba(var(--primary-rgb), 0.2);
+}
+
+/* Écran fin de minuteur */
+.timer-complete {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.timer-complete.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.complete-icon {
+    font-size: 5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    animation: pulseIcon 2s infinite;
+}
+
+@keyframes pulseIcon {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.timer-complete h3 {
+    font-size: 2rem;
+    color: white;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.complete-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.btn {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.btn-primary {
+    background: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background: var(--primary-hover);
+    box-shadow: 0 5px 15px rgba(var(--primary-rgb), 0.4);
+}
+
+/* Animation pour la pulsation en fin de compte à rebours */
+@keyframes timerPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.timer-ending .time-remaining {
+    animation: timerPulse 0.5s infinite;
+    color: var(--danger-color);
+}
+
+/* Animation des chiffres qui changent */
+@keyframes flipNumber {
+    0% { transform: rotateX(0deg); opacity: 1; }
+    50% { transform: rotateX(90deg); opacity: 0.5; }
+    100% { transform: rotateX(0deg); opacity: 1; }
+}
+
+.digit-changing {
+    animation: flipNumber 0.3s ease;
+}
+
+/* Adaptations pour différentes tailles d'écran */
+@media (max-width: 640px) {
+    .timer-container {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+
+    .time-remaining {
+        font-size: 3.5rem;
+    }
+
+    .timer-input {
+        grid-template-columns: 1fr;
+    }
+
+    .timer-controls {
+        flex-wrap: wrap;
+    }
+    
+    .btn-circle {
+        width: 50px;
+        height: 50px;
+        font-size: 1rem;
+    }
+}
+
+/* Mode plein écran amélioré */
+.timer-fullscreen-active .timer-container.timer-fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 4rem 2rem;
+    z-index: 99999;
+    background: var(--card-bg);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 0;
+    box-shadow: none;
+    overflow-y: auto;
+}
+
+.timer-tool-fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-color);
+    z-index: 99990;
+}
+
+/* Cacher le header principal en mode plein écran */
+.timer-fullscreen-active header {
+    display: none !important;
+}
+
+/* Ajuster l'espacement en plein écran */
+.timer-fullscreen-active .timer-container.timer-fullscreen .timer-display {
+    margin-top: 2rem;
+}
+
+.timer-fullscreen .time-remaining {
+    font-size: 8rem;
+    margin-bottom: 2rem;
+}
+
+.timer-fullscreen .progress-container {
+    width: 50%;
+    height: 20px;
+    margin-bottom: 3rem;
+}
+
+.timer-fullscreen .timer-controls {
+    margin: 2rem 0;
+}
+
+.timer-fullscreen .btn-circle {
+    width: 80px;
+    height: 80px;
+    font-size: 1.5rem;
+}
+
+.timer-fullscreen .timer-input,
+.timer-fullscreen .timer-presets,
+.timer-fullscreen .timer-options {
+    max-width: 800px;
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+/* Animation de transition pour le mode plein écran */
+.fullscreen-transition {
+    animation: expand-fullscreen 0.4s ease-out forwards;
+}
+
+.fullscreen-exit-transition {
+    animation: shrink-fullscreen 0.4s ease-in forwards;
+}
+
+@keyframes expand-fullscreen {
+    0% {
+        transform: scale(0.9);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes shrink-fullscreen {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0.9);
+        opacity: 0.8;
+    }
+}
+
+/* Adaptation mobile en mode plein écran */
+@media (max-width: 768px) {
+    .timer-fullscreen-active .timer-container.timer-fullscreen {
+        padding: 2rem 1rem;
+    }
+    
+    .timer-fullscreen .time-remaining {
+        font-size: 5rem;
+    }
+    
+    .timer-fullscreen .progress-container {
+        width: 80%;
+    }
+    
+    .timer-fullscreen .btn-circle {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+/* Effets de particules lorsque le minuteur tourne */
+.particles-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.particle {
+    position: absolute;
+    background: var(--primary-color);
+    border-radius: 50%;
+    opacity: 0.5;
+    animation: floatParticle 4s linear infinite;
+}
+
+@keyframes floatParticle {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* Animation pour le mode alarme activé */
+.timer-alarm-active {
+    animation: alarmPulse 0.5s infinite alternate;
+}
+
+@keyframes alarmPulse {
+    0% {
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    100% {
+        box-shadow: 0 10px 30px rgba(var(--danger-rgb, 255, 0, 0), 0.5);
+    }
+}
+
+/* Désactiver les flèches des inputs number */
+.time-input::-webkit-outer-spin-button,
+.time-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.time-input[type=number] {
+    -moz-appearance: textfield;
+}
+
+/* Bouton de fermeture explicite pour le mode plein écran */
+.fullscreen-close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+    z-index: 100001;
+}
+
+.fullscreen-close-btn::before,
+.fullscreen-close-btn::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 2px;
+    background: var(--text-color);
+    transform: rotate(45deg);
+}
+
+.fullscreen-close-btn::after {
+    transform: rotate(-45deg);
+}
+
+.fullscreen-close-btn:hover {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+/* Style pour la section d'aide intégrée */
+.timer-help-section {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.timer-help-section h3 {
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+    color: var(--text-color);
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.timer-help-section h4 {
+    margin: 1.5rem 0 0.8rem;
+    font-size: 1rem;
+    color: var(--text-color);
+}
+
+.timer-help-section ol,
+.timer-help-section ul {
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.timer-help-section li {
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
+
+.timer-help-section .help-note {
+    margin-top: 1.5rem;
+    font-style: italic;
+    opacity: 0.8;
+    font-size: 0.9rem;
+} 

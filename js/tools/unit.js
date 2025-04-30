@@ -3,6 +3,8 @@
  * Module pour gérer les conversions entre différentes unités de mesure
  */
 
+import { formatNumber } from '../calculator-global.js';
+
 // Catégories d'unités et leurs valeurs de conversion
 const unitCategories = {
     // Longueur (mètre comme unité de base)

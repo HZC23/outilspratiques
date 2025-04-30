@@ -8,7 +8,9 @@ export const MenuManager = {
         activeSubmenu: null,
         isMobile: window.innerWidth <= 768,
         shortcuts: new Map(),
-        isMenuOpen: false
+        isMenuOpen: false,
+        lastFocusedElement: null,
+        isAnimating: false
     },
 
     /**
@@ -28,6 +30,9 @@ export const MenuManager = {
         
         // Vérifier si une ancre est présente dans l'URL
         this.checkUrlHash();
+        
+        // Sauvegarder l'élément ayant le focus
+        this.saveLastFocusedElement();
         
         console.log('Gestionnaire de menu initialisé');
     },
@@ -49,52 +54,99 @@ export const MenuManager = {
     },
 
     /**
+     * Sauvegarde le dernier élément ayant le focus
+     */
+    saveLastFocusedElement() {
+        document.addEventListener('focusin', () => {
+            this.state.lastFocusedElement = document.activeElement;
+        }, true);
+    },
+
+    /**
+     * Restaure le focus sur le dernier élément actif
+     */
+    restoreFocus() {
+        if (this.state.lastFocusedElement) {
+            this.state.lastFocusedElement.focus();
+        }
+    },
+
+    /**
      * Configure les écouteurs pour le menu
      */
     setupMenuListeners() {
-        // Gestion des clics sur les déclencheurs de menu
+        // Gestion des clics sur les déclencheurs de menu avec debounce
+        let clickTimeout;
         document.querySelectorAll('.menu-trigger').forEach(trigger => {
             trigger.addEventListener('click', (e) => {
                 e.preventDefault();
-                e.stopPropagation(); // Empêcher la propagation de l'événement
-                const menuId = trigger.getAttribute('data-menu-id');
-                if (menuId) {
-                    this.toggleSubmenu(menuId);
+                e.stopPropagation();
+                
+                if (clickTimeout) {
+                    clearTimeout(clickTimeout);
                 }
+                
+                clickTimeout = setTimeout(() => {
+                    const menuId = trigger.getAttribute('data-menu-id');
+                    if (menuId) {
+                        this.toggleSubmenu(menuId);
+                    }
+                }, 100);
             });
         });
 
-        // Gestion des clics sur les éléments du sous-menu
+        // Gestion des clics sur les éléments du sous-menu avec debounce
         document.querySelectorAll('.submenu-item').forEach(item => {
             item.addEventListener('click', (e) => {
-                e.stopPropagation(); // Empêcher la propagation de l'événement
-                const toolId = item.getAttribute('data-tool-id');
-                if (toolId) {
-                    this.handleToolSelection(toolId);
+                e.stopPropagation();
+                
+                if (clickTimeout) {
+                    clearTimeout(clickTimeout);
                 }
+                
+                clickTimeout = setTimeout(() => {
+                    const toolId = item.getAttribute('data-tool-id');
+                    if (toolId) {
+                        this.handleToolSelection(toolId);
+                    }
+                }, 100);
             });
         });
 
-        // Fermeture des sous-menus lors d'un clic à l'extérieur
+        // Fermeture des sous-menus lors d'un clic à l'extérieur avec debounce
+        let closeTimeout;
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.menu')) {
-                this.closeAllSubmenus();
+                if (closeTimeout) {
+                    clearTimeout(closeTimeout);
+                }
+                
+                closeTimeout = setTimeout(() => {
+                    this.closeAllSubmenus();
+                }, 100);
             }
         });
 
-        // Gestion du redimensionnement de la fenêtre
+        // Gestion du redimensionnement avec debounce
+        let resizeTimeout;
         window.addEventListener('resize', () => {
-            this.handleResize();
+            if (resizeTimeout) {
+                clearTimeout(resizeTimeout);
+            }
+            
+            resizeTimeout = setTimeout(() => {
+                this.handleResize();
+            }, 150);
         });
 
-        // Gestion du scroll avec throttling pour limiter la fréquence des appels
+        // Gestion du scroll avec requestAnimationFrame
         let scrollTimeout;
         window.addEventListener('scroll', () => {
             if (!scrollTimeout) {
-                scrollTimeout = setTimeout(() => {
+                scrollTimeout = window.requestAnimationFrame(() => {
                     this.handleScroll();
                     scrollTimeout = null;
-                }, 10); // Limite à 100 appels par seconde maximum
+                });
             }
         });
     },
@@ -111,13 +163,41 @@ export const MenuManager = {
                 } else {
                     this.closeAllSubmenus();
                 }
+                this.restoreFocus();
             }
 
             // Navigation avec les flèches
             if (e.key.startsWith('Arrow')) {
                 this.handleArrowNavigation(e.key);
             }
+
+            // Navigation avec Tab
+            if (e.key === 'Tab') {
+                this.handleTabNavigation(e);
+            }
         });
+    },
+
+    /**
+     * Gère la navigation avec Tab
+     */
+    handleTabNavigation(e) {
+        const activeSubmenu = document.querySelector('.submenu.active');
+        if (!activeSubmenu) return;
+
+        const items = activeSubmenu.querySelectorAll('.submenu-item');
+        const activeItem = document.activeElement;
+        const lastItem = items[items.length - 1];
+
+        if (e.shiftKey && activeItem === items[0]) {
+            e.preventDefault();
+            const trigger = document.querySelector(`[data-menu-id="${activeSubmenu.id}"]`);
+            trigger?.focus();
+        } else if (!e.shiftKey && activeItem === lastItem) {
+            e.preventDefault();
+            const nextTrigger = activeSubmenu.closest('.menu-category')?.nextElementSibling?.querySelector('.menu-trigger');
+            nextTrigger?.focus();
+        }
     },
 
     /**
@@ -172,11 +252,26 @@ export const MenuManager = {
             if (!trigger.hasAttribute('aria-expanded')) {
                 trigger.setAttribute('aria-expanded', 'false');
             }
+            if (!trigger.hasAttribute('role')) {
+                trigger.setAttribute('role', 'button');
+            }
         });
 
         document.querySelectorAll('.submenu').forEach(submenu => {
             if (!submenu.hasAttribute('aria-hidden')) {
                 submenu.setAttribute('aria-hidden', 'true');
+            }
+            if (!submenu.hasAttribute('role')) {
+                submenu.setAttribute('role', 'menu');
+            }
+        });
+
+        document.querySelectorAll('.submenu-item').forEach(item => {
+            if (!item.hasAttribute('role')) {
+                item.setAttribute('role', 'menuitem');
+            }
+            if (!item.hasAttribute('tabindex')) {
+                item.setAttribute('tabindex', '-1');
             }
         });
     },
@@ -186,14 +281,17 @@ export const MenuManager = {
      * @param {string} menuId - L'identifiant du menu
      */
     toggleSubmenu(menuId) {
+        if (this.state.isAnimating) return;
+        
         const submenu = document.getElementById(menuId);
-        if (!submenu) return;
-
         const trigger = document.querySelector(`[data-menu-id="${menuId}"]`);
-        if (!trigger) return;
+        
+        if (!submenu || !trigger) return;
 
         const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
         const newState = !isExpanded;
+
+        this.state.isAnimating = true;
 
         // Fermer les autres sous-menus
         this.closeAllSubmenus();
@@ -203,19 +301,29 @@ export const MenuManager = {
         trigger.setAttribute('aria-expanded', newState);
         submenu.setAttribute('aria-hidden', !newState);
         
-        // Empêcher la fermeture automatique
         if (newState) {
             submenu.style.display = 'block';
             this.state.activeSubmenu = menuId;
+            
+            // Focus sur le premier élément du sous-menu
+            const firstItem = submenu.querySelector('.submenu-item');
+            if (firstItem) {
+                firstItem.focus();
+            }
         } else {
             this.state.activeSubmenu = null;
+            trigger.focus();
         }
-        
+
         // Annoncer le changement d'état pour l'accessibilité
         const message = newState ? 'Sous-menu ouvert' : 'Sous-menu fermé';
         if (Utils && typeof Utils.announceToScreenReader === 'function') {
             Utils.announceToScreenReader(message);
         }
+
+        setTimeout(() => {
+            this.state.isAnimating = false;
+        }, 300);
     },
 
     /**
@@ -376,6 +484,20 @@ export const MenuManager = {
             case 'ArrowUp':
                 nextIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
                 break;
+            case 'ArrowRight':
+                const nextCategory = menu.closest('.menu-category')?.nextElementSibling;
+                if (nextCategory) {
+                    const nextTrigger = nextCategory.querySelector('.menu-trigger');
+                    nextTrigger?.focus();
+                }
+                return;
+            case 'ArrowLeft':
+                const prevCategory = menu.closest('.menu-category')?.previousElementSibling;
+                if (prevCategory) {
+                    const prevTrigger = prevCategory.querySelector('.menu-trigger');
+                    prevTrigger?.focus();
+                }
+                return;
             default:
                 return;
         }
@@ -500,3 +622,31 @@ export const MenuManager = {
         });
     },
 }; 
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.querySelector('.search-input');
+    const toolCards = document.querySelectorAll('.tools-grid .tool-card');
+    if (!searchInput) return;
+    searchInput.addEventListener('input', function() {
+        const query = searchInput.value.trim().toLowerCase();
+        let visibleCount = 0;
+        toolCards.forEach(function(card) {
+            const text = card.textContent.toLowerCase();
+            const match = text.includes(query);
+            card.style.display = match ? '' : 'none';
+            if (match) visibleCount++;
+        });
+        // Optionnel : afficher un message si aucun résultat
+        let noResult = document.getElementById('noToolsFound');
+        if (!noResult && visibleCount === 0) {
+            noResult = document.createElement('div');
+            noResult.id = 'noToolsFound';
+            noResult.style.textAlign = 'center';
+            noResult.style.color = '#888';
+            noResult.style.fontSize = '1.1em';
+            noResult.style.margin = '2rem 0';
+            noResult.textContent = 'Aucun outil trouvé';
+            document.querySelector('.tools-grid').parentNode.insertBefore(noResult, document.querySelector('.tools-grid').nextSibling);
+        }
+        if (noResult) noResult.style.display = (visibleCount === 0) ? '' : 'none';
+    });
+});

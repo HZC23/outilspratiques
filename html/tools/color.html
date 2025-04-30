@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<div class="tool-container" id="colorTool">
+    <div class="tool-header">
+        <h2><i class="fas fa-palette"></i> Sélecteur de couleur</h2>
+        <div class="tool-actions">
+            <button type="button" class="btn-icon" id="colorHelp" aria-label="Aide">
+                <i class="fas fa-question-circle"></i>
+            </button>
+            <button type="button" class="btn-icon" id="colorFullscreen" aria-label="Plein écran">
+                <i class="fas fa-expand"></i>
+            </button>
+        </div>
+    </div>
+    
+    <div class="tool-content">
+        <div class="color-picker-container">
+            <div class="color-picker-main">
+                <div class="color-canvas-wrapper">
+                    <div class="color-canvas" id="colorCanvas">
+                        
+                    </div>
+                </div>
+                
+                <div class="color-preview-container">
+                    <div class="color-preview-fav-wrapper">
+                        <input type="color" name="colorThumb" id="colorThumb">
+                        <button type="button" class="btn-fav" id="favoriteBtn" aria-label="Ajouter/Retirer des favoris">
+                            <i class="fas fa-star" id="favoriteIcon"></i>
+                        </button>
+                    </div>
+                    <div class="color-values">
+                        <div class="color-value-group">
+                            <label for="hexValue">HEX</label>
+                            <div class="color-value-input">
+                                <input type="text" id="hexValue" class="color-input" maxlength="7" value="#FF0000">
+                                <button type="button" class="btn-copy" data-value="hex" aria-label="Copier">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="color-value-group">
+                            <label for="rgbValue">RGB</label>
+                            <div class="color-value-input">
+                                <input type="text" id="rgbValue" class="color-input" value="rgb(255, 0, 0)">
+                                <button type="button" class="btn-copy" data-value="rgb" aria-label="Copier">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="color-value-group">
+                            <label for="hslValue">HSL</label>
+                            <div class="color-value-input">
+                                <input type="text" id="hslValue" class="color-input" value="hsl(0, 100%, 50%)">
+                                <button type="button" class="btn-copy" data-value="hsl" aria-label="Copier">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="color-value-group">
+                            <label for="cmykValue">CMYK</label>
+                            <div class="color-value-input">
+                                <input type="text" id="cmykValue" class="color-input" value="cmyk(0%, 100%, 100%, 0%)">
+                                <button type="button" class="btn-copy" data-value="cmyk" aria-label="Copier">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="color-history">
+                <h3>Historique</h3>
+                <div class="history-colors" id="colorHistory"></div>
+                <button type="button" class="btn btn-outline" id="clearHistory" onclick="clearColorHistory()">
+                    <i class="fas fa-trash-alt"></i> Effacer l'historique
+                </button>
+                <div class="color-favorites">
+                    <h3>Favoris</h3>
+                    <div class="favorites-colors" id="colorFavorites"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="help-panel" id="colorHelpPanel">
+        <div class="help-panel-header">
+            <h3>Aide - Sélecteur de couleur</h3>
+            <button type="button" class="btn-icon" id="closeColorHelp">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="help-panel-content">
+            <h4>Comment utiliser</h4>
+            <ol>
+                <li>Cliquez et déplacez le curseur sur le carré coloré pour sélectionner une couleur</li>
+                <li>Utilisez le curseur horizontal pour changer la teinte de base</li>
+                <li>Ajustez l'opacité avec le curseur d'alpha si nécessaire</li>
+                <li>Les valeurs HEX, RGB, HSL et CMYK sont automatiquement calculées</li>
+                <li>Utilisez les onglets pour explorer les palettes, harmonies et autres outils</li>
+            </ol>
+            
+            <h4>Fonctionnalités</h4>
+            <ul>
+                <li><strong>Palettes</strong> : générez automatiquement des teintes, nuances et tons de votre couleur</li>
+                <li><strong>Harmonies</strong> : découvrez des combinaisons de couleurs harmonieuses (complémentaires, analogues, etc.)</li>
+                <li><strong>Ajustement</strong> : modifiez précisément la teinte, saturation, luminosité et température</li>
+                <li><strong>Accessibilité</strong> : vérifiez le contraste pour la lisibilité et visualisez l'apparence pour différents types de daltonisme</li>
+                <li><strong>Historique</strong> : gardez une trace des couleurs précédemment sélectionnées</li>
+            </ul>
+            
+            <h4>Astuces</h4>
+            <ul>
+                <li>Cliquez sur l'icône de copie à côté d'une valeur pour la copier dans le presse-papiers</li>
+                <li>Vous pouvez saisir directement une valeur HEX dans le champ correspondant</li>
+                <li>Pour une interface accessible, visez un ratio de contraste d'au moins 4.5:1 (AA)</li>
+                <li>Utilisez la simulation de daltonisme pour vérifier que vos couleurs sont perceptibles par tous</li>
+            </ul>
+        </div>
+    </div>
+</div> 

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<div class="tool-container" id="currencyTool">
+    <div class="tool-header">
+        <h2><i class="fas fa-money-bill-wave"></i> Convertisseur de devises</h2>
+        <div class="tool-actions">
+            <button type="button" class="btn-icon" id="currencyHelp" aria-label="Aide">
+                <i class="fas fa-question-circle"></i>
+            </button>
+            <button type="button" class="btn-icon" id="currencyFullscreen" aria-label="Plein écran">
+                <i class="fas fa-expand"></i>
+            </button>
+        </div>
+    </div>
+    
+    <div class="tool-content">
+        <div class="currency-converter">
+            <div class="rates-info">
+                <p>Taux de change: <span id="lastUpdate">En attente...</span></p>
+                <button type="button" class="btn btn-sm" id="refreshRates">
+                    <i class="fas fa-sync-alt"></i> Actualiser
+                </button>
+            </div>
+            
+            <div class="conversion-input">
+                <div class="input-group">
+                    <input type="number" id="fromAmount" class="form-input" value="1" step="any">
+                    <div class="currency-select-wrapper">
+                        <select id="fromCurrency" class="form-select currency-select">
+                            <option value="EUR" selected>EUR - Euro</option>
+                            <option value="USD">USD - Dollar américain</option>
+                            <option value="GBP">GBP - Livre sterling</option>
+                            <option value="JPY">JPY - Yen japonais</option>
+                            <option value="CHF">CHF - Franc suisse</option>
+                            <!-- D'autres devises seront ajoutées dynamiquement -->
+                        </select>
+                    </div>
+                </div>
+                
+                <button type="button" id="swapCurrencies" class="swap-btn">
+                    <i class="fas fa-exchange-alt"></i>
+                </button>
+                
+                <div class="input-group">
+                    <input type="number" id="toAmount" class="form-input" readonly>
+                    <div class="currency-select-wrapper">
+                        <select id="toCurrency" class="form-select currency-select">
+                            <option value="USD" selected>USD - Dollar américain</option>
+                            <option value="EUR">EUR - Euro</option>
+                            <option value="GBP">GBP - Livre sterling</option>
+                            <option value="JPY">JPY - Yen japonais</option>
+                            <option value="CHF">CHF - Franc suisse</option>
+                            <!-- D'autres devises seront ajoutées dynamiquement -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="conversion-details">
+                <p id="conversionRate">1 EUR = 1.10 USD</p>
+                <p id="inverseRate">1 USD = 0.91 EUR</p>
+            </div>
+            
+            <div class="popular-currencies">
+                <h3>Conversions populaires</h3>
+                <div class="currency-grid" id="popularConversions">
+                    <!-- Les conversions populaires seront générées dynamiquement -->
+                </div>
+            </div>
+            
+            <div class="conversion-chart">
+                <h3>Historique du taux</h3>
+                <div class="chart-container">
+                    <canvas id="currencyChart"></canvas>
+                </div>
+                <div class="chart-period">
+                    <button type="button" class="btn btn-sm" data-period="7">7j</button>
+                    <button type="button" class="btn btn-sm" data-period="30">30j</button>
+                    <button type="button" class="btn btn-sm" data-period="90">90j</button>
+                    <button type="button" class="btn btn-sm" data-period="365">1an</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="offline-message" id="currencyOfflineMessage">
+        <div class="offline-icon">
+            <i class="fas fa-wifi-slash"></i>
+        </div>
+        <h3>Mode hors ligne</h3>
+        <p>Vous utilisez actuellement des taux de change enregistrés. Ces taux peuvent ne pas être à jour.</p>
+        <p class="cached-time">Dernière mise à jour: <span id="cachedTime">Inconnue</span></p>
+    </div>
+    
+    <div class="help-panel" id="currencyHelpPanel">
+        <div class="help-panel-header">
+            <h3>Aide - Convertisseur de devises</h3>
+            <button type="button" class="btn-icon" id="closeCurrencyHelp">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="help-panel-content">
+            <h4>Comment utiliser</h4>
+            <ol>
+                <li>Entrez un montant dans le champ de gauche</li>
+                <li>Sélectionnez la devise source et la devise cible</li>
+                <li>Le résultat de la conversion s'affiche automatiquement</li>
+                <li>Utilisez le bouton d'échange pour inverser les devises</li>
+            </ol>
+            
+            <h4>Fonctionnalités</h4>
+            <ul>
+                <li><strong>Taux de change</strong> : mis à jour régulièrement</li>
+                <li><strong>Mode hors ligne</strong> : utilise les derniers taux connus si vous n'êtes pas connecté</li>
+                <li><strong>Graphique d'évolution</strong> : visualisez l'évolution du taux de change sur différentes périodes</li>
+                <li><strong>Conversions populaires</strong> : accès rapide aux principales devises mondiales</li>
+            </ul>
+            
+            <p class="help-note">Note: Les taux de change sont fournis à titre indicatif et peuvent différer légèrement des taux appliqués par les banques ou les services de change.</p>
+        </div>
+    </div>
+</div> 

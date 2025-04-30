@@ -1,0 +1,413 @@
+/**
+ * Styles pour les boutons
+ * Définit des styles améliorés pour tous les boutons du site
+ */
+
+/* Style de base pour tous les boutons */
+.btn,
+button[type="button"],
+button[type="submit"],
+input[type="button"],
+input[type="submit"],
+.calculator-button,
+.todo-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius);
+    font-family: var(--font-family);
+    font-size: var(--font-size);
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all var(--transition-duration) var(--ease-out-back);
+    user-select: none;
+    overflow: hidden;
+    gap: var(--spacing-sm);
+    line-height: 1.5;
+    white-space: nowrap;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* État au survol pour tous les boutons */
+.btn:hover,
+button[type="button"]:hover,
+button[type="submit"]:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover,
+.calculator-button:hover,
+.todo-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* État actif pour tous les boutons */
+.btn:active,
+button[type="button"]:active,
+button[type="submit"]:active,
+input[type="button"]:active,
+input[type="submit"]:active,
+.calculator-button:active,
+.todo-button:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* État focus pour tous les boutons */
+.btn:focus,
+button[type="button"]:focus,
+button[type="submit"]:focus,
+input[type="button"]:focus,
+input[type="submit"]:focus,
+.calculator-button:focus,
+.todo-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.25);
+}
+
+/* Effet de ripple au clic */
+.btn::after,
+button[type="button"]::after,
+button[type="submit"]::after,
+input[type="button"]::after,
+input[type="submit"]::after,
+.calculator-button::after,
+.todo-button::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.3) 10%, transparent 10.01%);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    transform: scale(10, 10);
+    opacity: 0;
+    transition: transform 0.5s, opacity 0.8s;
+}
+
+.btn:active::after,
+button[type="button"]:active::after,
+button[type="submit"]:active::after,
+input[type="button"]:active::after,
+input[type="submit"]:active::after,
+.calculator-button:active::after,
+.todo-button:active::after {
+    transform: scale(0, 0);
+    opacity: 0.3;
+    transition: 0s;
+}
+
+/* Variantes de boutons */
+
+/* Bouton par défaut */
+.btn,
+button[type="button"],
+button[type="submit"],
+input[type="button"],
+input[type="submit"] {
+    color: var(--text-color);
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+}
+
+.btn:hover,
+button[type="button"]:hover,
+button[type="submit"]:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover {
+    background-color: var(--hover-color);
+    border-color: var(--primary-color);
+}
+
+/* Bouton primaire */
+.btn-primary,
+.btn.primary,
+.todo-button.primary,
+.calculator-button.primary {
+    color: var(--text-on-primary);
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-color) 70%, var(--primary-color-hover, #0D93F0));
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover,
+.btn.primary:hover,
+.todo-button.primary:hover,
+.calculator-button.primary:hover {
+    background: linear-gradient(135deg, var(--primary-color-hover, #0D93F0), var(--primary-color));
+    box-shadow: 0 5px 15px rgba(var(--primary-color-rgb), 0.4);
+}
+
+/* Bouton secondaire */
+.btn-secondary,
+.btn.secondary,
+.todo-button.secondary,
+.calculator-button.secondary {
+    color: var(--text-on-primary);
+    background: linear-gradient(135deg, var(--secondary-color), var(--secondary-color) 70%, var(--secondary-color-dark, #43A047));
+    border-color: var(--secondary-color);
+}
+
+.btn-secondary:hover,
+.btn.secondary:hover,
+.todo-button.secondary:hover,
+.calculator-button.secondary:hover {
+    background: linear-gradient(135deg, var(--secondary-color-dark, #43A047), var(--secondary-color));
+    box-shadow: 0 5px 15px rgba(var(--secondary-color-rgb), 0.4);
+}
+
+/* Bouton danger / suppression */
+.btn-danger,
+.btn.danger,
+.btn.delete-all,
+.todo-button.delete-all,
+.calculator-button.clear {
+    color: var(--text-on-primary);
+    background: linear-gradient(135deg, var(--error-color), var(--error-color) 70%, var(--danger-color-hover, #E53935));
+    border-color: var(--error-color);
+}
+
+.btn-danger:hover,
+.btn.danger:hover,
+.btn.delete-all:hover,
+.todo-button.delete-all:hover,
+.calculator-button.clear:hover {
+    background: linear-gradient(135deg, var(--danger-color-hover, #E53935), var(--error-color));
+    box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
+}
+
+/* Bouton opérateur (calculatrice) */
+.calculator-button.operator {
+    background: linear-gradient(to bottom, var(--calc-button-operator), var(--calc-button-operator-hover, #D4E6FC));
+    color: var(--primary-color);
+    border-color: var(--calc-button-operator-hover, #D4E6FC);
+    font-weight: 600;
+}
+
+.calculator-button.operator:hover {
+    background: linear-gradient(to bottom, var(--calc-button-operator-hover, #D4E6FC), var(--calc-button-operator));
+}
+
+/* Bouton égal (calculatrice) */
+.calculator-button.equals {
+    background: linear-gradient(135deg, var(--calc-button-equals), var(--calc-button-equals) 60%, var(--primary-color-hover, #0D93F0));
+    color: var(--text-on-primary);
+    border-color: var(--calc-button-equals);
+    font-weight: 600;
+}
+
+.calculator-button.equals:hover {
+    background: linear-gradient(135deg, #0D93F0, var(--calc-button-equals));
+    box-shadow: 0 5px 15px rgba(14, 156, 255, 0.4);
+}
+
+/* Bouton fantôme / transparent */
+.btn-ghost,
+.btn.ghost,
+.calculator-help-toggle,
+.todo-action-button {
+    background-color: transparent;
+    color: var(--text-secondary);
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.btn-ghost:hover,
+.btn.ghost:hover,
+.calculator-help-toggle:hover,
+.todo-action-button:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--primary-color);
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* Bouton icône */
+.btn-icon,
+.btn.icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.btn-icon:hover,
+.btn.icon:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.btn-icon i,
+.btn.icon i {
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+/* Bouton avec icône + texte */
+.btn i, 
+.todo-button i,
+button[type="button"] i, 
+button[type="submit"] i {
+    margin-right: var(--spacing-sm);
+    font-size: 1.1em;
+}
+
+/* Tailles de bouton */
+.btn-sm,
+.btn.sm {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: var(--font-size-sm);
+    border-radius: var(--border-radius-sm);
+}
+
+.btn-lg,
+.btn.lg {
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: var(--font-size-md);
+}
+
+/* Bouton désactivé */
+.btn:disabled,
+button[type="button"]:disabled,
+button[type="submit"]:disabled,
+input[type="button"]:disabled,
+input[type="submit"]:disabled,
+.calculator-button:disabled,
+.todo-button:disabled {
+    opacity: 0.65;
+    pointer-events: none;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Bouton avec badge */
+.btn-badge {
+    position: relative;
+}
+
+.btn-badge::before {
+    content: attr(data-count);
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    font-size: var(--font-size-xs);
+    font-weight: bold;
+    line-height: 18px;
+    border-radius: 9px;
+    background-color: var(--error-color);
+    color: white;
+    text-align: center;
+}
+
+/* Bouton pleine largeur */
+.btn-block,
+.btn.block {
+    display: block;
+    width: 100%;
+}
+
+/* Groupe de boutons */
+.btn-group {
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-group .btn {
+    border-radius: 0;
+    margin-right: -1px;
+}
+
+.btn-group .btn:first-child {
+    border-top-left-radius: var(--border-radius);
+    border-bottom-left-radius: var(--border-radius);
+}
+
+.btn-group .btn:last-child {
+    border-top-right-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
+    margin-right: 0;
+}
+
+/* Effet d'ombre sur les boutons calculatrice */
+.calculator-button {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.calculator-button:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Thème sombre */
+[data-theme="dark"] .btn,
+[data-theme="dark"] button[type="button"],
+[data-theme="dark"] button[type="submit"],
+[data-theme="dark"] input[type="button"],
+[data-theme="dark"] input[type="submit"] {
+    background-color: var(--button-bg-dark);
+    color: var(--button-text-dark);
+    border-color: #444444;
+}
+
+[data-theme="dark"] .btn:hover,
+[data-theme="dark"] button[type="button"]:hover,
+[data-theme="dark"] button[type="submit"]:hover,
+[data-theme="dark"] input[type="button"]:hover,
+[data-theme="dark"] input[type="submit"]:hover {
+    background-color: var(--button-bg-hover-dark);
+    border-color: var(--primary-color);
+}
+
+[data-theme="dark"] .btn-ghost:hover,
+[data-theme="dark"] .btn.ghost:hover,
+[data-theme="dark"] .calculator-help-toggle:hover,
+[data-theme="dark"] .todo-action-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .btn-icon:hover,
+[data-theme="dark"] .btn.icon:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Adaptation mobile */
+@media (max-width: 480px) {
+    .btn,
+    button[type="button"],
+    button[type="submit"],
+    input[type="button"],
+    input[type="submit"],
+    .calculator-button:not(.calculator-button.equals),
+    .todo-button {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-size: var(--font-size-sm);
+    }
+    
+    .btn-group {
+        flex-wrap: wrap;
+    }
+    
+    .btn-group .btn {
+        margin-bottom: var(--spacing-xs);
+    }
+} 

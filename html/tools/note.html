@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<div class="tool-container" id="noteTool">
+    <div class="tool-header">
+        <h2><i class="fas fa-sticky-note"></i> Bloc-notes</h2>
+        <div class="tool-actions">
+            <button type="button" class="btn-icon" id="noteHelp" aria-label="Aide">
+                <i class="fas fa-question-circle"></i>
+            </button>
+            <button type="button" class="btn-icon" id="noteFullscreen" aria-label="Plein écran">
+                <i class="fas fa-expand"></i>
+            </button>
+        </div>
+    </div>
+    
+    <div class="tool-content">
+        <div class="note-editor-container">
+            <div class="notes-sidebar">
+                <div class="notes-header">
+                    <h3>Mes notes</h3>
+                    <button type="button" class="btn-icon" id="addNewNote" aria-label="Nouvelle note">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                
+                <div class="notes-search">
+                    <input type="search" id="noteSearch" placeholder="Rechercher..." aria-label="Rechercher dans les notes">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                
+                <div class="notes-list" id="notesList">
+                    <!-- Liste des notes générée dynamiquement -->
+                </div>
+                
+                <div class="notes-actions">
+                    <button type="button" class="btn btn-outline" id="exportAllNotes">
+                        <i class="fas fa-download"></i> Exporter toutes
+                    </button>
+                    <button type="button" class="btn btn-outline btn-danger" id="deleteAllNotes">
+                        <i class="fas fa-trash-alt"></i> Supprimer toutes
+                    </button>
+                </div>
+            </div>
+            
+            <div class="note-editor">
+                <div class="note-title-container">
+                    <input type="text" id="noteTitle" placeholder="Titre de la note" class="note-title">
+                </div>
+                
+                <!-- Quill Editor Container -->
+                <div id="quill-editor-container">
+                    <div id="quill-toolbar">
+                        <!-- Les outils seront automatiquement ajoutés par Quill -->
+                    </div>
+                    <div id="quill-editor"></div>
+                </div>
+                
+                <div class="note-status-bar">
+                    <div class="word-count">
+                        <span id="wordCount">0 mots</span>
+                    </div>
+                    <div class="last-saved">
+                        <span id="lastSaved">Dernière sauvegarde: jamais</span>
+                    </div>
+                </div>
+                
+                <div class="note-actions">
+                    <button type="button" class="btn" id="clearNote">
+                        <i class="fas fa-eraser"></i> Effacer
+                    </button>
+                    <button type="button" class="btn btn-outline" id="downloadNote">
+                        <i class="fas fa-download"></i> Télécharger
+                    </button>
+                    <button type="button" class="btn btn-primary" id="saveNote">
+                        <i class="fas fa-save"></i> Enregistrer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="help-panel" id="noteHelpPanel">
+        <div class="help-panel-header">
+            <h3>Aide - Bloc-notes</h3>
+            <button type="button" class="btn-icon" id="closeNoteHelp">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="help-panel-content">
+            <h4>Comment utiliser</h4>
+            <ol>
+                <li>Créez une nouvelle note avec le bouton "+" dans la barre latérale</li>
+                <li>Donnez un titre à votre note et commencez à rédiger son contenu</li>
+                <li>Utilisez la barre d'outils pour mettre en forme votre texte</li>
+                <li>Vos notes sont automatiquement sauvegardées localement</li>
+                <li>Vous pouvez exporter vos notes au format HTML ou texte</li>
+            </ol>
+            
+            <h4>Fonctionnalités</h4>
+            <ul>
+                <li><strong>Formatage riche</strong> : mise en forme du texte, listes, liens, etc.</li>
+                <li><strong>Sauvegarde automatique</strong> : vos notes sont conservées dans votre navigateur</li>
+                <li><strong>Recherche</strong> : retrouvez facilement vos notes avec la barre de recherche</li>
+                <li><strong>Export</strong> : téléchargez vos notes pour les conserver ou les partager</li>
+                <li><strong>Compteur de mots</strong> : suivez la longueur de vos notes</li>
+            </ul>
+            
+            <h4>Raccourcis clavier</h4>
+            <ul>
+                <li><strong>Ctrl+B</strong> : Gras</li>
+                <li><strong>Ctrl+I</strong> : Italique</li>
+                <li><strong>Ctrl+U</strong> : Souligné</li>
+                <li><strong>Ctrl+Z</strong> : Annuler</li>
+                <li><strong>Ctrl+Y</strong> : Rétablir</li>
+                <li><strong>Ctrl+S</strong> : Sauvegarder</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+<link rel="stylesheet" href="../../styles/tools/notes.css">
+<!-- <link rel="stylesheet" href="../../styles/tools/note.css"> -->
+
+<script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+<script src="../../js/tools/notes.js" defer></script> 
