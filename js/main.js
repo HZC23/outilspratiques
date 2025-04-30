@@ -11,6 +11,7 @@ import { ColorManager } from './tools/color.js';
 import { QRCodeManager } from './tools/qrcode.js';
 import { TodoManager } from './tools/todo.js';
 import { StopwatchManager } from './tools/stopwatch.js';
+import { initAllFullscreenButtons } from './fullscreen.js';
 
 /**
  * Classe principale de l'application
@@ -19,7 +20,6 @@ class App {
     constructor() {
         this.init();
         this.initErrorHandling();
-        this.initOfflineBadge();
     }
 
     /**
@@ -44,6 +44,9 @@ class App {
         
         // Initialiser les outils
         this.initTools();
+        
+        // Initialiser le mode plein écran pour tous les outils
+        initAllFullscreenButtons();
         
         // Initialiser les gestionnaires d'événements
         this.initEventHandlers();
@@ -527,41 +530,6 @@ class App {
         };
     }
 
-    /**
-     * Badge visuel d'état du mode hors ligne
-     */
-    initOfflineBadge() {
-        const badge = document.createElement('div');
-        badge.id = 'offline-badge';
-        badge.style.position = 'fixed';
-        badge.style.bottom = '16px';
-        badge.style.left = '16px';
-        badge.style.zIndex = 99999;
-        badge.style.background = '#4a90e2';
-        badge.style.color = '#fff';
-        badge.style.padding = '8px 16px';
-        badge.style.borderRadius = '20px';
-        badge.style.fontWeight = 'bold';
-        badge.style.boxShadow = '0 2px 8px rgba(0,0,0,0.12)';
-        badge.style.fontSize = '15px';
-        badge.style.display = 'none';
-        badge.setAttribute('aria-live', 'polite');
-        document.body.appendChild(badge);
-        this.updateOfflineBadge();
-        window.addEventListener('storage', () => this.updateOfflineBadge());
-    }
-    updateOfflineBadge() {
-        const badge = document.getElementById('offline-badge');
-        const settings = JSON.parse(localStorage.getItem('appSettings'));
-        const offlineMode = settings && settings.sync && settings.sync.offlineMode;
-        if (offlineMode) {
-            badge.textContent = 'Mode hors ligne actif';
-            badge.style.display = 'block';
-        } else {
-            badge.textContent = '';
-            badge.style.display = 'none';
-        }
-    }
 
     /**
      * Affiche une notification accessible

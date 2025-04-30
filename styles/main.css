@@ -944,4 +944,134 @@ footer {
 .search-form:hover .search-icon {
     background: var(--primary-color, #8c52ff);
     color: white;
+}
+
+/* Mode plein écran amélioré */
+:fullscreen .tool-header,
+:-webkit-full-screen .tool-header,
+:-moz-full-screen .tool-header,
+:-ms-fullscreen .tool-header {
+    display: none !important;
+}
+
+:fullscreen .tool-container,
+:-webkit-full-screen .tool-container,
+:-moz-full-screen .tool-container,
+:-ms-fullscreen .tool-container {
+    background-color: var(--bg-color);
+    border-radius: 0;
+    box-shadow: none;
+    margin: 0;
+    padding: 1.5rem;
+    height: 100vh;
+    max-height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Animation d'entrée en mode plein écran */
+.fullscreen-transition-enter {
+    animation: fullscreen-enter 0.3s ease-out forwards;
+}
+
+.fullscreen-transition-exit {
+    animation: fullscreen-exit 0.3s ease-in forwards;
+}
+
+@keyframes fullscreen-enter {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes fullscreen-exit {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+}
+
+/* Ajuste le positionnement des éléments en plein écran pour compenser l'absence de l'en-tête */
+:fullscreen .calculator-container,
+:-webkit-full-screen .calculator-container,
+:-moz-full-screen .calculator-container,
+:-ms-fullscreen .calculator-container,
+:fullscreen .notes-container,
+:-webkit-full-screen .notes-container,
+:-moz-full-screen .notes-container,
+:-ms-fullscreen .notes-container,
+:fullscreen .timer-container,
+:-webkit-full-screen .timer-container,
+:-moz-full-screen .timer-container,
+:-ms-fullscreen .timer-container,
+:fullscreen .stopwatch-container,
+:-webkit-full-screen .stopwatch-container,
+:-moz-full-screen .stopwatch-container,
+:-ms-fullscreen .stopwatch-container,
+:fullscreen .styletext-container,
+:-webkit-full-screen .styletext-container,
+:-moz-full-screen .styletext-container,
+:-ms-fullscreen .styletext-container,
+:fullscreen .todo-container,
+:-webkit-full-screen .todo-container,
+:-moz-full-screen .todo-container,
+:-ms-fullscreen .todo-container,
+:fullscreen .metronome-container,
+:-webkit-full-screen .metronome-container,
+:-moz-full-screen .metronome-container,
+:-ms-fullscreen .metronome-container,
+:fullscreen .qrcode-container,
+:-webkit-full-screen .qrcode-container,
+:-moz-full-screen .qrcode-container,
+:-ms-fullscreen .qrcode-container,
+:fullscreen .converter-container,
+:-webkit-full-screen .converter-container,
+:-moz-full-screen .converter-container,
+:-ms-fullscreen .converter-container {
+    padding-top: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Bouton de fermeture du mode plein écran */
+:fullscreen::after,
+:-webkit-full-screen::after,
+:-moz-full-screen::after,
+:-ms-fullscreen::after {
+    content: "\f057";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 400;
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    color: var(--text-color);
+    background-color: rgba(128, 128, 128, 0.2);
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 9999;
+    transition: background-color 0.2s ease;
+}
+
+:fullscreen::after:hover,
+:-webkit-full-screen::after:hover,
+:-moz-full-screen::after:hover,
+:-ms-fullscreen::after:hover {
+    background-color: rgba(128, 128, 128, 0.4);
 } 

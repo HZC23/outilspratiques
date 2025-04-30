@@ -410,4 +410,34 @@ input[type="submit"]:disabled,
     .btn-group .btn {
         margin-bottom: var(--spacing-xs);
     }
+}
+
+/* Classe pour indiquer une erreur sur le bouton de plein écran */
+.fullscreen-btn-error {
+    animation: fullscreen-btn-shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    border: 1px solid var(--color-danger) !important;
+    background-color: rgba(220, 53, 69, 0.1) !important;
+    color: var(--color-danger) !important;
+}
+
+/* Animation de secousse pour indiquer une erreur */
+@keyframes fullscreen-btn-shake {
+    10%, 90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+    
+    20%, 80% {
+        transform: translate3d(2px, 0, 0);
+    }
+    
+    30%, 50%, 70% {
+        transform: translate3d(-3px, 0, 0);
+    }
+    
+    40%, 60% {
+        transform: translate3d(3px, 0, 0);
+    }
 } 

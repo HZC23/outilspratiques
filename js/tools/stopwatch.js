@@ -1,462 +1,990 @@
+import { Utils } from '../utils.js';
+
 /**
- * Gestionnaire du chronomètre
+ * Gestionnaire du minuteur et du chronomètre
  */
 export const StopwatchManager = {
-    /**
-     * État du chronomètre
-     */
     state: {
-        startTime: 0,
-        elapsedTime: 0,
-        running: false,
-        laps: [],
-        animationFrameId: null,
-        bestLap: null,
-        slowestLap: null,
-        averageLap: 0
+        timer: {
+            hours: 0,
+            minutes: 0,
+            seconds: 0,
+            isRunning: false,
+            intervalId: null,
+            endTime: null,
+            sound: true,
+            currentSound: 'bell',
+            initialTime: {
+                hours: 0,
+                minutes: 0,
+                seconds: 0
+            }
+        },
+        stopwatch: {
+            time: 0,
+            isRunning: false,
+            intervalId: null,
+            laps: []
+        }
     },
 
     /**
-     * Initialise le chronomètre
+     * Initialise le minuteur
      */
     init() {
-        // Récupérer les éléments du DOM
-        this.minutesEl = document.getElementById('minutesSW');
-        this.secondsEl = document.getElementById('secondsSW');
-        this.millisecondsEl = document.getElementById('millisecondsSW');
-        this.startBtn = document.getElementById('startStopwatch');
-        this.pauseBtn = document.getElementById('pauseStopwatch');
-        this.resetBtn = document.getElementById('resetStopwatch');
-        this.lapBtn = document.getElementById('lapStopwatch');
-        this.lapList = document.getElementById('lapList');
-        this.lapCount = document.getElementById('lapCount');
-        this.clearLapsBtn = document.getElementById('clearLaps');
-        this.exportLapsBtn = document.getElementById('exportLaps');
-        this.bestLapEl = document.getElementById('bestLap');
-        this.slowestLapEl = document.getElementById('slowestLap');
-        this.averageLapEl = document.getElementById('averageLap');
-        this.totalTimeEl = document.getElementById('totalTime');
-        this.helpBtn = document.getElementById('stopwatchHelp');
-        this.helpPanel = document.getElementById('stopwatchHelpPanel');
-        this.closeHelpBtn = document.getElementById('closeStopwatchHelp');
-        this.fullscreenBtn = document.getElementById('stopwatchFullscreen');
-        this.container = document.getElementById('stopwatchTool');
-        this.displayEl = document.querySelector('.stopwatch-display');
-        this.stopwatchContainer = document.querySelector('.stopwatch-container');
-
-        // Vérifier si les éléments existent
-        if (!this.minutesEl || !this.secondsEl || !this.millisecondsEl) {
-            console.log('Éléments d\'affichage du chronomètre non présents dans la page actuelle');
-            return;
-        }
-
-        // Configurer les gestionnaires d'événements
-        this.startBtn.addEventListener('click', () => this.startStopwatch());
-        this.pauseBtn.addEventListener('click', () => this.pauseStopwatch());
-        this.resetBtn.addEventListener('click', () => this.resetStopwatch());
-        this.lapBtn.addEventListener('click', () => this.recordLap());
-        this.clearLapsBtn.addEventListener('click', () => this.clearLaps());
-        this.exportLapsBtn.addEventListener('click', () => this.exportLaps());
-        
-        // Gestion de l'aide
-        if (this.helpBtn && this.closeHelpBtn && this.helpPanel) {
-            this.helpBtn.addEventListener('click', () => this.toggleHelpPanel());
-            this.closeHelpBtn.addEventListener('click', () => this.toggleHelpPanel());
-        }
-        
-        // Gestion du plein écran
-        if (this.fullscreenBtn && this.container) {
-            this.fullscreenBtn.addEventListener('click', () => this.toggleFullscreen());
-            
-            // Écouter l'événement de changement de mode plein écran
-            document.addEventListener('fullscreenchange', () => this.onFullscreenChange());
-        }
-
-        // Raccourcis clavier
-        document.addEventListener('keydown', (e) => this.handleKeyboardShortcuts(e));
-
-        // Initialiser l'affichage
+        this.loadState();
+        this.setupListeners();
         this.updateDisplay();
+        this.loadSoundPreference();
+        this.requestNotificationPermission();
         
-        console.log('Chronomètre initialisé');
+        // Initialiser la source audio par défaut
+        const sound = document.getElementById('timerAlarm');
+        if (sound && (!sound.src || sound.src === '')) {
+            // Utiliser le son "bell" par défaut
+            sound.src = 'sounds/bell.mp3';
+        }
     },
 
     /**
-     * Gère les raccourcis clavier
-     * @param {KeyboardEvent} e - L'événement clavier
+     * Demande la permission pour les notifications
      */
-    handleKeyboardShortcuts(e) {
-        // Vérifier que le focus est sur le chronomètre ou ses enfants
-        if (!this.container.contains(document.activeElement) && 
-            document.activeElement !== document.body) {
+    requestNotificationPermission() {
+        // Vérifier si le navigateur supporte les notifications
+        if (!("Notification" in window)) {
+            console.log("Ce navigateur ne prend pas en charge les notifications");
             return;
         }
         
-        switch(e.key) {
-            case ' ': // Espace
-                e.preventDefault();
-                if (this.state.running) {
-                    this.pauseStopwatch();
-                } else {
-                    this.startStopwatch();
-                }
-                break;
-            case 'l':
-            case 'L':
-                if (this.state.running) {
-                    this.recordLap();
-                }
-                break;
-            case 'r':
-            case 'R':
-                this.resetStopwatch();
-                break;
-            case 'c':
-            case 'C':
-                if (this.state.laps.length > 0) {
-                    this.clearLaps();
-                }
-                break;
-            case 'f':
-            case 'F':
-                this.toggleFullscreen();
-                break;
-            case 'h':
-            case 'H':
-                this.toggleHelpPanel();
-                break;
+        // Ne demander que si la permission n'a pas déjà été accordée ou refusée
+        if (Notification.permission !== "granted" && Notification.permission !== "denied") {
+            // Attendre un peu pour ne pas demander immédiatement au chargement de la page
+            setTimeout(() => {
+                Notification.requestPermission().then(permission => {
+                    console.log(`Permission de notification: ${permission}`);
+                });
+            }, 3000);
         }
     },
 
     /**
-     * Démarre le chronomètre
+     * Configure les écouteurs d'événements
      */
-    startStopwatch() {
-        if (!this.state.running) {
-            this.state.running = true;
-            this.state.startTime = Date.now() - this.state.elapsedTime;
-            this.startBtn.disabled = true;
-            this.pauseBtn.disabled = false;
-            this.lapBtn.disabled = false;
-            this.resetBtn.disabled = false;
-            
-            // Ajouter la classe pour l'animation
-            if (this.displayEl) {
-                this.displayEl.classList.add('running');
-            }
-            if (this.stopwatchContainer) {
-                this.stopwatchContainer.classList.add('stopwatch-running');
-            }
-            
-            this.updateStopwatch();
-            
-            // Animation pour le bouton de démarrage
-            this.animateButton(this.startBtn);
-        }
-    },
+    setupListeners() {
+        // Minuteur - Corrigé pour correspondre aux ID dans le HTML
+        document.getElementById('startTimer')?.addEventListener('click', () => {
+            this.startTimer();
+        });
 
-    /**
-     * Met en pause le chronomètre
-     */
-    pauseStopwatch() {
-        if (this.state.running) {
-            this.state.running = false;
-            this.state.elapsedTime = Date.now() - this.state.startTime;
-            this.startBtn.disabled = false;
-            this.pauseBtn.disabled = true;
-            
-            // Retirer la classe pour l'animation
-            if (this.displayEl) {
-                this.displayEl.classList.remove('running');
-            }
-            if (this.stopwatchContainer) {
-                this.stopwatchContainer.classList.remove('stopwatch-running');
-            }
-            
-            if (this.state.animationFrameId) {
-                cancelAnimationFrame(this.state.animationFrameId);
-                this.state.animationFrameId = null;
-            }
-            
-            // Animation pour le bouton de pause
-            this.animateButton(this.pauseBtn);
-        }
-    },
+        document.getElementById('pauseTimer')?.addEventListener('click', () => {
+            this.pauseTimer();
+        });
 
-    /**
-     * Réinitialise le chronomètre
-     */
-    resetStopwatch() {
-        this.pauseStopwatch();
-        this.state.elapsedTime = 0;
-        this.startBtn.disabled = false;
-        this.pauseBtn.disabled = true;
-        this.resetBtn.disabled = true;
-        this.lapBtn.disabled = true;
-        this.updateDisplay();
-        
-        // Animation pour le bouton de réinitialisation
-        this.animateButton(this.resetBtn);
-    },
-
-    /**
-     * Efface les tours tout en gardant le chronomètre en l'état
-     */
-    clearLaps() {
-        this.state.laps = [];
-        this.state.bestLap = null;
-        this.state.slowestLap = null;
-        this.state.averageLap = 0;
-        this.updateLapsList();
-        this.updateStats();
-        this.clearLapsBtn.disabled = true;
-        this.exportLapsBtn.disabled = true;
-        
-        // Animation pour le bouton d'effacement
-        this.animateButton(this.clearLapsBtn);
-    },
-
-    /**
-     * Exporte les tours au format CSV
-     */
-    exportLaps() {
-        if (this.state.laps.length === 0) return;
-        
-        let csvContent = "data:text/csv;charset=utf-8,";
-        csvContent += "Tour,Temps du tour,Temps total\n";
-        
-        this.state.laps.forEach(lap => {
-            csvContent += `${lap.number},${this.formatTime(lap.lapTime)},${this.formatTime(lap.totalTime)}\n`;
+        document.getElementById('resetTimer')?.addEventListener('click', () => {
+            this.resetTimer();
         });
         
-        const encodedUri = encodeURI(csvContent);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        const dateStr = new Date().toISOString().replace(/:/g, '-').substring(0, 19);
-        link.setAttribute("download", `chronometre_tours_${dateStr}.csv`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        document.getElementById('cancelTimer')?.addEventListener('click', () => {
+            this.resetTimer(); // Utiliser resetTimer pour l'instant
+        });
+
+        document.getElementById('testSound')?.addEventListener('click', () => {
+            this.testTimerSound();
+        });
+
+        document.getElementById('alarmSound')?.addEventListener('change', (e) => {
+            this.changeTimerSound(e.target.value);
+        });
         
-        // Animation pour le bouton d'exportation
-        this.animateButton(this.exportLapsBtn);
+        // Modifier le comportement du bouton d'aide pour faire défiler vers la section d'aide
+        document.getElementById('timerHelp')?.addEventListener('click', () => {
+            const helpSection = document.querySelector('.help-panel-content');
+            if (helpSection) {
+                helpSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+        
+        // Écouter les changements de volume
+        document.getElementById('alarmVolume')?.addEventListener('input', (e) => {
+            const volume = e.target.value / 100;
+            const sound = document.getElementById('timerAlarm');
+            if (sound) {
+                sound.volume = volume;
+            }
+        });
+        
+        // Écouter les changements de la case à cocher des notifications
+        document.getElementById('notifications')?.addEventListener('change', (e) => {
+            if (e.target.checked && Notification.permission !== "granted" && Notification.permission !== "denied") {
+                this.requestNotificationPermission();
+            }
+        });
+
+        // Gérer les préréglages
+        document.querySelectorAll('.preset-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const seconds = parseInt(e.target.dataset.time);
+                if (isNaN(seconds)) return;
+                
+                // Convertir en heures, minutes, secondes
+                const hours = Math.floor(seconds / 3600);
+                const minutes = Math.floor((seconds % 3600) / 60);
+                const remainingSeconds = seconds % 60;
+                
+                // Mettre à jour l'état et l'affichage
+                this.state.timer.hours = hours;
+                this.state.timer.minutes = minutes;
+                this.state.timer.seconds = remainingSeconds;
+                
+                // Mettre à jour les champs d'entrée
+                const inputHours = document.getElementById('inputHours');
+                const inputMinutes = document.getElementById('inputMinutes');
+                const inputSeconds = document.getElementById('inputSeconds');
+                
+                if (inputHours) inputHours.value = hours;
+                if (inputMinutes) inputMinutes.value = minutes;
+                if (inputSeconds) inputSeconds.value = remainingSeconds;
+                
+                this.updateDisplay();
+                
+                // Ajouter la classe active au bouton cliqué et la retirer des autres
+                document.querySelectorAll('.preset-btn').forEach(b => {
+                    b.classList.remove('active');
+                });
+                e.target.classList.add('active');
+            });
+        });
+
+        // Gérer le bouton plein écran
+        document.getElementById('timerFullscreen')?.addEventListener('click', () => {
+            this.toggleFullscreen();
+        });
+
+        // Gérer les boutons de fin de minuteur
+        document.getElementById('dismissTimer')?.addEventListener('click', () => {
+            const timerComplete = document.getElementById('timerComplete');
+            if (timerComplete) timerComplete.classList.remove('show');
+        });
+
+        document.getElementById('restartTimer')?.addEventListener('click', () => {
+            const timerComplete = document.getElementById('timerComplete');
+            if (timerComplete) timerComplete.classList.remove('show');
+            this.startTimer();
+        });
+
+        // Entrées du minuteur
+        ['Hours', 'Minutes', 'Seconds'].forEach(field => {
+            document.getElementById(`input${field}`)
+                ?.addEventListener('input', (e) => {
+                    this.updateTimerValue(field.toLowerCase(), e.target.value);
+                });
+        });
+
+        // Raccourcis clavier
+        document.addEventListener('keydown', (e) => {
+            if (!this.isTimerVisible()) return;
+
+            if (e.code === 'Space') {
+                e.preventDefault();
+                if (this.state.timer.isRunning) {
+                    this.pauseTimer();
+                } else {
+                    this.startTimer();
+                }
+            } else if (e.key === 'r' && e.ctrlKey) {
+                e.preventDefault();
+                this.resetTimer();
+            }
+        });
+
+        // Ajouter les options de sons en ligne et locaux si elles n'existent pas déjà
+        const soundSelect = document.getElementById('alarmSound');
+        if (soundSelect) {
+            // Vérifier si les options en ligne existent déjà
+            const hasOnlineSounds = Array.from(soundSelect.options).some(option => 
+                option.value.includes('-online')
+            );
+            
+            if (!hasOnlineSounds) {
+                // Ajouter un séparateur optgroup pour les sons en ligne
+                const localGroup = document.createElement('optgroup');
+                localGroup.label = 'Sons locaux';
+                
+                // Déplacer les options existantes dans le groupe local
+                while (soundSelect.options.length > 0) {
+                    const option = soundSelect.options[0];
+                    localGroup.appendChild(option);
+                }
+                
+                soundSelect.appendChild(localGroup);
+                
+                // Créer le groupe pour les sons en ligne
+                const onlineGroup = document.createElement('optgroup');
+                onlineGroup.label = 'Sons en ligne';
+                
+                // Ajouter les options pour les sons en ligne
+                [
+                    { value: 'beep-online', text: 'Bip (en ligne)' },
+                    { value: 'bell-online', text: 'Cloche (en ligne)' },
+                    { value: 'digital-online', text: 'Digital (en ligne)' },
+                    { value: 'gentle-online', text: 'Doux (en ligne)' }
+                ].forEach(sound => {
+                    const option = document.createElement('option');
+                    option.value = sound.value;
+                    option.textContent = sound.text;
+                    onlineGroup.appendChild(option);
+                });
+                
+                soundSelect.appendChild(onlineGroup);
+            }
+        }
+    },
+
+    /**
+     * Bascule en mode plein écran
+     */
+    toggleFullscreen() {
+        const timerContainer = document.querySelector('.timer-container');
+        const toolContainer = document.getElementById('timerTool');
+        
+        if (!timerContainer) return;
+        
+        if (!document.body.classList.contains('timer-fullscreen-active')) {
+            // Activer le mode plein écran
+            document.body.classList.add('timer-fullscreen-active');
+            timerContainer.classList.add('timer-fullscreen');
+            
+            // Déplacer le conteneur vers le body pour un vrai plein écran
+            if (toolContainer) {
+                toolContainer.classList.add('timer-tool-fullscreen');
+            }
+            
+            // Bloquer le défilement de la page
+            document.body.style.overflow = 'hidden';
+            
+            // Changer l'icône du bouton
+            const fullscreenBtn = document.getElementById('timerFullscreen');
+            if (fullscreenBtn) {
+                const icon = fullscreenBtn.querySelector('i');
+                if (icon) icon.className = 'fas fa-compress';
+            }
+            
+            // Ajouter un écouteur pour la touche Échap
+            document.addEventListener('keydown', this.escapeFullscreen);
+            
+            // Ajouter un écouteur pour le clic sur la croix de fermeture
+            const closeBtn = document.createElement('div');
+            closeBtn.className = 'fullscreen-close-btn';
+            closeBtn.setAttribute('aria-label', 'Fermer le plein écran');
+            closeBtn.addEventListener('click', () => this.toggleFullscreen());
+            timerContainer.appendChild(closeBtn);
+            
+            // Créer une animation de transition
+            timerContainer.classList.add('fullscreen-transition');
+            setTimeout(() => {
+                timerContainer.classList.remove('fullscreen-transition');
+            }, 500);
+        } else {
+            // Désactiver le mode plein écran
+            document.body.classList.remove('timer-fullscreen-active');
+            timerContainer.classList.remove('timer-fullscreen');
+            
+            if (toolContainer) {
+                toolContainer.classList.remove('timer-tool-fullscreen');
+            }
+            
+            // Rétablir le défilement
+            document.body.style.overflow = '';
+            
+            // Restaurer l'icône du bouton
+            const fullscreenBtn = document.getElementById('timerFullscreen');
+            if (fullscreenBtn) {
+                const icon = fullscreenBtn.querySelector('i');
+                if (icon) icon.className = 'fas fa-expand';
+            }
+            
+            // Retirer l'écouteur de la touche Échap
+            document.removeEventListener('keydown', this.escapeFullscreen);
+            
+            // Supprimer le bouton de fermeture s'il existe
+            const closeBtn = timerContainer.querySelector('.fullscreen-close-btn');
+            if (closeBtn) {
+                closeBtn.removeEventListener('click', () => this.toggleFullscreen());
+                timerContainer.removeChild(closeBtn);
+            }
+            
+            // Animation de transition pour le retour
+            timerContainer.classList.add('fullscreen-exit-transition');
+            setTimeout(() => {
+                timerContainer.classList.remove('fullscreen-exit-transition');
+            }, 500);
+        }
+    },
+
+    /**
+     * Gestionnaire pour quitter le plein écran avec la touche Échap
+     */
+    escapeFullscreen(e) {
+        if (e.key === 'Escape' && document.body.classList.contains('timer-fullscreen-active')) {
+            TimerManager.toggleFullscreen();
+        }
+    },
+
+    /**
+     * Vérifie si le minuteur est visible
+     */
+    isTimerVisible() {
+        const timer = document.getElementById('timerTool');
+        return timer?.style.display !== 'none';
+    },
+
+    /**
+     * Démarre le minuteur
+     */
+    startTimer() {
+        if (this.state.timer.isRunning) return;
+
+        const totalSeconds = this.calculateTotalSeconds();
+        if (totalSeconds <= 0) {
+            Utils.showNotification('Veuillez définir une durée', 'warning');
+            return;
+        }
+
+        // Sauvegarder le temps initial
+        this.state.timer.initialTime = {
+            hours: this.state.timer.hours,
+            minutes: this.state.timer.minutes,
+            seconds: this.state.timer.seconds
+        };
+
+        this.state.timer.endTime = Date.now() + totalSeconds * 1000;
+        this.state.timer.isRunning = true;
+        this.state.timer.intervalId = setInterval(() => this.updateTimer(), 1000);
+
+        this.updateTimerControls();
+        this.updateProgressBar(totalSeconds);
+        
+        // Activer/désactiver les boutons appropriés
+        const startBtn = document.getElementById('startTimer');
+        const pauseBtn = document.getElementById('pauseTimer');
+        const resetBtn = document.getElementById('resetTimer');
+        const cancelBtn = document.getElementById('cancelTimer');
+        
+        if (startBtn) startBtn.disabled = true;
+        if (pauseBtn) pauseBtn.disabled = false;
+        if (resetBtn) resetBtn.disabled = false;
+        if (cancelBtn) cancelBtn.disabled = false;
+    },
+
+    /**
+     * Met à jour la barre de progression
+     */
+    updateProgressBar(totalSeconds) {
+        const progressBar = document.getElementById('timerProgress');
+        if (!progressBar) return;
+
+        const startTime = Date.now();
+        const endTime = this.state.timer.endTime;
+        const duration = endTime - startTime;
+
+        const updateProgress = () => {
+            if (!this.state.timer.isRunning) return;
+            
+            const now = Date.now();
+            const timeLeft = endTime - now;
+            const progress = ((duration - timeLeft) / duration) * 100;
+            
+            progressBar.style.width = `${progress}%`;
+            progressBar.setAttribute('aria-valuenow', progress);
+
+            if (timeLeft > 0) {
+                requestAnimationFrame(updateProgress);
+            }
+        };
+
+        requestAnimationFrame(updateProgress);
+    },
+
+    /**
+     * Met en pause le minuteur
+     */
+    pauseTimer() {
+        if (!this.state.timer.isRunning) return;
+
+        clearInterval(this.state.timer.intervalId);
+        this.state.timer.isRunning = false;
+        this.state.timer.intervalId = null;
+
+        // Sauvegarder le temps restant
+        const remaining = Math.max(0, Math.floor((this.state.timer.endTime - Date.now()) / 1000));
+        this.state.timer.hours = Math.floor(remaining / 3600);
+        this.state.timer.minutes = Math.floor((remaining % 3600) / 60);
+        this.state.timer.seconds = remaining % 60;
+
+        this.updateTimerControls();
+        this.updateDisplay();
+        
+        // Activer/désactiver les boutons appropriés
+        const startBtn = document.getElementById('startTimer');
+        const pauseBtn = document.getElementById('pauseTimer');
+        
+        if (startBtn) startBtn.disabled = false;
+        if (pauseBtn) pauseBtn.disabled = true;
+    },
+
+    /**
+     * Réinitialise le minuteur
+     */
+    resetTimer() {
+        clearInterval(this.state.timer.intervalId);
+        this.state.timer.isRunning = false;
+        this.state.timer.intervalId = null;
+        this.state.timer.endTime = null;
+
+        // Restaurer le temps initial
+        this.state.timer.hours = this.state.timer.initialTime.hours;
+        this.state.timer.minutes = this.state.timer.initialTime.minutes;
+        this.state.timer.seconds = this.state.timer.initialTime.seconds;
+
+        // Réinitialiser les champs d'entrée avec le temps initial
+        const inputHours = document.getElementById('inputHours');
+        const inputMinutes = document.getElementById('inputMinutes');
+        const inputSeconds = document.getElementById('inputSeconds');
+        
+        if (inputHours) inputHours.value = this.state.timer.initialTime.hours;
+        if (inputMinutes) inputMinutes.value = this.state.timer.initialTime.minutes;
+        if (inputSeconds) inputSeconds.value = this.state.timer.initialTime.seconds;
+
+        // Réinitialiser la barre de progression
+        const progressBar = document.getElementById('timerProgress');
+        if (progressBar) {
+            progressBar.style.width = '0%';
+            progressBar.setAttribute('aria-valuenow', 0);
+        }
+
+        this.updateDisplay();
+        this.updateTimerControls();
+        
+        // Activer/désactiver les boutons appropriés
+        const startBtn = document.getElementById('startTimer');
+        const pauseBtn = document.getElementById('pauseTimer');
+        const resetBtn = document.getElementById('resetTimer');
+        const cancelBtn = document.getElementById('cancelTimer');
+        
+        if (startBtn) startBtn.disabled = false;
+        if (pauseBtn) pauseBtn.disabled = true;
+        if (resetBtn) resetBtn.disabled = true;
+        if (cancelBtn) cancelBtn.disabled = true;
+        
+        // Supprimer l'état sauvegardé au lieu de le sauvegarder
+        localStorage.removeItem('timerState');
+    },
+
+    /**
+     * Met à jour le minuteur
+     */
+    updateTimer() {
+        const remaining = Math.max(0, Math.floor((this.state.timer.endTime - Date.now()) / 1000));
+
+        if (remaining === 0) {
+            this.timerComplete();
+            return;
+        }
+
+        this.state.timer.hours = Math.floor(remaining / 3600);
+        this.state.timer.minutes = Math.floor((remaining % 3600) / 60);
+        this.state.timer.seconds = remaining % 60;
+
+        this.updateDisplay();
+        
+        // Ajouter une classe pour animation si on est proche de la fin
+        if (remaining <= 10) {
+            const timerDisplay = document.querySelector('.time-remaining');
+            if (timerDisplay && !timerDisplay.classList.contains('timer-ending')) {
+                timerDisplay.classList.add('timer-ending');
+            }
+        }
+    },
+
+    /**
+     * Gère la fin du minuteur
+     */
+    timerComplete() {
+        clearInterval(this.state.timer.intervalId);
+        this.state.timer.isRunning = false;
+        this.state.timer.intervalId = null;
+        this.state.timer.endTime = null;
+
+        // Restaurer le temps initial
+        this.state.timer.hours = this.state.timer.initialTime.hours;
+        this.state.timer.minutes = this.state.timer.initialTime.minutes;
+        this.state.timer.seconds = this.state.timer.initialTime.seconds;
+
+        // Réinitialiser les champs d'entrée avec le temps initial
+        const inputHours = document.getElementById('inputHours');
+        const inputMinutes = document.getElementById('inputMinutes');
+        const inputSeconds = document.getElementById('inputSeconds');
+        
+        if (inputHours) inputHours.value = this.state.timer.initialTime.hours;
+        if (inputMinutes) inputMinutes.value = this.state.timer.initialTime.minutes;
+        if (inputSeconds) inputSeconds.value = this.state.timer.initialTime.seconds;
+
+        // Réinitialiser la barre de progression
+        const progressBar = document.getElementById('timerProgress');
+        if (progressBar) {
+            progressBar.style.width = '0%';
+            progressBar.setAttribute('aria-valuenow', 0);
+        }
+
+        // Retirer la classe d'animation de fin
+        const timerDisplay = document.querySelector('.time-remaining');
+        if (timerDisplay) {
+            timerDisplay.classList.remove('timer-ending');
+        }
+
+        this.updateDisplay();
+        this.updateTimerControls();
+        
+        // Activer/désactiver les boutons appropriés
+        const startBtn = document.getElementById('startTimer');
+        const pauseBtn = document.getElementById('pauseTimer');
+        const resetBtn = document.getElementById('resetTimer');
+        const cancelBtn = document.getElementById('cancelTimer');
+        
+        if (startBtn) startBtn.disabled = false;
+        if (pauseBtn) pauseBtn.disabled = true;
+        if (resetBtn) resetBtn.disabled = true;
+        if (cancelBtn) cancelBtn.disabled = true;
+        
+        // Supprimer l'état sauvegardé au lieu de le sauvegarder
+        localStorage.removeItem('timerState');
+
+        if (this.state.timer.sound) {
+            this.playAlarm();
+            
+            // Ajouter l'animation d'alarme
+            const timerContainer = document.querySelector('.timer-container');
+            if (timerContainer) {
+                timerContainer.classList.add('timer-alarm-active');
+                setTimeout(() => {
+                    timerContainer.classList.remove('timer-alarm-active');
+                }, 3000); // Arrêter l'animation après 3 secondes
+            }
+        }
+
+        // Afficher l'écran de fin
+        const timerComplete = document.getElementById('timerComplete');
+        if (timerComplete) {
+            timerComplete.classList.add('show');
+        }
+    },
+
+    /**
+     * Joue l'alarme
+     */
+    playAlarm() {
+        if (!this.state.timer.sound) return;
+        
+        // Si le son sélectionné est "none", ne pas jouer
+        if (this.state.timer.currentSound === 'none') {
+            console.log('Son désactivé, aucune alarme jouée');
+            return;
+        }
+        
+        // Utiliser l'élément audio timerAlarm existant dans le HTML
+        const sound = document.getElementById('timerAlarm');
+        if (sound) {
+            // Définir le volume en fonction du paramètre
+            const volumeSlider = document.getElementById('alarmVolume');
+            if (volumeSlider) {
+                sound.volume = volumeSlider.value / 100;
+            }
+            
+            sound.currentTime = 0;
+            sound.play().catch((error) => {
+                console.warn('Impossible de jouer l\'alarme:', error);
+            });
+            
+            // Essayer d'envoyer une notification
+            this.showNotification();
+        } else {
+            console.warn('Élément audio du minuteur non trouvé');
+        }
+    },
+
+    /**
+     * Affiche une notification
+     */
+    showNotification() {
+        // Vérifier si le navigateur supporte les notifications
+        if (!("Notification" in window)) {
+            console.warn("Ce navigateur ne prend pas en charge les notifications");
+            return;
+        }
+        
+        // Vérifier si l'utilisateur a activé les notifications
+        const notifications = document.getElementById('notifications');
+        if (notifications && !notifications.checked) {
+            return;
+        }
+        
+        // Si la permission est déjà accordée, afficher la notification
+        if (Notification.permission === "granted") {
+            const notification = new Notification("Minuteur terminé !", {
+                body: "Votre minuteur est terminé.",
+                icon: "/icons/icon-144x144.png"
+            });
+            
+            // Fermer la notification après 5 secondes
+            setTimeout(() => {
+                notification.close();
+            }, 5000);
+        } 
+        // Sinon, demander la permission
+        else if (Notification.permission !== "denied") {
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    const notification = new Notification("Minuteur terminé !", {
+                        body: "Votre minuteur est terminé.",
+                        icon: "/icons/icon-144x144.png"
+                    });
+                    
+                    setTimeout(() => {
+                        notification.close();
+                    }, 5000);
+                }
+            });
+        }
+    },
+
+    /**
+     * Active/désactive le son
+     */
+    toggleSound() {
+        this.state.timer.sound = !this.state.timer.sound;
+        const soundBtn = document.getElementById('soundToggle');
+        if (soundBtn) {
+            const icon = soundBtn.querySelector('i');
+            if (icon) {
+                icon.className = this.state.timer.sound ? 'fas fa-volume-up' : 'fas fa-volume-mute';
+            }
+            soundBtn.innerHTML = this.state.timer.sound ? '<i class="fas fa-volume-up"></i> Son activé' : '<i class="fas fa-volume-mute"></i> Son désactivé';
+        }
+    },
+
+    /**
+     * Démarre/arrête le chronomètre
+     */
+    toggleStopwatch() {
+        if (this.state.stopwatch.isRunning) {
+            clearInterval(this.state.stopwatch.intervalId);
+            this.state.stopwatch.isRunning = false;
+            this.state.stopwatch.intervalId = null;
+        } else {
+            const startTime = Date.now() - this.state.stopwatch.time;
+            this.state.stopwatch.isRunning = true;
+            this.state.stopwatch.intervalId = setInterval(() => {
+                this.state.stopwatch.time = Date.now() - startTime;
+                this.updateStopwatchDisplay();
+            }, 10);
+        }
+
+        this.updateStopwatchControls();
     },
 
     /**
      * Enregistre un tour
      */
     recordLap() {
-        if (this.state.running) {
-            const currentTime = Date.now() - this.state.startTime;
-            const previousLapTime = this.state.laps.length > 0 ? this.state.laps[this.state.laps.length - 1].totalTime : 0;
-            const lapTime = currentTime - previousLapTime;
-            
-            this.state.laps.push({
-                number: this.state.laps.length + 1,
-                lapTime: lapTime,
-                totalTime: currentTime
-            });
-            
-            this.updateLapsList();
-            this.updateStats();
-            
-            this.clearLapsBtn.disabled = false;
-            this.exportLapsBtn.disabled = false;
-            
-            // Animation pour le bouton de tour
-            this.animateButton(this.lapBtn);
+        if (!this.state.stopwatch.isRunning) return;
+
+        const lastLapTime = this.state.stopwatch.laps[0]?.time || 0;
+        const lapTime = this.state.stopwatch.time - lastLapTime;
+
+        this.state.stopwatch.laps.unshift({
+            number: this.state.stopwatch.laps.length + 1,
+            time: this.state.stopwatch.time,
+            lap: lapTime
+        });
+
+        this.updateLapsDisplay();
+        this.saveState();
+    },
+
+    /**
+     * Réinitialise le chronomètre
+     */
+    resetStopwatch() {
+        clearInterval(this.state.stopwatch.intervalId);
+        this.state.stopwatch.isRunning = false;
+        this.state.stopwatch.intervalId = null;
+        this.state.stopwatch.time = 0;
+        this.state.stopwatch.laps = [];
+
+        this.updateStopwatchDisplay();
+        this.updateLapsDisplay();
+        this.updateStopwatchControls();
+        this.saveState();
+    },
+
+    /**
+     * Met à jour l'affichage
+     */
+    updateDisplay() {
+        this.updateTimerDisplay();
+        this.updateStopwatchDisplay();
+        this.updateLapsDisplay();
+    },
+
+    /**
+     * Met à jour l'affichage du minuteur
+     */
+    updateTimerDisplay() {
+        // Mettre à jour l'affichage principal du temps
+        const hoursElement = document.getElementById('hours');
+        const minutesElement = document.getElementById('minutes');
+        const secondsElement = document.getElementById('seconds');
+        
+        if (hoursElement && minutesElement && secondsElement) {
+            const { hours, minutes, seconds } = this.state.timer;
+            hoursElement.textContent = hours.toString().padStart(2, '0');
+            minutesElement.textContent = minutes.toString().padStart(2, '0');
+            secondsElement.textContent = seconds.toString().padStart(2, '0');
         }
     },
 
     /**
      * Met à jour l'affichage du chronomètre
      */
-    updateStopwatch() {
-        if (this.state.running) {
-            this.state.elapsedTime = Date.now() - this.state.startTime;
-            this.updateDisplay();
-            this.state.animationFrameId = requestAnimationFrame(() => this.updateStopwatch());
+    updateStopwatchDisplay() {
+        const display = document.getElementById('stopwatchDisplay');
+        if (display) {
+            display.textContent = this.formatTime(this.state.stopwatch.time);
         }
     },
 
     /**
-     * Met à jour l'affichage du temps
+     * Met à jour l'affichage des tours
      */
-    updateDisplay() {
-        const time = this.getTimeComponents(this.state.elapsedTime);
-        
-        if (this.minutesEl && this.secondsEl && this.millisecondsEl) {
-            this.minutesEl.textContent = time.minutes;
-            this.secondsEl.textContent = time.seconds;
-            this.millisecondsEl.textContent = time.milliseconds;
-        }
-        
-        if (this.totalTimeEl) {
-            this.totalTimeEl.textContent = this.formatTime(this.state.elapsedTime);
-        }
+    updateLapsDisplay() {
+        const lapsContainer = document.getElementById('lapsContainer');
+        if (!lapsContainer) return;
+
+        lapsContainer.innerHTML = this.state.stopwatch.laps
+            .map(lap => `
+                <div class="lap-item">
+                    <span class="lap-number">#${lap.number}</span>
+                    <span class="lap-time">${this.formatTime(lap.lap)}</span>
+                    <span class="total-time">${this.formatTime(lap.time)}</span>
+                </div>
+            `)
+            .join('');
     },
 
     /**
-     * Décompose le temps en millisecondes en composants
-     * @param {number} timeMs - Temps en millisecondes
-     * @returns {Object} - Composants du temps
+     * Met à jour les contrôles du minuteur
      */
-    getTimeComponents(timeMs) {
-        const ms = Math.floor((timeMs % 1000) / 10);
-        const seconds = Math.floor((timeMs / 1000) % 60);
-        const minutes = Math.floor((timeMs / (1000 * 60)) % 60);
-        const hours = Math.floor(timeMs / (1000 * 60 * 60));
+    updateTimerControls() {
+        const startButton = document.getElementById('startTimer');
+        const pauseButton = document.getElementById('pauseTimer');
+        const resetButton = document.getElementById('resetTimer');
+        const cancelButton = document.getElementById('cancelTimer');
         
-        return {
-            hours: hours.toString().padStart(2, '0'),
-            minutes: minutes.toString().padStart(2, '0'),
-            seconds: seconds.toString().padStart(2, '0'),
-            milliseconds: ms.toString().padStart(2, '0')
-        };
-    },
-
-    /**
-     * Met à jour la liste des tours
-     */
-    updateLapsList() {
-        if (this.lapList && this.lapCount) {
-            this.lapList.innerHTML = '';
-            this.lapCount.textContent = `(${this.state.laps.length})`;
+        if (startButton && pauseButton) {
+            startButton.disabled = this.state.timer.isRunning;
+            pauseButton.disabled = !this.state.timer.isRunning;
             
-            if (this.state.laps.length === 0) {
+            if (resetButton) {
+                resetButton.disabled = !this.state.timer.isRunning && this.calculateTotalSeconds() === 0;
+            }
+            
+            if (cancelButton) {
+                cancelButton.disabled = !this.state.timer.isRunning;
+            }
+        }
+    },
+
+    /**
+     * Met à jour les contrôles du chronomètre
+     */
+    updateStopwatchControls() {
+        const startButton = document.getElementById('startStopwatch');
+        const lapButton = document.getElementById('lapStopwatch');
+        
+        if (startButton) {
+            startButton.textContent = this.state.stopwatch.isRunning ? 'Pause' : 'Démarrer';
+        }
+        
+        if (lapButton) {
+            lapButton.disabled = !this.state.stopwatch.isRunning;
+        }
+    },
+
+    /**
+     * Calcule le total des secondes
+     */
+    calculateTotalSeconds() {
+        return this.state.timer.hours * 3600 +
+               this.state.timer.minutes * 60 +
+               this.state.timer.seconds;
+    },
+
+    /**
+     * Formate le temps en millisecondes
+     */
+    formatTime(ms) {
+        const totalSeconds = Math.floor(ms / 1000);
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        const milliseconds = Math.floor((ms % 1000) / 10);
+
+        return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(2, '0')}`;
+    },
+
+    /**
+     * Met à jour une valeur du minuteur
+     */
+    updateTimerValue(field, value) {
+        const num = parseInt(value, 10);
+        if (isNaN(num)) return;
+
+        let max = field === 'hours' ? 99 : 59;
+        this.state.timer[field] = Math.min(Math.max(0, num), max);
+        this.updateTimerDisplay();
+        
+        // Sauvegarder l'état pour persister les valeurs modifiées
+        this.saveState();
+    },
+
+    /**
+     * Sauvegarde l'état
+     */
+    saveState() {
+        localStorage.setItem('timerState', JSON.stringify(this.state));
+    },
+
+    /**
+     * Charge l'état
+     */
+    loadState() {
+        const savedState = localStorage.getItem('timerState');
+        if (savedState) {
+            try {
+                const parsedState = JSON.parse(savedState);
+                this.state = parsedState;
+                this.updateDisplay();
+                this.updateTimerControls();
+            } catch (e) {
+                console.error('Erreur lors du chargement de l\'état du minuteur:', e);
+            }
+        }
+    },
+
+    /**
+     * Nettoie les ressources
+     */
+    destroy() {
+        clearInterval(this.state.timer.intervalId);
+        clearInterval(this.state.stopwatch.intervalId);
+        this.saveState();
+    },
+
+    /**
+     * Charge la préférence de son depuis le localStorage
+     */
+    loadSoundPreference() {
+        const savedSound = localStorage.getItem('timerSound');
+        if (savedSound) {
+            this.state.timer.currentSound = savedSound;
+            const soundSelect = document.getElementById('alarmSound');
+            if (soundSelect) {
+                soundSelect.value = savedSound;
+            }
+            
+            // Mettre à jour la source audio en fonction du son sauvegardé
+            this.changeTimerSound(savedSound);
+        }
+    },
+
+    /**
+     * Change le son du timer
+     * @param {string} soundType - Le type de son à utiliser
+     */
+    changeTimerSound(soundType) {
+        this.state.timer.currentSound = soundType;
+        localStorage.setItem('timerSound', soundType);
+        
+        // Définir la carte des sons avec les sources locales et en ligne
+        const soundMap = {
+            // Sons locaux
+            'beep': 'sounds/beep.mp3',
+            'bell': 'sounds/bell.mp3',
+            'digital': 'sounds/alarm.mp3',
+            'gentle': 'sounds/chime.mp3',
+            'notification': 'sounds/notification.mp3',
+            // Sons en ligne
+            'beep-online': 'https://assets.mixkit.co/active_storage/sfx/1867/1867-preview.mp3',
+            'bell-online': 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3',
+            'digital-online': 'https://assets.mixkit.co/active_storage/sfx/2310/2310-preview.mp3',
+            'gentle-online': 'https://assets.mixkit.co/active_storage/sfx/1862/1862-preview.mp3',
+            'none': '' // Aucun son
+        };
+        
+        const sound = document.getElementById('timerAlarm');
+        if (sound && soundType !== 'none') {
+            sound.src = soundMap[soundType] || soundMap['bell']; // Par défaut 'bell'
+        }
+        
+        this.testTimerSound();
+    },
+
+    /**
+     * Teste le son de l'alarme
+     */
+    testTimerSound() {
+        // Utiliser l'élément audio timerAlarm existant
+        const sound = document.getElementById('timerAlarm');
+        if (sound) {
+            // Si le son est "none", ne pas jouer
+            if (this.state.timer.currentSound === 'none') {
+                console.log('Son désactivé, aucun test joué');
                 return;
             }
             
-            // Créer les éléments de tour en ordre inverse (le plus récent en haut)
-            for (let i = this.state.laps.length - 1; i >= 0; i--) {
-                const lap = this.state.laps[i];
-                const lapItem = document.createElement('div');
-                lapItem.className = 'lap-item';
-                
-                // Détermine si c'est le meilleur ou le pire tour
-                if (this.state.bestLap && lap.lapTime === this.state.bestLap) {
-                    lapItem.classList.add('best-lap');
-                } else if (this.state.slowestLap && lap.lapTime === this.state.slowestLap) {
-                    lapItem.classList.add('worst-lap');
-                }
-                
-                const lapNumber = document.createElement('div');
-                lapNumber.className = 'lap-number';
-                lapNumber.textContent = `Tour ${lap.number}`;
-                
-                const lapTimeEl = document.createElement('div');
-                lapTimeEl.className = 'lap-time';
-                lapTimeEl.textContent = this.formatTime(lap.lapTime);
-                
-                const totalTimeEl = document.createElement('div');
-                totalTimeEl.className = 'total-time';
-                totalTimeEl.textContent = this.formatTime(lap.totalTime);
-                
-                lapItem.appendChild(lapNumber);
-                lapItem.appendChild(lapTimeEl);
-                lapItem.appendChild(totalTimeEl);
-                
-                this.lapList.appendChild(lapItem);
+            // Définir le volume
+            const volumeSlider = document.getElementById('alarmVolume');
+            if (volumeSlider) {
+                sound.volume = volumeSlider.value / 100;
             }
-        }
-    },
-
-    /**
-     * Met à jour les statistiques
-     */
-    updateStats() {
-        if (this.state.laps.length === 0) {
-            this.state.bestLap = null;
-            this.state.slowestLap = null;
-            this.state.averageLap = 0;
             
-            if (this.bestLapEl) this.bestLapEl.textContent = '--:--:--';
-            if (this.slowestLapEl) this.slowestLapEl.textContent = '--:--:--';
-            if (this.averageLapEl) this.averageLapEl.textContent = '--:--:--';
-            return;
-        }
-        
-        // Trouver le meilleur et le pire tour
-        this.state.bestLap = Math.min(...this.state.laps.map(lap => lap.lapTime));
-        this.state.slowestLap = Math.max(...this.state.laps.map(lap => lap.lapTime));
-        
-        // Calculer la moyenne
-        const totalLapTime = this.state.laps.reduce((sum, lap) => sum + lap.lapTime, 0);
-        this.state.averageLap = Math.round(totalLapTime / this.state.laps.length);
-        
-        // Mettre à jour l'affichage
-        if (this.bestLapEl) this.bestLapEl.textContent = this.formatTime(this.state.bestLap);
-        if (this.slowestLapEl) this.slowestLapEl.textContent = this.formatTime(this.state.slowestLap);
-        if (this.averageLapEl) this.averageLapEl.textContent = this.formatTime(this.state.averageLap);
-    },
-
-    /**
-     * Affiche/cache le panneau d'aide
-     */
-    toggleHelpPanel() {
-        if (this.helpPanel) {
-            this.helpPanel.classList.toggle('active');
-        }
-    },
-
-    /**
-     * Active/désactive le mode plein écran
-     */
-    toggleFullscreen() {
-        if (!document.fullscreenElement) {
-            if (this.container.requestFullscreen) {
-                this.container.requestFullscreen();
-            } else if (this.container.webkitRequestFullscreen) {
-                this.container.webkitRequestFullscreen();
-            } else if (this.container.msRequestFullscreen) {
-                this.container.msRequestFullscreen();
-            }
+            sound.currentTime = 0;
+            sound.play().catch(error => {
+                console.warn('Impossible de jouer le son de test:', error);
+            });
         } else {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            } else if (document.webkitExitFullscreen) {
-                document.webkitExitFullscreen();
-            } else if (document.msExitFullscreen) {
-                document.msExitFullscreen();
-            }
+            console.warn('Élément audio du minuteur non trouvé');
         }
-    },
-    
-    /**
-     * Gère le changement d'état du mode plein écran
-     */
-    onFullscreenChange() {
-        const icon = this.fullscreenBtn.querySelector('i');
-        if (document.fullscreenElement) {
-            icon.classList.replace('fa-expand', 'fa-compress');
-        } else {
-            icon.classList.replace('fa-compress', 'fa-expand');
-        }
-    },
-    
-    /**
-     * Anime un bouton lorsqu'il est cliqué
-     * @param {HTMLElement} button - Le bouton à animer
-     */
-    animateButton(button) {
-        button.classList.add('button-clicked');
-        setTimeout(() => {
-            button.classList.remove('button-clicked');
-        }, 300);
-    },
-
-    /**
-     * Formate le temps en millisecondes en format lisible
-     * @param {number} timeMs - Temps en millisecondes
-     * @returns {string} - Temps formaté (HH:MM:SS.MS)
-     */
-    formatTime(timeMs) {
-        const components = this.getTimeComponents(timeMs);
-        
-        if (parseInt(components.hours) > 0) {
-            return `${components.hours}:${components.minutes}:${components.seconds}.${components.milliseconds}`;
-        }
-        
-        return `${components.minutes}:${components.seconds}.${components.milliseconds}`;
     }
-}; 
+};
+
+// Exposer les fonctions globalement pour le HTML
+window.startTimer = () => TimerManager.startTimer();
+window.pauseTimer = () => TimerManager.pauseTimer();
+window.resetTimer = () => TimerManager.resetTimer();
+window.toggleSound = () => TimerManager.toggleSound();
+window.startStopwatch = () => TimerManager.toggleStopwatch();
+window.pauseStopwatch = () => TimerManager.toggleStopwatch();
+window.resetStopwatch = () => TimerManager.resetStopwatch();
+window.lapStopwatch = () => TimerManager.recordLap();
+window.changeTimerSound = () => {
+    const select = document.getElementById('alarmSound');
+    if (select) {
+        TimerManager.changeTimerSound(select.value);
+    }
+};
+window.testTimerSound = () => TimerManager.testTimerSound();
+
+// Initialiser le minuteur au chargement
+document.addEventListener('DOMContentLoaded', () => {
+    StopwatchManager.init();
+}); 

@@ -244,80 +244,22 @@ export const TimerManager = {
      * Bascule en mode plein écran
      */
     toggleFullscreen() {
-        const timerContainer = document.querySelector('.timer-container');
-        const toolContainer = document.getElementById('timerTool');
+        // Cette fonction est désormais gérée par le module fullscreen.js global
+        console.warn('La fonction toggleFullscreen() est déconseillée, utilisez FullscreenManager à la place');
         
-        if (!timerContainer) return;
-        
-        if (!document.body.classList.contains('timer-fullscreen-active')) {
-            // Activer le mode plein écran
-            document.body.classList.add('timer-fullscreen-active');
-            timerContainer.classList.add('timer-fullscreen');
-            
-            // Déplacer le conteneur vers le body pour un vrai plein écran
-            if (toolContainer) {
-                toolContainer.classList.add('timer-tool-fullscreen');
-            }
-            
-            // Bloquer le défilement de la page
-            document.body.style.overflow = 'hidden';
-            
-            // Changer l'icône du bouton
-            const fullscreenBtn = document.getElementById('timerFullscreen');
-            if (fullscreenBtn) {
-                const icon = fullscreenBtn.querySelector('i');
-                if (icon) icon.className = 'fas fa-compress';
-            }
-            
-            // Ajouter un écouteur pour la touche Échap
-            document.addEventListener('keydown', this.escapeFullscreen);
-            
-            // Ajouter un écouteur pour le clic sur la croix de fermeture
-            const closeBtn = document.createElement('div');
-            closeBtn.className = 'fullscreen-close-btn';
-            closeBtn.setAttribute('aria-label', 'Fermer le plein écran');
-            closeBtn.addEventListener('click', () => this.toggleFullscreen());
-            timerContainer.appendChild(closeBtn);
-            
-            // Créer une animation de transition
-            timerContainer.classList.add('fullscreen-transition');
-            setTimeout(() => {
-                timerContainer.classList.remove('fullscreen-transition');
-            }, 500);
+        // Plutôt que d'essayer d'utiliser l'API directement, utilisons le bouton existant
+        const fullscreenBtn = document.getElementById('timerFullscreen');
+        if (fullscreenBtn) {
+            // Déclencher un clic sur le bouton pour activer correctement le plein écran
+            // via le gestionnaire d'événements qui contient déjà l'appel à requestFullscreen
+            fullscreenBtn.click();
         } else {
-            // Désactiver le mode plein écran
-            document.body.classList.remove('timer-fullscreen-active');
-            timerContainer.classList.remove('timer-fullscreen');
-            
-            if (toolContainer) {
-                toolContainer.classList.remove('timer-tool-fullscreen');
+            // Si le bouton n'existe pas, essayons de trouver une instance de FullscreenManager
+            if (window.fullscreenManagers && window.fullscreenManagers.timerTool) {
+                // Utiliser la méthode de repli CSS qui ne nécessite pas d'être appelée 
+                // directement depuis un événement utilisateur
+                window.fullscreenManagers.timerTool._useFallbackFullscreen(true);
             }
-            
-            // Rétablir le défilement
-            document.body.style.overflow = '';
-            
-            // Restaurer l'icône du bouton
-            const fullscreenBtn = document.getElementById('timerFullscreen');
-            if (fullscreenBtn) {
-                const icon = fullscreenBtn.querySelector('i');
-                if (icon) icon.className = 'fas fa-expand';
-            }
-            
-            // Retirer l'écouteur de la touche Échap
-            document.removeEventListener('keydown', this.escapeFullscreen);
-            
-            // Supprimer le bouton de fermeture s'il existe
-            const closeBtn = timerContainer.querySelector('.fullscreen-close-btn');
-            if (closeBtn) {
-                closeBtn.removeEventListener('click', () => this.toggleFullscreen());
-                timerContainer.removeChild(closeBtn);
-            }
-            
-            // Animation de transition pour le retour
-            timerContainer.classList.add('fullscreen-exit-transition');
-            setTimeout(() => {
-                timerContainer.classList.remove('fullscreen-exit-transition');
-            }, 500);
         }
     },
 
@@ -325,9 +267,8 @@ export const TimerManager = {
      * Gestionnaire pour quitter le plein écran avec la touche Échap
      */
     escapeFullscreen(e) {
-        if (e.key === 'Escape' && document.body.classList.contains('timer-fullscreen-active')) {
-            TimerManager.toggleFullscreen();
-        }
+        // Cette fonction est désormais gérée par le module fullscreen.js global
+        console.warn('La fonction escapeFullscreen() est déconseillée, utilisez FullscreenManager à la place');
     },
 
     /**

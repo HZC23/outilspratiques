@@ -3,18 +3,36 @@
  */
 document.addEventListener('DOMContentLoaded', () => {
     // Vérifier si nous sommes sur la page du métronome
-    if (!document.getElementById('metronomeTool')) return;
+    const metronomeContainer = document.querySelector('.metronome-container');
+    if (!metronomeContainer) return;
 
-    // Gestion du panneau d'aide
+    // Initialiser le métronome
+    initMetronome();
+
+    // Récupérer les éléments du DOM
+    const tempoInput = document.getElementById('tempo');
+    const tempoSlider = document.getElementById('tempoSlider');
+    const beatsPerMeasureInput = document.getElementById('beatsPerMeasure');
+    const noteValueSelect = document.getElementById('noteValue');
+    const startButton = document.getElementById('startMetronome');
+    const tapTempoButton = document.getElementById('tapTempo');
+    const tapCounterDisplay = document.getElementById('tapCounter');
+    const fullscreenButton = document.getElementById('metronomeFullscreen');
+    const tapTempoContainer = document.querySelector('.tap-tempo-container');
     const helpButton = document.getElementById('metronomeHelp');
-    const closeHelpButton = document.getElementById('closeMetronomeHelp');
     const helpPanel = document.getElementById('metronomeHelpPanel');
+    const closeHelpButton = document.getElementById('closeMetronomeHelp');
 
-    if (helpButton && closeHelpButton && helpPanel) {
+    // Initialiser le visualiseur et l'animation
+    setupMetronomeVisualization();
+
+    // Le plein écran est maintenant géré par le module fullscreen.js global
+
+    // Configurer les fonctionnalités d'aide
+    if (helpButton && helpPanel && closeHelpButton) {
         helpButton.addEventListener('click', () => {
             helpPanel.classList.add('show');
         });
-
         closeHelpButton.addEventListener('click', () => {
             helpPanel.classList.remove('show');
         });
@@ -27,52 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 helpPanel.classList.remove('show');
             }
         });
-    }
-
-    // Gestion du mode plein écran
-    const fullscreenButton = document.getElementById('metronomeFullscreen');
-    const metronomeContainer = document.getElementById('metronomeTool');
-
-    if (fullscreenButton && metronomeContainer) {
-        fullscreenButton.addEventListener('click', () => {
-            if (!document.fullscreenElement) {
-                if (metronomeContainer.requestFullscreen) {
-                    metronomeContainer.requestFullscreen();
-                    fullscreenButton.innerHTML = '<i class="fas fa-compress"></i>';
-                } else if (metronomeContainer.mozRequestFullScreen) {
-                    metronomeContainer.mozRequestFullScreen();
-                } else if (metronomeContainer.webkitRequestFullscreen) {
-                    metronomeContainer.webkitRequestFullscreen();
-                } else if (metronomeContainer.msRequestFullscreen) {
-                    metronomeContainer.msRequestFullscreen();
-                }
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                    fullscreenButton.innerHTML = '<i class="fas fa-expand"></i>';
-                } else if (document.mozCancelFullScreen) {
-                    document.mozCancelFullScreen();
-                } else if (document.webkitExitFullscreen) {
-                    document.webkitExitFullscreen();
-                } else if (document.msExitFullscreen) {
-                    document.msExitFullscreen();
-                }
-            }
-        });
-
-        // Détecter les changements de plein écran
-        document.addEventListener('fullscreenchange', updateFullscreenButtonIcon);
-        document.addEventListener('webkitfullscreenchange', updateFullscreenButtonIcon);
-        document.addEventListener('mozfullscreenchange', updateFullscreenButtonIcon);
-        document.addEventListener('MSFullscreenChange', updateFullscreenButtonIcon);
-
-        function updateFullscreenButtonIcon() {
-            if (document.fullscreenElement) {
-                fullscreenButton.innerHTML = '<i class="fas fa-compress"></i>';
-            } else {
-                fullscreenButton.innerHTML = '<i class="fas fa-expand"></i>';
-            }
-        }
     }
 
     // Gestion de l'option d'accentuation personnalisée

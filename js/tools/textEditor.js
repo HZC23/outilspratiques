@@ -132,11 +132,8 @@ function clearContent() {
 }
 
 function toggleFullscreen() {
-    if (!document.fullscreenElement) {
-        els.container.requestFullscreen();
-    } else {
-        document.exitFullscreen();
-    }
+    // Cette fonction est désormais gérée par le module fullscreen.js global
+    console.warn('La fonction toggleFullscreen() est déconseillée, utilisez FullscreenManager à la place');
 }
 
 function updateFilenameExtension() {

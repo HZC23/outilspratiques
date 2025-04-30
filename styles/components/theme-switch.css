@@ -1,78 +1,47 @@
 /*
   Theme Switch Component
   Ce composant permet de basculer entre les thèmes clair et sombre
+  From Uiverse.io by Galahhad
 */
 
-:root {
-  --theme-switch-size: 16px;
-  --theme-switch-icon-size: 12px;
-  --theme-switch-padding: 3px;
-}
-
-/* Commutateur de thème */
+/* Position dans le header */
 .theme-switch-wrapper {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    position: relative;
+    left: 0;
+    z-index: 20;
+    margin-right: auto;
 }
+
 
 .theme-switch {
-    display: inline-block;
-    height: 24px;
-    position: relative;
-    width: 48px;
-}
-
-/* Style pour mobile */
-@media screen and (max-width: 768px) {
-  .theme-switch {
-    --toggle-size: 16px;
-  }
-  
-  /* Masquer les éléments complexes sur mobile */
-  .theme-switch__clouds, 
-  .theme-switch__stars-container {
-    display: none;
-  }
-  
-  /* Simplifier le bouton */
-  .theme-switch__container {
-    width: 3.5em;
-    height: 1.8em;
-  }
-  
-  .theme-switch__circle-container {
-    width: 2.5em;
-    height: 2.5em;
-  }
-  
-  .theme-switch__sun-moon-container {
-    width: 1.5em;
-    height: 1.5em;
-  }
-}
-
-/* Style encore plus compact pour les très petits écrans */
-@media screen and (max-width: 480px) {
-  .theme-switch {
-    --toggle-size: 14px;
-    left: 10px;
-  }
-  
-  .theme-switch__container {
-    width: 3em;
-    height: 1.5em;
-  }
-  
-  .theme-switch__circle-container {
-    width: 2.2em;
-    height: 2.2em;
-  }
-  
-  .theme-switch__sun-moon-container {
-    width: 1.2em;
-    height: 1.2em;
-  }
+  --toggle-size: 25px; /* Taille de base réduite pour mieux s'intégrer au header */
+  /* la taille est ajustée en utilisant font-size,
+     ce n'est pas transform scale,
+     vous pouvez donc choisir n'importe quelle taille */
+  --container-width: 4em; /* Réduit de 5.625em à 4em */
+  --container-height: 2em; /* Réduit de 2.5em à 2em */
+  --container-radius: 6.25em;
+  /* radius 0 - mode minecraft :) */
+  --container-light-bg: #3D7EAE;
+  --container-night-bg: #1D1F2C;
+  --circle-container-diameter: 2.8em; /* Réduit de 3.375em à 2.8em */
+  --sun-moon-diameter: 1.8em; /* Réduit de 2.125em à 1.8em */
+  --sun-bg: #ECCA2F;
+  --moon-bg: #C4C9D1;
+  --spot-color: #959DB1;
+  --circle-container-offset: calc((var(--circle-container-diameter) - var(--container-height)) / 2 * -1);
+  --stars-color: #fff;
+  --clouds-color: #F3FDFF;
+  --back-clouds-color: #AACADF;
+  --transition: .5s cubic-bezier(0, -0.02, 0.4, 1.25);
+  --circle-transition: .3s cubic-bezier(0, -0.02, 0.35, 1.17);
+  display: inline-block;
+  position: relative;
+  transform: scale(0.85); /* Réduction globale de 15% */
+  transform-origin: left center;
 }
 
 .theme-switch, .theme-switch *, .theme-switch *::before, .theme-switch *::after {
@@ -83,16 +52,19 @@
   font-size: var(--toggle-size);
 }
 
-.slider {
-    background-color: #ccc;
-    bottom: 0;
-    cursor: pointer;
-    left: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-    transition: var(--transition-medium);
-    border-radius: 24px;
+.theme-switch__container {
+  width: var(--container-width);
+  height: var(--container-height);
+  background-color: var(--container-light-bg);
+  border-radius: var(--container-radius);
+  overflow: hidden;
+  cursor: pointer;
+  -webkit-box-shadow: 0em -0.062em 0.062em rgba(0, 0, 0, 0.25), 0em 0.062em 0.125em rgba(255, 255, 255, 0.94);
+  box-shadow: 0em -0.062em 0.062em rgba(0, 0, 0, 0.25), 0em 0.062em 0.125em rgba(255, 255, 255, 0.94);
+  -webkit-transition: var(--transition);
+  -o-transition: var(--transition);
+  transition: var(--transition);
+  position: relative;
 }
 
 .theme-switch__container::before {
@@ -102,11 +74,11 @@
   inset: 0;
   -webkit-box-shadow: 0em 0.05em 0.187em rgba(0, 0, 0, 0.25) inset, 0em 0.05em 0.187em rgba(0, 0, 0, 0.25) inset;
   box-shadow: 0em 0.05em 0.187em rgba(0, 0, 0, 0.25) inset, 0em 0.05em 0.187em rgba(0, 0, 0, 0.25) inset;
-  border-radius: var(--container-radius)
+  border-radius: var(--container-radius);
 }
 
-input:checked + .slider {
-    background-color: var(--primary-color);
+.theme-switch__checkbox {
+  display: none;
 }
 
 .theme-switch__circle-container {
@@ -175,42 +147,78 @@ input:checked + .slider {
   box-shadow: 0em 0.0312em 0.062em rgba(0, 0, 0, 0.25) inset;
 }
 
-/* Mode sombre spécifique */
-[data-theme="dark"] .theme-switch-toggle::before {
-  background-color: var(--primary-color);
+.theme-switch__spot:nth-of-type(2) {
+  width: 0.375em;
+  height: 0.375em;
+  top: 0.937em;
+  left: 1.375em;
 }
 
-[data-theme="dark"] .theme-switch-toggle {
-  background-color: rgba(var(--rgb-primary), 0.25);
+.theme-switch__spot:nth-last-of-type(3) {
+  width: 0.25em;
+  height: 0.25em;
+  top: 0.312em;
+  left: 0.812em;
 }
 
-[data-theme="dark"] .moon-icon .moon-crater {
-  fill: var(--text-color);
+.theme-switch__clouds {
+  width: 1.25em;
+  height: 1.25em;
+  background-color: var(--clouds-color);
+  border-radius: var(--container-radius);
+  position: absolute;
+  bottom: -0.625em;
+  left: 0.312em;
+  -webkit-box-shadow: 0.937em 0.312em var(--clouds-color), -0.312em -0.312em var(--back-clouds-color), 1.437em 0.375em var(--clouds-color), 0.5em -0.125em var(--back-clouds-color), 2.187em 0 var(--clouds-color), 1.25em -0.062em var(--back-clouds-color), 2.937em 0.312em var(--clouds-color), 2em -0.312em var(--back-clouds-color), 3.625em -0.062em var(--clouds-color), 2.625em 0em var(--back-clouds-color), 4.5em -0.312em var(--clouds-color), 3.375em -0.437em var(--back-clouds-color), 4.625em -1.75em 0 0.437em var(--clouds-color), 4em -0.625em var(--back-clouds-color), 4.125em -2.125em 0 0.437em var(--back-clouds-color);
+  box-shadow: 0.937em 0.312em var(--clouds-color), -0.312em -0.312em var(--back-clouds-color), 1.437em 0.375em var(--clouds-color), 0.5em -0.125em var(--back-clouds-color), 2.187em 0 var(--clouds-color), 1.25em -0.062em var(--back-clouds-color), 2.937em 0.312em var(--clouds-color), 2em -0.312em var(--back-clouds-color), 3.625em -0.062em var(--clouds-color), 2.625em 0em var(--back-clouds-color), 4.5em -0.312em var(--clouds-color), 3.375em -0.437em var(--back-clouds-color), 4.625em -1.75em 0 0.437em var(--clouds-color), 4em -0.625em var(--back-clouds-color), 4.125em -2.125em 0 0.437em var(--back-clouds-color);
+  -webkit-transition: 0.5s cubic-bezier(0, -0.02, 0.4, 1.25);
+  -o-transition: 0.5s cubic-bezier(0, -0.02, 0.4, 1.25);
+  transition: 0.5s cubic-bezier(0, -0.02, 0.4, 1.25);
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .theme-switch-wrapper {
-        margin-left: auto;
-    }
+.theme-switch__stars-container {
+  position: absolute;
+  color: var(--stars-color);
+  top: -100%;
+  left: 0.312em;
+  width: 2.75em;
+  height: auto;
+  -webkit-transition: var(--transition);
+  -o-transition: var(--transition);
+  transition: var(--transition);
 }
 
-/* Version extra-compacte pour très petits écrans */
-@media (max-width: 480px) {
-  .theme-switch {
-    gap: 4px;
-    margin-right: 0;
-    height: 24px;
-  }
-  
-  :root {
-    --theme-switch-size: 12px;
-    --theme-switch-icon-size: 9px;
-    --theme-switch-padding: 2px;
-  }
-  
-  .theme-switch-label {
-    font-size: 0.7rem;
-    display: none; /* Cacher le texte sur très petits écrans */
-  }
+/* actions */
+
+.theme-switch__checkbox:checked + .theme-switch__container {
+  background-color: var(--container-night-bg);
+}
+
+.theme-switch__checkbox:checked + .theme-switch__container .theme-switch__circle-container {
+  left: calc(100% - var(--circle-container-offset) - var(--circle-container-diameter));
+}
+
+.theme-switch__checkbox:checked + .theme-switch__container .theme-switch__circle-container:hover {
+  left: calc(100% - var(--circle-container-offset) - var(--circle-container-diameter) - 0.187em);
+}
+
+.theme-switch__circle-container:hover {
+  left: calc(var(--circle-container-offset) + 0.187em);
+}
+
+.theme-switch__checkbox:checked + .theme-switch__container .theme-switch__moon {
+  -webkit-transform: translate(0);
+  -ms-transform: translate(0);
+  transform: translate(0);
+}
+
+.theme-switch__checkbox:checked + .theme-switch__container .theme-switch__clouds {
+  bottom: -4.062em;
+}
+
+.theme-switch__checkbox:checked + .theme-switch__container .theme-switch__stars-container {
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
 }

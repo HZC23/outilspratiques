@@ -824,39 +824,6 @@ function setupAccessibilityFeatures() {
         });
     }
     
-    // Gérer le mode plein écran
-    const fullscreenButton = document.getElementById('styletextFullscreen');
-    if (fullscreenButton) {
-        fullscreenButton.addEventListener('click', () => {
-            const toolContainer = document.getElementById('styletextTool');
-            if (toolContainer) {
-                if (!document.fullscreenElement) {
-                    if (toolContainer.requestFullscreen) {
-                        toolContainer.requestFullscreen();
-                    } else if (toolContainer.mozRequestFullScreen) {
-                        toolContainer.mozRequestFullScreen();
-                    } else if (toolContainer.webkitRequestFullscreen) {
-                        toolContainer.webkitRequestFullscreen();
-                    } else if (toolContainer.msRequestFullscreen) {
-                        toolContainer.msRequestFullscreen();
-                    }
-                    fullscreenButton.innerHTML = '<i class="fas fa-compress"></i>';
-                } else {
-                    if (document.exitFullscreen) {
-                        document.exitFullscreen();
-                    } else if (document.mozCancelFullScreen) {
-                        document.mozCancelFullScreen();
-                    } else if (document.webkitExitFullscreen) {
-                        document.webkitExitFullscreen();
-                    } else if (document.msExitFullscreen) {
-                        document.msExitFullscreen();
-                    }
-                    fullscreenButton.innerHTML = '<i class="fas fa-expand"></i>';
-                }
-            }
-        });
-    }
-    
     // Gérer le panneau d'aide
     const helpButton = document.getElementById('styletextHelp');
     const helpPanel = document.getElementById('styletextHelpPanel');

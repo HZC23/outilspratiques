@@ -32,35 +32,8 @@ export class NotesManager {
             helpButton.addEventListener('click', () => helpPanel.classList.toggle('show'));
             closeHelpButton.addEventListener('click', () => helpPanel.classList.remove('show'));
         }
-        const fullscreenButton = document.getElementById('noteFullscreen');
-        const toolContainer = document.getElementById('noteTool');
-        if (fullscreenButton && toolContainer) {
-            fullscreenButton.addEventListener('click', () => {
-                if (!document.fullscreenElement) {
-                    if (toolContainer.requestFullscreen) toolContainer.requestFullscreen();
-                    else if (toolContainer.webkitRequestFullscreen) toolContainer.webkitRequestFullscreen();
-                    else if (toolContainer.msRequestFullscreen) toolContainer.msRequestFullscreen();
-                } else {
-                    if (document.exitFullscreen) document.exitFullscreen();
-                    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-                    else if (document.msExitFullscreen) document.msExitFullscreen();
-                }
-            });
-            function updateNoteFullscreenIcon() {
-                const icon = fullscreenButton.querySelector('i');
-                if (document.fullscreenElement === toolContainer) {
-                    icon.classList.remove('fa-expand');
-                    icon.classList.add('fa-compress');
-                } else {
-                    icon.classList.remove('fa-compress');
-                    icon.classList.add('fa-expand');
-                }
-            }
-            document.addEventListener('fullscreenchange', updateNoteFullscreenIcon);
-            document.addEventListener('webkitfullscreenchange', updateNoteFullscreenIcon);
-            document.addEventListener('mozfullscreenchange', updateNoteFullscreenIcon);
-            document.addEventListener('MSFullscreenChange', updateNoteFullscreenIcon);
-        }
+        
+        // Le plein écran est maintenant géré par le module fullscreen.js global
     }
 
     setupEditor() {

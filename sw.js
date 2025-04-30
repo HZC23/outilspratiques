@@ -1,6 +1,7 @@
 const CACHE_VERSION = '2';
 const CACHE_NAME = `outils-pratiques-v${CACHE_VERSION}`;
 const OFFLINE_PAGE = 'offline.html';
+const BASE_PATH = ''; // Base path pour les chemins relatifs
 
 // Séparation des ressources par priorité
 const CORE_ASSETS = [
@@ -14,8 +15,9 @@ const CORE_ASSETS = [
     'js/utils.js',
     'js/theme.js',
     'js/navigation.js',
+    'js/fullscreen.js',
     'icons/favicon.ico',
-    'icons/icon-192x192.png'
+    'icons/icon-144x144.png'
 ];
 
 const SECONDARY_ASSETS = [
@@ -37,18 +39,21 @@ const SECONDARY_ASSETS = [
     './styles/tools/scheduler.css',
     './styles/tools/metronome.css',
     './styles/tools/qrcode.css',
-    './js/tools/color.js',
-    './js/tools/calculator.js',
-    './js/tools/unit.js',
-    './js/tools/text.js',
-    './js/tools/timer.js',
-    './js/tools/stopwatch.js',
-    './js/tools/notes.js',
-    './js/tools/translator.js',
-    './js/tools/scheduler.js',
-    './js/tools/metronome.js',
-    './js/tools/password.js',
-    './js/tools/qrcode.js'
+    `${BASE_PATH}/js/tools/notes.js`,
+    `${BASE_PATH}/js/tools/translator.js`, 
+    `${BASE_PATH}/js/tools/scheduler.js`,
+    `${BASE_PATH}/js/tools/metronome.js`,
+    `${BASE_PATH}/js/tools/password.js`,
+    `${BASE_PATH}/js/tools/qrcode.js`,
+    `${BASE_PATH}/js/tools/currency.js`,
+    `${BASE_PATH}/js/tools/unit.js`,
+    `${BASE_PATH}/js/tools/text.js`,
+    `${BASE_PATH}/js/tools/timer.js`,
+    `${BASE_PATH}/js/tools/stopwatch.js`,
+    `${BASE_PATH}/js/tools/calculator.js`,
+    `${BASE_PATH}/js/tools/converter.js`,
+    `${BASE_PATH}/js/tools/color.js`,
+    `${BASE_PATH}/js/tools/styletext.js`
 ];
 
 // Combiner toutes les ressources à mettre en cache

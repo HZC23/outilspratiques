@@ -559,7 +559,7 @@ header h1 {
 /* Bouton de réduction du menu */
 .toggle-menu-width {
     position: absolute;
-    top: 10px;
+    top: 15px;
     right: -14px;
     width: 28px;
     height: 28px;
@@ -570,22 +570,31 @@ header h1 {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    z-index: 10;
-    transition: transform 0.3s ease;
+    z-index: 20;
+    transition: transform 0.3s ease, background 0.2s ease;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     will-change: transform;
+    color: var(--text-color);
 }
 
 .toggle-menu-width:hover {
     transform: scale(1.1);
+    background: var(--primary-color-light);
+}
+
+.toggle-menu-width i {
+    font-size: 0.9rem;
+    visibility: visible;
 }
 
 .menu.compact .toggle-menu-width {
     transform: rotate(180deg);
+    right: -14px;
 }
 
 .menu.compact .toggle-menu-width:hover {
     transform: rotate(180deg) scale(1.1);
+    background: var(--primary-color-light);
 }
 
 .menu.compact {

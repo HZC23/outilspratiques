@@ -81,44 +81,7 @@ export const TodoManager = {
             document.getElementById('todoHelpPanel').classList.remove('active');
         });
 
-        // Basculer en plein écran
-        const todoFullscreenBtn = document.getElementById('todoFullscreen');
-        const todoTool = document.getElementById('todoTool');
-        if (todoFullscreenBtn && todoTool) {
-            todoFullscreenBtn.addEventListener('click', () => {
-                if (!document.fullscreenElement) {
-                    if (todoTool.requestFullscreen) {
-                        todoTool.requestFullscreen();
-                    } else if (todoTool.webkitRequestFullscreen) {
-                        todoTool.webkitRequestFullscreen();
-                    } else if (todoTool.msRequestFullscreen) {
-                        todoTool.msRequestFullscreen();
-                    }
-                } else {
-                    if (document.exitFullscreen) {
-                        document.exitFullscreen();
-                    } else if (document.webkitExitFullscreen) {
-                        document.webkitExitFullscreen();
-                    } else if (document.msExitFullscreen) {
-                        document.msExitFullscreen();
-                    }
-                }
-            });
-
-            // Mettre à jour l'icône selon l'état plein écran
-            function updateTodoFullscreenIcon() {
-                const icon = todoFullscreenBtn.querySelector('i');
-                if (document.fullscreenElement === todoTool) {
-                    icon.classList.replace('fa-expand', 'fa-compress');
-                } else {
-                    icon.classList.replace('fa-compress', 'fa-expand');
-                }
-            }
-            document.addEventListener('fullscreenchange', updateTodoFullscreenIcon);
-            document.addEventListener('webkitfullscreenchange', updateTodoFullscreenIcon);
-            document.addEventListener('mozfullscreenchange', updateTodoFullscreenIcon);
-            document.addEventListener('MSFullscreenChange', updateTodoFullscreenIcon);
-        }
+        // Le plein écran est maintenant géré par le module fullscreen.js global
 
         // Ajouter une nouvelle tâche
         document.getElementById('addTodoForm')?.addEventListener('submit', (e) => {
