@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<div class="tool-container" id="styletextTool">
+    <div class="tool-header">
+        <h2><i class="fas fa-font"></i> Styliseur de texte</h2>
+        <div class="tool-actions">
+            <button type="button" class="btn-icon" id="styletextHelp" aria-label="Aide">
+                <i class="fas fa-question-circle"></i>
+            </button>
+            <button type="button" class="btn-icon" id="styletextFullscreen" aria-label="Plein écran">
+                <i class="fas fa-expand"></i>
+            </button>
+        </div>
+    </div>
+    
+    <div class="tool-content">
+        <div class="styletext-container">
+            <div class="input-section">
+                <h3><i class="fas fa-keyboard"></i> Texte à styliser</h3>
+                <textarea id="styleInput" placeholder="Saisissez ou collez votre texte ici..." class="styletext-input" aria-label="Texte à styliser"></textarea>
+                <div class="input-counter" id="inputCounter">0 caractères</div>
+            </div>
+            
+            <div class="style-options">
+                <h4><i class="fas fa-magic"></i> Choisissez un style</h4>
+                <div class="style-buttons">
+                    <button class="style-btn active" data-style="serif" type="button">
+                        <span>Serif</span>
+                        <span class="style-preview">𝔓𝔯𝔢𝔳𝔦𝔢𝔴</span>
+                    </button>
+                    <button class="style-btn" data-style="script" type="button">
+                        <span>Script</span>
+                        <span class="style-preview">𝓟𝓻𝓮𝓿𝓲𝓮𝔀</span>
+                    </button>
+                    <button class="style-btn" data-style="bold" type="button">
+                        <span>Gras</span>
+                        <span class="style-preview">𝐏𝐫𝐞𝐯𝐢𝐞𝐰</span>
+                    </button>
+                    <button class="style-btn" data-style="italic" type="button">
+                        <span>Italique</span>
+                        <span class="style-preview">𝘗𝘳𝘦𝘷𝘪𝘦𝘸</span>
+                    </button>
+                    <button class="style-btn" data-style="gothic" type="button">
+                        <span>Gothique</span>
+                        <span class="style-preview">𝖕𝖗𝖊𝖛𝖎𝖊𝖜</span>
+                    </button>
+                    <button class="style-btn" data-style="double" type="button">
+                        <span>Double</span>
+                        <span class="style-preview">𝕡𝕣𝕖𝕧𝕚𝕖𝕨</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="output-section">
+                <h3><i class="fas fa-wand-magic-sparkles"></i> Texte stylisé</h3>
+                <textarea id="styleOutput" class="styletext-input" readonly aria-label="Texte stylisé"></textarea>
+                <div class="styletext-actions">
+                    <button type="button" class="styletext-button" onclick="copyStyleOutput()">
+                        <i class="fas fa-copy"></i> Copier
+                    </button>
+                    <button type="button" class="styletext-button" id="shareButton">
+                        <i class="fas fa-share-alt"></i> Partager
+                    </button>
+                    <button type="button" class="styletext-button secondary" onclick="clearHistory()">
+                        <i class="fas fa-trash-alt"></i> Effacer l'historique
+                    </button>
+                </div>
+            </div>
+            
+            <div class="history-section">
+                <h4><i class="fas fa-history"></i> Historique</h4>
+                <div id="style-history">
+                    <div class="empty-history" id="emptyHistory">Aucun historique disponible</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="help-panel" id="styletextHelpPanel">
+        <div class="help-panel-header">
+            <h3>Aide - Styliseur de texte</h3>
+            <button type="button" class="btn-icon" id="closeStyletextHelp">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="help-panel-content">
+            <h4>Comment utiliser</h4>
+            <ol>
+                <li>Saisissez ou collez votre texte dans la zone "Texte à styliser"</li>
+                <li>Sélectionnez un style parmi les options disponibles</li>
+                <li>Le texte stylisé apparaîtra automatiquement dans la zone de sortie</li>
+                <li>Utilisez les boutons pour copier ou partager votre texte stylisé</li>
+                <li>Consultez l'historique pour réutiliser des textes précédemment stylisés</li>
+            </ol>
+            
+            <h4>Styles disponibles</h4>
+            <ul>
+                <li><strong>Serif</strong> : police de caractères avec empattements élégants (𝔓𝔯𝔢𝔳𝔦𝔢𝔴)</li>
+                <li><strong>Script</strong> : style d'écriture cursive élégante (𝓟𝓻𝓮𝓿𝓲𝓮𝔀)</li>
+                <li><strong>Gras</strong> : caractères en surbrillance (𝐏𝐫𝐞𝐯𝐢𝐞𝐰)</li>
+                <li><strong>Italique</strong> : texte incliné pour l'accentuation (𝘗𝘳𝘦𝘷𝘪𝘦𝘸)</li>
+                <li><strong>Gothique</strong> : police de style médiéval et blackletter (𝖕𝖗𝖊𝖛𝖎𝖊𝖜)</li>
+                <li><strong>Double</strong> : police au style mathématique avec lignes doubles (𝕡𝕣𝕖𝕧𝕚𝕖𝕨)</li>
+            </ul>
+            
+            <h4>Remarque</h4>
+            <p>Les styles utilisent des caractères Unicode qui peuvent ne pas s'afficher correctement sur tous les appareils. Pour une meilleure compatibilité, testez l'affichage avant de partager.</p>
+        </div>
+    </div>
+</div> 

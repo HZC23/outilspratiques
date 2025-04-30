@@ -23,7 +23,9 @@ export const StyleTextManager = {
         history: [],
         input: '',
         output: '',
-        currentStyle: 'serif'
+        currentStyle: 'serif',
+        maxHistoryItems: 10,
+        charLimit: 500
     },
 
     /**
@@ -32,6 +34,17 @@ export const StyleTextManager = {
     init() {
         this.loadHistory();
         this.setupListeners();
+        this.setupSharePopup();
+        
+        // Définir le style initial
+        const styleButtons = document.querySelectorAll('.style-btn');
+        if (styleButtons && styleButtons.length > 0) {
+            styleButtons[0].classList.add('active');
+        }
+        
+        // Actualiser l'affichage de l'historique vide si nécessaire
+        this.updateEmptyHistoryState();
+        
         console.log('Gestionnaire de style de texte initialisé');
     },
 
@@ -42,20 +55,63 @@ export const StyleTextManager = {
         const styleInput = document.getElementById('styleInput');
         const styleOutput = document.getElementById('styleOutput');
         const styleButtons = document.querySelectorAll('.style-btn');
+        const inputCounter = document.getElementById('inputCounter');
+        const shareButton = document.getElementById('shareButton');
 
         if (styleInput) {
             styleInput.addEventListener('input', () => {
                 this.state.input = styleInput.value;
                 this.applyCurrentStyle();
+                
+                // Mettre à jour le compteur de caractères
+                if (inputCounter) {
+                    const count = styleInput.value.length;
+                    inputCounter.textContent = `${count} caractère${count > 1 ? 's' : ''}`;
+                    
+                    // Avertir si le nombre de caractères est trop élevé
+                    if (count > this.state.charLimit) {
+                        inputCounter.classList.add('limit-exceeded');
+                        inputCounter.setAttribute('data-tooltip', `Limite recommandée: ${this.state.charLimit} caractères`);
+                    } else {
+                        inputCounter.classList.remove('limit-exceeded');
+                        inputCounter.removeAttribute('data-tooltip');
+                    }
+                }
+            });
+            
+            // Gérer le collage
+            styleInput.addEventListener('paste', (e) => {
+                // Permettre au navigateur de coller le texte d'abord
+                setTimeout(() => {
+                    this.state.input = styleInput.value;
+                    this.applyCurrentStyle();
+                    
+                    // Mettre à jour le compteur de caractères
+                    if (inputCounter) {
+                        const count = styleInput.value.length;
+                        inputCounter.textContent = `${count} caractère${count > 1 ? 's' : ''}`;
+                    }
+                }, 0);
             });
         }
 
         if (styleButtons) {
             styleButtons.forEach(button => {
-                const style = button.getAttribute('data-style');
                 button.addEventListener('click', () => {
+                    // Retirer la classe active de tous les boutons
+                    styleButtons.forEach(btn => btn.classList.remove('active'));
+                    // Ajouter la classe active au bouton cliqué
+                    button.classList.add('active');
+                    
+                    const style = button.getAttribute('data-style');
                     this.applyStyle(style);
                 });
+            });
+        }
+        
+        if (shareButton) {
+            shareButton.addEventListener('click', () => {
+                this.openSharePopup();
             });
         }
 
@@ -63,6 +119,140 @@ export const StyleTextManager = {
         window.applyStyle = (style) => this.applyStyle(style);
         window.copyStyleOutput = () => this.copyOutput();
         window.clearHistory = () => this.clearHistory();
+    },
+
+    /**
+     * Configure la popup de partage
+     */
+    setupSharePopup() {
+        // Créer la popup de partage si elle n'existe pas déjà
+        if (!document.querySelector('.share-popup')) {
+            const popupHTML = `
+                <div class="share-overlay"></div>
+                <div class="share-popup">
+                    <div class="share-popup-header">
+                        <h3><i class="fas fa-share-alt"></i> Partager</h3>
+                        <button type="button" class="btn-icon" id="closeSharePopup">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="share-popup-content">
+                        <p>Partagez votre texte stylisé via :</p>
+                        <div class="share-options">
+                            <div class="share-option" data-type="twitter">
+                                <i class="fab fa-twitter"></i>
+                                <span>Twitter</span>
+                            </div>
+                            <div class="share-option" data-type="facebook">
+                                <i class="fab fa-facebook"></i>
+                                <span>Facebook</span>
+                            </div>
+                            <div class="share-option" data-type="whatsapp">
+                                <i class="fab fa-whatsapp"></i>
+                                <span>WhatsApp</span>
+                            </div>
+                            <div class="share-option" data-type="telegram">
+                                <i class="fab fa-telegram"></i>
+                                <span>Telegram</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            const popupContainer = document.createElement('div');
+            popupContainer.innerHTML = popupHTML;
+            document.body.appendChild(popupContainer);
+            
+            // Configurer les écouteurs d'événements pour la popup
+            const closeBtn = document.getElementById('closeSharePopup');
+            const overlay = document.querySelector('.share-overlay');
+            const shareOptions = document.querySelectorAll('.share-option');
+            
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => {
+                    this.closeSharePopup();
+                });
+            }
+            
+            if (overlay) {
+                overlay.addEventListener('click', () => {
+                    this.closeSharePopup();
+                });
+            }
+            
+            if (shareOptions) {
+                shareOptions.forEach(option => {
+                    option.addEventListener('click', () => {
+                        const shareType = option.getAttribute('data-type');
+                        this.shareText(shareType);
+                    });
+                });
+            }
+        }
+    },
+
+    /**
+     * Ouvre la popup de partage
+     */
+    openSharePopup() {
+        const popup = document.querySelector('.share-popup');
+        const overlay = document.querySelector('.share-overlay');
+        
+        if (popup && overlay) {
+            popup.classList.add('active');
+            overlay.classList.add('active');
+        }
+    },
+    
+    /**
+     * Ferme la popup de partage
+     */
+    closeSharePopup() {
+        const popup = document.querySelector('.share-popup');
+        const overlay = document.querySelector('.share-overlay');
+        
+        if (popup && overlay) {
+            popup.classList.remove('active');
+            overlay.classList.remove('active');
+        }
+    },
+    
+    /**
+     * Partage le texte stylisé selon le type de partage
+     * @param {string} shareType - Le type de partage (twitter, facebook, whatsapp, telegram)
+     */
+    shareText(shareType) {
+        const output = this.state.output;
+        const input = this.state.input;
+        const text = output || input;
+        
+        if (!text) {
+            Utils.showNotification('Aucun texte à partager', 'warning');
+            return;
+        }
+        
+        let url = '';
+        
+        switch (shareType) {
+            case 'twitter':
+                url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+                break;
+            case 'facebook':
+                url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(text)}`;
+                break;
+            case 'whatsapp':
+                url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+                break;
+            case 'telegram':
+                url = `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(text)}`;
+                break;
+        }
+        
+        if (url) {
+            window.open(url, '_blank');
+            this.closeSharePopup();
+        }
     },
 
     /**
@@ -81,40 +271,56 @@ export const StyleTextManager = {
         const input = this.state.input;
         const styleOutput = document.getElementById('styleOutput');
         
-        if (!input || !styleOutput) return;
+        if (!styleOutput) return;
         
         let output = '';
         
-        switch (this.state.currentStyle) {
-            case 'serif':
-                output = this.convertToSerif(input);
-                break;
-            case 'script':
-                output = this.convertToScript(input);
-                break;
-            case 'bold':
-                output = this.convertToBold(input);
-                break;
-            case 'italic':
-                output = this.convertToItalic(input);
-                break;
-            case 'gothic':
-                output = this.convertToGothic(input);
-                break;
-            case 'double':
-                output = this.convertToDouble(input);
-                break;
-            default:
-                output = input;
+        // Si l'entrée est vide, effacer également la sortie
+        if (!input || input.trim() === '') {
+            styleOutput.value = '';
+            this.state.output = '';
+            return;
         }
         
-        this.state.output = output;
-        styleOutput.value = output;
-        
-        // Ajouter à l'historique si le texte n'est pas vide
-        if (input.trim() !== '' && output.trim() !== '') {
-            this.addToHistory(input, output, this.state.currentStyle);
+        // Appliquer une animation de chargement si le texte est long
+        if (input.length > 200) {
+            styleOutput.classList.add('processing');
         }
+        
+        // Utiliser setTimeout pour ne pas bloquer l'UI pendant la conversion
+        setTimeout(() => {
+            switch (this.state.currentStyle) {
+                case 'serif':
+                    output = this.convertToSerif(input);
+                    break;
+                case 'script':
+                    output = this.convertToScript(input);
+                    break;
+                case 'bold':
+                    output = this.convertToBold(input);
+                    break;
+                case 'italic':
+                    output = this.convertToItalic(input);
+                    break;
+                case 'gothic':
+                    output = this.convertToGothic(input);
+                    break;
+                case 'double':
+                    output = this.convertToDouble(input);
+                    break;
+                default:
+                    output = input;
+            }
+            
+            this.state.output = output;
+            styleOutput.value = output;
+            styleOutput.classList.remove('processing');
+            
+            // Ajouter à l'historique si le texte n'est pas vide
+            if (input.trim() !== '' && output.trim() !== '') {
+                this.addToHistory(input, output, this.state.currentStyle);
+            }
+        }, 10);
     },
 
     /**
@@ -129,7 +335,8 @@ export const StyleTextManager = {
             's': '𝔰', 't': '𝔱', 'u': '𝔲', 'v': '𝔳', 'w': '𝔴', 'x': '𝔵', 'y': '𝔶', 'z': '𝔷',
             'A': '𝔄', 'B': '𝔅', 'C': 'ℭ', 'D': '𝔇', 'E': '𝔈', 'F': '𝔉', 'G': '𝔊', 'H': 'ℌ', 'I': 'ℑ',
             'J': '𝔍', 'K': '𝔎', 'L': '𝔏', 'M': '𝔐', 'N': '𝔑', 'O': '𝔒', 'P': '𝔓', 'Q': '𝔔', 'R': 'ℜ',
-            'S': '𝔖', 'T': '𝔗', 'U': '𝔘', 'V': '𝔙', 'W': '𝔚', 'X': '𝔛', 'Y': '𝔜', 'Z': 'ℨ'
+            'S': '𝔖', 'T': '𝔗', 'U': '𝔘', 'V': '𝔙', 'W': '𝔚', 'X': '𝔛', 'Y': '𝔜', 'Z': 'ℨ',
+            '0': '𝟎', '1': '𝟏', '2': '𝟐', '3': '𝟑', '4': '𝟒', '5': '𝟓', '6': '𝟔', '7': '𝟕', '8': '𝟖', '9': '𝟗'
         };
         
         return this.mapCharacters(text, serifMap);
@@ -147,7 +354,8 @@ export const StyleTextManager = {
             's': '𝓼', 't': '𝓽', 'u': '𝓾', 'v': '𝓿', 'w': '𝔀', 'x': '𝔁', 'y': '𝔂', 'z': '𝔃',
             'A': '𝓐', 'B': '𝓑', 'C': '𝓒', 'D': '𝓓', 'E': '𝓔', 'F': '𝓕', 'G': '𝓖', 'H': '𝓗', 'I': '𝓘',
             'J': '𝓙', 'K': '𝓚', 'L': '𝓛', 'M': '𝓜', 'N': '𝓝', 'O': '𝓞', 'P': '𝓟', 'Q': '𝓠', 'R': '𝓡',
-            'S': '𝓢', 'T': '𝓣', 'U': '𝓤', 'V': '𝓥', 'W': '𝓦', 'X': '𝓧', 'Y': '𝓨', 'Z': '𝓩'
+            'S': '𝓢', 'T': '𝓣', 'U': '𝓤', 'V': '𝓥', 'W': '𝓦', 'X': '𝓧', 'Y': '𝓨', 'Z': '𝓩',
+            '0': '𝟎', '1': '𝟏', '2': '𝟐', '3': '𝟑', '4': '𝟒', '5': '𝟓', '6': '𝟔', '7': '𝟕', '8': '𝟖', '9': '𝟗'
         };
         
         return this.mapCharacters(text, scriptMap);
@@ -165,7 +373,8 @@ export const StyleTextManager = {
             's': '𝐬', 't': '𝐭', 'u': '𝐮', 'v': '𝐯', 'w': '𝐰', 'x': '𝐱', 'y': '𝐲', 'z': '𝐳',
             'A': '𝐀', 'B': '𝐁', 'C': '𝐂', 'D': '𝐃', 'E': '𝐄', 'F': '𝐅', 'G': '𝐆', 'H': '𝐇', 'I': '𝐈',
             'J': '𝐉', 'K': '𝐊', 'L': '𝐋', 'M': '𝐌', 'N': '𝐍', 'O': '𝐎', 'P': '𝐏', 'Q': '𝐐', 'R': '𝐑',
-            'S': '𝐒', 'T': '𝐓', 'U': '𝐔', 'V': '𝐕', 'W': '𝐖', 'X': '𝐗', 'Y': '𝐘', 'Z': '𝐙'
+            'S': '𝐒', 'T': '𝐓', 'U': '𝐔', 'V': '𝐕', 'W': '𝐖', 'X': '𝐗', 'Y': '𝐘', 'Z': '𝐙',
+            '0': '𝟎', '1': '𝟏', '2': '𝟐', '3': '𝟑', '4': '𝟒', '5': '𝟓', '6': '𝟔', '7': '𝟕', '8': '𝟖', '9': '𝟗'
         };
         
         return this.mapCharacters(text, boldMap);
@@ -183,7 +392,8 @@ export const StyleTextManager = {
             's': '𝘴', 't': '𝘵', 'u': '𝘶', 'v': '𝘷', 'w': '𝘸', 'x': '𝘹', 'y': '𝘺', 'z': '𝘻',
             'A': '𝘈', 'B': '𝘉', 'C': '𝘊', 'D': '𝘋', 'E': '𝘌', 'F': '𝘍', 'G': '𝘎', 'H': '𝘏', 'I': '𝘐',
             'J': '𝘑', 'K': '𝘒', 'L': '𝘓', 'M': '𝘔', 'N': '𝘕', 'O': '𝘖', 'P': '𝘗', 'Q': '𝘘', 'R': '𝘙',
-            'S': '𝘚', 'T': '𝘛', 'U': '𝘜', 'V': '𝘝', 'W': '𝘞', 'X': '𝘟', 'Y': '𝘠', 'Z': '𝘡'
+            'S': '𝘚', 'T': '𝘛', 'U': '𝘜', 'V': '𝘝', 'W': '𝘞', 'X': '𝘟', 'Y': '𝘠', 'Z': '𝘡',
+            '0': '𝟎', '1': '𝟏', '2': '𝟐', '3': '𝟑', '4': '𝟒', '5': '𝟓', '6': '𝟔', '7': '𝟕', '8': '𝟖', '9': '𝟗'
         };
         
         return this.mapCharacters(text, italicMap);
@@ -201,7 +411,8 @@ export const StyleTextManager = {
             's': '𝖘', 't': '𝖙', 'u': '𝖚', 'v': '𝖛', 'w': '𝖜', 'x': '𝖝', 'y': '𝖞', 'z': '𝖟',
             'A': '𝕬', 'B': '𝕭', 'C': '𝕮', 'D': '𝕯', 'E': '𝕰', 'F': '𝕱', 'G': '𝕲', 'H': '𝕳', 'I': '𝕴',
             'J': '𝕵', 'K': '𝕶', 'L': '𝕷', 'M': '𝕸', 'N': '𝕹', 'O': '𝕺', 'P': '𝕻', 'Q': '𝕼', 'R': '𝕽',
-            'S': '𝕾', 'T': '𝕿', 'U': '𝖀', 'V': '𝖁', 'W': '𝖂', 'X': '𝖃', 'Y': '𝖄', 'Z': '𝖅'
+            'S': '𝕾', 'T': '𝕿', 'U': '𝖀', 'V': '𝖁', 'W': '𝖂', 'X': '𝖃', 'Y': '𝖄', 'Z': '𝖅',
+            '0': '𝟎', '1': '𝟏', '2': '𝟐', '3': '𝟑', '4': '𝟒', '5': '𝟓', '6': '𝟔', '7': '𝟕', '8': '𝟖', '9': '𝟗'
         };
         
         return this.mapCharacters(text, gothicMap);
@@ -219,7 +430,8 @@ export const StyleTextManager = {
             's': '𝕤', 't': '𝕥', 'u': '𝕦', 'v': '𝕧', 'w': '𝕨', 'x': '𝕩', 'y': '𝕪', 'z': '𝕫',
             'A': '𝔸', 'B': '𝔹', 'C': 'ℂ', 'D': '𝔻', 'E': '𝔼', 'F': '𝔽', 'G': '𝔾', 'H': 'ℍ', 'I': '𝕀',
             'J': '𝕁', 'K': '𝕂', 'L': '𝕃', 'M': '𝕄', 'N': 'ℕ', 'O': '𝕆', 'P': 'ℙ', 'Q': 'ℚ', 'R': 'ℝ',
-            'S': '𝕊', 'T': '𝕋', 'U': '𝕌', 'V': '𝕍', 'W': '𝕎', 'X': '𝕏', 'Y': '𝕐', 'Z': 'ℤ'
+            'S': '𝕊', 'T': '𝕋', 'U': '𝕌', 'V': '𝕍', 'W': '𝕎', 'X': '𝕏', 'Y': '𝕐', 'Z': 'ℤ',
+            '0': '𝟖', '1': '𝟗', '2': '𝟚', '3': '𝟛', '4': '𝟜', '5': '𝟝', '6': '𝟞', '7': '𝟟', '8': '𝟠', '9': '𝟡'
         };
         
         return this.mapCharacters(text, doubleMap);
@@ -232,7 +444,17 @@ export const StyleTextManager = {
      * @returns {string} - Le texte mappé
      */
     mapCharacters(text, charMap) {
-        return text.split('').map(char => charMap[char] || char).join('');
+        if (!text) return '';
+        
+        return text.split('').map(char => {
+            // Vérifier si le caractère existe dans la carte
+            if (charMap[char] !== undefined) {
+                return charMap[char];
+            }
+            
+            // Si non, conserver le caractère original
+            return char;
+        }).join('');
     },
 
     /**
@@ -244,11 +466,27 @@ export const StyleTextManager = {
             navigator.clipboard.writeText(output)
                 .then(() => {
                     Utils.showNotification('Texte copié dans le presse-papier', 'success');
+                    this.animateCopyButton();
                 })
                 .catch(err => {
                     console.error('Erreur lors de la copie :', err);
                     Utils.showNotification('Erreur lors de la copie du texte', 'error');
                 });
+        } else {
+            Utils.showNotification('Aucun texte à copier', 'warning');
+        }
+    },
+
+    /**
+     * Anime le bouton de copie
+     */
+    animateCopyButton() {
+        const copyButton = document.querySelector('.styletext-button');
+        if (copyButton) {
+            copyButton.classList.add('copied');
+            setTimeout(() => {
+                copyButton.classList.remove('copied');
+            }, 1000);
         }
     },
 
@@ -259,28 +497,41 @@ export const StyleTextManager = {
      * @param {string} style - Le style appliqué
      */
     addToHistory(input, output, style) {
+        // Ne pas ajouter si l'entrée ou la sortie est vide
+        if (!input.trim() || !output.trim()) return;
+        
         // Limiter la taille de l'historique
-        if (this.state.history.length >= 10) {
+        if (this.state.history.length >= this.state.maxHistoryItems) {
             this.state.history.pop();
         }
         
         const historyItem = {
-            input,
-            output,
+            input: input.length > 50 ? input.substring(0, 50) + '...' : input,
+            output: output.length > 50 ? output.substring(0, 50) + '...' : output,
+            fullInput: input,
+            fullOutput: output,
             style,
             timestamp: new Date().toISOString()
         };
         
         // Vérifier si l'entrée existe déjà dans l'historique
-        const exists = this.state.history.some(item => 
-            item.input === input && item.style === style
+        const existingIndex = this.state.history.findIndex(item => 
+            item.fullInput === input && item.style === style
         );
         
-        if (!exists) {
+        if (existingIndex > -1) {
+            // Déplacer l'élément existant en haut de la liste
+            const existingItem = this.state.history.splice(existingIndex, 1)[0];
+            existingItem.timestamp = new Date().toISOString(); // Mettre à jour l'horodatage
+            this.state.history.unshift(existingItem);
+        } else {
+            // Ajouter un nouvel élément
             this.state.history.unshift(historyItem);
-            this.saveHistory();
-            this.updateHistoryDisplay();
         }
+        
+        this.saveHistory();
+        this.updateHistoryDisplay();
+        this.updateEmptyHistoryState();
     },
 
     /**
@@ -290,51 +541,152 @@ export const StyleTextManager = {
         const historyContainer = document.getElementById('style-history');
         if (!historyContainer) return;
         
-        historyContainer.innerHTML = '';
+        // Conserver l'élément d'historique vide s'il existe
+        const emptyHistoryElement = document.getElementById('emptyHistory');
+        
+        // Vider le conteneur de l'historique, sauf pour l'élément vide
+        Array.from(historyContainer.children).forEach(child => {
+            if (child.id !== 'emptyHistory') {
+                child.remove();
+            }
+        });
         
         this.state.history.forEach(item => {
             const historyItem = document.createElement('div');
             historyItem.className = 'history-item';
+            historyItem.setAttribute('data-style', item.style);
             
             const date = new Date(item.timestamp);
-            const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+            const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+            
+            // Ajouter un badge de style
+            let badgeIcon = '';
+            switch (item.style) {
+                case 'serif': badgeIcon = '𝔖'; break;
+                case 'script': badgeIcon = '𝓢'; break;
+                case 'bold': badgeIcon = '𝐁'; break;
+                case 'italic': badgeIcon = '𝘐'; break;
+                case 'gothic': badgeIcon = '𝖌'; break;
+                case 'double': badgeIcon = '𝕕'; break;
+                default: badgeIcon = 'S'; 
+            }
             
             historyItem.innerHTML = `
+                <div class="history-badge" data-style="${item.style}">${badgeIcon}</div>
                 <div class="history-content">
-                    <div class="history-input">${item.input}</div>
-                    <div class="history-output">${item.output}</div>
+                    <div class="history-input" title="${item.fullInput}">${item.input}</div>
+                    <div class="history-output" title="${item.fullOutput}">${item.output}</div>
                 </div>
                 <div class="history-meta">
                     <div class="history-style">${item.style}</div>
                     <div class="history-timestamp">${formattedDate}</div>
                 </div>
+                <div class="history-actions">
+                    <button class="history-action-btn reuse-btn" data-tooltip="Réutiliser"><i class="fas fa-redo-alt"></i></button>
+                    <button class="history-action-btn copy-btn" data-tooltip="Copier"><i class="fas fa-copy"></i></button>
+                </div>
             `;
             
-            historyItem.addEventListener('click', () => {
-                const styleInput = document.getElementById('styleInput');
-                const styleButtons = document.querySelectorAll('.style-btn');
-                
-                if (styleInput) {
-                    styleInput.value = item.input;
-                    this.state.input = item.input;
-                }
-                
-                this.state.currentStyle = item.style;
-                
-                // Mettre à jour le bouton actif
-                styleButtons.forEach(button => {
-                    if (button.getAttribute('data-style') === item.style) {
-                        button.classList.add('active');
-                    } else {
-                        button.classList.remove('active');
-                    }
+            // Configurer les boutons d'action
+            const reuseBtn = historyItem.querySelector('.reuse-btn');
+            const copyBtn = historyItem.querySelector('.copy-btn');
+            
+            if (reuseBtn) {
+                reuseBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.reuseHistoryItem(item);
                 });
-                
-                this.applyCurrentStyle();
+            }
+            
+            if (copyBtn) {
+                copyBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.copyHistoryItem(item);
+                });
+            }
+            
+            // Configurer l'action de clic sur l'élément d'historique
+            historyItem.addEventListener('click', () => {
+                this.reuseHistoryItem(item);
             });
             
             historyContainer.appendChild(historyItem);
         });
+    },
+    
+    /**
+     * Met à jour l'état de l'historique vide
+     */
+    updateEmptyHistoryState() {
+        const emptyHistory = document.getElementById('emptyHistory');
+        if (emptyHistory) {
+            if (this.state.history.length === 0) {
+                emptyHistory.style.display = 'flex';
+            } else {
+                emptyHistory.style.display = 'none';
+            }
+        }
+    },
+    
+    /**
+     * Réutilise un élément de l'historique
+     * @param {object} item - L'élément d'historique à réutiliser
+     */
+    reuseHistoryItem(item) {
+        const styleInput = document.getElementById('styleInput');
+        const styleButtons = document.querySelectorAll('.style-btn');
+        const inputCounter = document.getElementById('inputCounter');
+        
+        if (styleInput) {
+            styleInput.value = item.fullInput;
+            this.state.input = item.fullInput;
+            
+            // Mettre à jour le compteur de caractères
+            if (inputCounter) {
+                const count = item.fullInput.length;
+                inputCounter.textContent = `${count} caractère${count > 1 ? 's' : ''}`;
+            }
+        }
+        
+        this.state.currentStyle = item.style;
+        
+        // Mettre à jour le bouton actif
+        styleButtons.forEach(button => {
+            const style = button.getAttribute('data-style');
+            if (style === item.style) {
+                button.classList.add('active');
+            } else {
+                button.classList.remove('active');
+            }
+        });
+        
+        this.applyCurrentStyle();
+        
+        // Animation de feedback
+        const historyItems = document.querySelectorAll('.history-item');
+        historyItems.forEach(historyItem => {
+            if (historyItem.getAttribute('data-style') === item.style) {
+                historyItem.classList.add('reused');
+                setTimeout(() => {
+                    historyItem.classList.remove('reused');
+                }, 1000);
+            }
+        });
+    },
+    
+    /**
+     * Copie un élément de l'historique
+     * @param {object} item - L'élément d'historique à copier
+     */
+    copyHistoryItem(item) {
+        navigator.clipboard.writeText(item.fullOutput)
+            .then(() => {
+                Utils.showNotification('Texte de l\'historique copié', 'success');
+            })
+            .catch(err => {
+                console.error('Erreur lors de la copie :', err);
+                Utils.showNotification('Erreur lors de la copie du texte', 'error');
+            });
     },
 
     /**
@@ -352,7 +704,19 @@ export const StyleTextManager = {
         if (savedHistory) {
             try {
                 this.state.history = JSON.parse(savedHistory);
+                
+                // Assurer la compatibilité avec l'ancien format
+                this.state.history = this.state.history.map(item => ({
+                    input: item.input,
+                    output: item.output,
+                    fullInput: item.fullInput || item.input,
+                    fullOutput: item.fullOutput || item.output,
+                    style: item.style,
+                    timestamp: item.timestamp
+                }));
+                
                 this.updateHistoryDisplay();
+                this.updateEmptyHistoryState();
             } catch (error) {
                 console.error('Erreur lors du chargement de l\'historique :', error);
                 this.state.history = [];
@@ -364,10 +728,14 @@ export const StyleTextManager = {
      * Efface l'historique
      */
     clearHistory() {
-        this.state.history = [];
-        this.saveHistory();
-        this.updateHistoryDisplay();
-        Utils.showNotification('Historique effacé', 'info');
+        // Demander confirmation avant de supprimer
+        if (this.state.history.length > 0 && confirm('Êtes-vous sûr de vouloir effacer tout l\'historique ?')) {
+            this.state.history = [];
+            this.saveHistory();
+            this.updateHistoryDisplay();
+            this.updateEmptyHistoryState();
+            Utils.showNotification('Historique effacé', 'info');
+        }
     }
 };
 
@@ -380,4 +748,127 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialiser le gestionnaire
     StyleTextManager.init();
-}); 
+    
+    // Configurer les écouteurs d'événements pour l'accessibilité
+    setupAccessibilityFeatures();
+});
+
+/**
+ * Configure les fonctionnalités d'accessibilité
+ */
+function setupAccessibilityFeatures() {
+    // Gérer les raccourcis clavier
+    document.addEventListener('keydown', (e) => {
+        // Ctrl/Cmd + Enter pour convertir le texte
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+            const styleInput = document.getElementById('styleInput');
+            if (styleInput && document.activeElement === styleInput) {
+                StyleTextManager.applyCurrentStyle();
+                e.preventDefault();
+            }
+        }
+        
+        // Échap pour fermer les popups
+        if (e.key === 'Escape') {
+            StyleTextManager.closeSharePopup();
+        }
+        
+        // Ctrl/Cmd + C pour copier la sortie quand elle est en focus
+        if ((e.ctrlKey || e.metaKey) && e.key === 'c') {
+            const styleOutput = document.getElementById('styleOutput');
+            if (styleOutput && document.activeElement === styleOutput) {
+                StyleTextManager.copyOutput();
+                e.preventDefault();
+            }
+        }
+    });
+    
+    // Configurer l'autocomplétion et les suggestions
+    const styleInput = document.getElementById('styleInput');
+    if (styleInput) {
+        styleInput.addEventListener('focus', () => {
+            // Charger les suggestions basées sur l'historique
+            if (StyleTextManager.state.history.length > 0) {
+                const datalist = document.createElement('datalist');
+                datalist.id = 'styleInputSuggestions';
+                
+                // Utiliser les entrées uniques de l'historique comme suggestions
+                const uniqueInputs = [...new Set(
+                    StyleTextManager.state.history.map(item => item.fullInput)
+                )];
+                
+                uniqueInputs.forEach(input => {
+                    const option = document.createElement('option');
+                    option.value = input;
+                    datalist.appendChild(option);
+                });
+                
+                // Supprimer l'ancien datalist s'il existe
+                const oldDatalist = document.getElementById('styleInputSuggestions');
+                if (oldDatalist) {
+                    oldDatalist.remove();
+                }
+                
+                document.body.appendChild(datalist);
+                styleInput.setAttribute('list', 'styleInputSuggestions');
+            }
+        });
+    }
+    
+    // Support du copier-coller pour le champ de sortie
+    const styleOutput = document.getElementById('styleOutput');
+    if (styleOutput) {
+        styleOutput.addEventListener('click', () => {
+            // Sélectionner tout le texte au clic
+            styleOutput.select();
+        });
+    }
+    
+    // Gérer le mode plein écran
+    const fullscreenButton = document.getElementById('styletextFullscreen');
+    if (fullscreenButton) {
+        fullscreenButton.addEventListener('click', () => {
+            const toolContainer = document.getElementById('styletextTool');
+            if (toolContainer) {
+                if (!document.fullscreenElement) {
+                    if (toolContainer.requestFullscreen) {
+                        toolContainer.requestFullscreen();
+                    } else if (toolContainer.mozRequestFullScreen) {
+                        toolContainer.mozRequestFullScreen();
+                    } else if (toolContainer.webkitRequestFullscreen) {
+                        toolContainer.webkitRequestFullscreen();
+                    } else if (toolContainer.msRequestFullscreen) {
+                        toolContainer.msRequestFullscreen();
+                    }
+                    fullscreenButton.innerHTML = '<i class="fas fa-compress"></i>';
+                } else {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    } else if (document.mozCancelFullScreen) {
+                        document.mozCancelFullScreen();
+                    } else if (document.webkitExitFullscreen) {
+                        document.webkitExitFullscreen();
+                    } else if (document.msExitFullscreen) {
+                        document.msExitFullscreen();
+                    }
+                    fullscreenButton.innerHTML = '<i class="fas fa-expand"></i>';
+                }
+            }
+        });
+    }
+    
+    // Gérer le panneau d'aide
+    const helpButton = document.getElementById('styletextHelp');
+    const helpPanel = document.getElementById('styletextHelpPanel');
+    const closeHelpButton = document.getElementById('closeStyletextHelp');
+    
+    if (helpButton && helpPanel && closeHelpButton) {
+        helpButton.addEventListener('click', () => {
+            helpPanel.classList.add('active');
+        });
+        
+        closeHelpButton.addEventListener('click', () => {
+            helpPanel.classList.remove('active');
+        });
+    }
+} 

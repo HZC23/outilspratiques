@@ -1,0 +1,341 @@
+/**
+ * Variables CSS globales
+ * Système de couleurs optimisé pour l'accessibilité et la cohérence visuelle
+ */
+
+:root {
+    /* Couleurs principales - système cohérent */
+    --primary-color: #4096E3;
+    --primary-color-rgb: 64, 150, 227;
+    --primary-light: #D9EAFC;
+    --secondary-color: #50B8E8;
+    --secondary-color-rgb: 80, 184, 232;
+    
+    /* Couleurs d'interface - inspirées de l'image mais optimisées */
+    --bg-color: #DAEFFF;
+    --card-bg: #FFFFFF;
+    --border-color: #E8E8E8;
+    --hover-color: #D9EAFC;
+    --text-on-primary: #FFFFFF;
+    
+    /* Couleurs pour les textes - optimisées pour la lisibilité */
+    --text-color: #2A2A2A;
+    --text-secondary: #575757;
+    --text-muted: #787878;
+    
+    /* Couleurs fonctionnelles - optimisées pour l'accessibilité */
+    --success-color: #4CAF50;
+    --warning-color: #FF9800;
+    --error-color: #E74C3C;
+    --info-color: #4096E3;
+    --danger-color: #E74C3C;
+    
+    /* Système d'espacement - Inchangé */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --spacing-xxl: 48px;
+    
+    /* Bordures et arrondi - comme sur l'image */
+    --border-radius-sm: 6px;
+    --border-radius: 12px;
+    --border-radius-md: 16px;
+    --border-radius-lg: 20px;
+    --border-radius-xl: 28px;
+    --border-radius-circle: 50%;
+    
+    /* Ombres - optimisées pour la profondeur */
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --hover-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    --inset-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.03);
+    
+    /* Animation et transitions - Inchangé */
+    --transition-fast: 0.15s ease;
+    --transition-duration: 0.3s;
+    --transition-slow: 0.5s;
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+    
+    /* Typographie - Inchangé */
+    --font-family: 'Poppins', 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.85rem;
+    --font-size: 1rem;
+    --font-size-md: 1.2rem;
+    --font-size-lg: 1.5rem;
+    --font-size-xl: 1.8rem;
+    --font-size-xxl: 2.4rem;
+    
+    /* Line height et letter spacing - Inchangé */
+    --line-height-tight: 1.2;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.8;
+    --letter-spacing-tight: -0.015em;
+    --letter-spacing-normal: 0;
+    --letter-spacing-wide: 0.015em;
+
+    /* Breakpoints - Inchangé */
+    --breakpoint-mobile: 640px;
+    --breakpoint-tablet: 1024px;
+    --breakpoint-desktop: 1280px;
+
+    /* Thème sombre optimisé */
+    --bg-color-dark: #101F3D;
+    --text-color-dark: #F0F0F0;
+    --button-bg-dark: #1E2A47;
+    --button-bg-hover-dark: #283654;
+    --button-text-dark: #FFFFFF;
+    
+    /* Variables pour les composants communs */
+    --button-border-radius: var(--border-radius);
+    --button-gap: var(--spacing-sm);
+    
+    /* Calculatrice - inspirée de l'image mais optimisée */
+    --calc-padding: var(--spacing-md);
+    --calc-display-bg: #F8F9FA;
+    --calc-display-text: #2A2A2A;
+    --calc-display-bg-dark: #1E2A47;
+    --calc-button-bg: #FFFFFF;
+    --calc-button-bg-hover: #F5F5F5;
+    --calc-button-text: #2A2A2A;
+    --calc-button-primary: #4096E3;
+    --calc-button-secondary: #50B8E8;
+    --calc-button-operator: #D9EAFC;
+    --calc-button-equals: #0075C9;
+    --calc-button-clear: #E74C3C;
+    
+    /* QR Code */
+    --qrcode-tab-bg: #FFFFFF;
+    --qrcode-tab-active: var(--primary-color);
+    --qrcode-tab-text: #2A2A2A;
+    --qrcode-tab-text-active: #FFFFFF;
+    --qrcode-output-bg: #FFFFFF;
+    --qrcode-output-border: #E8E8E8;
+    --qrcode-scanner-bg: #F8F9FA;
+    --qrcode-marker-color: var(--primary-color);
+    
+    /* Chronomètre/Timer */
+    --timer-display-bg: #F8F9FA;
+    --timer-display-text: #2A2A2A;
+    --timer-button-start: #4CAF50;
+    --timer-button-stop: #E74C3C;
+    --timer-button-lap: var(--primary-color);
+    --timer-progress-bg: #E8E8E8;
+    --timer-progress-fill: var(--primary-color);
+    
+    /* Todo */
+    --todo-item-bg: #FFFFFF;
+    --todo-item-border: #E8E8E8;
+    --todo-item-completed-bg: #F8F9FA;
+    --todo-checkbox-color: var(--primary-color);
+    --todo-priority-high: #E74C3C;
+    --todo-priority-medium: #FF9800;
+    --todo-priority-low: #4CAF50;
+    
+    /* Notes */
+    --note-bg: #FFFFFF;
+    --note-border: #E8E8E8;
+    --note-toolbar-bg: #F8F9FA;
+    --note-toolbar-button: #575757;
+    --note-toolbar-button-hover: #2A2A2A;
+    
+    /* Métronome */
+    --metronome-pendulum-color: var(--primary-color);
+    --metronome-bg: #FFFFFF;
+    --metronome-marker-color: #E74C3C;
+    --metronome-tempo-bg: #F8F9FA;
+    
+    /* Traducteur */
+    --translator-lang-bg: #F8F9FA;
+    --translator-arrow-color: var(--primary-color);
+    --translator-input-bg: #FFFFFF;
+    --translator-swap-button: var(--primary-color);
+    
+    /* Convertisseur de devise/unités */
+    --converter-arrow-color: var(--primary-color);
+    --converter-result-bg: #F8F9FA;
+    --converter-select-bg: #FFFFFF;
+    
+    /* Sélecteur de couleur */
+    --color-picker-slider-bg: linear-gradient(to right, #E74C3C, #FF9800, #8BC34A, #50B8E8, #4096E3, #3F51B5, #E74C3C);
+    --color-picker-hue-thumb: #FFFFFF;
+    --color-picker-saturation-bg: #4096E3;
+    --color-picker-alpha-bg: transparent;
+    --color-picker-alpha-pattern: #D6D6D6;
+    
+    /* Password Generator */
+    --password-bg: #F8F9FA;
+    --password-text: #2A2A2A;
+    --password-strength-weak: #E74C3C;
+    --password-strength-medium: #FF9800;
+    --password-strength-strong: #4CAF50;
+    
+    /* Containers et formulaires communs */
+    --tool-container-bg: #FFFFFF;
+    --tool-header-bg: #F8F9FA;
+    --tool-header-text: #2A2A2A;
+    --form-input-bg: #FFFFFF;
+    --form-input-border: #E8E8E8;
+    --form-input-focus-border: var(--primary-color);
+    --form-input-text: #2A2A2A;
+    --form-label-text: #575757;
+    --form-select-bg: #FFFFFF;
+    --form-range-bg: #E8E8E8;
+    --form-range-thumb: var(--primary-color);
+    --form-file-bg: #F8F9FA;
+    --form-checkbox-color: var(--primary-color);
+    --help-panel-bg: #FFFFFF;
+    --help-panel-header-bg: #F8F9FA;
+    
+    /* Harmonisation - Variables optimisées */
+    --primary-gradient-blue: #0075C9;
+    --primary-gradient-purple: #3F51B5;
+    --primary-blue: #0075C9;
+    --primary-dark-blue: #00579B;
+    --success-color-dark: #3D8B40;
+    --warning-color-dark: #E68300;
+    --info-color-dark: #0075C9;
+    --primary-color-hover: #0075C9;
+    --danger-color-hover: #D32F2F;
+    --menu-min-width: 200px;
+    --menu-max-width: 250px;
+    --header-height: 70px;
+    --container-max-width: 1800px;
+    --menu-min-width-md: 180px;
+    --menu-max-width-md: 250px;
+    --menu-min-width-sm: 160px;
+    --menu-max-width-sm: 230px;
+    --menu-max-width-mobile: 320px;
+    --scrollbar-width: 6px;
+    --border-radius-sm: 6px;
+    --icon-width: 1.5rem;
+    --toggle-width: 24px;
+    --toggle-height: 18px;
+    --hamburger-bar-height: 2px;
+    --border-radius-xs: 2px;
+    --notification-close-hover-bg: rgba(0, 0, 0, 0.05);
+    --notification-close-hover-bg-dark: rgba(255, 255, 255, 0.08);
+    --header-title-gradient-1: #FFFFFF;
+    --header-title-gradient-2: #F5F5F5;
+
+    /* Ajouts pour harmonisation des outils */
+    --input-bg: #FFFFFF;
+    --button-bg: #F8F9FA;
+    --button-hover-bg: #D9EAFC;
+    --primary-hover: #0075C9;
+    --danger-hover: #D32F2F;
+    --text-color-secondary: #575757;
+    --todo-item-bg-hover: #F5F5F5;
+}
+
+/* Variables pour le thème sombre - optimisé pour l'accessibilité */
+[data-theme="dark"] {
+    /* Couleurs principales en mode sombre */
+    --primary-color: #2196F3;
+    --secondary-color: #42A5F5;
+    
+    /* Couleurs d'interface en mode sombre */
+    --bg-color: #101F3D;
+    --card-bg: #1E2A47;
+    --border-color: #283654;
+    --hover-color: #283654;
+    
+    /* Couleurs pour les textes en mode sombre */
+    --text-color: #F0F0F0;
+    --text-secondary: #B0BEC5;
+    --text-muted: #78909C;
+    
+    /* Ombres en mode sombre */
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    --hover-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    --inset-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+    
+    /* Calculatrice en mode sombre */
+    --calc-display-bg: #1E2A47;
+    --calc-display-text: #F0F0F0;
+    --calc-button-bg: #283654;
+    --calc-button-bg-hover: #344266;
+    --calc-button-text: #F0F0F0;
+    --calc-button-operator: #344266;
+    
+    /* Containers et formulaires communs en mode sombre */
+    --tool-container-bg: #1E2A47;
+    --tool-header-bg: #283654;
+    --tool-header-text: #F0F0F0;
+    --form-input-bg: #283654;
+    --form-input-border: #344266;
+    --form-input-text: #F0F0F0;
+    --form-label-text: #B0BEC5;
+    --form-select-bg: #283654;
+    --form-range-bg: #344266;
+    --form-file-bg: #283654;
+    --form-checkbox-color: var(--primary-color);
+    --help-panel-bg: #283654;
+    --help-panel-header-bg: #344266;
+    
+    /* QR Code en mode sombre */
+    --qrcode-tab-bg: #283654;
+    --qrcode-tab-text: #F0F0F0;
+    --qrcode-output-bg: #1E2A47;
+    --qrcode-output-border: #344266;
+    --qrcode-scanner-bg: #283654;
+    
+    /* Chronomètre/Timer en mode sombre */
+    --timer-display-bg: #1E2A47;
+    --timer-display-text: #F0F0F0;
+    --timer-progress-bg: #344266;
+    
+    /* Todo en mode sombre */
+    --todo-item-bg: #283654;
+    --todo-item-border: #344266;
+    --todo-item-completed-bg: #1E2A47;
+    
+    /* Notes en mode sombre */
+    --note-bg: #283654;
+    --note-border: #344266;
+    --note-toolbar-bg: #1E2A47;
+    --note-toolbar-button: #B0BEC5;
+    --note-toolbar-button-hover: #F0F0F0;
+    
+    /* Traducteur en mode sombre */
+    --translator-lang-bg: #283654;
+    --translator-input-bg: #1E2A47;
+    
+    /* Convertisseur en mode sombre */
+    --converter-result-bg: #1E2A47;
+    --converter-select-bg: #283654;
+    
+    /* Password Generator en mode sombre */
+    --password-bg: #1E2A47;
+    --password-text: #F0F0F0;
+
+    /* Ajouts pour harmonisation des outils en mode sombre */
+    --input-bg: #283654;
+    --button-bg: #344266;
+    --button-hover-bg: #3F4E78;
+    --primary-hover: #1976D2;
+    --danger-hover: #C62828;
+    --text-color-secondary: #B0BEC5;
+    --todo-item-bg-hover: #344266;
+}
+
+/* Adaptation mobile */
+@media (max-width: 768px) {
+    :root {
+        --spacing-lg: 20px;
+        --spacing-xl: 24px;
+        --spacing-xxl: 32px;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --spacing-md: 12px;
+        --spacing-lg: 16px;
+        --spacing-xl: 20px;
+        --font-size-xl: 1.5rem;
+        --font-size-xxl: 2rem;
+    }
+} 
