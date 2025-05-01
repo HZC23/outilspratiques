@@ -15,24 +15,18 @@
     <div class="tool-content">
         <div class="color-picker-container">
             <div class="color-picker-main">
-                <div class="color-canvas-wrapper">
-                    <div class="color-canvas" id="colorCanvas">
-                        
-                    </div>
-                </div>
-                
                 <div class="color-preview-container">
                     <div class="color-preview-fav-wrapper">
-                        <input type="color" name="colorThumb" id="colorThumb">
+                        <input type="color" name="colorThumb" id="colorThumb" value="#0066CC">
                         <button type="button" class="btn-fav" id="favoriteBtn" aria-label="Ajouter/Retirer des favoris">
-                            <i class="fas fa-star" id="favoriteIcon"></i>
+                            <i class="far fa-star" id="favoriteIcon"></i>
                         </button>
                     </div>
                     <div class="color-values">
                         <div class="color-value-group">
                             <label for="hexValue">HEX</label>
                             <div class="color-value-input">
-                                <input type="text" id="hexValue" class="color-input" maxlength="7" value="#FF0000">
+                                <input type="text" id="hexValue" class="color-input" maxlength="7" value="#0066CC">
                                 <button type="button" class="btn-copy" data-value="hex" aria-label="Copier">
                                     <i class="fas fa-copy"></i>
                                 </button>
@@ -42,7 +36,7 @@
                         <div class="color-value-group">
                             <label for="rgbValue">RGB</label>
                             <div class="color-value-input">
-                                <input type="text" id="rgbValue" class="color-input" value="rgb(255, 0, 0)">
+                                <input type="text" id="rgbValue" class="color-input" value="rgb(0, 102, 204)">
                                 <button type="button" class="btn-copy" data-value="rgb" aria-label="Copier">
                                     <i class="fas fa-copy"></i>
                                 </button>
@@ -52,7 +46,7 @@
                         <div class="color-value-group">
                             <label for="hslValue">HSL</label>
                             <div class="color-value-input">
-                                <input type="text" id="hslValue" class="color-input" value="hsl(0, 100%, 50%)">
+                                <input type="text" id="hslValue" class="color-input" value="hsl(210, 100%, 40%)">
                                 <button type="button" class="btn-copy" data-value="hsl" aria-label="Copier">
                                     <i class="fas fa-copy"></i>
                                 </button>
@@ -62,10 +56,85 @@
                         <div class="color-value-group">
                             <label for="cmykValue">CMYK</label>
                             <div class="color-value-input">
-                                <input type="text" id="cmykValue" class="color-input" value="cmyk(0%, 100%, 100%, 0%)">
+                                <input type="text" id="cmykValue" class="color-input" value="cmyk(100%, 50%, 0%, 20%)">
                                 <button type="button" class="btn-copy" data-value="cmyk" aria-label="Copier">
                                     <i class="fas fa-copy"></i>
                                 </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-container">
+                    <div class="tab-buttons">
+                        <button type="button" class="tab-button active" data-tab="palettesTab">Palettes</button>
+                        <button type="button" class="tab-button" data-tab="harmoniesTab">Harmonies</button>
+                        <button type="button" class="tab-button" data-tab="adjustmentTab">Ajustement</button>
+                        <button type="button" class="tab-button" data-tab="accessibilityTab">Accessibilité</button>
+                    </div>
+                    
+                    <div class="tab-panes">
+                        <!-- Onglet Palettes -->
+                        <div id="palettesTab" class="tab-pane active">
+                            <div class="color-canvas-wrapper">
+                                <div class="color-canvas" id="colorCanvas">
+                                    <!-- Zone de sélection de couleur sera ajoutée par JS -->
+                                </div>
+                            </div>
+                            
+                            <div id="namedColors" class="named-colors">
+                                <!-- Couleurs nommées seront ajoutées par JS -->
+                            </div>
+                        </div>
+                        
+                        <!-- Onglet Harmonies -->
+                        <div id="harmoniesTab" class="tab-pane">
+                            <div id="harmonySamples" class="harmony-samples">
+                                <!-- Harmonies de couleurs seront ajoutées par JS -->
+                            </div>
+                            
+                            <div id="gradientSamples" class="gradient-samples">
+                                <!-- Dégradés seront ajoutés par JS -->
+                            </div>
+                        </div>
+                        
+                        <!-- Onglet Ajustement -->
+                        <div id="adjustmentTab" class="tab-pane">
+                            <div class="color-adjustments">
+                                <div class="adjustment-group">
+                                    <label for="hueAdjust">
+                                        Teinte <span id="hueAdjustValue">210°</span>
+                                    </label>
+                                    <input type="range" id="hueAdjust" min="0" max="360" value="210">
+                                </div>
+                                
+                                <div class="adjustment-group">
+                                    <label for="satAdjust">
+                                        Saturation <span id="satAdjustValue">100%</span>
+                                    </label>
+                                    <input type="range" id="satAdjust" min="0" max="100" value="100">
+                                </div>
+                                
+                                <div class="adjustment-group">
+                                    <label for="lightAdjust">
+                                        Luminosité <span id="lightAdjustValue">40%</span>
+                                    </label>
+                                    <input type="range" id="lightAdjust" min="0" max="100" value="40">
+                                </div>
+                                
+                                <div class="adjustment-group">
+                                    <label for="tempAdjust">
+                                        Température <span id="tempAdjustValue">0</span>
+                                    </label>
+                                    <input type="range" id="tempAdjust" min="-30" max="30" value="0">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Onglet Accessibilité -->
+                        <div id="accessibilityTab" class="tab-pane">
+                            <div id="contrastSamples" class="contrast-samples">
+                                <!-- Exemples de contraste seront ajoutés par JS -->
                             </div>
                         </div>
                     </div>
@@ -74,13 +143,17 @@
             
             <div class="color-history">
                 <h3>Historique</h3>
-                <div class="history-colors" id="colorHistory"></div>
+                <div class="history-colors" id="colorHistory">
+                    <!-- Historique des couleurs sera ajouté par JS -->
+                </div>
                 <button type="button" class="btn btn-outline" id="clearHistory" onclick="clearColorHistory()">
                     <i class="fas fa-trash-alt"></i> Effacer l'historique
                 </button>
                 <div class="color-favorites">
                     <h3>Favoris</h3>
-                    <div class="favorites-colors" id="colorFavorites"></div>
+                    <div class="favorites-colors" id="colorFavorites">
+                        <!-- Favoris seront ajoutés par JS -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -96,29 +169,33 @@
         <div class="help-panel-content">
             <h4>Comment utiliser</h4>
             <ol>
-                <li>Cliquez et déplacez le curseur sur le carré coloré pour sélectionner une couleur</li>
-                <li>Utilisez le curseur horizontal pour changer la teinte de base</li>
-                <li>Ajustez l'opacité avec le curseur d'alpha si nécessaire</li>
-                <li>Les valeurs HEX, RGB, HSL et CMYK sont automatiquement calculées</li>
-                <li>Utilisez les onglets pour explorer les palettes, harmonies et autres outils</li>
+                <li>Cliquez sur le cercle de couleur en haut pour ouvrir le sélecteur de couleur natif</li>
+                <li>Utilisez les onglets pour explorer les palettes, harmonies, ajustements et test d'accessibilité</li>
+                <li>Modifiez directement les valeurs HEX, RGB, HSL ou CMYK dans les champs correspondants</li>
+                <li>Ajoutez des couleurs aux favoris avec l'icône d'étoile pour y accéder rapidement</li>
+                <li>L'historique conserve automatiquement les dernières couleurs utilisées</li>
             </ol>
             
             <h4>Fonctionnalités</h4>
             <ul>
-                <li><strong>Palettes</strong> : générez automatiquement des teintes, nuances et tons de votre couleur</li>
-                <li><strong>Harmonies</strong> : découvrez des combinaisons de couleurs harmonieuses (complémentaires, analogues, etc.)</li>
-                <li><strong>Ajustement</strong> : modifiez précisément la teinte, saturation, luminosité et température</li>
-                <li><strong>Accessibilité</strong> : vérifiez le contraste pour la lisibilité et visualisez l'apparence pour différents types de daltonisme</li>
-                <li><strong>Historique</strong> : gardez une trace des couleurs précédemment sélectionnées</li>
+                <li><strong>Palettes</strong> : Sélectionnez visuellement une couleur ou utilisez une couleur nommée</li>
+                <li><strong>Harmonies</strong> : Découvrez des combinaisons de couleurs harmonieuses et dégradés prêts à l'emploi</li>
+                <li><strong>Ajustement</strong> : Ajustez précisément la teinte, saturation, luminosité et température</li>
+                <li><strong>Accessibilité</strong> : Vérifiez le contraste pour garantir la lisibilité suivant les normes WCAG</li>
+                <li><strong>Copie</strong> : Copiez facilement une valeur de couleur dans différents formats avec les boutons dédiés</li>
             </ul>
             
             <h4>Astuces</h4>
             <ul>
-                <li>Cliquez sur l'icône de copie à côté d'une valeur pour la copier dans le presse-papiers</li>
-                <li>Vous pouvez saisir directement une valeur HEX dans le champ correspondant</li>
+                <li>Cliquez sur une couleur dans l'historique pour la réutiliser</li>
                 <li>Pour une interface accessible, visez un ratio de contraste d'au moins 4.5:1 (AA)</li>
-                <li>Utilisez la simulation de daltonisme pour vérifier que vos couleurs sont perceptibles par tous</li>
+                <li>Utilisez le mode plein écran pour une surface de travail plus grande</li>
+                <li>Double-cliquez dans un champ de texte pour sélectionner toute la valeur</li>
+                <li>Appuyez sur Entrée après avoir édité une valeur pour appliquer le changement</li>
             </ul>
         </div>
     </div>
+    
+    <!-- Notification de copie qui apparaîtra lors de la copie -->
+    <div class="copy-notification"></div>
 </div> 

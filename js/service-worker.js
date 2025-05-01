@@ -37,7 +37,6 @@ const RESOURCES_TO_CACHE = [
     `${BASE_PATH}/js/navigation.js`,
     `${BASE_PATH}/js/cache.js`,
     `${BASE_PATH}/js/performance.js`,
-    `${BASE_PATH}/js/calculator-global.js`,
     `${BASE_PATH}/js/script.js`,
     `${BASE_PATH}/js/sw.js`,
     // Outils
@@ -72,7 +71,7 @@ const RESOURCES_TO_CACHE = [
     `${BASE_PATH}/icons/favicon.ico`,
     `${BASE_PATH}/icons/icon-144x144.png`,
     `${BASE_PATH}/icons/icon-192x192.png`,
-    `${BASE_PATH}/icons/icon-512x512.png`
+    `${BASE_PATH}/icons/icon-1024x1024.png`
 ];
 
 // Installation du Service Worker

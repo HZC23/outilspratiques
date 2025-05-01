@@ -141,7 +141,7 @@ export const CalculatorManager = {
         }
 
         // Raccourcis clavier
-        document.addEventListener('keydown', (e) => {
+        this.handleKeyDown = (e) => {
             if (!this.isCalculatorVisible()) return;
 
             e.preventDefault();
@@ -159,7 +159,9 @@ export const CalculatorManager = {
             } else if (key === 'backspace') {
                 this.backspace();
             }
-        });
+        };
+        
+        document.addEventListener('keydown', this.handleKeyDown);
     },
 
     /**
@@ -515,6 +517,8 @@ export const CalculatorManager = {
      */
     destroy() {
         this.saveState();
+        // Décharger l'écouteur d'événements clavier
+        document.removeEventListener('keydown', this.handleKeyDown);
         window.__calculatorAlreadyInitialized = false;
     },
 

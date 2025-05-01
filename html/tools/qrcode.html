@@ -26,7 +26,8 @@
                 <div class="tab-pane active" id="urlTab">
                     <div class="form-group">
                         <label for="urlInput">Adresse URL</label>
-                        <input type="url" id="urlInput" class="form-input" placeholder="https://exemple.com">
+                        <input type="url" id="urlInput" class="form-input" placeholder="https://exemple.com" autocomplete="url" spellcheck="false">
+                        <p class="form-hint">Entrez l'adresse web que vous souhaitez partager dans votre QR code.</p>
                     </div>
                 </div>
                 
@@ -34,45 +35,51 @@
                 <div class="tab-pane" id="textTab">
                     <div class="form-group">
                         <label for="textInput">Texte</label>
-                        <textarea id="textInput" class="form-textarea" placeholder="Saisissez votre texte ici..."></textarea>
+                        <textarea id="textInput" class="form-textarea" placeholder="Saisissez votre texte ici..." rows="4"></textarea>
+                        <p class="form-hint">Vous pouvez saisir n'importe quel texte, message ou information.</p>
                     </div>
                 </div>
                 
                 <!-- Onglet Contact -->
                 <div class="tab-pane" id="contactTab">
-                    <div class="form-group">
-                        <label for="contactName">Nom</label>
-                        <input type="text" id="contactName" class="form-input" placeholder="Nom Prénom">
-                    </div>
-                    <div class="form-group">
-                        <label for="contactPhone">Téléphone</label>
-                        <input type="tel" id="contactPhone" class="form-input" placeholder="+33 6 12 34 56 78">
-                    </div>
-                    <div class="form-group">
-                        <label for="contactEmail">Email</label>
-                        <input type="email" id="contactEmail" class="form-input" placeholder="nom@exemple.com">
-                    </div>
-                    <div class="form-group">
-                        <label for="contactAddress">Adresse</label>
-                        <textarea id="contactAddress" class="form-textarea" placeholder="Numéro, rue, code postal, ville, pays"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="contactWebsite">Site web</label>
-                        <input type="url" id="contactWebsite" class="form-input" placeholder="https://exemple.com">
+                    <div class="contact-form">
+                        <div class="form-group">
+                            <label for="contactName">Nom <span class="required">*</span></label>
+                            <input type="text" id="contactName" class="form-input" placeholder="Nom Prénom" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="contactPhone">Téléphone</label>
+                                <input type="tel" id="contactPhone" class="form-input" placeholder="+33 6 12 34 56 78">
+                            </div>
+                            <div class="form-group">
+                                <label for="contactEmail">Email</label>
+                                <input type="email" id="contactEmail" class="form-input" placeholder="nom@exemple.com">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactAddress">Adresse</label>
+                            <textarea id="contactAddress" class="form-textarea" placeholder="Numéro, rue, code postal, ville, pays" rows="2"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactWebsite">Site web</label>
+                            <input type="url" id="contactWebsite" class="form-input" placeholder="https://exemple.com">
+                        </div>
+                        <p class="form-hint">Créez une carte de contact numérique qui pourra être ajoutée aux contacts d'un smartphone.</p>
                     </div>
                 </div>
                 
                 <!-- Onglet Wi-Fi -->
                 <div class="tab-pane" id="wifiTab">
                     <div class="form-group">
-                        <label for="wifiSsid">Nom du réseau (SSID)</label>
-                        <input type="text" id="wifiSsid" class="form-input" placeholder="Nom de votre réseau Wi-Fi">
+                        <label for="wifiSsid">Nom du réseau (SSID) <span class="required">*</span></label>
+                        <input type="text" id="wifiSsid" class="form-input" placeholder="Nom de votre réseau Wi-Fi" required>
                     </div>
                     <div class="form-group">
                         <label for="wifiPassword">Mot de passe</label>
                         <div class="password-input">
                             <input type="password" id="wifiPassword" class="form-input" placeholder="Mot de passe Wi-Fi">
-                            <button type="button" class="btn-toggle-password" id="toggleWifiPassword">
+                            <button type="button" class="btn-toggle-password" id="toggleWifiPassword" aria-label="Afficher/masquer le mot de passe">
                                 <i class="fas fa-eye"></i>
                             </button>
                         </div>
@@ -91,6 +98,7 @@
                             <span class="checkbox-label">Réseau caché</span>
                         </label>
                     </div>
+                    <p class="form-hint">Partagez facilement les informations de connexion Wi-Fi sans avoir à saisir le mot de passe.</p>
                 </div>
             </div>
             
@@ -105,6 +113,7 @@
                         <option value="Q">Élevé (25%)</option>
                         <option value="H">Maximum (30%)</option>
                     </select>
+                    <p class="form-hint">Plus le niveau est élevé, plus le QR code pourra être endommagé tout en restant lisible.</p>
                 </div>
                 
                 <div class="form-group">
@@ -120,7 +129,7 @@
                         <label for="foregroundColor">Couleur du QR code</label>
                         <div class="color-picker">
                             <input type="color" id="foregroundColor" class="form-color" value="#000000">
-                            <input type="text" id="foregroundColorText" class="form-input color-text" value="#000000">
+                            <input type="text" id="foregroundColorText" class="form-input color-text" value="#000000" pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$">
                         </div>
                     </div>
                     
@@ -128,7 +137,7 @@
                         <label for="backgroundColor">Couleur de fond</label>
                         <div class="color-picker">
                             <input type="color" id="backgroundColor" class="form-color" value="#FFFFFF">
-                            <input type="text" id="backgroundColorText" class="form-input color-text" value="#FFFFFF">
+                            <input type="text" id="backgroundColorText" class="form-input color-text" value="#FFFFFF" pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$">
                         </div>
                     </div>
                 </div>
@@ -137,6 +146,7 @@
                     <label for="logoUpload">Logo (optionnel)</label>
                     <input type="file" id="logoUpload" class="form-file" accept="image/*">
                     <div class="file-preview" id="logoPreview"></div>
+                    <p class="form-hint">Ajoutez votre logo au centre du QR code. Préférez un logo simple avec un fond transparent.</p>
                 </div>
                 
                 <div class="form-group logo-options" id="logoOptions" style="display: none;">
@@ -161,6 +171,10 @@
                 <h3>Aperçu</h3>
                 <div class="qrcode-output" id="qrcodeOutput">
                     <!-- QR code sera généré ici -->
+                    <div class="empty-state">
+                        <i class="fas fa-qrcode"></i>
+                        <p>Votre QR code apparaîtra ici</p>
+                    </div>
                 </div>
                 
                 <div class="qrcode-actions">
@@ -184,6 +198,11 @@
                         <i class="fas fa-print"></i> Imprimer
                     </button>
                 </div>
+            </div>
+            
+            <!-- Historique des QR codes -->
+            <div class="qrcode-history" id="qrcodeHistory">
+                <!-- L'historique sera généré ici -->
             </div>
             
             <div class="qrcode-scanner-section">
@@ -210,7 +229,7 @@
                         <div class="scanner-overlay">
                             <div class="scanner-marker"></div>
                         </div>
-                        <button type="button" class="btn-icon" id="stopWebcam">
+                        <button type="button" class="btn-icon" id="stopWebcam" aria-label="Arrêter la caméra">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
@@ -235,7 +254,7 @@
     <div class="help-panel" id="qrcodeHelpPanel">
         <div class="help-panel-header">
             <h3>Aide - Générateur de QR Code</h3>
-            <button type="button" class="btn-icon" id="closeQrcodeHelp">
+            <button type="button" class="btn-icon" id="closeQrcodeHelp" aria-label="Fermer l'aide">
                 <i class="fas fa-times"></i>
             </button>
         </div>
@@ -274,6 +293,12 @@
             <ul>
                 <li>Via votre webcam en temps réel</li>
                 <li>En important une image contenant un QR code</li>
+            </ul>
+            
+            <h4>Raccourcis clavier</h4>
+            <ul>
+                <li><kbd>Ctrl</kbd> + <kbd>Enter</kbd> : Générer le QR code</li>
+                <li><kbd>Esc</kbd> : Fermer la fenêtre d'aide</li>
             </ul>
         </div>
     </div>

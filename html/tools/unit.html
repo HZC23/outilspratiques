@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <div class="tool-container" id="unitTool">
     <div class="tool-header">
-        <h2><i class="fas fa-ruler"></i> Convertisseur d'unités</h2>
+        <h2 class="unit-title"><i class="fas fa-ruler"></i> Convertisseur d'unités</h2>
         <div class="tool-actions">
             <button type="button" class="btn-icon" id="unitHelp" aria-label="Aide">
                 <i class="fas fa-question-circle"></i>
@@ -13,46 +13,45 @@
     </div>
     
     <div class="tool-content">
-        <div class="unit-converter">
+        <div class="unit-container">
             <div class="conversion-category">
+                <label for="conversionCategory">Catégorie:</label>
                 <select id="conversionCategory" class="form-select">
-                    <option value="length">Longueur</option>
-                    <option value="area">Surface</option>
-                    <option value="volume">Volume</option>
-                    <option value="mass">Masse</option>
-                    <option value="temperature">Température</option>
-                    <option value="speed">Vitesse</option>
-                    <option value="time">Temps</option>
-                    <option value="pressure">Pression</option>
-                    <option value="energy">Énergie</option>
-                    <option value="power">Puissance</option>
-                    <option value="data">Données</option>
+                    <!-- Les options seront générées par JS -->
                 </select>
             </div>
             
             <div class="conversion-input">
                 <div class="input-group">
+                    <label for="fromValue">Valeur:</label>
                     <input type="number" id="fromValue" class="form-input" value="1" step="any">
-                    <select id="fromUnit" class="form-select unit-select"></select>
+                    <select id="fromUnit" class="form-select unit-select">
+                        <!-- Options générées dynamiquement par JS -->
+                    </select>
                 </div>
                 
-                <button type="button" id="swapUnits" class="swap-btn">
+                <button type="button" id="swapUnits" class="swap-btn" aria-label="Échanger les unités">
                     <i class="fas fa-exchange-alt"></i>
                 </button>
                 
                 <div class="input-group">
+                    <label for="toValue">Résultat:</label>
                     <input type="number" id="toValue" class="form-input" readonly>
-                    <select id="toUnit" class="form-select unit-select"></select>
+                    <select id="toUnit" class="form-select unit-select">
+                        <!-- Options générées dynamiquement par JS -->
+                    </select>
                 </div>
             </div>
             
-            <div class="conversion-formula">
-                <p>Formule: <span id="conversionFormula">1 mètre = 100 centimètres</span></p>
+            <div class="conversion-formula" id="conversionFormula">
+                <!-- La formule sera générée dynamiquement -->
             </div>
             
             <div class="conversion-history">
                 <h3>Historique de conversion</h3>
-                <div class="history-list" id="conversionHistory"></div>
+                <div class="history-list" id="conversionHistory">
+                    <!-- L'historique sera généré dynamiquement -->
+                </div>
                 <button type="button" class="btn btn-outline" id="clearConversionHistory">
                     <i class="fas fa-trash-alt"></i> Effacer l'historique
                 </button>
@@ -85,11 +84,82 @@
             
             <h4>Fonctionnalités</h4>
             <ul>
+                <li><strong>Calcul automatique</strong> : les résultats sont mis à jour instantanément</li>
                 <li><strong>Bouton d'échange</strong> : permet d'inverser les unités</li>
                 <li><strong>Historique</strong> : garde une trace de vos conversions récentes</li>
                 <li><strong>Formule</strong> : affiche la relation entre les unités sélectionnées</li>
                 <li><strong>Conversions courantes</strong> : accès rapide aux conversions fréquentes</li>
             </ul>
+            
+            <h4>Catégories disponibles</h4>
+            <ul>
+                <li><strong>Longueur</strong> : km, m, cm, mm, mi, yd, ft, in</li>
+                <li><strong>Masse</strong> : t, kg, g, mg, lb, oz</li>
+                <li><strong>Volume</strong> : m³, L, mL, gal, qt, pt, floz</li>
+                <li><strong>Température</strong> : °C, °F, K</li>
+                <li><strong>Surface</strong> : km², m², cm², ha, ac, ft²</li>
+                <li><strong>Vitesse</strong> : m/s, km/h, mph, nœuds</li>
+                <li><strong>Temps</strong> : année, mois, jour, heure, minute, seconde</li>
+                <li><strong>Et bien plus...</strong> : pression, énergie, données</li>
+            </ul>
         </div>
     </div>
-</div> 
+</div>
+
+<script type="module">
+    import { UnitConverter } from '../../js/tools/unitConverter.js';
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        try {
+            // Initialisation du convertisseur
+            UnitConverter.init();
+            
+            // Fonctionnalité d'aide
+            const helpBtn = document.getElementById('unitHelp');
+            const helpPanel = document.getElementById('unitHelpPanel');
+            const closeHelpBtn = document.getElementById('closeUnitHelp');
+            
+            if (helpBtn && helpPanel && closeHelpBtn) {
+                helpBtn.addEventListener('click', () => {
+                    helpPanel.classList.add('active');
+                });
+                
+                closeHelpBtn.addEventListener('click', () => {
+                    helpPanel.classList.remove('active');
+                });
+            }
+            
+            // S'assurer que les calculs sont effectués après chargement complet
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    // Forcer une conversion initiale en déclenchant des événements sur les éléments
+                    const categorySelect = document.getElementById('conversionCategory');
+                    const fromUnit = document.getElementById('fromUnit');
+                    const toUnit = document.getElementById('toUnit');
+                    const fromValue = document.getElementById('fromValue');
+                    
+                    // Déclencher les événements dans l'ordre pour assurer un calcul correct
+                    if (categorySelect) {
+                        categorySelect.dispatchEvent(new Event('change', { bubbles: true }));
+                    } else {
+                        // Si le sélecteur de catégorie n'est pas trouvé, déclencher directement les autres événements
+                        if (fromUnit) {
+                            fromUnit.dispatchEvent(new Event('change', { bubbles: true }));
+                        }
+                        
+                        if (toUnit) {
+                            toUnit.dispatchEvent(new Event('change', { bubbles: true }));
+                        }
+                    }
+                    
+                    // Toujours déclencher l'événement input sur la valeur d'entrée pour effectuer le calcul
+                    if (fromValue) {
+                        fromValue.dispatchEvent(new Event('input', { bubbles: true }));
+                    }
+                }, 500); // Augmenter le délai pour s'assurer que tout est bien chargé
+            });
+        } catch (error) {
+            console.error("Erreur lors de l'initialisation du convertisseur:", error);
+        }
+    });
+</script> 

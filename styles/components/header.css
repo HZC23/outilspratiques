@@ -118,15 +118,6 @@ header:hover {
         text-align: center;
     }
     
-    .btn-icon, .menu-toggle {
-        width: 36px;
-        height: 36px;
-    }
-    
-    .btn-icon i, .menu-toggle i {
-        font-size: 1rem;
-    }
-    
     /* Ajustement pour aligner à gauche sur mobile */
     .theme-switch-wrapper {
         margin-right: auto;
@@ -160,11 +151,6 @@ header:hover {
         font-size: calc(var(--font-size-md));
         width: 55%;
         left: 48%; /* Légèrement décentré pour compenser l'espace du theme-switch */
-    }
-    
-    .btn-icon, .menu-toggle {
-        width: 28px;
-        height: 28px;
     }
     
     /* Réduire encore l'espacement sur les petits écrans */

@@ -155,11 +155,6 @@ export const TimerManager = {
             });
         });
 
-        // Gérer le bouton plein écran
-        document.getElementById('timerFullscreen')?.addEventListener('click', () => {
-            this.toggleFullscreen();
-        });
-
         // Gérer les boutons de fin de minuteur
         document.getElementById('dismissTimer')?.addEventListener('click', () => {
             const timerComplete = document.getElementById('timerComplete');
@@ -238,37 +233,6 @@ export const TimerManager = {
                 soundSelect.appendChild(onlineGroup);
             }
         }
-    },
-
-    /**
-     * Bascule en mode plein écran
-     */
-    toggleFullscreen() {
-        // Cette fonction est désormais gérée par le module fullscreen.js global
-        console.warn('La fonction toggleFullscreen() est déconseillée, utilisez FullscreenManager à la place');
-        
-        // Plutôt que d'essayer d'utiliser l'API directement, utilisons le bouton existant
-        const fullscreenBtn = document.getElementById('timerFullscreen');
-        if (fullscreenBtn) {
-            // Déclencher un clic sur le bouton pour activer correctement le plein écran
-            // via le gestionnaire d'événements qui contient déjà l'appel à requestFullscreen
-            fullscreenBtn.click();
-        } else {
-            // Si le bouton n'existe pas, essayons de trouver une instance de FullscreenManager
-            if (window.fullscreenManagers && window.fullscreenManagers.timerTool) {
-                // Utiliser la méthode de repli CSS qui ne nécessite pas d'être appelée 
-                // directement depuis un événement utilisateur
-                window.fullscreenManagers.timerTool._useFallbackFullscreen(true);
-            }
-        }
-    },
-
-    /**
-     * Gestionnaire pour quitter le plein écran avec la touche Échap
-     */
-    escapeFullscreen(e) {
-        // Cette fonction est désormais gérée par le module fullscreen.js global
-        console.warn('La fonction escapeFullscreen() est déconseillée, utilisez FullscreenManager à la place');
     },
 
     /**

@@ -9,8 +9,8 @@
     "orientation": "any",
     "icons": [
         {
-            "src": "/icons/icon-144x144.png",
-            "sizes": "144x144",
+            "src": "/icons/icon-1024x1024.png",
+            "sizes": "1024x1024",
             "type": "image/png",
             "purpose": "any maskable"
         }

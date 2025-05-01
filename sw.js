@@ -22,7 +22,7 @@ const CORE_ASSETS = [
 
 const SECONDARY_ASSETS = [
     './js/clock.js',
-    './icons/icon-512x512.png',
+    './icons/icon-1024x1024.png',
     'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css',
     './styles/menu.css',

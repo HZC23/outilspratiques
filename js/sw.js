@@ -40,7 +40,7 @@ const CONFIG = {
             '/icons/favicon.ico',
             '/icons/icon-144x144.png',
             '/icons/icon-192x192.png',
-            '/icons/icon-512x512.png',
+            '/icons/icon-1024x1024.png',
             'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css',
             'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap'
         ],

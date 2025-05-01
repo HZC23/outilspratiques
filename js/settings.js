@@ -40,7 +40,7 @@ class SettingsManager {
                     tools: ['/tools/calculator.html', '/tools/timer.html', '/tools/notes.html'],
                     styles: ['/styles/main.css', '/styles/variables.css'],
                     scripts: ['/js/main.js', '/js/utils.js'],
-                    images: ['/icons/favicon.ico', '/icons/icon-512x512.png']
+                    images: ['/icons/favicon.ico', '/icons/icon-1024x1024.png']
                 }
             }
         };
@@ -629,7 +629,7 @@ class SettingsManager {
                 title: 'Images et icônes',
                 resources: [
                     { path: '/icons/favicon.ico', name: 'Favicon' },
-                    { path: '/icons/icon-512x512.png', name: 'Icône principale' }
+                    { path: '/icons/icon-1024x1024.png', name: 'Icône principale' }
                 ]
             }
         };

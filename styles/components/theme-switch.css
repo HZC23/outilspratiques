@@ -1,34 +1,23 @@
-/*
-  Theme Switch Component
-  Ce composant permet de basculer entre les thèmes clair et sombre
-  From Uiverse.io by Galahhad
-*/
-
-/* Position dans le header */
-.theme-switch-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    position: relative;
-    left: 0;
-    z-index: 20;
-    margin-right: auto;
-}
-
-
+/* From Uiverse.io by Galahhad */ 
 .theme-switch {
-  --toggle-size: 25px; /* Taille de base réduite pour mieux s'intégrer au header */
-  /* la taille est ajustée en utilisant font-size,
-     ce n'est pas transform scale,
-     vous pouvez donc choisir n'importe quelle taille */
-  --container-width: 4em; /* Réduit de 5.625em à 4em */
-  --container-height: 2em; /* Réduit de 2.5em à 2em */
+  position: absolute;
+  display: inline-block;
+  left: 15px; /* Positionner à gauche */
+  top: 50%; /* Centrer verticalement */
+  transform: translateY(-50%); /* Parfait centrage vertical */
+  margin: 0;
+  --toggle-size: 20px;
+  /* the size is adjusted using font-size,
+     this is not transform scale,
+     so you can choose any size */
+  --container-width: 5.625em;
+  --container-height: 2.5em;
   --container-radius: 6.25em;
-  /* radius 0 - mode minecraft :) */
+  /* radius 0 - minecraft mode :) */
   --container-light-bg: #3D7EAE;
   --container-night-bg: #1D1F2C;
-  --circle-container-diameter: 2.8em; /* Réduit de 3.375em à 2.8em */
-  --sun-moon-diameter: 1.8em; /* Réduit de 2.125em à 1.8em */
+  --circle-container-diameter: 3.375em;
+  --sun-moon-diameter: 2.125em;
   --sun-bg: #ECCA2F;
   --moon-bg: #C4C9D1;
   --spot-color: #959DB1;
@@ -38,10 +27,59 @@
   --back-clouds-color: #AACADF;
   --transition: .5s cubic-bezier(0, -0.02, 0.4, 1.25);
   --circle-transition: .3s cubic-bezier(0, -0.02, 0.35, 1.17);
-  display: inline-block;
-  position: relative;
-  transform: scale(0.85); /* Réduction globale de 15% */
-  transform-origin: left center;
+  z-index: 10; /* S'assurer qu'il est au-dessus des autres éléments */
+}
+
+/* Style pour mobile */
+@media screen and (max-width: 768px) {
+  .theme-switch {
+    --toggle-size: 16px;
+  }
+  
+  /* Masquer les éléments complexes sur mobile */
+  .theme-switch__clouds, 
+  .theme-switch__stars-container {
+    display: none;
+  }
+  
+  /* Simplifier le bouton */
+  .theme-switch__container {
+    width: 3.5em;
+    height: 1.8em;
+  }
+  
+  .theme-switch__circle-container {
+    width: 2.5em;
+    height: 2.5em;
+  }
+  
+  .theme-switch__sun-moon-container {
+    width: 1.5em;
+    height: 1.5em;
+  }
+}
+
+/* Style encore plus compact pour les très petits écrans */
+@media screen and (max-width: 480px) {
+  .theme-switch {
+    --toggle-size: 14px;
+    left: 10px;
+  }
+  
+  .theme-switch__container {
+    width: 3em;
+    height: 1.5em;
+  }
+  
+  .theme-switch__circle-container {
+    width: 2.2em;
+    height: 2.2em;
+  }
+  
+  .theme-switch__sun-moon-container {
+    width: 1.2em;
+    height: 1.2em;
+  }
 }
 
 .theme-switch, .theme-switch *, .theme-switch *::before, .theme-switch *::after {
@@ -74,7 +112,7 @@
   inset: 0;
   -webkit-box-shadow: 0em 0.05em 0.187em rgba(0, 0, 0, 0.25) inset, 0em 0.05em 0.187em rgba(0, 0, 0, 0.25) inset;
   box-shadow: 0em 0.05em 0.187em rgba(0, 0, 0, 0.25) inset, 0em 0.05em 0.187em rgba(0, 0, 0, 0.25) inset;
-  border-radius: var(--container-radius);
+  border-radius: var(--container-radius)
 }
 
 .theme-switch__checkbox {
@@ -199,7 +237,7 @@
 }
 
 .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__circle-container:hover {
-  left: calc(100% - var(--circle-container-offset) - var(--circle-container-diameter) - 0.187em);
+  left: calc(100% - var(--circle-container-offset) - var(--circle-container-diameter) - 0.187em)
 }
 
 .theme-switch__circle-container:hover {

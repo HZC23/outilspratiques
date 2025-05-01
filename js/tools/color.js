@@ -22,8 +22,9 @@ export const ColorManager = {
      * Initialise le sélecteur de couleurs
      */
     init() {
-        // Charger l'historique
+        // Charger l'historique et l'état
         this.loadColorHistory();
+        this.loadState();
         
         // Initialiser les écouteurs d'événements
         this.setupEventListeners();
@@ -38,7 +39,8 @@ export const ColorManager = {
      * Configure les écouteurs d'événements
      */
     setupEventListeners() {
-        const colorPicker = document.getElementById('colorPicker');
+        // Sélecteur de couleur principal
+        const colorPicker = document.getElementById('colorThumb');
         if (colorPicker) {
             colorPicker.addEventListener('input', (e) => {
                 this.updateColorPicker(e.target.value);
@@ -57,23 +59,29 @@ export const ColorManager = {
 
         // Fonction de mise à jour de la couleur à partir des sliders
         const updateFromSliders = () => {
-            // Prend la couleur actuelle, la convertit en HSL
-            const rgb = this.hexToRgb(this.state.currentColor);
-            let hsl = this.rgbToHsl(rgb.r, rgb.g, rgb.b);
-            // Remplace les valeurs par celles des sliders
-            if (hueSlider) hsl.h = parseInt(hueSlider.value, 10);
-            if (satSlider) hsl.s = parseInt(satSlider.value, 10);
-            if (lightSlider) hsl.l = parseInt(lightSlider.value, 10);
-            // Température : simple ajustement sur la teinte (pour l'exemple)
-            if (tempSlider) hsl.h = (hsl.h + parseInt(tempSlider.value, 10) + 360) % 360;
-            // Met à jour la couleur courante
-            const hex = this.hslToHex(hsl.h, hsl.s, hsl.l);
-            this.updateColorPicker(hex);
-            // Met à jour l'affichage des valeurs
-            if (hueValue) hueValue.textContent = hsl.h + '°';
-            if (satValue) satValue.textContent = hsl.s + '%';
-            if (lightValue) lightValue.textContent = hsl.l + '%';
-            if (tempValue) tempValue.textContent = tempSlider ? tempSlider.value : '0';
+            try {
+                // Prend la couleur actuelle, la convertit en HSL
+                const rgb = this.hexToRgb(this.state.currentColor);
+                if (!rgb) return;
+                
+                let hsl = this.rgbToHsl(rgb.r, rgb.g, rgb.b);
+                // Remplace les valeurs par celles des sliders
+                if (hueSlider) hsl.h = parseInt(hueSlider.value, 10);
+                if (satSlider) hsl.s = parseInt(satSlider.value, 10);
+                if (lightSlider) hsl.l = parseInt(lightSlider.value, 10);
+                // Température : simple ajustement sur la teinte (pour l'exemple)
+                if (tempSlider) hsl.h = (hsl.h + parseInt(tempSlider.value, 10) + 360) % 360;
+                // Met à jour la couleur courante
+                const hex = this.hslToHex(hsl.h, hsl.s, hsl.l);
+                this.updateColorPicker(hex);
+                // Met à jour l'affichage des valeurs
+                if (hueValue) hueValue.textContent = hsl.h + '°';
+                if (satValue) satValue.textContent = hsl.s + '%';
+                if (lightValue) lightValue.textContent = hsl.l + '%';
+                if (tempValue) tempValue.textContent = tempSlider ? tempSlider.value : '0';
+            } catch (err) {
+                console.error('Erreur lors de la mise à jour des sliders:', err);
+            }
         };
 
         if (hueSlider) {
@@ -91,16 +99,22 @@ export const ColorManager = {
 
         // Synchronise les sliders avec la couleur courante à chaque changement
         this.syncSlidersWithColor = () => {
-            const rgb = this.hexToRgb(this.state.currentColor);
-            const hsl = this.rgbToHsl(rgb.r, rgb.g, rgb.b);
-            if (hueSlider) hueSlider.value = Math.round(hsl.h);
-            if (satSlider) satSlider.value = Math.round(hsl.s);
-            if (lightSlider) lightSlider.value = Math.round(hsl.l);
-            if (tempSlider) tempSlider.value = 0;
-            if (hueValue) hueValue.textContent = Math.round(hsl.h) + '°';
-            if (satValue) satValue.textContent = Math.round(hsl.s) + '%';
-            if (lightValue) lightValue.textContent = Math.round(hsl.l) + '%';
-            if (tempValue) tempValue.textContent = '0';
+            try {
+                const rgb = this.hexToRgb(this.state.currentColor);
+                if (!rgb) return;
+                
+                const hsl = this.rgbToHsl(rgb.r, rgb.g, rgb.b);
+                if (hueSlider) hueSlider.value = Math.round(hsl.h);
+                if (satSlider) satSlider.value = Math.round(hsl.s);
+                if (lightSlider) lightSlider.value = Math.round(hsl.l);
+                if (tempSlider) tempSlider.value = 0;
+                if (hueValue) hueValue.textContent = Math.round(hsl.h) + '°';
+                if (satValue) satValue.textContent = Math.round(hsl.s) + '%';
+                if (lightValue) lightValue.textContent = Math.round(hsl.l) + '%';
+                if (tempValue) tempValue.textContent = '0';
+            } catch (err) {
+                console.error('Erreur lors de la synchronisation des sliders:', err);
+            }
         };
 
         // Appelle la synchronisation à chaque updateColorPicker
@@ -119,25 +133,37 @@ export const ColorManager = {
         if (hexInput) {
             hexInput.addEventListener('blur', () => this.handleHexInput(hexInput.value));
             hexInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') this.handleHexInput(hexInput.value);
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    this.handleHexInput(hexInput.value);
+                }
             });
         }
         if (rgbInput) {
             rgbInput.addEventListener('blur', () => this.handleRgbInput(rgbInput.value));
             rgbInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') this.handleRgbInput(rgbInput.value);
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    this.handleRgbInput(rgbInput.value);
+                }
             });
         }
         if (hslInput) {
             hslInput.addEventListener('blur', () => this.handleHslInput(hslInput.value));
             hslInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') this.handleHslInput(hslInput.value);
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    this.handleHslInput(hslInput.value);
+                }
             });
         }
         if (cmykInput) {
             cmykInput.addEventListener('blur', () => this.handleCmykInput(cmykInput.value));
             cmykInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') this.handleCmykInput(cmykInput.value);
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    this.handleCmykInput(cmykInput.value);
+                }
             });
         }
 
@@ -145,7 +171,7 @@ export const ColorManager = {
         const colorPreview = document.getElementById('colorPreview');
         if (colorPreview) {
             colorPreview.addEventListener('click', () => {
-                this.copyColorValue('Hex');
+                this.copyColorValue('hex');
             });
         }
 
@@ -219,6 +245,55 @@ export const ColorManager = {
                 if (pane) pane.classList.add('active');
             });
         });
+        
+        // Gestion de l'affichage du panneau d'aide
+        const helpButton = document.getElementById('colorHelp');
+        const helpPanel = document.getElementById('colorHelpPanel');
+        const closeHelpButton = document.getElementById('closeColorHelp');
+        
+        if (helpButton && helpPanel) {
+            helpButton.addEventListener('click', () => {
+                helpPanel.classList.toggle('show');
+            });
+        }
+        
+        if (closeHelpButton && helpPanel) {
+            closeHelpButton.addEventListener('click', () => {
+                helpPanel.classList.remove('show');
+            });
+        }
+        
+        // Gestion du mode plein écran
+        const fullscreenBtn = document.getElementById('colorFullscreenBtn');
+        const colorTool = document.getElementById('colorTool');
+        
+        if (fullscreenBtn && colorTool) {
+            fullscreenBtn.addEventListener('click', () => {
+                if (!document.fullscreenElement) {
+                    colorTool.requestFullscreen().catch(err => {
+                        console.error(`Erreur lors du passage en plein écran: ${err.message}`);
+                    });
+                } else {
+                    document.exitFullscreen();
+                }
+            });
+        }
+        
+        // Événement de changement de plein écran pour mettre à jour l'icône
+        document.addEventListener('fullscreenchange', () => {
+            if (fullscreenBtn) {
+                const icon = fullscreenBtn.querySelector('i');
+                if (icon) {
+                    if (document.fullscreenElement) {
+                        icon.classList.remove('fa-expand');
+                        icon.classList.add('fa-compress');
+                    } else {
+                        icon.classList.remove('fa-compress');
+                        icon.classList.add('fa-expand');
+                    }
+                }
+            }
+        });
     },
 
     /**
@@ -229,7 +304,7 @@ export const ColorManager = {
         this.state.currentColor = color;
         
         // Mettre à jour le sélecteur de couleur
-        const colorPicker = document.getElementById('colorPicker');
+        const colorPicker = document.getElementById('colorThumb');
         if (colorPicker) {
             colorPicker.value = color;
         }
@@ -536,14 +611,20 @@ export const ColorManager = {
 
     /**
      * Copie une valeur de couleur dans le presse-papier
-     * @param {string} format - Le format de couleur à copier (Hex, Rgb, Hsl)
+     * @param {string} format - Le format de couleur à copier (hex, rgb, hsl, cmyk)
      */
     copyColorValue(format) {
-        const element = document.getElementById(`color${format}`);
-        if (!element) return;
+        // Correction: utiliser les IDs appropriés au lieu de 'colorFormat'
+        const elementId = format.toLowerCase() + 'Value';
+        const element = document.getElementById(elementId);
+        
+        if (!element) {
+            console.error(`Élément avec l'ID ${elementId} non trouvé`);
+            return;
+        }
         
         this.copyToClipboard(element.value);
-        this.showCopyNotification(`${format} copié : ${element.value}`);
+        this.showCopyNotification(`${format.toUpperCase()} copié : ${element.value}`);
         
         // Vibrer si disponible (mobile)
         if (navigator.vibrate) {
@@ -708,18 +789,39 @@ export const ColorManager = {
      * @param {string} text - Le texte à copier
      */
     copyToClipboard(text) {
+        // Utilisation de l'API Clipboard moderne si disponible
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text)
+                .then(() => true)
+                .catch((err) => {
+                    console.error('Erreur lors de la copie avec Clipboard API:', err);
+                    return this.fallbackCopyToClipboard(text);
+                });
+            return true;
+        } else {
+            // Méthode de secours pour les navigateurs plus anciens
+            return this.fallbackCopyToClipboard(text);
+        }
+    },
+    
+    /**
+     * Méthode de secours pour copier du texte
+     * @param {string} text - Le texte à copier
+     */
+    fallbackCopyToClipboard(text) {
         const textarea = document.createElement('textarea');
         textarea.value = text;
-        textarea.style.position = 'fixed'; // Évite de faire défiler la page
+        textarea.style.position = 'fixed';
+        textarea.style.left = '-9999px';
+        textarea.style.top = '0';
         document.body.appendChild(textarea);
-        textarea.focus();
-        textarea.select();
         
         try {
-            document.execCommand('copy');
-            return true;
+            textarea.focus();
+            textarea.select();
+            return document.execCommand('copy');
         } catch (err) {
-            console.error('Erreur lors de la copie :', err);
+            console.error('Erreur lors de la copie via execCommand:', err);
             return false;
         } finally {
             document.body.removeChild(textarea);
@@ -732,15 +834,29 @@ export const ColorManager = {
      * @returns {Object|null} Objet contenant les valeurs r, g, b ou null si invalide
      */
     hexToRgb(hex) {
-        const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-        hex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
+        if (!hex) return null;
         
-        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-        return result ? {
-            r: parseInt(result[1], 16),
-            g: parseInt(result[2], 16),
-            b: parseInt(result[3], 16)
-        } : null;
+        try {
+            // Normaliser la chaîne hexadécimale
+            hex = hex.trim();
+            
+            // Gérer le format raccourci #RGB
+            const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+            hex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
+            
+            // Analyser le format complet #RRGGBB
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            if (!result) return null;
+            
+            return {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            };
+        } catch (err) {
+            console.error('Erreur lors de la conversion HEX->RGB:', err);
+            return null;
+        }
     },
 
     /**
@@ -962,56 +1078,98 @@ export const ColorManager = {
         return this.hslToHex(hsl.h, hsl.s, l);
     },
 
-    // Gestion des entrées utilisateur pour chaque format
+    // Gestion des entrées utilisateur pour chaque format avec validation améliorée
     handleHexInput(value) {
-        let hex = value.trim();
-        if (!hex.startsWith('#')) hex = '#' + hex;
-        if (/^#[0-9a-fA-F]{6}$/.test(hex)) {
-            this.updateColorPicker(hex);
-        } else {
+        if (!value) return;
+        
+        try {
+            let hex = value.trim();
+            // Ajouter # si absent
+            if (!hex.startsWith('#')) hex = '#' + hex;
+            
+            // Supporter les formats courts #RGB
+            if (/^#[0-9a-fA-F]{3}$/.test(hex)) {
+                hex = '#' + hex[1] + hex[1] + hex[2] + hex[2] + hex[3] + hex[3];
+            }
+            
+            // Valider le format complet
+            if (/^#[0-9a-fA-F]{6}$/.test(hex)) {
+                this.updateColorPicker(hex);
+            } else {
+                this.showCopyNotification('Format HEX invalide');
+            }
+        } catch (err) {
+            console.error('Erreur lors du traitement de l\'entrée HEX:', err);
             this.showCopyNotification('Format HEX invalide');
         }
     },
+    
     handleRgbInput(value) {
-        const match = value.match(/^rgb\s*\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/i);
-        if (match) {
-            const r = parseInt(match[1], 10);
-            const g = parseInt(match[2], 10);
-            const b = parseInt(match[3], 10);
-            if ([r, g, b].every(v => v >= 0 && v <= 255)) {
-                this.updateColorPicker(this.rgbToHex(r, g, b));
-                return;
+        if (!value) return;
+        
+        try {
+            // Support pour les formats rgb(r, g, b) et rgb(r g b)
+            const match = value.match(/^rgb\s*\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/i);
+            if (match) {
+                const r = parseInt(match[1], 10);
+                const g = parseInt(match[2], 10);
+                const b = parseInt(match[3], 10);
+                if ([r, g, b].every(v => v >= 0 && v <= 255)) {
+                    this.updateColorPicker(this.rgbToHex(r, g, b));
+                    return;
+                }
             }
+            this.showCopyNotification('Format RGB invalide');
+        } catch (err) {
+            console.error('Erreur lors du traitement de l\'entrée RGB:', err);
+            this.showCopyNotification('Format RGB invalide');
         }
-        this.showCopyNotification('Format RGB invalide');
     },
+    
     handleHslInput(value) {
-        const match = value.match(/^hsl\s*\(\s*(\d{1,3})\s*,\s*(\d{1,3})%\s*,\s*(\d{1,3})%\s*\)$/i);
-        if (match) {
-            const h = parseInt(match[1], 10);
-            const s = parseInt(match[2], 10);
-            const l = parseInt(match[3], 10);
-            if (h >= 0 && h <= 360 && s >= 0 && s <= 100 && l >= 0 && l <= 100) {
-                this.updateColorPicker(this.hslToHex(h, s, l));
-                return;
+        if (!value) return;
+        
+        try {
+            // Support pour les formats hsl(h, s%, l%) et hsl(h s% l%)
+            const match = value.match(/^hsl\s*\(\s*(\d{1,3})\s*,?\s*(\d{1,3})%\s*,?\s*(\d{1,3})%\s*\)$/i);
+            if (match) {
+                const h = parseInt(match[1], 10);
+                const s = parseInt(match[2], 10);
+                const l = parseInt(match[3], 10);
+                if (h >= 0 && h <= 360 && s >= 0 && s <= 100 && l >= 0 && l <= 100) {
+                    this.updateColorPicker(this.hslToHex(h, s, l));
+                    return;
+                }
             }
+            this.showCopyNotification('Format HSL invalide');
+        } catch (err) {
+            console.error('Erreur lors du traitement de l\'entrée HSL:', err);
+            this.showCopyNotification('Format HSL invalide');
         }
-        this.showCopyNotification('Format HSL invalide');
     },
+    
     handleCmykInput(value) {
-        const match = value.match(/^cmyk\s*\(\s*(\d{1,3})%\s*,\s*(\d{1,3})%\s*,\s*(\d{1,3})%\s*,\s*(\d{1,3})%\s*\)$/i);
-        if (match) {
-            const c = parseInt(match[1], 10) / 100;
-            const m = parseInt(match[2], 10) / 100;
-            const y = parseInt(match[3], 10) / 100;
-            const k = parseInt(match[4], 10) / 100;
-            if ([c, m, y, k].every(v => v >= 0 && v <= 1)) {
-                const rgb = this.cmykToRgb(c, m, y, k);
-                this.updateColorPicker(this.rgbToHex(rgb.r, rgb.g, rgb.b));
-                return;
+        if (!value) return;
+        
+        try {
+            // Support pour les formats cmyk(c%, m%, y%, k%) et cmyk(c% m% y% k%)
+            const match = value.match(/^cmyk\s*\(\s*(\d{1,3})%\s*,?\s*(\d{1,3})%\s*,?\s*(\d{1,3})%\s*,?\s*(\d{1,3})%\s*\)$/i);
+            if (match) {
+                const c = parseInt(match[1], 10) / 100;
+                const m = parseInt(match[2], 10) / 100;
+                const y = parseInt(match[3], 10) / 100;
+                const k = parseInt(match[4], 10) / 100;
+                if ([c, m, y, k].every(v => v >= 0 && v <= 1)) {
+                    const rgb = this.cmykToRgb(c, m, y, k);
+                    this.updateColorPicker(this.rgbToHex(rgb.r, rgb.g, rgb.b));
+                    return;
+                }
             }
+            this.showCopyNotification('Format CMYK invalide');
+        } catch (err) {
+            console.error('Erreur lors du traitement de l\'entrée CMYK:', err);
+            this.showCopyNotification('Format CMYK invalide');
         }
-        this.showCopyNotification('Format CMYK invalide');
     },
 
     // Conversion CMYK -> RGB

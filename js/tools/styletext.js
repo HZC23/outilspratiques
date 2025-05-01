@@ -34,7 +34,6 @@ export const StyleTextManager = {
     init() {
         this.loadHistory();
         this.setupListeners();
-        this.setupSharePopup();
         
         // Définir le style initial
         const styleButtons = document.querySelectorAll('.style-btn');
@@ -108,151 +107,11 @@ export const StyleTextManager = {
                 });
             });
         }
-        
-        if (shareButton) {
-            shareButton.addEventListener('click', () => {
-                this.openSharePopup();
-            });
-        }
 
         // Exposer les fonctions au contexte global pour les appels depuis HTML
         window.applyStyle = (style) => this.applyStyle(style);
         window.copyStyleOutput = () => this.copyOutput();
         window.clearHistory = () => this.clearHistory();
-    },
-
-    /**
-     * Configure la popup de partage
-     */
-    setupSharePopup() {
-        // Créer la popup de partage si elle n'existe pas déjà
-        if (!document.querySelector('.share-popup')) {
-            const popupHTML = `
-                <div class="share-overlay"></div>
-                <div class="share-popup">
-                    <div class="share-popup-header">
-                        <h3><i class="fas fa-share-alt"></i> Partager</h3>
-                        <button type="button" class="btn-icon" id="closeSharePopup">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                    <div class="share-popup-content">
-                        <p>Partagez votre texte stylisé via :</p>
-                        <div class="share-options">
-                            <div class="share-option" data-type="twitter">
-                                <i class="fab fa-twitter"></i>
-                                <span>Twitter</span>
-                            </div>
-                            <div class="share-option" data-type="facebook">
-                                <i class="fab fa-facebook"></i>
-                                <span>Facebook</span>
-                            </div>
-                            <div class="share-option" data-type="whatsapp">
-                                <i class="fab fa-whatsapp"></i>
-                                <span>WhatsApp</span>
-                            </div>
-                            <div class="share-option" data-type="telegram">
-                                <i class="fab fa-telegram"></i>
-                                <span>Telegram</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            const popupContainer = document.createElement('div');
-            popupContainer.innerHTML = popupHTML;
-            document.body.appendChild(popupContainer);
-            
-            // Configurer les écouteurs d'événements pour la popup
-            const closeBtn = document.getElementById('closeSharePopup');
-            const overlay = document.querySelector('.share-overlay');
-            const shareOptions = document.querySelectorAll('.share-option');
-            
-            if (closeBtn) {
-                closeBtn.addEventListener('click', () => {
-                    this.closeSharePopup();
-                });
-            }
-            
-            if (overlay) {
-                overlay.addEventListener('click', () => {
-                    this.closeSharePopup();
-                });
-            }
-            
-            if (shareOptions) {
-                shareOptions.forEach(option => {
-                    option.addEventListener('click', () => {
-                        const shareType = option.getAttribute('data-type');
-                        this.shareText(shareType);
-                    });
-                });
-            }
-        }
-    },
-
-    /**
-     * Ouvre la popup de partage
-     */
-    openSharePopup() {
-        const popup = document.querySelector('.share-popup');
-        const overlay = document.querySelector('.share-overlay');
-        
-        if (popup && overlay) {
-            popup.classList.add('active');
-            overlay.classList.add('active');
-        }
-    },
-    
-    /**
-     * Ferme la popup de partage
-     */
-    closeSharePopup() {
-        const popup = document.querySelector('.share-popup');
-        const overlay = document.querySelector('.share-overlay');
-        
-        if (popup && overlay) {
-            popup.classList.remove('active');
-            overlay.classList.remove('active');
-        }
-    },
-    
-    /**
-     * Partage le texte stylisé selon le type de partage
-     * @param {string} shareType - Le type de partage (twitter, facebook, whatsapp, telegram)
-     */
-    shareText(shareType) {
-        const output = this.state.output;
-        const input = this.state.input;
-        const text = output || input;
-        
-        if (!text) {
-            Utils.showNotification('Aucun texte à partager', 'warning');
-            return;
-        }
-        
-        let url = '';
-        
-        switch (shareType) {
-            case 'twitter':
-                url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
-                break;
-            case 'facebook':
-                url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(text)}`;
-                break;
-            case 'whatsapp':
-                url = `https://wa.me/?text=${encodeURIComponent(text)}`;
-                break;
-            case 'telegram':
-                url = `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(text)}`;
-                break;
-        }
-        
-        if (url) {
-            window.open(url, '_blank');
-            this.closeSharePopup();
-        }
     },
 
     /**

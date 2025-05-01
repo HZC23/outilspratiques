@@ -326,10 +326,7 @@ header:hover {
 /* Toolbox container */
 .tools {
     flex: 1;
-    padding: var(--spacing-xs);
-    background-color: var(--card-bg);
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--box-shadow);
+    background-color: transparent;
 }
 
 /* Ajustement pour les outils comme la calculatrice */

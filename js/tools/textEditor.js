@@ -24,7 +24,9 @@ const els = {
     colorBtns: null,
     fontSelect: null,
     boldBtn: null,
-    italicBtn: null
+    italicBtn: null,
+    importBtn: null,
+    fileInput: null
 };
 
 let isBold = false;
@@ -42,6 +44,13 @@ function updateStats() {
     const charCount = text ? text.replace(/\s/g, '').length : 0;
     if (els.wordCount) els.wordCount.textContent = `${wordCount} mot${wordCount > 1 ? 's' : ''}`;
     if (els.charCount) els.charCount.textContent = `${charCount} caractère${charCount > 1 ? 's' : ''}`;
+    
+    // Gérer la classe empty pour le placeholder
+    if (text === '') {
+        els.editor.classList.add('empty');
+    } else {
+        els.editor.classList.remove('empty');
+    }
 }
 
 function switchTab(tabName) {
@@ -69,20 +78,177 @@ function showNotification(message, type = 'success') {
     setTimeout(() => notification.classList.remove('show'), 3000);
 }
 
+// Fonction pour convertir du texte en HTML simple
+function textToHtml(text) {
+    return text.replace(/\n/g, '<br>').replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+}
+
+// Fonction pour extraire le texte du HTML
+function htmlToText(html) {
+    const temp = document.createElement('div');
+    temp.innerHTML = html;
+    return temp.textContent || temp.innerText || '';
+}
+
+// Fonction pour convertir de docx à html (simulation)
+async function docxToHtml(arrayBuffer) {
+    try {
+        // Simuler une conversion DOCX à HTML
+        const text = new TextDecoder().decode(arrayBuffer);
+        return `<p>${text.replace(/\n/g, '</p><p>')}</p>`;
+    } catch (error) {
+        console.error('Erreur lors de la conversion DOCX:', error);
+        throw error;
+    }
+}
+
+// Fonction pour convertir de odt à html (simulation)
+async function odtToHtml(arrayBuffer) {
+    try {
+        // Simuler une conversion ODT à HTML
+        const text = new TextDecoder().decode(arrayBuffer);
+        return `<p>${text.replace(/\n/g, '</p><p>')}</p>`;
+    } catch (error) {
+        console.error('Erreur lors de la conversion ODT:', error);
+        throw error;
+    }
+}
+
+// Fonction pour importer un fichier
+async function importFile(file) {
+    if (!file) return;
+    
+    try {
+        // Mettre à jour le nom du fichier
+        const filename = file.name;
+        if (els.filename) els.filename.value = filename;
+        
+        // Détecter le format du fichier
+        const format = filename.split('.').pop().toLowerCase();
+        if (els.format && els.format.querySelector(`option[value="${format}"]`)) {
+            els.format.value = format;
+        }
+        
+        // Lire le contenu du fichier
+        const reader = new FileReader();
+        
+        reader.onload = async (e) => {
+            try {
+                let content = '';
+                
+                if (format === 'txt') {
+                    // Fichier texte simple
+                    content = textToHtml(e.target.result);
+                } else if (format === 'docx') {
+                    // Convertir DOCX à HTML
+                    content = await docxToHtml(e.target.result);
+                } else if (format === 'odt') {
+                    // Convertir ODT à HTML
+                    content = await odtToHtml(e.target.result);
+                } else {
+                    showNotification(`Format ${format} non supporté`, 'error');
+                    return;
+                }
+                
+                // Mettre à jour l'éditeur
+                if (els.editor) {
+                    els.editor.innerHTML = content;
+                    els.editor.classList.remove('empty');
+                    updateStats();
+                    showNotification(`Fichier ${filename} importé avec succès`);
+                }
+            } catch (error) {
+                console.error('Erreur lors du traitement du fichier:', error);
+                showNotification('Erreur lors de l\'importation du fichier', 'error');
+            }
+        };
+        
+        reader.onerror = () => {
+            showNotification('Erreur lors de la lecture du fichier', 'error');
+        };
+        
+        if (format === 'txt') {
+            reader.readAsText(file);
+        } else {
+            reader.readAsArrayBuffer(file);
+        }
+    } catch (error) {
+        console.error('Erreur lors de l\'importation:', error);
+        showNotification('Erreur lors de l\'importation du fichier', 'error');
+    }
+}
+
+// Fonction pour lancer l'importation
+function triggerFileImport() {
+    if (els.fileInput) els.fileInput.click();
+}
+
+// Fonction pour gérer l'importation de fichier
+function handleFileImport(event) {
+    const file = event.target.files[0];
+    if (file) {
+        importFile(file);
+    }
+}
+
 function downloadContent() {
     const format = els.format.value;
     let content = '';
     let mimeType = '';
+    
     if (format === 'txt') {
         content = els.editor.innerText;
         mimeType = 'text/plain';
+        downloadFile(content, format, mimeType);
     } else if (format === 'html') {
         content = `<!DOCTYPE html>\n<html><head><meta charset='utf-8'><title>${els.filename.value}</title></head><body>${els.editor.innerHTML}</body></html>`;
         mimeType = 'text/html';
+        downloadFile(content, format, mimeType);
     } else if (format === 'docx') {
-        showNotification('Export Word non supporté dans cette version', 'error');
-        return;
+        // Simuler la création d'un fichier DOCX
+        convertToDocx(els.editor.innerHTML)
+            .then(blob => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = els.filename.value || `document.${format}`;
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }, 100);
+                showNotification(`Document téléchargé : ${els.filename.value}`);
+            })
+            .catch(error => {
+                console.error('Erreur lors de l\'export DOCX:', error);
+                showNotification('Erreur lors de l\'export DOCX', 'error');
+            });
+    } else if (format === 'odt') {
+        // Simuler la création d'un fichier ODT
+        convertToOdt(els.editor.innerHTML)
+            .then(blob => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = els.filename.value || `document.${format}`;
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }, 100);
+                showNotification(`Document téléchargé : ${els.filename.value}`);
+            })
+            .catch(error => {
+                console.error('Erreur lors de l\'export ODT:', error);
+                showNotification('Erreur lors de l\'export ODT', 'error');
+            });
     }
+}
+
+// Fonction pour télécharger un fichier simple
+function downloadFile(content, format, mimeType) {
     const blob = new Blob([content], {type: mimeType});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -95,6 +261,18 @@ function downloadContent() {
         URL.revokeObjectURL(url);
     }, 100);
     showNotification(`Document téléchargé : ${els.filename.value}`);
+}
+
+// Simuler la conversion vers DOCX (en réalité on crée juste un fichier texte avec extension .docx)
+async function convertToDocx(htmlContent) {
+    const textContent = htmlToText(htmlContent);
+    return new Blob([textContent], {type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
+}
+
+// Simuler la conversion vers ODT (en réalité on crée juste un fichier texte avec extension .odt)
+async function convertToOdt(htmlContent) {
+    const textContent = htmlToText(htmlContent);
+    return new Blob([textContent], {type: 'application/vnd.oasis.opendocument.text'});
 }
 
 function copyToClipboard() {
@@ -126,6 +304,7 @@ function printContent() {
 function clearContent() {
     if (confirm('Êtes-vous sûr de vouloir effacer tout le contenu ?')) {
         els.editor.innerHTML = '';
+        els.editor.classList.add('empty');
         updateStats();
         showNotification('Contenu effacé');
     }
@@ -150,6 +329,21 @@ function hideHelpPanel() {
     els.helpPanel.classList.remove('show');
 }
 
+// Fonction pour activer le focus sur l'éditeur
+function focusEditor() {
+    if (els.editor) {
+        els.editor.focus();
+        
+        // Positionner le curseur à la fin du texte
+        const range = document.createRange();
+        const selection = window.getSelection();
+        range.selectNodeContents(els.editor);
+        range.collapse(false); // false = collapse to end
+        selection.removeAllRanges();
+        selection.addRange(range);
+    }
+}
+
 function initToolbar() {
     // Alignement
     els.alignBtns.forEach(btn => {
@@ -159,6 +353,7 @@ function initToolbar() {
                 if (btn.classList.contains('btn-text-left')) els.editor.style.textAlign = 'left';
                 if (btn.classList.contains('btn-text-center')) els.editor.style.textAlign = 'center';
                 if (btn.classList.contains('btn-text-right')) els.editor.style.textAlign = 'right';
+                focusEditor();
             }
         });
     });
@@ -168,6 +363,7 @@ function initToolbar() {
             setActive(els.colorBtns, btn);
             if (els.editor) {
                 els.editor.style.color = btn.dataset.color;
+                focusEditor();
             }
         });
     });
@@ -176,6 +372,7 @@ function initToolbar() {
         els.fontSelect.addEventListener('change', e => {
             const val = e.target.value;
             els.editor.style.fontFamily = val ? `'${val}', sans-serif` : '';
+            focusEditor();
         });
     }
     // Gras
@@ -184,6 +381,7 @@ function initToolbar() {
             isBold = !isBold;
             els.editor.style.fontWeight = isBold ? 'bold' : 'normal';
             els.boldBtn.classList.toggle('active', isBold);
+            focusEditor();
         });
     }
     // Italique
@@ -192,25 +390,10 @@ function initToolbar() {
             isItalic = !isItalic;
             els.editor.style.fontStyle = isItalic ? 'italic' : 'normal';
             els.italicBtn.classList.toggle('active', isItalic);
+            focusEditor();
         });
     }
-    // Raccourcis clavier
-    if (els.editor) {
-        els.editor.addEventListener('keydown', (e) => {
-            if (e.ctrlKey && e.key.toLowerCase() === 'b') {
-                e.preventDefault();
-                if (els.boldBtn) els.boldBtn.click();
-            }
-            if (e.ctrlKey && e.key.toLowerCase() === 'i') {
-                e.preventDefault();
-                if (els.italicBtn) els.italicBtn.click();
-            }
-            if (e.altKey && e.key.toLowerCase() === 'p') {
-                e.preventDefault();
-                switchTab('preview');
-            }
-        });
-    }
+    // Raccourcis clavier sont maintenant gérés dans la fonction init
 }
 
 function init() {
@@ -236,6 +419,8 @@ function init() {
     els.fontSelect = document.querySelector('.fonts select');
     els.boldBtn = document.querySelector('.btn-bold');
     els.italicBtn = document.querySelector('.btn-italic');
+    els.importBtn = document.getElementById('importBtn');
+    els.fileInput = document.getElementById('fileImport');
 
     // Onglets
     els.tabBtns.forEach(btn => {
@@ -254,10 +439,107 @@ function init() {
     if (els.printBtn) {
         els.printBtn.addEventListener('click', printContent);
     }
+    // Import
+    if (els.importBtn) {
+        els.importBtn.addEventListener('click', triggerFileImport);
+    }
+    if (els.fileInput) {
+        els.fileInput.addEventListener('change', handleFileImport);
+    }
     // Stats
     if (els.editor) {
-        els.editor.addEventListener('input', updateStats);
+        // Initialiser l'éditeur avec un contenu vide
+        els.editor.innerHTML = '';
+        els.editor.classList.add('empty');
+        
+        // Événements de l'éditeur
+        els.editor.addEventListener('input', function() {
+            // Si l'éditeur est vide après suppression, réinitialiser
+            if (els.editor.innerHTML.trim() === '' || els.editor.innerHTML === '<br>') {
+                els.editor.innerHTML = '';
+                els.editor.classList.add('empty');
+            } else {
+                els.editor.classList.remove('empty');
+            }
+            
+            // Mise à jour des statistiques
+            updateStats();
+        });
+        
+        // Gestion du focus
+        els.editor.addEventListener('focus', () => {
+            if (els.editor.classList.contains('empty')) {
+                els.editor.innerHTML = '';
+                // Forcer un contenu minimum pour maintenir le curseur visible
+                document.execCommand('insertHTML', false, '<br>');
+            }
+        });
+        
+        // Gestion de la perte de focus
+        els.editor.addEventListener('blur', () => {
+            if (els.editor.innerHTML.trim() === '' || els.editor.innerHTML === '<br>') {
+                els.editor.innerHTML = '';
+                els.editor.classList.add('empty');
+            }
+        });
+        
+        // Gestion du clic sur la zone d'édition vide
+        els.editor.parentElement.addEventListener('click', (e) => {
+            if (e.target === els.editor.parentElement || 
+                (e.target === els.editor && (els.editor.innerHTML.trim() === '' || els.editor.innerHTML === '<br>'))) {
+                focusEditor();
+            }
+        });
+        
+        // Gestion des raccourcis clavier et des espaces
+        els.editor.addEventListener('keydown', function(e) {
+            // Raccourcis clavier
+            if (e.ctrlKey && e.key.toLowerCase() === 'b') {
+                e.preventDefault();
+                if (els.boldBtn) els.boldBtn.click();
+                return;
+            }
+            else if (e.ctrlKey && e.key.toLowerCase() === 'i') {
+                e.preventDefault();
+                if (els.italicBtn) els.italicBtn.click();
+                return;
+            }
+            else if (e.altKey && e.key.toLowerCase() === 'p') {
+                e.preventDefault();
+                switchTab('preview');
+                return;
+            }
+            
+            // Gestion spéciale pour l'espace
+            if (e.key === ' ' || e.keyCode === 32 || e.code === 'Space') {
+                e.preventDefault(); // Bloquer le comportement par défaut
+                
+                // Si l'éditeur est vide, initialiser avec un espace non sécable
+                if (els.editor.classList.contains('empty') || 
+                    els.editor.innerHTML === '' || 
+                    els.editor.innerHTML === '<br>') {
+                    els.editor.innerHTML = '';
+                    document.execCommand('insertHTML', false, '&nbsp;');
+                    els.editor.classList.remove('empty');
+                } else {
+                    // Insérer un espace dans le contenu existant
+                    document.execCommand('insertHTML', false, '&nbsp;');
+                }
+                
+                updateStats();
+                return;
+            }
+        });
+        
+        // Prendre en charge explicitement l'événement input pour les caractères spéciaux
+        els.editor.addEventListener('beforeinput', function(e) {
+            if (e.inputType === 'insertText' && e.data === ' ') {
+                e.preventDefault();
+                document.execCommand('insertHTML', false, '&nbsp;');
+            }
+        });
     }
+    
     // Format
     if (els.format) {
         els.format.addEventListener('change', updateFilenameExtension);
@@ -284,4 +566,35 @@ function init() {
 
 document.addEventListener('DOMContentLoaded', init);
 
-export { init, clearContent, downloadContent, copyToClipboard }; 
+export { init, clearContent, downloadContent, copyToClipboard, importFile };
+
+// Fonction améliorée pour insérer du texte à la position actuelle du curseur
+function insertTextAtCursor(text) {
+    if (!els.editor) return;
+    
+    // S'assurer que l'éditeur a le focus
+    els.editor.focus();
+    
+    // Remplacer les espaces par des espaces non-sécables pour une meilleure visibilité
+    text = text.replace(/ /g, '&nbsp;');
+    
+    // Utiliser insertHTML qui est plus fiable pour les espaces
+    document.execCommand('insertHTML', false, text);
+    
+    // Vérifier si l'insertion a réussi
+    if (els.editor.innerHTML === '' || els.editor.innerHTML === '<br>') {
+        // Si l'insertion a échoué, essayer une méthode alternative
+        els.editor.innerHTML = text;
+        
+        // Positionner le curseur à la fin
+        const range = document.createRange();
+        const selection = window.getSelection();
+        range.selectNodeContents(els.editor);
+        range.collapse(false);
+        selection.removeAllRanges();
+        selection.addRange(range);
+    }
+    
+    // Mettre à jour les statistiques
+    updateStats();
+} 

@@ -2,14 +2,23 @@
 <html lang="fr">
 <head>
     <meta charset="utf-8" />
-    <title>Super éditeur de texte</title>
+    <title>Traitement de texte</title>
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans:ital,wght@0,400;0,600;1,400;1,600&family=Material+Icons&display=swap" rel="stylesheet">
     <link href="../../styles/tools/texteditor.css" rel="stylesheet" />
+    <script>
+        // Désactiver les extensions et outils qui pourraient interférer
+        window.addEventListener('load', function() {
+            // Supprimer les éditeurs externes qui pourraient causer des problèmes
+            document.querySelectorAll('[class*="grammar"], [id*="grammar"], [class*="spell"], [id*="spell"]').forEach(el => {
+                if (el.parentNode) el.parentNode.removeChild(el);
+            });
+        });
+    </script>
 </head>
 <body>
 <div class="tool-container" id="textEditorTool">
     <div class="tool-header">
-        <h2><i class="fas fa-keyboard"></i> Éditeur de texte</h2>
+        <h2 class="editor-title"><i class="fas fa-file-word"></i> Traitement de texte</h2>
         <div class="tool-actions">
             <button type="button" class="btn-icon" id="textEditorHelp" aria-label="Aide">
                 <i class="fas fa-question-circle"></i>
@@ -32,6 +41,12 @@
                         <option value="odt" selected>Open document (.odt)</option>
                         <option value="docx">Word (.docx)</option>
                     </select>
+                </div>
+                <div class="import-options">
+                    <input type="file" id="fileImport" accept=".txt,.docx,.odt" style="display: none;">
+                    <button type="button" class="btn btn-outline" id="importBtn">
+                        <span class="material-icons">upload_file</span> Importer
+                    </button>
                 </div>
             </div>
             <div class="toolbar">
@@ -69,15 +84,9 @@
                     </button>
                 </div>
             </div>
-            <div class="text-editor-tabs">
-                <button class="tab-btn active" data-tab="editor">Éditer</button>
-                <button class="tab-btn" data-tab="preview">Aperçu</button>
-            </div>
             <div id="text-editor-tab-content">
                 <div id="editor-tab" class="tab-content active">
-                    <div class="text-editor" contenteditable="true" spellcheck="true" aria-label="Zone d'édition">
-                        Commencez à écrire ici...
-                    </div>
+                    <div class="text-editor empty" contenteditable="true" spellcheck="true" aria-label="Zone d'édition" data-gramm="false" translate="no" aria-multiline="true" role="textbox" tabindex="0"></div>
                 </div>
                 <div id="preview-tab" class="tab-content">
                     <div id="texteditor-preview"></div>
@@ -127,6 +136,7 @@
                 <li><strong>Paragraphes</strong> : Alignement, indentation, listes à puces et numérotées</li>
                 <li><strong>Insertion</strong> : Images, liens, tableaux, vidéos</li>
                 <li><strong>Export</strong> : Formats HTML, texte brut, Word</li>
+                <li><strong>Import</strong> : Formats TXT, DOCX, ODT</li>
             </ul>
             <h4>Raccourcis clavier</h4>
             <ul>
