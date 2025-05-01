@@ -17,7 +17,7 @@ const CORE_ASSETS = [
     'js/navigation.js',
     'js/fullscreen.js',
     'icons/favicon.ico',
-    'icons/icon-144x144.png'
+    'icons/icon-1024x1024.png'
 ];
 
 const SECONDARY_ASSETS = [
@@ -53,7 +53,6 @@ const SECONDARY_ASSETS = [
     `${BASE_PATH}/js/tools/calculator.js`,
     `${BASE_PATH}/js/tools/converter.js`,
     `${BASE_PATH}/js/tools/color.js`,
-    `${BASE_PATH}/js/tools/styletext.js`
 ];
 
 // Combiner toutes les ressources à mettre en cache

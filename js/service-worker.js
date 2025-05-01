@@ -49,7 +49,6 @@ const RESOURCES_TO_CACHE = [
     `${BASE_PATH}/js/tools/color.js`,
     `${BASE_PATH}/js/tools/qrcode.js`,
     `${BASE_PATH}/js/tools/password.js`,
-    `${BASE_PATH}/js/tools/styletext.js`,
     `${BASE_PATH}/js/tools/metronome.js`,
     `${BASE_PATH}/js/tools/currency.js`,
     `${BASE_PATH}/js/tools/unit.js`,
@@ -69,7 +68,7 @@ const RESOURCES_TO_CACHE = [
     `${BASE_PATH}/tools/percentage.html`,
     // Icônes
     `${BASE_PATH}/icons/favicon.ico`,
-    `${BASE_PATH}/icons/icon-144x144.png`,
+    `${BASE_PATH}/icons/icon-1024x1024.png`,
     `${BASE_PATH}/icons/icon-192x192.png`,
     `${BASE_PATH}/icons/icon-1024x1024.png`
 ];

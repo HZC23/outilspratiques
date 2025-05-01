@@ -537,7 +537,7 @@ export const TimerManager = {
         if (Notification.permission === "granted") {
             const notification = new Notification("Minuteur terminé !", {
                 body: "Votre minuteur est terminé.",
-                icon: "/icons/icon-144x144.png"
+                icon: "/icons/icon-1024x1024.png"
             });
             
             // Fermer la notification après 5 secondes
@@ -551,7 +551,7 @@ export const TimerManager = {
                 if (permission === "granted") {
                     const notification = new Notification("Minuteur terminé !", {
                         body: "Votre minuteur est terminé.",
-                        icon: "/icons/icon-144x144.png"
+                        icon: "/icons/icon-1024x1024.png"
                     });
                     
                     setTimeout(() => {

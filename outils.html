@@ -36,8 +36,8 @@
     <!-- Favicon -->
     <link rel="shortcut icon" href="icons/favicon.ico">
     <link rel="icon" type="image/x-icon" href="icons/favicon.ico">
-    <link rel="icon" type="image/png" sizes="144x144" href="icons/icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="icons/icon-144x144.png">
+    <link rel="icon" type="image/png" sizes="1024x1024" href="icons/icon-1024x1024.png">
+    <link rel="apple-touch-icon" sizes="1024x1024" href="icons/icon-1024x1024.png">
     
     <!-- Manifest -->
     <link rel="manifest" href="manifest.json">
@@ -107,7 +107,7 @@
     <script type="module" src="js/clock.js"></script>
     <script type="module" src="js/menu.js"></script>
     <script type="module" src="js/tools/calculator.js"></script>
-    <script type="module" src="js/tools/converter.js"></script>
+    <script type="module" src="js/tools/unit.js"></script>
     <script type="module" src="js/tools/timer.js"></script>
     <script type="module" src="js/tools/stopwatch.js"></script>
     <script type="module" src="js/tools/notes.js"></script>
@@ -301,10 +301,12 @@
                         <i class="fas fa-language" aria-hidden="true"></i>
                         <span>Traducteur</span>
                     </button>
-                    <button type="button" data-tool-id="styletext" class="submenu-item" role="menuitem">
-                        <i class="fas fa-feather-alt" aria-hidden="true"></i>
-                        <span>Styliseur de texte</span>
-                    </button>
+                    <li class="submenu-item">
+                        <button type="button" data-tool-id="styletext" class="submenu-item" role="menuitem">
+                            <i class="fas fa-feather-alt"></i>
+                            <span>Styliseur de texte</span>
+                        </button>
+                    </li>
                 </div>
             </div>
 

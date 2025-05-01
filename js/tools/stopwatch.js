@@ -88,12 +88,78 @@ export const StopwatchManager = {
             this.resetTimer(); // Utiliser resetTimer pour l'instant
         });
 
+        // Chronomètre - Ajout des écouteurs d'événements
+        document.getElementById('startStopwatch')?.addEventListener('click', () => {
+            this.toggleStopwatch();
+        });
+
+        document.getElementById('resetStopwatch')?.addEventListener('click', () => {
+            this.resetStopwatch();
+        });
+
+        document.getElementById('lapStopwatch')?.addEventListener('click', () => {
+            this.recordLap();
+        });
+
+        // Effacer les tours
+        document.getElementById('clearLaps')?.addEventListener('click', () => {
+            this.state.stopwatch.laps = [];
+            this.updateLapsDisplay();
+            this.saveState();
+        });
+
+        // Exporter les tours
+        document.getElementById('exportLaps')?.addEventListener('click', () => {
+            this.exportLaps();
+        });
+        
+        // Raccourcis clavier pour le chronomètre
+        document.addEventListener('keydown', (e) => {
+            if (!document.getElementById('stopwatchTool')?.classList.contains('active')) return;
+            
+            if (e.code === 'Space') {
+                e.preventDefault();
+                this.toggleStopwatch();
+            } else if (e.key.toLowerCase() === 'l') {
+                e.preventDefault();
+                if (this.state.stopwatch.isRunning) {
+                    this.recordLap();
+                }
+            } else if (e.key.toLowerCase() === 'r') {
+                e.preventDefault();
+                this.resetStopwatch();
+            } else if (e.key.toLowerCase() === 'c') {
+                e.preventDefault();
+                if (this.state.stopwatch.laps.length > 0) {
+                    this.state.stopwatch.laps = [];
+                    this.updateLapsDisplay();
+                    this.saveState();
+                }
+            }
+        });
+
         document.getElementById('testSound')?.addEventListener('click', () => {
             this.testTimerSound();
         });
 
         document.getElementById('alarmSound')?.addEventListener('change', (e) => {
             this.changeTimerSound(e.target.value);
+        });
+        
+        // Aide du chronomètre
+        document.getElementById('stopwatchHelp')?.addEventListener('click', () => {
+            const helpPanel = document.getElementById('stopwatchHelpPanel');
+            if (helpPanel) {
+                helpPanel.classList.toggle('active');
+            }
+        });
+        
+        // Fermer l'aide du chronomètre
+        document.getElementById('closeStopwatchHelp')?.addEventListener('click', () => {
+            const helpPanel = document.getElementById('stopwatchHelpPanel');
+            if (helpPanel) {
+                helpPanel.classList.remove('active');
+            }
         });
         
         // Modifier le comportement du bouton d'aide pour faire défiler vers la section d'aide
@@ -536,7 +602,7 @@ export const StopwatchManager = {
         if (Notification.permission === "granted") {
             const notification = new Notification("Minuteur terminé !", {
                 body: "Votre minuteur est terminé.",
-                icon: "/icons/icon-144x144.png"
+                icon: "/icons/icon-1024x1024.png"
             });
             
             // Fermer la notification après 5 secondes
@@ -550,7 +616,7 @@ export const StopwatchManager = {
                 if (permission === "granted") {
                     const notification = new Notification("Minuteur terminé !", {
                         body: "Votre minuteur est terminé.",
-                        icon: "/icons/icon-144x144.png"
+                        icon: "/icons/icon-1024x1024.png"
                     });
                     
                     setTimeout(() => {
@@ -593,7 +659,9 @@ export const StopwatchManager = {
             }, 10);
         }
 
+        // Mettre à jour les contrôles (y compris l'icône du bouton)
         this.updateStopwatchControls();
+        this.saveState();
     },
 
     /**
@@ -619,9 +687,14 @@ export const StopwatchManager = {
      * Réinitialise le chronomètre
      */
     resetStopwatch() {
-        clearInterval(this.state.stopwatch.intervalId);
-        this.state.stopwatch.isRunning = false;
-        this.state.stopwatch.intervalId = null;
+        // Arrêter le chronomètre s'il est en cours
+        if (this.state.stopwatch.isRunning) {
+            clearInterval(this.state.stopwatch.intervalId);
+            this.state.stopwatch.isRunning = false;
+            this.state.stopwatch.intervalId = null;
+        }
+        
+        // Réinitialiser le temps et les tours
         this.state.stopwatch.time = 0;
         this.state.stopwatch.laps = [];
 
@@ -661,9 +734,83 @@ export const StopwatchManager = {
      * Met à jour l'affichage du chronomètre
      */
     updateStopwatchDisplay() {
-        const display = document.getElementById('stopwatchDisplay');
-        if (display) {
-            display.textContent = this.formatTime(this.state.stopwatch.time);
+        const time = this.state.stopwatch.time;
+        const minutes = Math.floor(time / 60000);
+        const seconds = Math.floor((time % 60000) / 1000);
+        const milliseconds = Math.floor((time % 1000) / 10);
+        
+        const minutesElement = document.getElementById('minutesSW');
+        const secondsElement = document.getElementById('secondsSW');
+        const millisecondsElement = document.getElementById('millisecondsSW');
+        
+        if (minutesElement && secondsElement && millisecondsElement) {
+            minutesElement.textContent = minutes.toString().padStart(2, '0');
+            secondsElement.textContent = seconds.toString().padStart(2, '0');
+            millisecondsElement.textContent = milliseconds.toString().padStart(2, '0');
+        }
+        
+        // Mettre à jour le compteur de tours
+        const lapCount = document.getElementById('lapCount');
+        if (lapCount) {
+            lapCount.textContent = `(${this.state.stopwatch.laps.length})`;
+        }
+        
+        // Mettre à jour les boutons de contrôle des tours
+        const clearLapsButton = document.getElementById('clearLaps');
+        const exportLapsButton = document.getElementById('exportLaps');
+        
+        if (clearLapsButton) {
+            clearLapsButton.disabled = this.state.stopwatch.laps.length === 0;
+        }
+        
+        if (exportLapsButton) {
+            exportLapsButton.disabled = this.state.stopwatch.laps.length === 0;
+        }
+        
+        // Mettre à jour les statistiques si disponibles
+        this.updateStopwatchStats();
+    },
+
+    /**
+     * Met à jour les statistiques du chronomètre
+     */
+    updateStopwatchStats() {
+        if (this.state.stopwatch.laps.length === 0) return;
+        
+        // Calculer le meilleur tour, le plus lent et la moyenne
+        let bestLapTime = Infinity;
+        let slowestLapTime = 0;
+        let totalLapTime = 0;
+        
+        this.state.stopwatch.laps.forEach(lap => {
+            if (lap.lap < bestLapTime) bestLapTime = lap.lap;
+            if (lap.lap > slowestLapTime) slowestLapTime = lap.lap;
+            totalLapTime += lap.lap;
+        });
+        
+        const averageLapTime = totalLapTime / this.state.stopwatch.laps.length;
+        
+        // Mettre à jour l'affichage
+        const bestLapElement = document.getElementById('bestLap');
+        const slowestLapElement = document.getElementById('slowestLap');
+        const averageLapElement = document.getElementById('averageLap');
+        const totalTimeElement = document.getElementById('totalTime');
+        
+        if (bestLapElement) {
+            bestLapElement.textContent = bestLapTime === Infinity ? '--:--:--' : this.formatTime(bestLapTime);
+        }
+        
+        if (slowestLapElement) {
+            slowestLapElement.textContent = slowestLapTime === 0 ? '--:--:--' : this.formatTime(slowestLapTime);
+        }
+        
+        if (averageLapElement) {
+            averageLapElement.textContent = isNaN(averageLapTime) ? '--:--:--' : this.formatTime(averageLapTime);
+        }
+        
+        if (totalTimeElement) {
+            const lastLap = this.state.stopwatch.laps[0];
+            totalTimeElement.textContent = lastLap ? this.formatTime(lastLap.time) : '00:00:00';
         }
     },
 
@@ -671,18 +818,41 @@ export const StopwatchManager = {
      * Met à jour l'affichage des tours
      */
     updateLapsDisplay() {
-        const lapsContainer = document.getElementById('lapsContainer');
-        if (!lapsContainer) return;
+        const lapList = document.getElementById('lapList');
+        if (!lapList) return;
 
-        lapsContainer.innerHTML = this.state.stopwatch.laps
-            .map(lap => `
-                <div class="lap-item">
-                    <span class="lap-number">#${lap.number}</span>
-                    <span class="lap-time">${this.formatTime(lap.lap)}</span>
-                    <span class="total-time">${this.formatTime(lap.time)}</span>
-                </div>
-            `)
-            .join('');
+        // Vider la liste des tours
+        lapList.innerHTML = '';
+        
+        // Si aucun tour, afficher un message
+        if (this.state.stopwatch.laps.length === 0) {
+            lapList.innerHTML = '<div class="empty-laps">Aucun tour enregistré</div>';
+            return;
+        }
+
+        // Créer un élément pour chaque tour
+        this.state.stopwatch.laps.forEach(lap => {
+            const lapItem = document.createElement('div');
+            lapItem.className = 'lap-item';
+            
+            const lapNumber = document.createElement('span');
+            lapNumber.className = 'lap-number';
+            lapNumber.textContent = `Tour ${lap.number}`;
+            
+            const lapTime = document.createElement('span');
+            lapTime.className = 'lap-time';
+            lapTime.textContent = this.formatTime(lap.lap);
+            
+            const totalTime = document.createElement('span');
+            totalTime.className = 'lap-total';
+            totalTime.textContent = this.formatTime(lap.time);
+            
+            lapItem.appendChild(lapNumber);
+            lapItem.appendChild(lapTime);
+            lapItem.appendChild(totalTime);
+            
+            lapList.appendChild(lapItem);
+        });
     },
 
     /**
@@ -714,13 +884,38 @@ export const StopwatchManager = {
     updateStopwatchControls() {
         const startButton = document.getElementById('startStopwatch');
         const lapButton = document.getElementById('lapStopwatch');
+        const resetButton = document.getElementById('resetStopwatch');
         
         if (startButton) {
-            startButton.textContent = this.state.stopwatch.isRunning ? 'Pause' : 'Démarrer';
+            // Mettre à jour le texte et l'icône du bouton
+            const icon = startButton.querySelector('i');
+            if (icon) {
+                icon.className = this.state.stopwatch.isRunning ? 'fas fa-pause' : 'fas fa-play';
+            }
+            startButton.setAttribute('aria-label', this.state.stopwatch.isRunning ? 'Pause' : 'Démarrer');
         }
         
         if (lapButton) {
             lapButton.disabled = !this.state.stopwatch.isRunning;
+        }
+        
+        if (resetButton) {
+            // Activer le bouton reset seulement si le chronomètre est arrêté et le temps n'est pas à zéro
+            // ou si des tours sont enregistrés
+            resetButton.disabled = (this.state.stopwatch.isRunning || 
+                                   (this.state.stopwatch.time === 0 && this.state.stopwatch.laps.length === 0));
+        }
+        
+        // Mettre à jour les contrôles des tours
+        const clearLapsButton = document.getElementById('clearLaps');
+        const exportLapsButton = document.getElementById('exportLaps');
+        
+        if (clearLapsButton) {
+            clearLapsButton.disabled = this.state.stopwatch.laps.length === 0;
+        }
+        
+        if (exportLapsButton) {
+            exportLapsButton.disabled = this.state.stopwatch.laps.length === 0;
         }
     },
 
@@ -868,25 +1063,65 @@ export const StopwatchManager = {
         } else {
             console.warn('Élément audio du minuteur non trouvé');
         }
+    },
+
+    /**
+     * Exporte les tours en CSV
+     */
+    exportLaps() {
+        if (this.state.stopwatch.laps.length === 0) {
+            Utils.showNotification('Aucun tour à exporter', 'warning');
+            return;
+        }
+
+        // Préparer les en-têtes CSV
+        let csvContent = 'Tour,Temps du tour,Temps total\n';
+
+        // Ajouter les données de chaque tour
+        this.state.stopwatch.laps.forEach(lap => {
+            const lapNumber = lap.number;
+            const lapTime = this.formatTime(lap.lap);
+            const totalTime = this.formatTime(lap.time);
+            csvContent += `${lapNumber},${lapTime},${totalTime}\n`;
+        });
+
+        // Créer un Blob avec le contenu CSV
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+
+        // Créer un lien de téléchargement
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `chronometre_tours_${new Date().toISOString().slice(0, 10)}.csv`);
+        link.style.display = 'none';
+        document.body.appendChild(link);
+
+        // Déclencher le téléchargement
+        link.click();
+
+        // Nettoyer
+        setTimeout(() => {
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }, 100);
     }
 };
 
 // Exposer les fonctions globalement pour le HTML
-window.startTimer = () => TimerManager.startTimer();
-window.pauseTimer = () => TimerManager.pauseTimer();
-window.resetTimer = () => TimerManager.resetTimer();
-window.toggleSound = () => TimerManager.toggleSound();
-window.startStopwatch = () => TimerManager.toggleStopwatch();
-window.pauseStopwatch = () => TimerManager.toggleStopwatch();
-window.resetStopwatch = () => TimerManager.resetStopwatch();
-window.lapStopwatch = () => TimerManager.recordLap();
+window.startTimer = () => StopwatchManager.startTimer();
+window.pauseTimer = () => StopwatchManager.pauseTimer();
+window.resetTimer = () => StopwatchManager.resetTimer();
+window.toggleSound = () => StopwatchManager.toggleSound();
+window.startStopwatch = () => StopwatchManager.toggleStopwatch();
+window.resetStopwatch = () => StopwatchManager.resetStopwatch();
+window.lapStopwatch = () => StopwatchManager.recordLap();
 window.changeTimerSound = () => {
     const select = document.getElementById('alarmSound');
     if (select) {
-        TimerManager.changeTimerSound(select.value);
+        StopwatchManager.changeTimerSound(select.value);
     }
 };
-window.testTimerSound = () => TimerManager.testTimerSound();
+window.testTimerSound = () => StopwatchManager.testTimerSound();
 
 // Initialiser le minuteur au chargement
 document.addEventListener('DOMContentLoaded', () => {

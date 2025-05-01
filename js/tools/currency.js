@@ -106,6 +106,45 @@ const MAIN_CURRENCIES = [
 const EXCHANGE_API_URL = 'https://open.er-api.com/v6/latest/EUR';
 const HISTORICAL_API_BASE = 'https://open.er-api.com/v6/historical/';
 
+// Classe pour gérer le convertisseur de devises
+export class CurrencyManager {
+    /**
+     * Initialise le convertisseur de devises
+     */
+    static init() {
+        console.log('Initialisation du convertisseur de devises...');
+        initCurrencyConverter();
+    }
+
+    /**
+     * Méthode pour convertir une devise
+     */
+    static convert(amount, fromCurrency, toCurrency) {
+        return calculateConversion(amount, fromCurrency, toCurrency);
+    }
+
+    /**
+     * Méthode pour échanger les devises
+     */
+    static swap() {
+        swapCurrencies();
+    }
+
+    /**
+     * Méthode pour mettre à jour les taux
+     */
+    static updateRates() {
+        forceUpdateRates();
+    }
+
+    /**
+     * Méthode pour effacer l'historique
+     */
+    static clearHistory() {
+        clearCurrencyHistory();
+    }
+}
+
 /**
  * Initialise le convertisseur de devises
  */
@@ -132,9 +171,6 @@ function initCurrencyConverter() {
     
     // Vérifier si une mise à jour est nécessaire
     checkAndUpdateRates();
-    
-    // Charger les conversions populaires
-    loadPopularConversions();
     
     // Initialiser le graphique
     initCurrencyChart();
@@ -185,6 +221,9 @@ function initCurrencySelects() {
  * Configurer les écouteurs d'événements
  */
 function setupEventListeners() {
+    // Récupérer le conteneur
+    const container = document.getElementById('currencyTool');
+    
     // Éléments
     const amountInput = document.getElementById('fromAmount');
     const fromSelect = document.getElementById('fromCurrency');
@@ -230,34 +269,59 @@ function setupEventListeners() {
     // Écouteur pour le mode plein écran
     if (fullscreenButton && container) {
         fullscreenButton.addEventListener('click', () => {
-            if (!document.fullscreenElement) {
-                if (container.requestFullscreen) {
-                    container.requestFullscreen();
-                } else if (container.webkitRequestFullscreen) {
-                    container.webkitRequestFullscreen();
-                } else if (container.msRequestFullscreen) {
-                    container.msRequestFullscreen();
+            try {
+                if (!document.fullscreenElement) {
+                    console.log('Passage en mode plein écran');
+                    if (container.requestFullscreen) {
+                        container.requestFullscreen();
+                    } else if (container.webkitRequestFullscreen) {
+                        container.webkitRequestFullscreen();
+                    } else if (container.msRequestFullscreen) {
+                        container.msRequestFullscreen();
+                    } else {
+                        console.warn('Le mode plein écran n\'est pas pris en charge par ce navigateur');
+                        showNotification('Le mode plein écran n\'est pas disponible sur ce navigateur', 'warning');
+                    }
+                } else {
+                    console.log('Sortie du mode plein écran');
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    } else if (document.webkitExitFullscreen) {
+                        document.webkitExitFullscreen();
+                    } else if (document.msExitFullscreen) {
+                        document.msExitFullscreen();
+                    }
                 }
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.webkitExitFullscreen) {
-                    document.webkitExitFullscreen();
-                } else if (document.msExitFullscreen) {
-                    document.msExitFullscreen();
-                }
+            } catch (error) {
+                console.error('Erreur lors de la gestion du mode plein écran:', error);
+                showNotification('Erreur lors du changement de mode plein écran', 'error');
             }
         });
-        function updateCurrencyFullscreenIcon() {
-            const icon = fullscreenButton.querySelector('i');
-            if (document.fullscreenElement === container) {
-                icon.classList.remove('fa-expand');
-                icon.classList.add('fa-compress');
-            } else {
-                icon.classList.remove('fa-compress');
-                icon.classList.add('fa-expand');
+        
+        // Fonction pour mettre à jour l'icône du bouton plein écran
+        const updateCurrencyFullscreenIcon = () => {
+            try {
+                const icon = fullscreenButton.querySelector('i');
+                if (!icon) {
+                    console.warn('Icône du bouton plein écran non trouvée');
+                    return;
+                }
+                
+                if (document.fullscreenElement === container) {
+                    console.log('En mode plein écran - Mise à jour de l\'icône');
+                    icon.classList.remove('fa-expand');
+                    icon.classList.add('fa-compress');
+                } else {
+                    console.log('Hors mode plein écran - Mise à jour de l\'icône');
+                    icon.classList.remove('fa-compress');
+                    icon.classList.add('fa-expand');
+                }
+            } catch (error) {
+                console.error('Erreur lors de la mise à jour de l\'icône plein écran:', error);
             }
-        }
+        };
+        
+        // Ajouter des écouteurs pour les changements de mode plein écran
         document.addEventListener('fullscreenchange', updateCurrencyFullscreenIcon);
         document.addEventListener('webkitfullscreenchange', updateCurrencyFullscreenIcon);
         document.addEventListener('mozfullscreenchange', updateCurrencyFullscreenIcon);
@@ -354,9 +418,6 @@ function updateRates(force = false) {
                 
                 // Mettre à jour la conversion
                 convertCurrency();
-                
-                // Rafraîchir les conversions populaires
-                loadPopularConversions();
                 
                 // Notification de succès
                 showNotification('Taux de change mis à jour avec succès', 'success');
@@ -485,102 +546,16 @@ function swapCurrencies() {
     const swapButton = document.getElementById('swapCurrencies');
     if (swapButton) {
         swapButton.classList.add('active');
+        
+        // Faire tourner le bouton visuellement
+        swapButton.style.transform = 'rotate(180deg)';
+        
+        // Réinitialiser après l'animation
         setTimeout(() => {
             swapButton.classList.remove('active');
+            swapButton.style.transform = '';
         }, 500);
     }
-}
-
-/**
- * Charge les conversions populaires
- */
-function loadPopularConversions() {
-    const popularDiv = document.getElementById('popularConversions');
-    
-    if (!popularDiv) {
-        return;
-    }
-    
-    // Vider la div
-    popularDiv.innerHTML = '';
-    
-    // Récupérer les devises populaires
-    const currencies = ['USD', 'EUR', 'GBP', 'JPY', 'CHF', 'CAD', 'AUD', 'CNY'];
-    
-    // Créer un conteneur flex pour l'affichage en grille
-    const gridContainer = document.createElement('div');
-    gridContainer.className = 'conversion-grid';
-    
-    // Pour chaque paire de devises populaires
-    for (let i = 0; i < currencies.length; i++) {
-        for (let j = i + 1; j < currencies.length; j++) {
-            // Éviter les paires de même devise
-            if (currencies[i] === currencies[j]) continue;
-            
-            // Limiter à 8 paires pour éviter de surcharger l'interface
-            if (gridContainer.children.length >= 8) break;
-            
-            const fromCurrency = currencies[i];
-            const toCurrency = currencies[j];
-            
-            // Calculer les taux
-            const directRate = calculateConversion(1, fromCurrency, toCurrency);
-            
-            // Créer l'élément de conversion
-            const conversionItem = document.createElement('div');
-            conversionItem.className = 'conversion-item';
-            
-            // Ajouter les drapeaux et symboles
-            const fromCurrencyInfo = MAIN_CURRENCIES.find(c => c.code === fromCurrency) || { flag: '', symbol: '' };
-            const toCurrencyInfo = MAIN_CURRENCIES.find(c => c.code === toCurrency) || { flag: '', symbol: '' };
-            
-            conversionItem.innerHTML = `
-                <div class="conversion-header">
-                    <span class="currency-flag">${fromCurrencyInfo.flag}</span>
-                    <span class="currency-code">${fromCurrency}</span>
-                    <span class="conversion-arrow">→</span>
-                    <span class="currency-flag">${toCurrencyInfo.flag}</span>
-                    <span class="currency-code">${toCurrency}</span>
-                </div>
-                <div class="conversion-rate">${directRate.toFixed(4)}</div>
-                <button class="use-conversion" data-from="${fromCurrency}" data-to="${toCurrency}">
-                    <i class="fas fa-exchange-alt"></i>
-                </button>
-            `;
-            
-            // Ajouter un écouteur pour utiliser cette conversion
-            const useButton = conversionItem.querySelector('.use-conversion');
-            if (useButton) {
-                useButton.addEventListener('click', function() {
-                    const fromCurrency = this.dataset.from;
-                    const toCurrency = this.dataset.to;
-                    
-                    // Mettre à jour les sélecteurs
-                    document.getElementById('fromCurrency').value = fromCurrency;
-                    document.getElementById('toCurrency').value = toCurrency;
-                    
-                    // Mettre à jour la conversion
-                    convertCurrency();
-                    
-                    // Mettre à jour le graphique
-                    fetchHistoricalData(fromCurrency, toCurrency);
-                });
-            }
-            
-            gridContainer.appendChild(conversionItem);
-        }
-    }
-    
-    popularDiv.appendChild(gridContainer);
-}
-
-/**
- * Met en majuscule la première lettre d'une chaîne
- * @param {string} str - La chaîne à modifier
- * @returns {string} - La chaîne modifiée
- */
-function capitalizeFirstLetter(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 /**
@@ -939,19 +914,27 @@ function initCurrencyChart() {
     const chartCanvas = document.getElementById('currencyChart');
     
     if (!chartCanvas) {
+        console.log('Élément canvas pour le graphique non trouvé');
         return;
     }
     
     // Vérifier si Chart.js est disponible
     if (typeof Chart === 'undefined') {
+        console.log('Chart.js non disponible, chargement dynamique...');
         // Charger Chart.js dynamiquement s'il n'est pas déjà chargé
         loadChartJS().then(() => {
-            createChart(chartCanvas);
-            fetchHistoricalData(state.fromCurrency, state.toCurrency);
+            console.log('Chart.js chargé avec succès');
+            setTimeout(() => {
+                // Utiliser un délai pour s'assurer que Chart.js est complètement chargé
+                createChart(chartCanvas);
+                fetchHistoricalData(state.fromCurrency, state.toCurrency);
+            }, 500);
         }).catch(err => {
             console.error('Impossible de charger Chart.js:', err);
+            showNotification('Impossible de charger le graphique', 'error');
         });
     } else {
+        console.log('Chart.js déjà disponible');
         createChart(chartCanvas);
         fetchHistoricalData(state.fromCurrency, state.toCurrency);
     }
@@ -963,9 +946,48 @@ function initCurrencyChart() {
  */
 function loadChartJS() {
     return new Promise((resolve, reject) => {
+        // Vérifier si Chart.js est déjà en cours de chargement
+        if (document.querySelector('script[src*="chart.js"]')) {
+            // Attendre que Chart.js soit chargé
+            const checkIfLoaded = setInterval(() => {
+                if (typeof Chart !== 'undefined') {
+                    clearInterval(checkIfLoaded);
+                    resolve();
+                }
+            }, 100);
+            
+            // Timeout après 10 secondes
+            setTimeout(() => {
+                clearInterval(checkIfLoaded);
+                reject(new Error('Timeout lors du chargement de Chart.js'));
+            }, 10000);
+            
+            return;
+        }
+        
+        // Charger Chart.js
         const script = document.createElement('script');
         script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
-        script.onload = () => resolve();
+        script.onload = () => {
+            console.log('Script Chart.js chargé');
+            // Attendre que l'objet Chart soit disponible
+            const checkChart = setInterval(() => {
+                if (typeof Chart !== 'undefined') {
+                    clearInterval(checkChart);
+                    resolve();
+                }
+            }, 100);
+            
+            // Timeout après 5 secondes
+            setTimeout(() => {
+                clearInterval(checkChart);
+                if (typeof Chart === 'undefined') {
+                    reject(new Error('Chart.js chargé mais objet Chart non disponible'));
+                } else {
+                    resolve();
+                }
+            }, 5000);
+        };
         script.onerror = () => reject(new Error('Impossible de charger Chart.js'));
         document.head.appendChild(script);
     });
@@ -976,69 +998,138 @@ function loadChartJS() {
  * @param {HTMLCanvasElement} canvas - L'élément canvas pour le graphique
  */
 function createChart(canvas) {
-    // Détruire l'instance précédente si elle existe
-    if (state.chartInstance) {
-        state.chartInstance.destroy();
-    }
-    
-    // Créer un nouveau graphique vide
-    state.chartInstance = new Chart(canvas, {
-        type: 'line',
-        data: {
-            labels: [],
-            datasets: [{
-                label: 'Taux de change',
-                data: [],
-                fill: false,
-                borderColor: 'rgb(75, 128, 240)',
-                tension: 0.1,
-                pointBackgroundColor: 'rgb(75, 128, 240)',
-                pointRadius: 3,
-                pointHoverRadius: 6
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            interaction: {
-                mode: 'index',
-                intersect: false,
+    try {
+        // Vérifier si l'objet Chart est disponible
+        if (typeof Chart === 'undefined') {
+            console.error('Chart.js n\'est pas chargé');
+            showNotification('Impossible de créer le graphique - Chart.js non disponible', 'error');
+            return;
+        }
+        
+        // Vérifier si le canvas est valide
+        if (!canvas || !(canvas instanceof HTMLCanvasElement)) {
+            console.error('Canvas invalide pour le graphique');
+            return;
+        }
+        
+        // Détruire l'instance précédente si elle existe
+        if (state.chartInstance) {
+            try {
+                state.chartInstance.destroy();
+                console.log('Instance précédente du graphique détruite');
+            } catch (e) {
+                console.warn('Erreur lors de la destruction de l\'instance précédente:', e);
+            }
+        }
+        
+        // Créer un nouveau graphique avec des couleurs adaptées au thème
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+        const textColor = isDarkMode ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)';
+        
+        // Définir des couleurs adaptées au thème
+        const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--currency-primary').trim() || 'rgb(75, 128, 240)';
+        
+        console.log('Création du graphique avec la couleur:', primaryColor);
+        
+        // Créer un nouveau graphique vide
+        state.chartInstance = new Chart(canvas, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Taux de change',
+                    data: [],
+                    fill: {
+                        target: 'origin',
+                        above: isDarkMode ? 
+                            'rgba(75, 128, 240, 0.1)' : 
+                            'rgba(75, 128, 240, 0.2)',
+                    },
+                    borderColor: primaryColor,
+                    tension: 0.2,
+                    pointBackgroundColor: primaryColor,
+                    pointRadius: 3,
+                    pointHoverRadius: 6,
+                    borderWidth: 2
+                }]
             },
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        title: function(tooltipItems) {
-                            const date = new Date(tooltipItems[0].label);
-                            return date.toLocaleDateString('fr-FR', {
-                                day: '2-digit',
-                                month: 'short',
-                                year: 'numeric'
-                            });
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    tooltip: {
+                        backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.9)',
+                        titleColor: isDarkMode ? '#fff' : '#000',
+                        bodyColor: isDarkMode ? '#eee' : '#333',
+                        borderColor: isDarkMode ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)',
+                        borderWidth: 1,
+                        padding: 10,
+                        cornerRadius: 6,
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                const date = new Date(tooltipItems[0].label);
+                                return date.toLocaleDateString('fr-FR', {
+                                    day: '2-digit',
+                                    month: 'short',
+                                    year: 'numeric'
+                                });
+                            }
+                        }
+                    },
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        display: true,
+                        title: {
+                            display: false
+                        },
+                        ticks: {
+                            color: textColor,
+                            maxRotation: 45,
+                            minRotation: 45,
+                            autoSkip: true,
+                            maxTicksLimit: 10
+                        },
+                        grid: {
+                            display: true,
+                            color: gridColor
+                        }
+                    },
+                    y: {
+                        display: true,
+                        beginAtZero: false,
+                        ticks: {
+                            color: textColor,
+                            precision: 4
+                        },
+                        grid: {
+                            display: true,
+                            color: gridColor
                         }
                     }
                 },
-                legend: {
-                    display: false
-                }
-            },
-            scales: {
-                x: {
-                    display: true,
-                    title: {
-                        display: false
-                    },
-                    ticks: {
-                        maxRotation: 45,
-                        minRotation: 45
-                    }
-                },
-                y: {
-                    display: true,
-                    beginAtZero: false
+                animation: {
+                    duration: 1000,
+                    easing: 'easeOutQuart'
                 }
             }
-        }
-    });
+        });
+        
+        console.log('Graphique créé avec succès');
+        return state.chartInstance;
+    } catch (error) {
+        console.error('Erreur lors de la création du graphique:', error);
+        showNotification('Erreur lors de la création du graphique', 'error');
+        return null;
+    }
 }
 
 /**
@@ -1070,62 +1161,205 @@ function updateChartPeriod(days) {
  * @param {number} days - Nombre de jours d'historique (défaut: 30)
  */
 function fetchHistoricalData(fromCurrency, toCurrency, days = 30) {
-    if (!navigator.onLine) {
-        showNotification('Vous êtes hors ligne. Impossible de charger les données historiques.', 'warning');
-        return;
+    try {
+        if (!fromCurrency || !toCurrency) {
+            console.error('Devises non spécifiées pour les données historiques');
+            return;
+        }
+        
+        // Limiter le nombre de jours
+        days = Math.min(Math.max(1, days), 365);
+        
+        console.log(`Récupération des données historiques pour ${fromCurrency} → ${toCurrency} sur ${days} jours`);
+        
+        if (!navigator.onLine) {
+            console.warn('Hors ligne - Utilisation de données simulées');
+            showNotification('Vous êtes hors ligne. Utilisation de données simulées.', 'warning');
+            
+            // Utiliser des données simulées
+            const simulatedData = simulateHistoricalData(fromCurrency, toCurrency, days);
+            updateChart(fromCurrency, toCurrency, simulatedData);
+            return;
+        }
+        
+        // En conditions normales, nous ferions un appel API ici
+        // Mais pour cette démo, nous allons toujours utiliser des données simulées
+        // qui sont plus prévisibles et ne nécessitent pas d'API key
+        
+        // Simuler un délai de chargement pour une expérience plus réaliste
+        showNotification('Chargement des données historiques...', 'info');
+        
+        setTimeout(() => {
+            try {
+                const simulatedData = simulateHistoricalData(fromCurrency, toCurrency, days);
+                updateChart(fromCurrency, toCurrency, simulatedData);
+                console.log('Données historiques simulées chargées avec succès');
+            } catch (error) {
+                console.error('Erreur lors de la génération des données simulées:', error);
+                showNotification('Erreur lors du chargement des données historiques', 'error');
+            }
+        }, 800); // Délai simulé de 800ms
+    } catch (error) {
+        console.error('Erreur lors de la récupération des données historiques:', error);
+        showNotification('Erreur lors de la récupération des données historiques', 'error');
     }
-    
-    // Calculer les dates
-    const endDate = new Date();
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - days);
-    
-    // Formater les dates pour l'API (YYYY-MM-DD)
-    const formatAPIDate = (date) => {
-        return date.toISOString().split('T')[0];
-    };
-    
-    // URL de l'API pour les données historiques
-    const endDateStr = formatAPIDate(endDate);
-    const startDateStr = formatAPIDate(startDate);
-    
-    // Pour cet exemple, on utilise une API simple ou simulation
-    // En production, utiliser une vraie API avec authentification
-    // Exemples: EXCHANGERATE-API, Alpha Vantage, Fixer.io
-    
-    // Simuler des données historiques pour la démo
-    const simulateHistoricalData = () => {
+}
+
+/**
+ * Simule des données historiques pour la démo
+ * @param {string} fromCurrency - Devise source
+ * @param {string} toCurrency - Devise cible
+ * @param {number} days - Nombre de jours
+ * @returns {Object} - Données simulées
+ */
+function simulateHistoricalData(fromCurrency, toCurrency, days = 30) {
+    try {
+        console.log(`Simulation des données historiques : ${fromCurrency} → ${toCurrency} (${days} jours)`);
+        
+        // Calculer les dates
+        const endDate = new Date();
+        const startDate = new Date();
+        startDate.setDate(startDate.getDate() - days);
+        
+        // Formater les dates pour l'affichage
+        const formatAPIDate = (date) => {
+            return date.toISOString().split('T')[0];
+        };
+        
         const data = {
             labels: [],
             rates: []
         };
         
+        // Obtenir le taux actuel comme référence
+        const currentRate = calculateConversion(1, fromCurrency, toCurrency);
+        
+        // Vérifier si on a déjà des données historiques pour cette paire
+        const historyKey = `${fromCurrency}_${toCurrency}`;
+        
+        // Si nous avons déjà des données pour cette période, les retourner
+        if (state.historicalData[historyKey] && 
+            state.historicalData[historyKey].timestamp && 
+            state.historicalData[historyKey].days === days) {
+            
+            // Vérifier si les données ne sont pas trop anciennes (max 1 heure)
+            const lastUpdate = new Date(state.historicalData[historyKey].timestamp);
+            const hoursDiff = (new Date() - lastUpdate) / (1000 * 60 * 60);
+            
+            if (hoursDiff < 1) {
+                console.log(`Utilisation des données historiques en cache pour ${historyKey}`);
+                return state.historicalData[historyKey].data;
+            }
+        }
+        
+        // Initialiser une nouvelle série
+        console.log(`Génération de nouvelles données historiques pour ${historyKey}`);
+        
+        // Générer des caractéristiques aléatoires mais réalistes pour cette paire de devises
+        const volatility = Math.random() * 0.03 + 0.01; // Entre 1% et 4% de volatilité
+        const trendStrength = Math.random() * 0.1 - 0.05; // Tendance entre -5% et +5%
+        const seasonality = Math.random() > 0.7; // 30% de chance d'avoir une saisonnalité
+        const seasonalityPeriod = Math.floor(Math.random() * 5) + 3; // Période de 3 à 7 jours
+        const seasonalityStrength = Math.random() * 0.01 + 0.005; // Force entre 0.5% et 1.5%
+        const shocks = Math.random() > 0.8; // 20% de chance d'avoir des chocs
+        
+        // Paramètres pour les chocs
+        const shockProbability = 0.05; // 5% de chance par jour d'avoir un choc
+        const shockStrength = Math.random() * 0.04 + 0.01; // Entre 1% et 5%
+        
         // Générer des données pour chaque jour
         let currentDate = new Date(startDate);
-        const baseCurrencyRate = 1;
+        let rate = currentRate * (1 - (trendStrength / 2)); // Commencer un peu en dessous de la tendance finale
+        
+        // Variables pour garder une cohérence dans les données
+        let previousRate = rate;
+        let momentum = 0;
         
         while (currentDate <= endDate) {
             // Formater la date pour l'affichage
             const dateStr = formatAPIDate(currentDate);
             data.labels.push(dateStr);
             
-            // Simuler une fluctuation aléatoire autour de la valeur actuelle
-            const currentRate = calculateConversion(1, fromCurrency, toCurrency);
-            const randomFactor = 0.98 + (Math.random() * 0.04); // Entre 0.98 et 1.02
-            data.rates.push(currentRate * randomFactor);
+            // Partie tendancielle
+            const dayProgress = (currentDate - startDate) / (endDate - startDate); // 0 à 1
+            const trendComponent = currentRate * trendStrength * dayProgress;
+            
+            // Partie saisonnière (si applicable)
+            let seasonalComponent = 0;
+            if (seasonality) {
+                const dayOfSeason = data.labels.length % seasonalityPeriod;
+                seasonalComponent = Math.sin((dayOfSeason / seasonalityPeriod) * Math.PI * 2) * seasonalityStrength * currentRate;
+            }
+            
+            // Momentum (autocorrélation - les marchés tendent à suivre leur direction récente)
+            momentum = momentum * 0.7 + (Math.random() - 0.5) * volatility * currentRate * 0.3;
+            
+            // Composante aléatoire (bruit)
+            const randomComponent = (Math.random() - 0.5) * volatility * currentRate;
+            
+            // Chocs (événements rares mais importants)
+            let shockComponent = 0;
+            if (shocks && Math.random() < shockProbability) {
+                shockComponent = (Math.random() - 0.5) * shockStrength * 2 * currentRate;
+                console.log(`Choc simulé le ${dateStr}: ${shockComponent.toFixed(4)}`);
+            }
+            
+            // Combiner tous les composants
+            rate = previousRate + trendComponent + seasonalComponent + momentum + randomComponent + shockComponent;
+            
+            // Limiter les mouvements extrêmes (réalisme de marché)
+            const maxDailyChange = 0.03 * currentRate; // Max 3% de variation par jour
+            if (Math.abs(rate - previousRate) > maxDailyChange) {
+                const direction = rate > previousRate ? 1 : -1;
+                rate = previousRate + (direction * maxDailyChange);
+            }
+            
+            // S'assurer que le taux ne devient jamais négatif ou trop éloigné du taux actuel
+            rate = Math.max(rate, currentRate * 0.7);
+            rate = Math.min(rate, currentRate * 1.3);
+            
+            data.rates.push(rate);
+            previousRate = rate;
             
             // Passer au jour suivant
             currentDate.setDate(currentDate.getDate() + 1);
         }
         
+        // Ajouter un peu de lissage pour plus de réalisme
+        if (data.rates.length > 5) {
+            for (let i = 2; i < data.rates.length - 2; i++) {
+                // Moyenne mobile sur 5 jours (simple)
+                const smoothed = (data.rates[i-2] + data.rates[i-1] + data.rates[i] + data.rates[i+1] + data.rates[i+2]) / 5;
+                // Ne pas remplacer complètement pour garder certaines variations
+                data.rates[i] = data.rates[i] * 0.7 + smoothed * 0.3;
+            }
+        }
+        
+        // Mettre en cache les données générées
+        state.historicalData[historyKey] = {
+            timestamp: new Date().toISOString(),
+            days: days,
+            data: data,
+            params: {
+                volatility,
+                trendStrength, 
+                seasonality,
+                seasonalityPeriod
+            }
+        };
+        
+        console.log(`Données historiques générées et mises en cache pour ${historyKey}`);
+        
         return data;
-    };
-    
-    // Simuler le chargement des données
-    const simulatedData = simulateHistoricalData();
-    
-    // Mettre à jour le graphique
-    updateChart(fromCurrency, toCurrency, simulatedData);
+    } catch (error) {
+        console.error('Erreur lors de la génération des données historiques:', error);
+        
+        // En cas d'erreur, retourner des données minimales mais valides
+        return {
+            labels: [formatAPIDate(new Date())],
+            rates: [calculateConversion(1, fromCurrency, toCurrency)]
+        };
+    }
 }
 
 /**
@@ -1135,20 +1369,145 @@ function fetchHistoricalData(fromCurrency, toCurrency, days = 30) {
  * @param {Object} data - Données historiques
  */
 function updateChart(fromCurrency, toCurrency, data) {
-    if (!state.chartInstance) {
-        console.warn('Le graphique n\'est pas initialisé');
-        return;
+    try {
+        if (!state.chartInstance) {
+            console.warn('Le graphique n\'est pas initialisé');
+            // Tentative de réinitialisation du graphique
+            const canvas = document.getElementById('currencyChart');
+            if (canvas) {
+                console.log('Tentative de réinitialisation du graphique...');
+                createChart(canvas);
+                if (!state.chartInstance) {
+                    showNotification('Impossible de mettre à jour le graphique', 'warning');
+                    return;
+                }
+            } else {
+                console.error('Élément canvas non trouvé');
+                return;
+            }
+        }
+        
+        if (!data || !data.labels || !data.rates || data.labels.length === 0) {
+            console.error('Données invalides pour le graphique');
+            return;
+        }
+        
+        console.log(`Mise à jour du graphique pour ${fromCurrency} vers ${toCurrency} avec ${data.labels.length} points de données`);
+        
+        // Formater les dates pour un meilleur affichage
+        const formattedLabels = data.labels.map(dateStr => {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('fr-FR', {
+                day: '2-digit',
+                month: 'short'
+            });
+        });
+        
+        // Mettre à jour les labels et les données
+        state.chartInstance.data.labels = formattedLabels;
+        state.chartInstance.data.datasets[0].data = data.rates;
+        
+        // Personnaliser le titre du dataset basé sur les devises
+        const fromInfo = MAIN_CURRENCIES.find(c => c.code === fromCurrency) || { code: fromCurrency, symbol: '' };
+        const toInfo = MAIN_CURRENCIES.find(c => c.code === toCurrency) || { code: toCurrency, symbol: '' };
+        
+        state.chartInstance.data.datasets[0].label = 
+            `${fromInfo.code} (${fromInfo.symbol || ''}) → ${toInfo.code} (${toInfo.symbol || ''})`;
+        
+        // Déterminer les valeurs min et max pour les échelles
+        if (data.rates.length > 0) {
+            const values = data.rates;
+            const min = Math.min(...values);
+            const max = Math.max(...values);
+            const range = max - min;
+            const buffer = range * 0.1; // 10% de marge
+            
+            // Ajuster l'échelle Y pour une meilleure visualisation
+            if (state.chartInstance.options.scales.y) {
+                state.chartInstance.options.scales.y.min = Math.max(0, min - buffer);
+                state.chartInstance.options.scales.y.max = max + buffer;
+                
+                // Ajouter des informations sur la variation en pourcentage
+                const firstRate = data.rates[0];
+                const lastRate = data.rates[data.rates.length - 1];
+                const percentChange = ((lastRate - firstRate) / firstRate) * 100;
+                
+                // Mise à jour du titre du graphique
+                const chartTitle = document.querySelector('.currency-chart-title');
+                if (chartTitle) {
+                    const sign = percentChange >= 0 ? '+' : '';
+                    const changeClass = percentChange >= 0 ? 'positive-change' : 'negative-change';
+                    
+                    chartTitle.innerHTML = `Historique du taux <span class="${changeClass}">(${sign}${percentChange.toFixed(2)}%)</span>`;
+                }
+                
+                // Coloration du graphique selon la tendance
+                const primaryColor = getComputedStyle(document.documentElement)
+                    .getPropertyValue('--currency-primary').trim() || 'rgb(75, 128, 240)';
+                const positiveColor = 'rgba(46, 204, 113, 1)';
+                const negativeColor = 'rgba(231, 76, 60, 1)';
+                
+                const gradientColor = percentChange >= 0 ? positiveColor : negativeColor;
+                state.chartInstance.data.datasets[0].borderColor = gradientColor;
+                
+                // Mise à jour du gradient de fond
+                const ctx = state.chartInstance.ctx;
+                const chartArea = state.chartInstance.chartArea;
+                if (ctx && chartArea) {
+                    const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+                    gradient.addColorStop(0, percentChange >= 0 ? 
+                        'rgba(46, 204, 113, 0.2)' : 'rgba(231, 76, 60, 0.2)');
+                    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                    
+                    state.chartInstance.data.datasets[0].fill = {
+                        target: 'origin',
+                        above: gradient
+                    };
+                    
+                    state.chartInstance.data.datasets[0].pointBackgroundColor = gradientColor;
+                }
+            }
+        }
+        
+        // Rafraîchir le graphique avec une animation
+        state.chartInstance.update();
+        console.log('Graphique mis à jour avec succès');
+        
+        // Ajouter des indicateurs de variations si on a des données de paramètres
+        const historyKey = `${fromCurrency}_${toCurrency}`;
+        if (state.historicalData[historyKey] && state.historicalData[historyKey].params) {
+            const params = state.historicalData[historyKey].params;
+            const volatilityText = params.volatility < 0.02 ? 'Faible volatilité' : 
+                                  params.volatility < 0.03 ? 'Volatilité moyenne' : 
+                                  'Forte volatilité';
+            
+            const trendText = params.trendStrength > 0.02 ? 'Tendance haussière' :
+                             params.trendStrength < -0.02 ? 'Tendance baissière' :
+                             'Pas de tendance marquée';
+            
+            // Ajouter des annotations sous le graphique
+            const chartContainer = document.querySelector('.chart-container');
+            if (chartContainer) {
+                let chartInfo = chartContainer.nextElementSibling;
+                if (!chartInfo || !chartInfo.classList.contains('chart-info')) {
+                    chartInfo = document.createElement('div');
+                    chartInfo.classList.add('chart-info');
+                    chartContainer.after(chartInfo);
+                }
+                
+                chartInfo.innerHTML = `
+                    <div class="chart-stats">
+                        <span class="chart-stat volatility">${volatilityText}</span>
+                        <span class="chart-stat trend">${trendText}</span>
+                        ${params.seasonality ? '<span class="chart-stat seasonality">Variations cycliques</span>' : ''}
+                    </div>
+                `;
+            }
+        }
+    } catch (error) {
+        console.error('Erreur lors de la mise à jour du graphique:', error);
+        showNotification('Erreur lors de la mise à jour du graphique', 'error');
     }
-    
-    // Mettre à jour les labels et les données
-    state.chartInstance.data.labels = data.labels;
-    state.chartInstance.data.datasets[0].data = data.rates;
-    
-    // Mettre à jour le titre du dataset
-    state.chartInstance.data.datasets[0].label = `${fromCurrency} vers ${toCurrency}`;
-    
-    // Rafraîchir le graphique
-    state.chartInstance.update();
 }
 
 // Initialiser le convertisseur de devises seulement quand le DOM est complètement chargé
@@ -1159,16 +1518,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Exposer les fonctions globalement
-window.updateRates = updateRates;
+// Garder pour la rétrocompatibilité
+window.updateRates = forceUpdateRates;
 window.swapCurrencies = swapCurrencies;
 window.convertCurrency = convertCurrency;
 window.clearCurrencyHistory = clearCurrencyHistory;
-
-// Ajouter un écouteur d'événement pour initialiser le convertisseur quand le DOM est prêt
-document.addEventListener('DOMContentLoaded', () => {
-    initCurrencyConverter();
-});
 
 // Exporter les fonctions pour permettre l'utilisation comme module
 export {

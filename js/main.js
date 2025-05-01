@@ -6,7 +6,6 @@ import { CacheManager } from './cache.js';
 import { PerformanceManager } from './performance.js';
 import { Utils } from './utils.js';
 import { SchedulerManager } from './tools/scheduler.js';
-import { StyleTextManager } from './tools/styletext.js';
 import { ColorManager } from './tools/color.js';
 import { QRCodeManager } from './tools/qrcode.js';
 import { TodoManager } from './tools/todo.js';
@@ -455,12 +454,12 @@ class App {
             'currencyTool': () => import('./tools/currency.js').then(module => module.CurrencyManager.init()),
             'unitTool': () => import('./tools/unit.js').then(module => {
                 console.log('Module unitTool chargé:', module);
-                if (module.initUnitConverter) {
+                if (typeof module.initUnitConverter === 'function') {
                     console.log('Initialisation du convertisseur avec initUnitConverter');
                     module.initUnitConverter();
-                } else if (module.UnitManager && module.UnitManager.init) {
-                    console.log('Initialisation du convertisseur avec UnitManager.init');
-                    module.UnitManager.init();
+                } else if (module.UnitConverter && typeof module.UnitConverter.init === 'function') {
+                    console.log('Initialisation du convertisseur avec UnitConverter.init');
+                    module.UnitConverter.init();
                 } else {
                     console.error('Impossible de trouver une méthode d\'initialisation pour le convertisseur d\'unités');
                 }

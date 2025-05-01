@@ -14,6 +14,14 @@
     
     <div class="tool-content">
         <div class="metronome-container">
+            <h2>Métronome</h2>
+            
+            <div class="info-banner" id="audio-info-banner">
+                <i class="fas fa-info-circle"></i>
+                <span>Sur certains appareils (surtout mobiles), vous devez interagir avec la page (toucher l'écran ou cliquer) pour activer le son.</span>
+                <button class="close-banner"><i class="fas fa-times"></i></button>
+            </div>
+            
             <div class="metronome-display">
                 <div class="tempo-display">
                     <span id="currentTempo">120</span>
@@ -57,16 +65,6 @@
                         <option value="5">5/4</option>
                         <option value="6">6/8</option>
                         <option value="7">7/8</option>
-                    </select>
-                </div>
-                
-                <div class="option-group">
-                    <label for="soundType">Son</label>
-                    <select id="soundType" class="form-select">
-                        <option value="click">Clic</option>
-                        <option value="wood">Bois</option>
-                        <option value="digital">Digital</option>
-                        <option value="bell">Cloche</option>
                     </select>
                 </div>
                 
@@ -152,14 +150,14 @@
                 <li>Réglez le tempo en BPM (battements par minute) avec le curseur ou les boutons</li>
                 <li>Sélectionnez la mesure souhaitée (4/4, 3/4, etc.)</li>
                 <li>Appuyez sur "Démarrer" pour lancer le métronome</li>
-                <li>Vous pouvez régler les options sonores et visuelles selon vos préférences</li>
+                <li>Vous pouvez régler les options visuelles selon vos préférences</li>
             </ol>
             
             <h4>Fonctionnalités</h4>
             <ul>
                 <li><strong>Tempos préréglés</strong> : accès rapide aux tempos musicaux standards</li>
                 <li><strong>Accentuation</strong> : possibilité d'accentuer certains temps de la mesure</li>
-                <li><strong>Personnalisation</strong> : différents sons et effets visuels disponibles</li>
+                <li><strong>Personnalisation</strong> : différents effets visuels disponibles</li>
                 <li><strong>Précision</strong> : timing précis pour un entraînement musical optimal</li>
             </ul>
             
@@ -175,7 +173,4 @@
             </ul>
         </div>
     </div>
-</div>
-
-<!-- Chargement du script d'initialisation -->
-<script src="js/tools/init-metronome.js"></script> 
+</div> 

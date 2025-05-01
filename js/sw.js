@@ -38,7 +38,7 @@ const CONFIG = {
         // Ressources immuables jamais mises à jour (Cache Only après mise en cache initiale, expiration longue)
         IMMUTABLE: [
             '/icons/favicon.ico',
-            '/icons/icon-144x144.png',
+            '/icons/icon-1024x1024.png',
             '/icons/icon-192x192.png',
             '/icons/icon-1024x1024.png',
             'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css',
@@ -268,7 +268,7 @@ self.addEventListener('push', event => {
         title: 'Outils Pratiques',
         body: 'Nouvelle notification',
         icon: '/icons/icon-192x192.png',
-        badge: '/icons/icon-144x144.png',
+        badge: '/icons/icon-1024x1024.png',
         data: {
             url: '/'
         }

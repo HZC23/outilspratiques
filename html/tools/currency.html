@@ -6,7 +6,7 @@
             <button type="button" class="btn-icon" id="currencyHelp" aria-label="Aide">
                 <i class="fas fa-question-circle"></i>
             </button>
-            <button type="button" class="btn-icon" id="fullscreenBtn" aria-label="Plein écran">
+            <button type="button" class="btn-icon" id="currencyFullscreen" aria-label="Plein écran">
                 <i class="fas fa-expand"></i>
             </button>
         </div>
@@ -60,23 +60,15 @@
                 <p id="inverseRate">1 USD = 0.91 EUR</p>
             </div>
             
-            <div class="popular-currencies">
-                <h3>Conversions populaires</h3>
-                <div class="currency-grid" id="popularConversions">
-                    <!-- Les conversions populaires seront générées dynamiquement -->
+            <div class="conversion-history">
+                <div class="history-header">
+                    <h3>Historique des conversions</h3>
+                    <button type="button" class="btn btn-sm" onclick="clearCurrencyHistory()">
+                        <i class="fas fa-trash-alt"></i> Effacer
+                    </button>
                 </div>
-            </div>
-            
-            <div class="conversion-chart">
-                <h3>Historique du taux</h3>
-                <div class="chart-container">
-                    <canvas id="currencyChart"></canvas>
-                </div>
-                <div class="chart-period">
-                    <button type="button" class="btn btn-sm" data-period="7">7j</button>
-                    <button type="button" class="btn btn-sm" data-period="30">30j</button>
-                    <button type="button" class="btn btn-sm" data-period="90">90j</button>
-                    <button type="button" class="btn btn-sm" data-period="365">1an</button>
+                <div id="currencyHistory" class="history-list">
+                    <!-- L'historique sera généré dynamiquement -->
                 </div>
             </div>
         </div>
@@ -112,10 +104,20 @@
                 <li><strong>Taux de change</strong> : mis à jour régulièrement</li>
                 <li><strong>Mode hors ligne</strong> : utilise les derniers taux connus si vous n'êtes pas connecté</li>
                 <li><strong>Graphique d'évolution</strong> : visualisez l'évolution du taux de change sur différentes périodes</li>
-                <li><strong>Conversions populaires</strong> : accès rapide aux principales devises mondiales</li>
             </ul>
             
             <p class="help-note">Note: Les taux de change sont fournis à titre indicatif et peuvent différer légèrement des taux appliqués par les banques ou les services de change.</p>
         </div>
     </div>
-</div> 
+</div>
+
+<!-- On charge Chart.js de manière conditionnelle dans le code -->
+<script>
+    if (!window.Chart && document.getElementById('currencyChart')) {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+        document.head.appendChild(script);
+    }
+</script>
+
+<link rel="stylesheet" href="styles/tools/currency.css"> 

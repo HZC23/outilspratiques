@@ -4,7 +4,7 @@ import { Utils } from '../utils.js';
  * UnitConverter - Module unifié pour la conversion d'unités
  * Module fusionnant les fonctionnalités des modules converter.js et unit.js
  */
-export const UnitConverter = {
+const UnitConverter = {
     // État de l'application
     state: {
         // Catégorie sélectionnée
@@ -1213,5 +1213,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Exporter le module pour une utilisation externe
-export { UnitConverter as initUnitConverter }; 
+// Exporter la fonction d'initialisation et l'objet UnitConverter
+export const initUnitConverter = UnitConverter.init.bind(UnitConverter);
+export { UnitConverter }; 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <div class="tool-container" id="styletextTool">
+    
     <div class="tool-header">
         <h2><i class="fas fa-feather-alt"></i> Styliseur de texte</h2>
         <div class="tool-actions">
@@ -13,178 +14,117 @@
     </div>
     
     <div class="tool-content">
-        <div class="styletext-container">
-            <div class="input-section">
-                <h3>Texte à styliser</h3>
-                <div class="textarea-container">
-                    <textarea id="originalText" placeholder="Saisissez ou collez votre texte ici..." class="styletext-textarea"></textarea>
+        <div class="styletext-main-container">
+            <div class="styletext-io-container">
+                <div class="input-section">
+                    <textarea id="inputText" placeholder="Saisissez ou collez votre texte ici..." class="styletext-textarea"></textarea>
                     <div class="text-controls">
-                        <button type="button" class="btn-icon" id="clearText" aria-label="Effacer">
-                            <i class="fas fa-times"></i>
-                        </button>
-                        <button type="button" class="btn-icon" id="pasteText" aria-label="Coller">
-                            <i class="fas fa-paste"></i>
-                        </button>
+                        <div class="character-count">
+                            <span id="inputCounter">0</span> caractères
+                        </div>
+                        <div class="buttons-group">
+                            <button type="button" class="control-btn" id="clearText">
+                                <i class="fas fa-times"></i> Effacer
+                            </button>
+                            <button type="button" class="control-btn" id="pasteText">
+                                <i class="fas fa-paste"></i> Coller
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <div class="character-count">
-                    <span id="charCount">0</span> caractères
-                </div>
-            </div>
-            
-            <div class="style-options">
-                <div class="style-tabs">
-                    <button type="button" class="tab-button active" data-tab="fonts">Polices</button>
-                    <button type="button" class="tab-button" data-tab="symbols">Symboles</button>
-                    <button type="button" class="tab-button" data-tab="emojis">Émojis</button>
-                    <button type="button" class="tab-button" data-tab="borders">Bordures</button>
                 </div>
                 
-                <div class="tab-content">
-                    <div class="tab-pane active" id="fonts">
-                        <div class="font-styles" id="fontStyles">
-                            <div class="style-item" data-style="bold">
-                                <div class="style-preview">𝐓𝐞𝐱𝐭𝐞 𝐠𝐫𝐚𝐬</div>
-                                <div class="style-name">Gras</div>
-                            </div>
-                            <div class="style-item" data-style="italic">
-                                <div class="style-preview">𝘛𝘦𝘹𝘵𝘦 𝘪𝘵𝘢𝘭𝘪𝘲𝘶𝘦</div>
-                                <div class="style-name">Italique</div>
-                            </div>
-                            <div class="style-item" data-style="script">
-                                <div class="style-preview">𝓣𝓮𝔁𝓽𝓮 𝓼𝓬𝓻𝓲𝓹𝓽</div>
-                                <div class="style-name">Script</div>
-                            </div>
-                            <div class="style-item" data-style="double-struck">
-                                <div class="style-preview">𝕋𝕖𝕩𝕥𝕖 𝕕𝕠𝕦𝕓𝕝𝕖</div>
-                                <div class="style-name">Double</div>
-                            </div>
-                            <div class="style-item" data-style="monospace">
-                                <div class="style-preview">𝚃𝚎𝚡𝚝𝚎 𝚖𝚘𝚗𝚘</div>
-                                <div class="style-name">Monospace</div>
-                            </div>
-                            <div class="style-item" data-style="small-caps">
-                                <div class="style-preview">ᴛᴇxᴛᴇ ᴘᴇᴛɪᴛᴇs ᴄᴀᴘs</div>
-                                <div class="style-name">Petites caps</div>
-                            </div>
-                            <div class="style-item" data-style="upside-down">
-                                <div class="style-preview">ʇǝxʇǝ ɹǝuʌǝɹsé</div>
-                                <div class="style-name">Renversé</div>
-                            </div>
-                            <div class="style-item" data-style="strikethrough">
-                                <div class="style-preview">T̶e̶x̶t̶e̶ ̶b̶a̶r̶r̶é̶</div>
-                                <div class="style-name">Barré</div>
-                            </div>
-                            <div class="style-item" data-style="bubble">
-                                <div class="style-preview">ⓣⓔⓧⓣⓔ ⓑⓤⓛⓛⓔ</div>
-                                <div class="style-name">Bulle</div>
-                            </div>
-                            <div class="style-item" data-style="medieval">
-                                <div class="style-preview">𝔗𝔢𝔵𝔱𝔢 𝔪é𝔡𝔦é𝔳𝔞𝔩</div>
-                                <div class="style-name">Médiéval</div>
-                            </div>
-                            <div class="style-item" data-style="vaporwave">
-                                <div class="style-preview">Ｔｅｘｔｅ　ｖａｐｏｒｗａｖｅ</div>
-                                <div class="style-name">Vaporwave</div>
-                            </div>
-                            <div class="style-item" data-style="zalgo">
-                                <div class="style-preview">T̷̢̮̦̭̞̿̊͋̀̕ḙ̶̯̗̔̎̊͝ͅx̸̮̗̩͔̓͆̍̀t̵̤͊̐͆̓e̵̟͎̓̑̏̓ ̴̯̤̃̔͗͒͘Z̴̠̈͜a̸̞̹̠̍̂̽͘͝ḽ̸͕͊̏̄̀̏g̴̱͐̔͋̒̉o̷̔̎͑͜</div>
-                                <div class="style-name">Zalgo</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="tab-pane" id="symbols">
-                        <div class="symbols-grid" id="symbolsGrid">
-                            <button type="button" class="symbol-btn" data-symbol="★">★</button>
-                            <button type="button" class="symbol-btn" data-symbol="☆">☆</button>
-                            <button type="button" class="symbol-btn" data-symbol="♥">♥</button>
-                            <button type="button" class="symbol-btn" data-symbol="♡">♡</button>
-                            <button type="button" class="symbol-btn" data-symbol="✓">✓</button>
-                            <button type="button" class="symbol-btn" data-symbol="✗">✗</button>
-                            <button type="button" class="symbol-btn" data-symbol="♫">♫</button>
-                            <button type="button" class="symbol-btn" data-symbol="♪">♪</button>
-                            <button type="button" class="symbol-btn" data-symbol="☺">☺</button>
-                            <button type="button" class="symbol-btn" data-symbol="☹">☹</button>
-                            <button type="button" class="symbol-btn" data-symbol="♣">♣</button>
-                            <button type="button" class="symbol-btn" data-symbol="♠">♠</button>
-                            <button type="button" class="symbol-btn" data-symbol="♦">♦</button>
-                            <button type="button" class="symbol-btn" data-symbol="♤">♤</button>
-                            <button type="button" class="symbol-btn" data-symbol="♧">♧</button>
-                            <button type="button" class="symbol-btn" data-symbol="♢">♢</button>
-                            <button type="button" class="symbol-btn" data-symbol="☼">☼</button>
-                            <button type="button" class="symbol-btn" data-symbol="☾">☾</button>
-                            <button type="button" class="symbol-btn" data-symbol="✈">✈</button>
-                            <button type="button" class="symbol-btn" data-symbol="⚓">⚓</button>
-                            <button type="button" class="symbol-btn" data-symbol="⚔">⚔</button>
-                            <button type="button" class="symbol-btn" data-symbol="☮">☮</button>
-                            <button type="button" class="symbol-btn" data-symbol="☯">☯</button>
-                            <button type="button" class="symbol-btn" data-symbol="∞">∞</button>
-                        </div>
-                    </div>
-                    
-                    <div class="tab-pane" id="emojis">
-                        <div class="emoji-categories">
-                            <button type="button" class="emoji-category active" data-category="smileys">😀</button>
-                            <button type="button" class="emoji-category" data-category="people">👨</button>
-                            <button type="button" class="emoji-category" data-category="animals">🐶</button>
-                            <button type="button" class="emoji-category" data-category="food">🍎</button>
-                            <button type="button" class="emoji-category" data-category="activities">⚽</button>
-                            <button type="button" class="emoji-category" data-category="travel">🚗</button>
-                            <button type="button" class="emoji-category" data-category="objects">💡</button>
-                            <button type="button" class="emoji-category" data-category="symbols">💯</button>
-                        </div>
-                        <div class="emoji-grid" id="emojiGrid">
-                            <!-- Les émojis seront ajoutés dynamiquement ici -->
-                        </div>
-                    </div>
-                    
-                    <div class="tab-pane" id="borders">
-                        <div class="border-styles" id="borderStyles">
-                            <div class="style-item" data-border="simple">
-                                <div class="style-preview">┌─────┐<br>│ Texte │<br>└─────┘</div>
-                                <div class="style-name">Simple</div>
-                            </div>
-                            <div class="style-item" data-border="double">
-                                <div class="style-preview">╔═════╗<br>║ Texte ║<br>╚═════╝</div>
-                                <div class="style-name">Double</div>
-                            </div>
-                            <div class="style-item" data-border="rounded">
-                                <div class="style-preview">╭─────╮<br>│ Texte │<br>╰─────╯</div>
-                                <div class="style-name">Arrondi</div>
-                            </div>
-                            <div class="style-item" data-border="stars">
-                                <div class="style-preview">★★★★★★★<br>★ Texte ★<br>★★★★★★★</div>
-                                <div class="style-name">Étoiles</div>
-                            </div>
-                            <div class="style-item" data-border="hearts">
-                                <div class="style-preview">♥♥♥♥♥♥♥<br>♥ Texte ♥<br>♥♥♥♥♥♥♥</div>
-                                <div class="style-name">Cœurs</div>
-                            </div>
-                            <div class="style-item" data-border="flowers">
-                                <div class="style-preview">✿✿✿✿✿✿✿<br>✿ Texte ✿<br>✿✿✿✿✿✿✿</div>
-                                <div class="style-name">Fleurs</div>
-                            </div>
-                        </div>
+                <div class="output-section">
+                    <textarea id="outputText" readonly class="styletext-output"></textarea>
+                    <div class="output-controls">
+                        <button type="button" class="primary-btn" id="copyButton">
+                            <i class="fas fa-copy"></i> Copier dans le Presse-papiers
+                        </button>
                     </div>
                 </div>
             </div>
             
-            <div class="output-section">
-                <h3>Texte stylisé</h3>
-                <div class="output-container">
-                    <div id="styledText" class="styled-text"></div>
-                    <div class="output-controls">
-                        <button type="button" class="btn-icon" id="copyStyledText" aria-label="Copier">
-                            <i class="fas fa-copy"></i>
-                        </button>
-                        <button type="button" class="btn-icon" id="downloadStyledText" aria-label="Télécharger">
-                            <i class="fas fa-download"></i>
-                        </button>
-                        <button type="button" class="btn-icon" id="shareStyledText" aria-label="Partager">
-                            <i class="fas fa-share-alt"></i>
-                        </button>
-                    </div>
+            <div class="styles-section">
+                <h3 class="styles-title">Sélectionnez un style</h3>
+                <div class="style-options-grid">
+                    <label class="style-option">
+                        <input type="radio" name="textStyle" value="normal" checked>
+                        <div class="style-content">
+                            <span class="style-preview">Abc</span>
+                            <span class="style-name">Normal</span>
+                        </div>
+                    </label>
+                    
+                    <label class="style-option">
+                        <input type="radio" name="textStyle" value="outline">
+                        <div class="style-content">
+                            <span class="style-preview">𝕒𝕓𝕔</span>
+                            <span class="style-name">Police de contour</span>
+                        </div>
+                    </label>
+                    
+                    <label class="style-option">
+                        <input type="radio" name="textStyle" value="squared">
+                        <div class="style-content">
+                            <span class="style-preview">🅐🅑🅒</span>
+                            <span class="style-name">Texte carré</span>
+                        </div>
+                    </label>
+                    
+                    <label class="style-option">
+                        <input type="radio" name="textStyle" value="smallcaps">
+                        <div class="style-content">
+                            <span class="style-preview">ᴀʙᴄ</span>
+                            <span class="style-name">Petites majuscules</span>
+                        </div>
+                    </label>
+                    
+                    <label class="style-option">
+                        <input type="radio" name="textStyle" value="bold">
+                        <div class="style-content">
+                            <span class="style-preview">𝐀𝐛𝐜</span>
+                            <span class="style-name">Gras</span>
+                        </div>
+                    </label>
+                    
+                    <label class="style-option">
+                        <input type="radio" name="textStyle" value="fraktur">
+                        <div class="style-content">
+                            <span class="style-preview">𝔄𝔟𝔠</span>
+                            <span class="style-name">Vieux texte anglais</span>
+                        </div>
+                    </label>
+                    
+                    <label class="style-option">
+                        <input type="radio" name="textStyle" value="flipped">
+                        <div class="style-content">
+                            <span class="style-preview">ɐqɔ</span>
+                            <span class="style-name">Texte à l'envers</span>
+                        </div>
+                    </label>
+                    
+                    <label class="style-option">
+                        <input type="radio" name="textStyle" value="serif">
+                        <div class="style-content">
+                            <span class="style-preview">𝐀𝐛𝐜</span>
+                            <span class="style-name">Police serif</span>
+                        </div>
+                    </label>
+                    
+                    <label class="style-option">
+                        <input type="radio" name="textStyle" value="script">
+                        <div class="style-content">
+                            <span class="style-preview">𝓐𝓫𝓬</span>
+                            <span class="style-name">Lettres cursives</span>
+                        </div>
+                    </label>
+                    
+                    <label class="style-option">
+                        <input type="radio" name="textStyle" value="superscript">
+                        <div class="style-content">
+                            <span class="style-preview">ᴬᵇᶜ</span>
+                            <span class="style-name">Exposant</span>
+                        </div>
+                    </label>
                 </div>
             </div>
         </div>
@@ -201,22 +141,446 @@
             <h4>Comment utiliser</h4>
             <ol>
                 <li>Saisissez ou collez votre texte dans la zone "Texte à styliser"</li>
-                <li>Sélectionnez l'onglet correspondant au type de style souhaité (polices, symboles, etc.)</li>
-                <li>Cliquez sur un style pour l'appliquer à votre texte</li>
-                <li>Le texte stylisé apparaîtra dans la zone de sortie</li>
-                <li>Utilisez les boutons pour copier, télécharger ou partager votre texte stylisé</li>
+                <li>Sélectionnez un style parmi les options disponibles</li>
+                <li>Le texte stylisé apparaît automatiquement dans la zone de sortie</li>
+                <li>Utilisez le bouton "Copier" pour copier le texte stylisé dans le presse-papier</li>
             </ol>
             
-            <h4>Fonctionnalités</h4>
+            <h4>Styles disponibles</h4>
             <ul>
-                <li><strong>Polices</strong> : transformez votre texte avec différents styles typographiques</li>
-                <li><strong>Symboles</strong> : ajoutez des symboles spéciaux à votre texte</li>
-                <li><strong>Émojis</strong> : agrémentez votre texte avec des émojis classés par catégorie</li>
-                <li><strong>Bordures</strong> : encadrez votre texte avec différents styles de bordures</li>
+                <li><strong>Normal</strong> : Texte normal sans transformation</li>
+                <li><strong>Police de contour</strong> : 𝕡𝕠𝕝𝕚𝕔𝕖 𝕕𝕖 𝕔𝕠𝕟𝕥𝕠𝕦𝕣 - style double avec contour</li>
+                <li><strong>Texte carré</strong> : 🅣🅔🅧🅣🅔 🅒🅐🅡🅡🅔 - lettres dans des carrés</li>
+                <li><strong>Petites majuscules</strong> : ᴘᴇᴛɪᴛᴇs ᴍᴀᴊᴜsᴄᴜʟᴇs - version réduite des majuscules</li>
+                <li><strong>Gras</strong> : 𝐆𝐫𝐚𝐬 - caractères en gras mathématique</li>
+                <li><strong>Vieux texte anglais</strong> : 𝔳𝔦𝔢𝔲𝔵 𝔱𝔢𝔵𝔱𝔢 𝔞𝔫𝔤𝔩𝔞𝔦𝔰 - style médiéval</li>
+                <li><strong>Texte à l'envers</strong> : ʇǝxʇǝ à l,ǝuʌǝɹs - texte retourné à 180°</li>
+                <li><strong>Police serif</strong> : 𝐩𝐨𝐥𝐢𝐜𝐞 𝐬𝐞𝐫𝐢𝐟 - style avec empattements</li>
+                <li><strong>Lettres cursives</strong> : 𝓵𝓮𝓽𝓽𝓻𝓮𝓼 𝓬𝓾𝓻𝓼𝓲𝓿𝓮𝓼 - style d'écriture à la main</li>
+                <li><strong>Exposant</strong> : ᵉˣᵖᵒˢᵃⁿᵗ - texte en petit au-dessus de la ligne</li>
             </ul>
             
-            <h4>Remarques</h4>
-            <p>Certains styles de texte utilisent des caractères Unicode qui peuvent ne pas s'afficher correctement sur tous les appareils ou plateformes. Pour une meilleure compatibilité, privilégiez les styles simples lorsque vous partagez votre texte.</p>
+            <h4>Raccourcis clavier</h4>
+            <ul>
+                <li><kbd>Ctrl</kbd> + <kbd>Entrée</kbd> : Convertir le texte</li>
+                <li><kbd>Échap</kbd> : Fermer les fenêtres contextuelles</li>
+                <li><kbd>Ctrl</kbd> + <kbd>C</kbd> : Copier le texte stylisé lorsqu'il est sélectionné</li>
+            </ul>
+            
+            <h4>Remarque</h4>
+            <p>Certains styles utilisent des caractères Unicode spéciaux qui peuvent ne pas s'afficher correctement sur tous les appareils. Ces caractères sont principalement destinés aux réseaux sociaux et à la messagerie instantanée, où leur prise en charge est généralement bonne.</p>
         </div>
     </div>
-</div> 
+</div>
+
+<script>
+    // Script de débogage pour le styliseur de texte
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('---- DÉBOGAGE STYLETEXT ----');
+        console.log('DOM chargé - vérification des éléments critiques');
+        
+        // Vérifier les onglets
+        const tabs = document.querySelectorAll('.styletext-tab');
+        console.log(`Nombre d'onglets trouvés : ${tabs.length}`);
+        
+        tabs.forEach((tab, index) => {
+            console.log(`Onglet ${index + 1}: target=${tab.getAttribute('data-target')}, classe=${tab.className}`);
+            
+            // Ajouter un gestionnaire d'événements robuste
+            tab.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('data-target');
+                console.log(`Clic sur onglet avec cible: ${targetId}`);
+                
+                // Retirer la classe active de tous les onglets
+                tabs.forEach(t => t.classList.remove('active'));
+                
+                // Ajouter la classe active à l'onglet cliqué
+                this.classList.add('active');
+                
+                // Désactiver tous les panneaux
+                document.querySelectorAll('.tab-pane').forEach(pane => {
+                    pane.classList.remove('active');
+                    // Force la visibilité à none
+                    pane.style.display = 'none';
+                    console.log(`Panneau désactivé: ${pane.id}`);
+                });
+                
+                // Activer le panneau cible
+                const targetPane = document.getElementById(targetId);
+                if (targetPane) {
+                    targetPane.classList.add('active');
+                    // Force la visibilité à block
+                    targetPane.style.display = 'block';
+                    console.log(`Panneau activé: ${targetId}`);
+                } else {
+                    console.error(`Panneau cible introuvable: ${targetId}`);
+                }
+            });
+        });
+        
+        // Vérifier les panneaux
+        const panes = document.querySelectorAll('.tab-pane');
+        console.log(`Nombre de panneaux trouvés : ${panes.length}`);
+        
+        panes.forEach((pane, index) => {
+            console.log(`Panneau ${index + 1}: id=${pane.id}, classe=${pane.className}, display=${getComputedStyle(pane).display}`);
+        });
+        
+        // Force l'affichage du premier onglet après un court délai
+        setTimeout(function() {
+            const firstTab = document.querySelector('.styletext-tab');
+            if (firstTab) {
+                console.log('Activation forcée du premier onglet');
+                firstTab.click();
+            }
+        }, 500);
+        
+        // Fonction pour s'assurer que le contenu des onglets est correctement initialisé
+        function initTabsPanels() {
+            // Masquer tous les panneaux
+            document.querySelectorAll('.tab-pane').forEach(pane => {
+                pane.style.display = 'none';
+            });
+            
+            // Afficher uniquement le panneau actif
+            const activeTab = document.querySelector('.styletext-tab.active');
+            if (activeTab) {
+                const targetId = activeTab.getAttribute('data-target');
+                const targetPane = document.getElementById(targetId);
+                if (targetPane) {
+                    targetPane.style.display = 'block';
+                    console.log(`Initialisation: panneau ${targetId} affiché`);
+                }
+            }
+        }
+        
+        // Initialiser les panneaux après un court délai
+        setTimeout(initTabsPanels, 800);
+    });
+</script>
+
+<!-- Script principal du styliseur -->
+<script type="module">
+    import { StyleTextManager, debugStyleText } from '/js/tools/styletext.js';
+    
+    // Initialiser le styliseur
+    document.addEventListener('DOMContentLoaded', function() {
+        StyleTextManager.init();
+        
+        // Exécuter le débogage après un court délai
+        setTimeout(function() {
+            console.log('Exécution du débogage depuis le module');
+            if (typeof debugStyleText === 'function') {
+                debugStyleText();
+            } else {
+                console.error('Fonction debugStyleText non disponible');
+            }
+        }, 1000);
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialiser l'aide et le bouton plein écran
+        const helpBtn = document.getElementById('styletextHelp');
+        const closeHelpBtn = document.getElementById('closeStyletextHelp');
+        const helpPanel = document.getElementById('styletextHelpPanel');
+        
+        if (helpBtn && helpPanel && closeHelpBtn) {
+            helpBtn.addEventListener('click', function() {
+                helpPanel.classList.add('active');
+            });
+            
+            closeHelpBtn.addEventListener('click', function() {
+                helpPanel.classList.remove('active');
+            });
+        }
+        
+        // Bouton pour effacer l'historique
+        const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+        if (clearHistoryBtn) {
+            clearHistoryBtn.addEventListener('click', function() {
+                localStorage.removeItem('styletextHistory');
+                renderHistory();
+                showToast('Historique effacé', 'info');
+            });
+        }
+        
+        // Boutons pour effacer et coller
+        const clearTextBtn = document.getElementById('clearText');
+        const pasteTextBtn = document.getElementById('pasteText');
+        const inputText = document.getElementById('inputText');
+        
+        if (clearTextBtn && inputText) {
+            clearTextBtn.addEventListener('click', function() {
+                inputText.value = '';
+                inputText.focus();
+                StyleTextManager.applyCurrentStyle();
+                updateCharacterCount();
+            });
+        }
+        
+        if (pasteTextBtn && inputText) {
+            pasteTextBtn.addEventListener('click', function() {
+                navigator.clipboard.readText()
+                    .then(text => {
+                        inputText.value = text;
+                        StyleTextManager.applyCurrentStyle();
+                        updateCharacterCount();
+                    })
+                    .catch(err => {
+                        console.error('Erreur de collage:', err);
+                        alert('Impossible d\'accéder au presse-papiers');
+                    });
+            });
+        }
+        
+        // Compteur de caractères
+        function updateCharacterCount() {
+            const counter = document.getElementById('inputCounter');
+            if (counter && inputText) {
+                counter.textContent = inputText.value.length;
+            }
+        }
+        
+        if (inputText) {
+            inputText.addEventListener('input', updateCharacterCount);
+            // Initialiser le compteur
+            updateCharacterCount();
+        }
+    });
+    
+    // Fonction globale pour afficher un toast
+    function showToast(message, type = 'info') {
+        const toast = document.createElement('div');
+        toast.className = `styletext-toast ${type}`;
+        toast.textContent = message;
+        
+        document.body.appendChild(toast);
+        
+        // Animation d'entrée
+        setTimeout(() => toast.classList.add('show'), 10);
+        
+        // Disparition après 3 secondes
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+</script>
+
+<style>
+:root {
+    --primary-color: #4285f4;
+    --primary-dark: #3367d6;
+    --secondary-color: #34a853;
+    --accent-color: #fbbc05;
+    --danger-color: #ea4335;
+    --text-color: #202124;
+    --text-secondary: #5f6368;
+    --bg-color: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --border-color: #dadce0;
+    --shadow-sm: 0 1px 2px rgba(60, 64, 67, 0.3);
+    --shadow-md: 0 2px 6px rgba(60, 64, 67, 0.15);
+    --shadow-lg: 0 4px 12px rgba(60, 64, 67, 0.2);
+    --transition: all 0.2s ease;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+}
+
+.styletext-main-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.styletext-io-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .styletext-io-container {
+        flex-direction: row;
+    }
+    
+    .input-section, .output-section {
+        flex: 1;
+    }
+}
+
+.input-section, .output-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.styletext-textarea, .styletext-output {
+    width: 100%;
+    min-height: 150px;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    line-height: 1.5;
+    resize: vertical;
+    transition: var(--transition);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.styletext-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+}
+
+.styletext-output {
+    background-color: var(--bg-secondary);
+}
+
+.text-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.character-count {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.buttons-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.control-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.375rem 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background-color: var(--bg-color);
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.control-btn:hover {
+    background-color: var(--bg-secondary);
+    color: var(--text-color);
+}
+
+.primary-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: var(--radius-sm);
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+}
+
+.primary-btn:hover {
+    background-color: var(--primary-dark);
+    box-shadow: var(--shadow-md);
+}
+
+.output-controls {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.styles-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.style-options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+}
+
+.style-option {
+    position: relative;
+    cursor: pointer;
+}
+
+.style-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.style-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background-color: var(--bg-color);
+    transition: var(--transition);
+    height: 100%;
+    min-height: 100px;
+}
+
+.style-option:hover .style-content {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-sm);
+}
+
+.style-option input[type="radio"]:checked + .style-content {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.3);
+    background-color: rgba(66, 133, 244, 0.05);
+}
+
+.style-preview {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.style-name {
+    font-size: 0.875rem;
+    text-align: center;
+    color: var(--text-color);
+}
+
+/* Animation lors du changement de style */
+@keyframes highlight {
+    0% { background-color: var(--bg-secondary); }
+    50% { background-color: rgba(66, 133, 244, 0.1); }
+    100% { background-color: var(--bg-secondary); }
+}
+
+.style-changed {
+    animation: highlight 0.5s ease;
+}
+</style> 
