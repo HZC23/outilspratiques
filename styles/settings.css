@@ -89,7 +89,6 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-fill-color: transparent;
 }
 
 .settings-help-btn {
@@ -969,4 +968,63 @@ input:checked + .slider:before {
 
 .sync-notification.error {
     background-color: var(--error-color);
+}
+
+.sync-status {
+    background-color: var(--bg-color-secondary);
+    border-radius: var(--border-radius-small);
+    padding: var(--padding-medium);
+    margin-bottom: var(--margin-medium);
+    border-left: 4px solid var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sync-status p {
+    margin: 0;
+    color: var(--text-color-secondary);
+    font-size: 0.9rem;
+}
+
+.sync-status span {
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+/* Styles pour l'indicateur de connexion */
+.connection-status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--margin-medium);
+    padding: var(--padding-small);
+    background-color: var(--bg-color-secondary);
+    border-radius: var(--border-radius-small);
+}
+
+.connection-indicator {
+    display: flex;
+    align-items: center;
+}
+
+.connection-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: var(--margin-small);
+}
+
+.connection-dot.online {
+    background-color: #4CAF50;
+    box-shadow: 0 0 8px #4CAF50;
+}
+
+.connection-dot.offline {
+    background-color: #f44336;
+    box-shadow: 0 0 8px #f44336;
+}
+
+.connection-text {
+    font-weight: 500;
 } 

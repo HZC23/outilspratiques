@@ -45,6 +45,24 @@
     --border-radius-lg: 16px;
     --border-radius-xl: 24px;
     --border-radius-circle: 50%;
+        --styletext-gap: 1.5rem;
+        --styletext-padding: 1rem;
+        --styletext-border-radius: var(--radius);
+        --styletext-min-height: 180px;
+        --styletext-font-size: 1rem;
+        --styletext-line-height: 1.5;
+        --styletext-transition: var(--transition);
+        --styletext-shadow-sm: 0 0 0 2px rgba(66, 133, 244, 0.2);
+        --styletext-shadow-md: 0 0 0 1px var(--primary-color);
+        --styletext-bg-hover: rgba(66, 133, 244, 0.05);
+        --styletext-bg-active: rgba(66, 133, 244, 0.1);
+        --styletext-animation-duration: 0.6s;
+        --styletext-panel-width: 400px;
+        --styletext-toast-bottom: 20px;
+    --styletext-toast-right: 20px;
+    --styletext-grid-item-size: 140px;
+    --styletext-preview-font-size: 1.5rem;
+    --styletext-name-font-size: 0.8rem;
     
     /* Ombres */
     --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -234,18 +252,34 @@
 [data-theme="dark"] {
     /* Couleurs principales en mode sombre */
     --primary-color: #0E9CFF;
+    --primary-color-rgb: 14, 156, 255;
+    --primary-light: #1a3550;
     --secondary-color: #66BB69;
+    --secondary-color-rgb: 102, 187, 105;
     
     /* Couleurs d'interface en mode sombre */
     --bg-color: #121212;
     --card-bg: #1E1E1E;
     --border-color: #333333;
     --hover-color: #2A3747;
+    --text-on-primary: #FFFFFF;
     
     /* Couleurs pour les textes en mode sombre */
     --text-color: #E0E0E0;
     --text-secondary: #AAAAAA;
     --text-muted: #777777;
+    --text-color-secondary: #AAAAAA;
+    
+    /* Couleurs fonctionnelles en mode sombre */
+    --success-color: #66BB69;
+    --success-color-dark: #4a8c4c;
+    --warning-color: #FFB74D;
+    --warning-color-dark: #cc9339;
+    --error-color: #FF6B6B;
+    --info-color: #4FC3F7;
+    --info-color-dark: #3a94b8;
+    --danger-color: #FF6B6B;
+    --danger-color-hover: #b74b4b;
     
     /* Ombres en mode sombre */
     --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -259,6 +293,10 @@
     --calc-button-bg-hover: #404040;
     --calc-button-text: #E0E0E0;
     --calc-button-operator: #505050;
+    --calc-button-primary: #3a8ad2;
+    --calc-button-secondary: #4d96cc;
+    --calc-button-equals: #1d6fc7;
+    --calc-button-clear: #c74242;
     
     /* Containers et formulaires communs en mode sombre */
     --tool-container-bg: #1E1E1E;
@@ -266,10 +304,12 @@
     --tool-header-text: #E0E0E0;
     --form-input-bg: #2C2C2C;
     --form-input-border: #333333;
+    --form-input-focus-border: var(--primary-color);
     --form-input-text: #E0E0E0;
     --form-label-text: #AAAAAA;
     --form-select-bg: #2C2C2C;
     --form-range-bg: #333333;
+    --form-range-thumb: var(--primary-color);
     --form-file-bg: #2C2C2C;
     --form-checkbox-color: var(--primary-color);
     --help-panel-bg: #262626;
@@ -278,19 +318,31 @@
     /* QR Code en mode sombre */
     --qrcode-tab-bg: #262626;
     --qrcode-tab-text: #E0E0E0;
+    --qrcode-tab-active: var(--primary-color);
+    --qrcode-tab-text-active: #FFFFFF;
     --qrcode-output-bg: #333333;
     --qrcode-output-border: #444444;
     --qrcode-scanner-bg: #262626;
+    --qrcode-marker-color: var(--primary-color);
     
     /* Chronomètre/Timer en mode sombre */
     --timer-display-bg: #333333;
     --timer-display-text: #E0E0E0;
     --timer-progress-bg: #444444;
+    --timer-progress-fill: var(--primary-color);
+    --timer-button-start: #4CAF50;
+    --timer-button-stop: #FF6B6B;
+    --timer-button-lap: var(--primary-color);
     
     /* Todo en mode sombre */
     --todo-item-bg: #262626;
     --todo-item-border: #333333;
     --todo-item-completed-bg: #333333;
+    --todo-checkbox-color: var(--primary-color);
+    --todo-priority-high: #FF6B6B;
+    --todo-priority-medium: #FFB74D;
+    --todo-priority-low: #66BB69;
+    --todo-item-bg-hover: #333333;
     
     /* Notes en mode sombre */
     --note-bg: #262626;
@@ -299,26 +351,55 @@
     --note-toolbar-button: #AAAAAA;
     --note-toolbar-button-hover: #E0E0E0;
     
+    /* Métronome en mode sombre */
+    --metronome-pendulum-color: var(--primary-color);
+    --metronome-bg: #262626;
+    --metronome-marker-color: #FF6B6B;
+    --metronome-tempo-bg: #333333;
+    
     /* Traducteur en mode sombre */
     --translator-lang-bg: #262626;
+    --translator-arrow-color: var(--primary-color);
     --translator-input-bg: #333333;
+    --translator-swap-button: var(--primary-color);
     
-    /* Convertisseur en mode sombre */
+    /* Convertisseur de devise/unités en mode sombre */
+    --converter-arrow-color: var(--primary-color);
     --converter-result-bg: #333333;
     --converter-select-bg: #262626;
+    
+    /* Sélecteur de couleur en mode sombre */
+    --color-picker-hue-thumb: #FFFFFF;
+    --color-picker-saturation-bg: #FF0000;
+    --color-picker-alpha-bg: transparent;
+    --color-picker-alpha-pattern: #444444;
     
     /* Password Generator en mode sombre */
     --password-bg: #333333;
     --password-text: #E0E0E0;
+    --password-strength-weak: #FF6B6B;
+    --password-strength-medium: #FFB74D;
+    --password-strength-strong: #66BB69;
 
     /* Ajouts pour harmonisation des outils en mode sombre */
     --input-bg: #262626;
     --button-bg: #2C2C2C;
     --button-hover-bg: #404040;
+    --button-text: #E0E0E0;
     --primary-hover: #0a6ecf;
     --danger-hover: #a93226;
-    --text-color-secondary: #AAAAAA;
     --todo-item-bg-hover: #333333;
+    
+    /* Variables pour dégradés et titres */
+    --primary-gradient-blue: #0a4994;
+    --primary-gradient-purple: #292481;
+    --primary-blue: #0078d4;
+    --primary-dark-blue: #005a9e;
+    --header-title-gradient-1: #e0e0e0;
+    --header-title-gradient-2: #aaaaaa;
+    
+    /* Variables pour notifications */
+    --notification-close-hover-bg: rgba(255, 255, 255, 0.1);
 }
 
 /* Adaptation mobile */

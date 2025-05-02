@@ -728,10 +728,6 @@ function setupMetronomeUI() {
 
     // Configuration du Tap Tempo
     setupTapTempo();
-    
-    // Configuration du plein écran
-    setupFullscreen();
-    
     // Configuration du panel d'aide
     setupHelpPanel();
     
@@ -824,67 +820,6 @@ function setupMetronomeUI() {
             console.error('Erreur lors de la configuration du Tap Tempo:', error);
         }
     }
-    
-    /**
-     * Configurer les contrôles de plein écran
-     */
-    function setupFullscreen() {
-        try {
-            if (!fullscreenButton) return;
-            
-            const toolContainer = document.getElementById('metronomeTool');
-            if (!toolContainer) return;
-            
-            fullscreenButton.addEventListener('click', () => {
-                if (!document.fullscreenElement) {
-                    // Entrer en mode plein écran
-                    if (toolContainer.requestFullscreen) {
-                        toolContainer.requestFullscreen();
-                    } else if (toolContainer.mozRequestFullScreen) {
-                        toolContainer.mozRequestFullScreen();
-                    } else if (toolContainer.webkitRequestFullscreen) {
-                        toolContainer.webkitRequestFullscreen();
-                    } else if (toolContainer.msRequestFullscreen) {
-                        toolContainer.msRequestFullscreen();
-                    }
-                    
-                    fullscreenButton.innerHTML = '<i class="fas fa-compress"></i>';
-                } else {
-                    // Sortir du mode plein écran
-                    if (document.exitFullscreen) {
-                        document.exitFullscreen();
-                    } else if (document.mozCancelFullScreen) {
-                        document.mozCancelFullScreen();
-                    } else if (document.webkitExitFullscreen) {
-                        document.webkitExitFullscreen();
-                    } else if (document.msExitFullscreen) {
-                        document.msExitFullscreen();
-                    }
-                    
-                    fullscreenButton.innerHTML = '<i class="fas fa-expand"></i>';
-                }
-            });
-            
-            // Mettre à jour le bouton quand le mode plein écran change
-            document.addEventListener('fullscreenchange', updateFullscreenButton);
-            document.addEventListener('webkitfullscreenchange', updateFullscreenButton);
-            document.addEventListener('mozfullscreenchange', updateFullscreenButton);
-            document.addEventListener('MSFullscreenChange', updateFullscreenButton);
-            
-            function updateFullscreenButton() {
-                if (document.fullscreenElement) {
-                    fullscreenButton.innerHTML = '<i class="fas fa-compress"></i>';
-                } else {
-                    fullscreenButton.innerHTML = '<i class="fas fa-expand"></i>';
-                }
-            }
-            
-            console.log('Contrôles de plein écran configurés avec succès');
-        } catch (error) {
-            console.error('Erreur lors de la configuration du plein écran:', error);
-        }
-    }
-    
     /**
      * Configurer le panneau d'aide
      */

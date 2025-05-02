@@ -198,4 +198,35 @@
     
     <!-- Notification de copie qui apparaîtra lors de la copie -->
     <div class="copy-notification"></div>
-</div> 
+
+
+
+
+
+<script>
+// S'assurer que le module de plein écran est chargé
+(function() {
+    function initFullscreen() {
+        if (!window.fullscreenManager) {
+            import('../../js/fullscreen.js')
+            .then(() => {
+                if (!window.fullscreenManager && typeof FullscreenManager !== 'undefined') {
+                    window.fullscreenManager = new FullscreenManager();
+                }
+            })
+            .catch(error => {
+                console.error('Erreur chargement fullscreen.js:', error);
+            });
+        } else {
+            window.fullscreenManager.initFullscreenButtons();
+        }
+    }
+    
+    // Exécuter immédiatement si le DOM est déjà chargé, sinon attendre l'événement
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initFullscreen);
+    } else {
+        initFullscreen();
+    }
+})();
+</script></div> 

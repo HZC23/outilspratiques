@@ -176,8 +176,57 @@
 
 <link rel="stylesheet" href="../../styles/tools/percentage.css">
 <script>
-// Chargement immédiat des ressources
 document.write('<script src="../../js/tools/percentage.js"><\/script>');
+
+// S'assurer que le module de plein écran est chargé
+(function() {
+    console.log('Script d\'initialisation du plein écran du calculateur de pourcentages');
+    
+    // Fonction d'initialisation du plein écran
+    function initFullscreen() {
+        console.log('Initialisation du plein écran');
+        
+        // Vérifier si le gestionnaire de plein écran est déjà initialisé
+        if (!window.fullscreenManager) {
+            console.log('Le gestionnaire de plein écran n\'existe pas, chargement du module');
+            
+            import('../../js/fullscreen.js')
+            .then(() => {
+                console.log('Module fullscreen.js chargé avec succès');
+                
+                // Vérifier à nouveau après le chargement
+                if (!window.fullscreenManager) {
+                    console.warn('Gestionnaire toujours non défini après chargement du module');
+                    
+                    // Créer manuellement une instance si nécessaire
+                    if (typeof FullscreenManager !== 'undefined') {
+                        console.log('Création manuelle d\'une instance de FullscreenManager');
+                        window.fullscreenManager = new FullscreenManager();
+                    }
+                } else {
+                    console.log('Gestionnaire de plein écran correctement initialisé');
+                }
+            })
+            .catch(error => {
+                console.error('Erreur lors du chargement du module fullscreen.js:', error);
+            });
+        } else {
+            console.log('Le gestionnaire de plein écran existe déjà');
+            
+            // Réinitialiser les boutons pour être sûr
+            window.fullscreenManager.initFullscreenButtons();
+        }
+    }
+    
+    // Exécuter immédiatement si le DOM est déjà chargé, sinon attendre l'événement
+    if (document.readyState === 'loading') {
+        console.log('DOM en cours de chargement, attente de l\'événement DOMContentLoaded');
+        document.addEventListener('DOMContentLoaded', initFullscreen);
+    } else {
+        console.log('DOM déjà chargé, initialisation immédiate');
+        initFullscreen();
+    }
+})();
 </script>
 <script>
 // S'assurer que l'initialisation se produit au bon moment

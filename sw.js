@@ -16,6 +16,7 @@ const CORE_ASSETS = [
     'js/theme.js',
     'js/navigation.js',
     'js/fullscreen.js',
+    'styles/components/fullscreen.css',
     'icons/favicon.ico',
     'icons/icon-1024x1024.png'
 ];

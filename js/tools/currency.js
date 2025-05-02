@@ -266,66 +266,12 @@ function setupEventListeners() {
         });
     }
     
-    // Écouteur pour le mode plein écran
+    // Le bouton de plein écran est maintenant géré par le module fullscreen.js global
     if (fullscreenButton && container) {
-        fullscreenButton.addEventListener('click', () => {
-            try {
-                if (!document.fullscreenElement) {
-                    console.log('Passage en mode plein écran');
-                    if (container.requestFullscreen) {
-                        container.requestFullscreen();
-                    } else if (container.webkitRequestFullscreen) {
-                        container.webkitRequestFullscreen();
-                    } else if (container.msRequestFullscreen) {
-                        container.msRequestFullscreen();
-                    } else {
-                        console.warn('Le mode plein écran n\'est pas pris en charge par ce navigateur');
-                        showNotification('Le mode plein écran n\'est pas disponible sur ce navigateur', 'warning');
-                    }
-                } else {
-                    console.log('Sortie du mode plein écran');
-                    if (document.exitFullscreen) {
-                        document.exitFullscreen();
-                    } else if (document.webkitExitFullscreen) {
-                        document.webkitExitFullscreen();
-                    } else if (document.msExitFullscreen) {
-                        document.msExitFullscreen();
-                    }
-                }
-            } catch (error) {
-                console.error('Erreur lors de la gestion du mode plein écran:', error);
-                showNotification('Erreur lors du changement de mode plein écran', 'error');
-            }
-        });
-        
-        // Fonction pour mettre à jour l'icône du bouton plein écran
-        const updateCurrencyFullscreenIcon = () => {
-            try {
-                const icon = fullscreenButton.querySelector('i');
-                if (!icon) {
-                    console.warn('Icône du bouton plein écran non trouvée');
-                    return;
-                }
-                
-                if (document.fullscreenElement === container) {
-                    console.log('En mode plein écran - Mise à jour de l\'icône');
-                    icon.classList.remove('fa-expand');
-                    icon.classList.add('fa-compress');
-                } else {
-                    console.log('Hors mode plein écran - Mise à jour de l\'icône');
-                    icon.classList.remove('fa-compress');
-                    icon.classList.add('fa-expand');
-                }
-            } catch (error) {
-                console.error('Erreur lors de la mise à jour de l\'icône plein écran:', error);
-            }
-        };
-        
-        // Ajouter des écouteurs pour les changements de mode plein écran
-        document.addEventListener('fullscreenchange', updateCurrencyFullscreenIcon);
-        document.addEventListener('webkitfullscreenchange', updateCurrencyFullscreenIcon);
-        document.addEventListener('mozfullscreenchange', updateCurrencyFullscreenIcon);
-        document.addEventListener('MSFullscreenChange', updateCurrencyFullscreenIcon);
+        console.log('Le plein écran est désormais géré par le module fullscreen.js global');
+        // Cette fonctionnalité personnalisée a été supprimée car elle est maintenant 
+        // gérée par le module global fullscreen.js qui détecte automatiquement 
+        // les boutons avec la classe fullscreen-btn
     }
     
     // Écouteur pour détecter les changements de connectivité

@@ -10,7 +10,6 @@ import { ColorManager } from './tools/color.js';
 import { QRCodeManager } from './tools/qrcode.js';
 import { TodoManager } from './tools/todo.js';
 import { StopwatchManager } from './tools/stopwatch.js';
-import { initAllFullscreenButtons } from './fullscreen.js';
 
 /**
  * Classe principale de l'application
@@ -43,9 +42,6 @@ class App {
         
         // Initialiser les outils
         this.initTools();
-        
-        // Initialiser le mode plein écran pour tous les outils
-        initAllFullscreenButtons();
         
         // Initialiser les gestionnaires d'événements
         this.initEventHandlers();

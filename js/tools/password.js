@@ -214,9 +214,7 @@ export class PasswordManager {
         // Plein écran
         const fullscreenButton = document.getElementById('fullscreenBtn');
         if (fullscreenButton) {
-            fullscreenButton.addEventListener('click', () => {
-                this.toggleFullscreen(container);
-            });
+            console.log('Le bouton de plein écran est maintenant géré par le module fullscreen.js global');
         }
     }
 
@@ -724,36 +722,10 @@ export class PasswordManager {
     /**
      * Bascule le mode plein écran pour un élément
      * @param {HTMLElement} element - L'élément à mettre en plein écran
+     * @deprecated - Utiliser le module fullscreen.js global à la place
      */
     static toggleFullscreen(element) {
-        if (!element) return;
-        
-        if (!document.fullscreenElement && 
-            !document.mozFullScreenElement && 
-            !document.webkitFullscreenElement && 
-            !document.msFullscreenElement) {
-            // Passer en plein écran
-            if (element.requestFullscreen) {
-                element.requestFullscreen();
-            } else if (element.msRequestFullscreen) {
-                element.msRequestFullscreen();
-            } else if (element.mozRequestFullScreen) {
-                element.mozRequestFullScreen();
-            } else if (element.webkitRequestFullscreen) {
-                element.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-            }
-        } else {
-            // Quitter le plein écran
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            } else if (document.msExitFullscreen) {
-                document.msExitFullscreen();
-            } else if (document.mozCancelFullScreen) {
-                document.mozCancelFullScreen();
-            } else if (document.webkitExitFullscreen) {
-                document.webkitExitFullscreen();
-            }
-        }
+        console.warn('Cette méthode est déconseillée. Utilisez le module fullscreen.js global à la place.');
     }
 
     /**

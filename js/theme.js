@@ -12,7 +12,17 @@ export const ThemeManager = {
     state: {
         theme: 'light',
         systemPreference: false,
-        initialized: false
+        initialized: false,
+        transitionElements: [
+            'body', 'header', '.card', '.tool-container', 
+            '.tool-header', 'input', 'select', 'textarea', 
+            'button', '.btn', '.search-form', '.calculator-container',
+            '.calculator-display', '.calculator-button', '.todo-item',
+            '.note-container', '.metronome-container', '.qrcode-container',
+            '.password-container', '.translator-container', '.converter-container',
+            '.color-picker-container', '.header-container', '.footer-container',
+            '.todo-container', '.timer-container', '.stopwatch-container'
+        ]
     },
     
     /**
@@ -90,10 +100,31 @@ export const ThemeManager = {
     },
     
     /**
+     * Applique des classes de transition aux éléments
+     * @param {boolean} add - True pour ajouter, false pour retirer
+     */
+    setTransitionClass(add = true) {
+        this.state.transitionElements.forEach(selector => {
+            const elements = document.querySelectorAll(selector);
+            elements.forEach(el => {
+                if (add) {
+                    el.classList.add('theme-transition');
+                } else {
+                    el.classList.remove('theme-transition');
+                }
+            });
+        });
+    },
+    
+    /**
      * Applique un thème
      * @param {string} theme - Le thème à appliquer ('dark' ou 'light')
      */
     applyTheme(theme) {
+        // Ajouter les classes de transition
+        this.setTransitionClass(true);
+        
+        // Appliquer le thème
         document.documentElement.setAttribute('data-theme', theme);
         
         // Mettre à jour les méta-tags pour le thème
@@ -101,6 +132,11 @@ export const ThemeManager = {
         if (metaThemeColor) {
             metaThemeColor.setAttribute('content', theme === 'dark' ? '#0f172a' : '#4a90e2');
         }
+        
+        // Retirer les classes de transition après la fin de la transition
+        setTimeout(() => {
+            this.setTransitionClass(false);
+        }, 500); // correspond à la durée de transition dans CSS
         
         // Émettre un événement personnalisé pour le changement de thème
         const event = new CustomEvent('themechange', { detail: { theme } });

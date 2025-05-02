@@ -1,10 +1,273 @@
 /* styles/tools/styletext.css */
 /* Styles pour le composant de stylisation de texte */
 
+/* Nouvelle mise en page */
+.styletext-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    gap: var(--styletext-gap);
+    padding: var(--styletext-padding);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+@media (min-width: 992px) {
+    .styletext-layout {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+        grid-template-areas:
+            "input output"
+            "styles styles";
+    }
+    
+    .styletext-input-area {
+        grid-area: input;
+    }
+    
+    .styletext-output-area {
+        grid-area: output;
+    }
+    
+    .styletext-styles-area {
+        grid-area: styles;
+    }
+}
+
+.styletext-textarea, 
+.styletext-output {
+    width: 100%;
+    min-height: var(--styletext-min-height);
+    padding: var(--styletext-padding);
+    border: 1px solid var(--med-gray);
+    border-radius: var(--styletext-border-radius);
+    font-size: var(--styletext-font-size);
+    line-height: var(--styletext-line-height);
+    transition: var(--styletext-transition);
+    resize: vertical;
+}
+
+.styletext-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: var(--styletext-shadow-sm);
+}
+
+.styletext-output {
+    background-color: var(--light-gray);
+}
+
+.input-controls,
+.output-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
+.character-count {
+    color: var(--dark-gray);
+    font-size: 0.875rem;
+}
+
+.input-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.control-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.375rem 0.75rem;
+    border: 1px solid var(--med-gray);
+    border-radius: var(--styletext-border-radius);
+    background: var(--white);
+    color: var(--dark-gray);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: var(--styletext-transition);
+}
+
+.control-btn:hover {
+    background-color: var(--light-gray);
+    color: var(--text-color);
+}
+
+.primary-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: var(--styletext-border-radius);
+    background: var(--primary-color);
+    color: var(--white);
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--styletext-transition);
+}
+
+.primary-btn:hover {
+    background: var(--primary-hover);
+    box-shadow: var(--shadow-sm);
+}
+
+.area-title {
+    font-size: 1.25rem;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+    text-align: center;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--light-gray);
+}
+
+.style-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--styletext-grid-item-size), 1fr));
+    gap: var(--styletext-padding);
+}
+
+.style-item {
+    position: relative;
+    cursor: pointer;
+}
+
+.style-item input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.style-item-content {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    padding: var(--styletext-padding) 0.5rem;
+    border: 2px solid var(--med-gray);
+    border-radius: var(--styletext-border-radius);
+    transition: var(--styletext-transition);
+    height: 100%;
+}
+
+.style-item:hover .style-item-content {
+    border-color: var(--primary-color);
+    background-color: var(--styletext-bg-hover);
+}
+
+.style-item input[type="radio"]:checked + .style-item-content {
+    border-color: var(--primary-color);
+    background-color: var(--styletext-bg-active);
+    box-shadow: var(--styletext-shadow-md);
+}
+
+.style-preview {
+    font-size: var(--styletext-preview-font-size);
+    margin-bottom: 0.75rem;
+    min-height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.style-name {
+    font-size: var(--styletext-name-font-size);
+    color: var(--text-color);
+    text-align: center;
+}
+
+/* Animation du changement de style */
+@keyframes highlight {
+    0% { background-color: var(--light-gray); }
+    50% { background-color: rgba(66, 133, 244, 0.2); }
+    100% { background-color: var(--light-gray); }
+}
+
+.style-changed {
+    animation: highlight var(--styletext-animation-duration) ease;
+}
+
+/* Panel d'aide */
+.help-panel {
+    position: fixed;
+    top: 0;
+    right: calc(-1 * var(--styletext-panel-width));
+    width: var(--styletext-panel-width);
+    height: 100vh;
+    background-color: var(--white);
+    box-shadow: var(--shadow-md);
+    z-index: 1000;
+    transition: right 0.3s ease;
+    overflow-y: auto;
+}
+
+.help-panel.active {
+    right: 0;
+}
+
+.help-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--styletext-padding);
+    border-bottom: 1px solid var(--med-gray);
+}
+
+.help-panel-content {
+    padding: 1.5rem;
+}
+
+.help-panel h4 {
+    color: var(--primary-color);
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.help-panel ul, .help-panel ol {
+    padding-left: 1.5rem;
+}
+
+.help-panel li {
+    margin-bottom: 0.5rem;
+}
+
+/* Toast notifications */
+.styletext-toast {
+    position: fixed;
+    bottom: var(--styletext-toast-bottom);
+    right: var(--styletext-toast-right);
+    padding: 10px 20px;
+    border-radius: var(--styletext-border-radius);
+    background-color: var(--primary-color);
+    color: white;
+    box-shadow: var(--shadow-md);
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+}
+
+.styletext-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.styletext-toast.success {
+    background-color: var(--success-color);
+}
+
+.styletext-toast.error {
+    background-color: var(--error-color);
+}
+
+.styletext-toast.info {
+    background-color: var(--primary-color);
+}
+
+/* Garder les anciens styles pour la compatibilité */
 .styletext-container {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1.5rem;
+    gap: var(--styletext-gap);
     width: 100%;
     max-width: 100%;
 }
@@ -35,13 +298,13 @@
 .styletext-textarea {
     width: 100%;
     min-height: 150px;
-    padding: 1rem;
+    padding: var(--styletext-padding);
     border: 1px solid var(--border-color);
     border-radius: 8px;
     background: var(--input-bg);
     color: var(--text-color);
-    font-size: 1rem;
-    line-height: 1.5;
+    font-size: var(--styletext-font-size);
+    line-height: var(--styletext-line-height);
     resize: vertical;
     transition: border-color 0.2s ease;
 }
@@ -116,58 +379,58 @@
 
 /* Boutons de style */
 .style-buttons {
-    display: grid !important;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
-    gap: 1rem !important;
-    margin-bottom: 1rem !important;
-    padding: 1rem !important;
-    border-radius: 8px !important;
-    background: rgba(var(--primary-color-rgb), 0.05) !important;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--styletext-grid-item-size), 1fr));
+    gap: var(--styletext-padding);
+    margin-bottom: 1rem;
+    padding: var(--styletext-padding);
+    border-radius: 8px;
+    background: rgba(var(--primary-color-rgb), 0.05);
 }
 
 .style-btn {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    height: 100px !important;
-    padding: 1rem !important;
-    border: 1px solid #ddd !important;
-    border-radius: 10px !important;
-    cursor: pointer !important;
-    background-color: #fff !important;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05) !important;
-    transition: all 0.3s ease !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+    padding: var(--styletext-padding);
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
 }
 
 .style-btn:hover {
-    transform: translateY(-5px) !important;
-    border-color: var(--primary-color) !important;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important;
+    transform: translateY(-5px);
+    border-color: var(--primary-color);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
 .style-btn.active {
-    border-color: var(--primary-color) !important;
-    background-color: #f0f8ff !important;
-    box-shadow: 0 0 0 2px var(--primary-color) !important;
+    border-color: var(--primary-color);
+    background-color: #f0f8ff;
+    box-shadow: 0 0 0 2px var(--primary-color);
 }
 
 .style-preview {
-    font-size: 1.4rem !important;
-    margin-bottom: 0.8rem !important;
-    line-height: 1.4 !important;
-    text-align: center !important;
-    height: 40px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+    font-size: 1.4rem;
+    margin-bottom: 0.8rem;
+    line-height: 1.4;
+    text-align: center;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .style-name {
-    font-size: 0.85rem !important;
-    color: var(--text-color) !important;
-    font-weight: 500 !important;
-    text-align: center !important;
+    font-size: 0.85rem;
+    color: var(--text-color);
+    font-weight: 500;
+    text-align: center;
 }
 
 /* Historique */
@@ -240,7 +503,7 @@
 .styletext-output {
     width: 100%;
     min-height: 120px;
-    padding: 1rem;
+    padding: var(--styletext-padding);
     border: 1px solid var(--border-color);
     border-radius: 8px;
     background: var(--card-bg);
@@ -307,14 +570,14 @@
 }
 
 .styletext-button i {
-    font-size: 1rem;
+    font-size: var(--styletext-font-size);
 }
 
 /* Toast notifications */
 .styletext-toast {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    bottom: var(--styletext-toast-bottom);
+    right: var(--styletext-toast-right);
     background-color: #333;
     color: white;
     padding: 10px 20px;
@@ -344,7 +607,7 @@
 }
 
 .styletext-toast i {
-    font-size: 1rem;
+    font-size: var(--styletext-font-size);
 }
 
 /* Panneau d'aide */
@@ -369,7 +632,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1rem;
+    padding: var(--styletext-padding);
     border-bottom: 1px solid var(--border-color);
 }
 
@@ -434,9 +697,9 @@
 .style-grid-enhanced {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    gap: 1rem;
-    margin: 1rem 0;
-    padding: 1rem;
+    gap: var(--styletext-padding);
+    margin: var(--styletext-padding) 0;
+    padding: var(--styletext-padding);
     border-radius: 10px;
     background-color: #f8f9fa;
 }
@@ -447,7 +710,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 1rem;
+    padding: var(--styletext-padding);
     border: 1px solid #e5e7eb;
     border-radius: 10px;
     background-color: #fff;
@@ -519,12 +782,12 @@
 }
 
 .style-tabs-enhanced .tab-button i {
-    font-size: 1rem;
+    font-size: var(--styletext-font-size);
 }
 
 /* Conteneur d'historique amélioré */
 .history-container-enhanced {
-    padding: 1rem;
+    padding: var(--styletext-padding);
     background-color: #f8f9fa;
     border-radius: 10px;
     max-height: 350px;
@@ -774,4 +1037,188 @@
 
 .btn-reuse:hover, .btn-delete:hover {
     background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Ajout du support pour le mode sombre */
+[data-theme="dark"] .styletext-textarea, 
+[data-theme="dark"] .styletext-output {
+    background-color: var(--form-input-bg);
+    color: var(--form-input-text);
+    border-color: var(--form-input-border);
+}
+
+[data-theme="dark"] .styletext-textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: var(--styletext-shadow-sm);
+}
+
+[data-theme="dark"] .control-btn {
+    background: var(--button-bg);
+    color: var(--button-text);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .control-btn:hover {
+    background-color: var(--button-hover-bg);
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .primary-btn {
+    background: var(--primary-color);
+    color: var(--text-on-primary);
+}
+
+[data-theme="dark"] .primary-btn:hover {
+    background: var(--primary-hover);
+    box-shadow: 0 0 8px rgba(var(--primary-color-rgb), 0.5);
+}
+
+[data-theme="dark"] .area-title {
+    color: var(--text-color);
+    border-bottom-color: var(--border-color);
+}
+
+[data-theme="dark"] .style-item-content {
+    border-color: var(--border-color);
+    background-color: var(--card-bg);
+}
+
+[data-theme="dark"] .style-item:hover .style-item-content {
+    border-color: var(--primary-color);
+    background-color: rgba(var(--primary-color-rgb), 0.1);
+}
+
+[data-theme="dark"] .style-item input[type="radio"]:checked + .style-item-content {
+    border-color: var(--primary-color);
+    background-color: rgba(var(--primary-color-rgb), 0.2);
+    box-shadow: 0 0 0 1px var(--primary-color);
+}
+
+[data-theme="dark"] .style-name {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .help-panel {
+    background-color: var(--help-panel-bg);
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .help-panel-header {
+    border-bottom-color: var(--border-color);
+}
+
+[data-theme="dark"] .help-panel h4 {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .help-panel p, 
+[data-theme="dark"] .help-panel li {
+    color: var(--text-secondary);
+}
+
+/* Support pour l'historique en mode sombre */
+[data-theme="dark"] .history-item {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .history-item:hover {
+    background-color: var(--button-hover-bg);
+    border-color: var(--primary-color);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .history-date {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .history-text {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .empty-history {
+    color: var(--text-muted);
+}
+
+[data-theme="dark"] .styletext-button {
+    background: var(--primary-color);
+    color: var(--text-on-primary);
+}
+
+[data-theme="dark"] .styletext-button:hover {
+    background: var(--primary-hover);
+}
+
+[data-theme="dark"] .styletext-button.copied {
+    background: var(--success-color);
+}
+
+[data-theme="dark"] .styletext-output.style-changed {
+    background-color: rgba(var(--primary-color-rgb), 0.15);
+    border-color: var(--primary-color);
+}
+
+[data-theme="dark"] .styletext-output.processing {
+    background-image: linear-gradient(90deg, var(--card-bg) 25%, var(--button-hover-bg) 50%, var(--card-bg) 75%);
+}
+
+[data-theme="dark"] .tab-button {
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .tab-button:hover {
+    background-color: var(--button-hover-bg);
+}
+
+[data-theme="dark"] .tab-button.active {
+    background-color: var(--primary-color);
+    color: var(--text-on-primary);
+}
+
+[data-theme="dark"] .style-btn {
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .style-btn:hover {
+    background-color: var(--button-hover-bg);
+}
+
+[data-theme="dark"] .style-btn.active {
+    border-color: var(--primary-color);
+    background-color: rgba(var(--primary-color-rgb), 0.2);
+}
+
+[data-theme="dark"] .btn-reuse {
+    color: var(--primary-color);
+}
+
+[data-theme="dark"] .btn-delete {
+    color: var(--error-color);
+}
+
+[data-theme="dark"] .btn-reuse:hover, 
+[data-theme="dark"] .btn-delete:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .active-style-display {
+    color: var(--primary-color);
+    background-color: rgba(var(--primary-color-rgb), 0.15);
+}
+
+@keyframes darkLoading {
+    0% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+[data-theme="dark"] .styletext-output.processing {
+    animation: darkLoading 1.5s infinite;
 } 

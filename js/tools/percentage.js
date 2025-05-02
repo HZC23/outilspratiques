@@ -5,33 +5,27 @@ window.percentageTool = (function() {
     
     // Constructeur du calculateur de pourcentage
     function init() {
-        // Vérifier si déjà initialisé pour éviter les doublons d'événements
-        if (isInitialized) {
-            console.warn('Le calculateur de pourcentage est déjà initialisé');
-            return;
-        }
-        
-        // S'assurer que le DOM est prêt
-        if (document.readyState === "loading") {
-            document.addEventListener("DOMContentLoaded", init);
-            return;
-        }
-        
         try {
             console.log('Initialisation du calculateur de pourcentages...');
-            // Initialisation des composants
+            
+            // Initialiser les onglets
             initTabs();
+            
+            // Initialiser le panneau d'aide
             initHelpPanel();
+            
+            // Initialiser les formulaires
             initBasicPercentage();
             initPercentageChange();
             initPercentageOf();
             initTipCalculator();
-            initFullscreenButton();
+            
+            // Gestion des formulaires
             initFormSubmit();
             
-            // Marquer comme initialisé
-            isInitialized = true;
-            console.log('Calculateur de pourcentage initialisé avec succès');
+            // Note: La gestion du plein écran est maintenant assurée par le module fullscreen.js global
+            
+            console.log('Calculateur de pourcentages initialisé avec succès');
         } catch (error) {
             console.error('Erreur lors de l\'initialisation du calculateur:', error);
         }
@@ -550,45 +544,6 @@ window.percentageTool = (function() {
             });
         } catch (error) {
             console.error('Erreur lors de l\'ajout des écouteurs d\'entrée:', error);
-        }
-    }
-    
-    // Initialisation du bouton plein écran
-    function initFullscreenButton() {
-        try {
-            const fullscreenBtn = document.getElementById('percentageFullscreenBtn');
-            const toolContainer = document.getElementById('percentageTool');
-            
-            if (!fullscreenBtn || !toolContainer) {
-                console.error('Éléments du bouton plein écran non trouvés');
-                return;
-            }
-            
-            fullscreenBtn.addEventListener('click', (event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                
-                if (toolContainer.classList.contains('fullscreen')) {
-                    toolContainer.classList.remove('fullscreen');
-                    fullscreenBtn.innerHTML = '<i class="fas fa-expand" aria-hidden="true"></i>';
-                    fullscreenBtn.setAttribute('aria-label', 'Plein écran');
-                } else {
-                    toolContainer.classList.add('fullscreen');
-                    fullscreenBtn.innerHTML = '<i class="fas fa-compress" aria-hidden="true"></i>';
-                    fullscreenBtn.setAttribute('aria-label', 'Quitter le plein écran');
-                }
-            });
-            
-            // Gérer la touche Escape pour quitter le mode plein écran
-            document.addEventListener('keydown', (event) => {
-                if (event.key === 'Escape' && toolContainer.classList.contains('fullscreen')) {
-                    fullscreenBtn.click();
-                }
-            });
-            
-            console.log('Bouton plein écran initialisé');
-        } catch (error) {
-            console.error('Erreur lors de l\'initialisation du bouton plein écran:', error);
         }
     }
     

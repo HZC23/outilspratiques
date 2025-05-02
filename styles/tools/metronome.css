@@ -677,4 +677,175 @@
     .metronome-options {
         padding: 1rem;
     }
+}
+
+/* Support du mode sombre pour le métronome */
+[data-theme="dark"] .metronome-container {
+    background-color: var(--tool-container-bg);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .tempo-display {
+    color: var(--primary-color);
+}
+
+[data-theme="dark"] .tempo-unit {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .beat-indicator {
+    background-color: #444;
+    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.1), 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .beat-indicator.active {
+    background-color: var(--primary-color);
+    box-shadow: 0 0 25px var(--primary-color), 0 0 15px rgba(0, 0, 0, 0.5) inset;
+}
+
+[data-theme="dark"] .beat-indicator.accented {
+    background-color: var(--accent-color, #ff5722);
+    box-shadow: 0 0 35px var(--accent-color, #ff5722), 0 0 20px rgba(0, 0, 0, 0.5) inset;
+}
+
+[data-theme="dark"] .btn-circle {
+    background-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .btn-circle:hover:not(:disabled) {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .btn-circle:active:not(:disabled) {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .btn-circle#stopMetronome {
+    background-color: var(--error-color);
+}
+
+[data-theme="dark"] .tempo-range span {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .tempo-slider {
+    background-color: var(--form-range-bg);
+}
+
+[data-theme="dark"] .tempo-slider::-webkit-slider-thumb {
+    background-color: var(--form-range-thumb);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .tempo-slider::-moz-range-thumb {
+    background-color: var(--form-range-thumb);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .btn {
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .btn:hover {
+    background-color: var(--button-hover-bg);
+}
+
+[data-theme="dark"] .metronome-options {
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .option-group label {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .form-select {
+    background-color: var(--form-input-bg);
+    color: var(--form-input-text);
+    border-color: var(--form-input-border);
+}
+
+[data-theme="dark"] .form-select:focus {
+    border-color: var(--primary-color);
+}
+
+[data-theme="dark"] .volume-slider {
+    background-color: var(--form-range-bg);
+}
+
+[data-theme="dark"] .volume-slider::-webkit-slider-thumb {
+    background-color: var(--form-range-thumb);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .volume-slider::-moz-range-thumb {
+    background-color: var(--form-range-thumb);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .checkbox-container {
+    border-color: var(--border-color);
+    background-color: var(--form-input-bg);
+}
+
+[data-theme="dark"] .checkbox-container:hover {
+    background-color: var(--button-hover-bg);
+}
+
+[data-theme="dark"] .checkbox-label {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .tempo-presets h3 {
+    color: var(--text-color);
+    border-bottom-color: var(--border-color);
+}
+
+[data-theme="dark"] .preset-btn {
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .preset-btn:hover {
+    background-color: var(--button-hover-bg);
+}
+
+[data-theme="dark"] .preset-tempo {
+    color: var(--primary-color);
+}
+
+[data-theme="dark"] .preset-name {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .info-banner {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .info-banner span {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .info-banner .close-banner {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .info-banner .close-banner:hover {
+    color: var(--text-color);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] #audioUnlockButton {
+    background-color: var(--primary-color);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] #audioUnlockButton:hover {
+    background-color: var(--primary-hover);
 } 

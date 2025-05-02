@@ -1,0 +1,202 @@
+/**
+ * Styles pour le mode plein écran
+ */
+
+/* Styles généraux pour les éléments en plein écran */
+:fullscreen,
+:-webkit-full-screen,
+:-moz-full-screen,
+:-ms-fullscreen {
+    background-color: var(--bg-color);
+    width: 100vw;
+    height: 100vh;
+    overflow: auto;
+    padding: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Animation lors de l'entrée en plein écran */
+@keyframes fullscreen-enter {
+    from {
+        opacity: 0.8;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Animation lors de la sortie du plein écran */
+@keyframes fullscreen-exit {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0.9;
+        transform: scale(0.95);
+    }
+}
+
+/* Classe pour l'animation d'entrée en plein écran */
+.fullscreen-transition-enter {
+    animation: fullscreen-enter 0.3s var(--ease-out);
+}
+
+/* Classe pour l'animation de sortie du plein écran */
+.fullscreen-transition-exit {
+    animation: fullscreen-exit 0.3s var(--ease-in);
+}
+
+/* Styles spécifiques pour les outils en plein écran */
+:fullscreen .tool-header,
+:-webkit-full-screen .tool-header,
+:-moz-full-screen .tool-header,
+:-ms-fullscreen .tool-header {
+    padding: var(--spacing-md) var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color);
+}
+
+:fullscreen .tool-container,
+:-webkit-full-screen .tool-container,
+:-moz-full-screen .tool-container,
+:-ms-fullscreen .tool-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+/* Animation de "glissement" pour les outils en plein écran */
+:fullscreen .tool-container > div:not(.tool-header),
+:-webkit-full-screen .tool-container > div:not(.tool-header),
+:-moz-full-screen .tool-container > div:not(.tool-header),
+:-ms-fullscreen .tool-container > div:not(.tool-header) {
+    flex-grow: 1;
+    animation: slide-up 0.4s var(--ease-out);
+}
+
+@keyframes slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Curseur de sortie de plein écran */
+:fullscreen::after,
+:-webkit-full-screen::after,
+:-moz-full-screen::after,
+:-ms-fullscreen::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    color: white;
+    cursor: pointer;
+    opacity: 0.4;
+    transition: all 0.2s var(--ease-in-out);
+    z-index: 9999;
+}
+
+:fullscreen::after:hover,
+:-webkit-full-screen::after:hover,
+:-moz-full-screen::after:hover,
+:-ms-fullscreen::after:hover {
+    opacity: 0.8;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Animation pour le bouton de plein écran en cas d'erreur */
+.fullscreen-btn-error {
+    animation: fullscreen-btn-shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes fullscreen-btn-shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-2px);
+    }
+    20%, 40%, 60%, 80% {
+        transform: translateX(2px);
+    }
+}
+
+/* Styles spécifiques pour différents outils en plein écran */
+:fullscreen .calculator-container,
+:-webkit-full-screen .calculator-container,
+:-moz-full-screen .calculator-container,
+:-ms-fullscreen .calculator-container {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: var(--spacing-lg);
+    height: calc(100vh - 120px);
+}
+
+:fullscreen .calculator-view,
+:-webkit-full-screen .calculator-view,
+:-moz-full-screen .calculator-view,
+:-ms-fullscreen .calculator-view {
+    height: 100%;
+}
+
+:fullscreen .calculator-display,
+:-webkit-full-screen .calculator-display,
+:-moz-full-screen .calculator-display,
+:-ms-fullscreen .calculator-display {
+    height: 120px;
+    font-size: 2.5rem;
+}
+
+:fullscreen .calculator-grid,
+:-webkit-full-screen .calculator-grid,
+:-moz-full-screen .calculator-grid,
+:-ms-fullscreen .calculator-grid {
+    height: calc(100% - 120px);
+}
+
+:fullscreen .calculator-button,
+:-webkit-full-screen .calculator-button,
+:-moz-full-screen .calculator-button,
+:-ms-fullscreen .calculator-button {
+    font-size: 1.8rem;
+}
+
+/* Responsive pour le plein écran sur mobile */
+@media (max-width: 768px) {
+    :fullscreen .calculator-container,
+    :-webkit-full-screen .calculator-container,
+    :-moz-full-screen .calculator-container,
+    :-ms-fullscreen .calculator-container {
+        grid-template-columns: 1fr;
+    }
+    
+    :fullscreen .calculator-history,
+    :-webkit-full-screen .calculator-history,
+    :-moz-full-screen .calculator-history,
+    :-ms-fullscreen .calculator-history {
+        display: none;
+    }
+} 

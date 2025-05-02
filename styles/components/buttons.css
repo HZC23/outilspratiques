@@ -364,9 +364,9 @@ input[type="submit"]:disabled,
 [data-theme="dark"] button[type="submit"],
 [data-theme="dark"] input[type="button"],
 [data-theme="dark"] input[type="submit"] {
-    background-color: var(--button-bg-dark);
-    color: var(--button-text-dark);
-    border-color: #444444;
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border-color: var(--border-color);
 }
 
 [data-theme="dark"] .btn:hover,
@@ -374,7 +374,7 @@ input[type="submit"]:disabled,
 [data-theme="dark"] button[type="submit"]:hover,
 [data-theme="dark"] input[type="button"]:hover,
 [data-theme="dark"] input[type="submit"]:hover {
-    background-color: var(--button-bg-hover-dark);
+    background-color: var(--button-hover-bg);
     border-color: var(--primary-color);
 }
 
@@ -388,6 +388,36 @@ input[type="submit"]:disabled,
 [data-theme="dark"] .btn-icon:hover,
 [data-theme="dark"] .btn.icon:hover {
     background-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .btn::after,
+[data-theme="dark"] button[type="button"]::after,
+[data-theme="dark"] button[type="submit"]::after,
+[data-theme="dark"] input[type="button"]::after,
+[data-theme="dark"] input[type="submit"]::after,
+[data-theme="dark"] .calculator-button::after,
+[data-theme="dark"] .todo-button::after {
+    background-image: radial-gradient(circle, rgba(0, 0, 0, 0.3) 10%, transparent 10.01%);
+}
+
+[data-theme="dark"] .calculator-button.operator {
+    background: linear-gradient(to bottom, var(--calc-button-operator), rgba(40, 40, 40, 0.8));
+    color: var(--primary-color);
+    border-color: rgba(40, 40, 40, 0.8);
+}
+
+[data-theme="dark"] .calculator-button.equals {
+    background: linear-gradient(135deg, var(--calc-button-equals), var(--calc-button-equals) 60%, var(--primary-hover));
+}
+
+[data-theme="dark"] .calculator-button.equals:hover {
+    background: linear-gradient(135deg, var(--primary-hover), var(--calc-button-equals));
+}
+
+[data-theme="dark"] .fullscreen-btn-error {
+    border: 1px solid var(--error-color) !important;
+    background-color: rgba(220, 53, 69, 0.2) !important;
+    color: var(--error-color) !important;
 }
 
 /* Adaptation mobile */

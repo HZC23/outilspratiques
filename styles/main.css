@@ -18,6 +18,7 @@
 /* Import des styles pour les composants */
 @import url('components/buttons.css');
 @import url('components/clock.css');
+@import url('components/fullscreen.css');
 /*/ Import des styles pour les composants supplémentaires */
 @import url('components/header.css');
 @import url('components/text.css');
@@ -49,6 +50,8 @@ html, body {
     line-height: var(--line-height-normal);
     scroll-behavior: smooth;
     font-size: 16px;
+    transition: background-color var(--transition-duration) var(--ease-in-out), 
+                color var(--transition-duration) var(--ease-in-out);
 }
 
 *, *::before, *::after {
@@ -65,7 +68,29 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-    font-size: var(--font-size-xxl);
+    margin: 0;
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    text-align: center;
+    flex-grow: 1;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    letter-spacing: 1px;
+    background: linear-gradient(to right, var(--header-title-gradient-1, #ffffff), var(--header-title-gradient-2, #f0f0f0), var(--header-title-gradient-1, #ffffff));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer 3s infinite;
+    transform: perspective(500px) translateZ(0);
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
 }
 
 h2 {
@@ -180,35 +205,9 @@ header {
     margin-right: var(--spacing-sm);
 }
 
-h1 {
-    margin: 0;
-    font-size: var(--font-size-lg);
-    font-weight: 700;
-    text-align: center;
-    flex-grow: 1;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    letter-spacing: 1px;
-    background: linear-gradient(to right, #ffffff, #f0f0f0, #ffffff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    color: transparent;
-    animation: shimmer 3s infinite;
-    transform: perspective(500px) translateZ(0);
-}
-
-@keyframes shimmer {
-    0% {
-        background-position: -100% 0;
-    }
-    100% {
-        background-position: 200% 0;
-    }
-}
-
 /* Effet supplémentaire pour le header au survol */
 header:hover {
-    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* Ajustement pour la top-clock dans le header */
@@ -383,13 +382,15 @@ input:focus, select:focus, textarea:focus {
     background-color: var(--card-bg);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
-    transition: box-shadow var(--transition-duration) var(--ease-in-out), transform var(--transition-duration) var(--ease-in-out);
-    overflow: hidden;
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    transition: all var(--transition-duration) var(--ease-in-out);
+    border: 1px solid var(--border-color);
 }
 
 .card:hover {
     box-shadow: var(--hover-shadow);
-    transform: translateY(-5px);
+    transform: translateY(-2px);
 }
 
 .card-header {
@@ -462,25 +463,29 @@ input:focus, select:focus, textarea:focus {
 
 /* Conteneur d'outil */
 .tool-container {
-    background-color: var(--card-bg);
+    background-color: var(--tool-container-bg);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
     margin-bottom: var(--spacing-lg);
+    transition: all var(--transition-duration) var(--ease-in-out);
 }
 
 .tool-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--spacing-md);
-    border-bottom: 1px solid var(--border-color);
     background-color: var(--tool-header-bg);
+    color: var(--tool-header-text);
+    padding: var(--spacing-md);
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+    border-bottom: 1px solid var(--border-color);
+    transition: all var(--transition-duration) var(--ease-in-out);
 }
 
 .tool-header h2 {
     font-size: var(--font-size-lg);
     margin: 0;
-    color: var(--tool-header-text);
     display: flex;
     align-items: center;
 }
@@ -1071,4 +1076,64 @@ footer {
 :-moz-full-screen::after:hover,
 :-ms-fullscreen::after:hover {
     background-color: rgba(128, 128, 128, 0.4);
+}
+
+/* Ajouts pour le mode sombre */
+[data-theme="dark"] input, 
+[data-theme="dark"] select, 
+[data-theme="dark"] textarea {
+    background-color: var(--form-input-bg);
+    color: var(--form-input-text);
+    border-color: var(--form-input-border);
+}
+
+[data-theme="dark"] input:focus, 
+[data-theme="dark"] select:focus, 
+[data-theme="dark"] textarea:focus {
+    border-color: var(--form-input-focus-border);
+    box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.25);
+}
+
+[data-theme="dark"] .card {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .card:hover {
+    box-shadow: var(--hover-shadow);
+}
+
+[data-theme="dark"] .search-form {
+    background-color: rgba(46, 46, 46, 0.8);
+    border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .search-input {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .search-icon {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .search-form:hover {
+    background-color: rgba(50, 50, 50, 0.9);
+}
+
+/* Transition pour les changements de thème */
+.theme-transition {
+    transition: background-color var(--transition-duration) var(--ease-in-out),
+                color var(--transition-duration) var(--ease-in-out),
+                border-color var(--transition-duration) var(--ease-in-out),
+                box-shadow var(--transition-duration) var(--ease-in-out);
+}
+
+[data-theme="dark"] header {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-gradient-blue), var(--primary-gradient-purple));
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] header:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 } 

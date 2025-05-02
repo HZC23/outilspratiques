@@ -1,130 +1,127 @@
 <!DOCTYPE html>
 <div class="tool-container" id="styletextTool">
-    
     <div class="tool-header">
         <h2><i class="fas fa-feather-alt"></i> Styliseur de texte</h2>
         <div class="tool-actions">
             <button type="button" class="btn-icon" id="styletextHelp" aria-label="Aide">
                 <i class="fas fa-question-circle"></i>
             </button>
-            <button type="button" class="btn-icon" id="fullscreenBtn" aria-label="Plein écran">
+            <button type="button" class="btn-icon fullscreen-btn" id="styletextFullscreenBtn" aria-label="Plein écran">
                 <i class="fas fa-expand"></i>
             </button>
         </div>
     </div>
     
     <div class="tool-content">
-        <div class="styletext-main-container">
-            <div class="styletext-io-container">
-                <div class="input-section">
-                    <textarea id="inputText" placeholder="Saisissez ou collez votre texte ici..." class="styletext-textarea"></textarea>
-                    <div class="text-controls">
-                        <div class="character-count">
-                            <span id="inputCounter">0</span> caractères
-                        </div>
-                        <div class="buttons-group">
-                            <button type="button" class="control-btn" id="clearText">
-                                <i class="fas fa-times"></i> Effacer
-                            </button>
-                            <button type="button" class="control-btn" id="pasteText">
-                                <i class="fas fa-paste"></i> Coller
-                            </button>
-                        </div>
+        <div class="styletext-layout">
+            <div class="styletext-input-area">
+                <textarea id="inputText" placeholder="Saisissez ou collez votre texte ici..." class="styletext-textarea"></textarea>
+                <div class="input-controls">
+                    <div class="character-count">
+                        <span id="inputCounter">0</span> caractères
                     </div>
-                </div>
-                
-                <div class="output-section">
-                    <textarea id="outputText" readonly class="styletext-output"></textarea>
-                    <div class="output-controls">
-                        <button type="button" class="primary-btn" id="copyButton">
-                            <i class="fas fa-copy"></i> Copier dans le Presse-papiers
+                    <div class="input-actions">
+                        <button type="button" class="control-btn" id="clearText">
+                            <i class="fas fa-times"></i> Effacer
+                        </button>
+                        <button type="button" class="control-btn" id="pasteText">
+                            <i class="fas fa-paste"></i> Coller
                         </button>
                     </div>
                 </div>
             </div>
             
-            <div class="styles-section">
-                <h3 class="styles-title">Sélectionnez un style</h3>
-                <div class="style-options-grid">
-                    <label class="style-option">
+            <div class="styletext-styles-area">
+                <h3 class="area-title">Choisissez un style</h3>
+                <div class="style-list">
+                    <label class="style-item">
                         <input type="radio" name="textStyle" value="normal" checked>
-                        <div class="style-content">
-                            <span class="style-preview">Abc</span>
+                        <span class="style-item-content">
                             <span class="style-name">Normal</span>
-                        </div>
+                            <span class="style-preview">Abc</span>
+                        </span>
                     </label>
                     
-                    <label class="style-option">
+                    <label class="style-item">
                         <input type="radio" name="textStyle" value="outline">
-                        <div class="style-content">
-                            <span class="style-preview">𝕒𝕓𝕔</span>
+                        <span class="style-item-content">
                             <span class="style-name">Police de contour</span>
-                        </div>
+                            <span class="style-preview">𝕒𝕓𝕔</span>
+                        </span>
                     </label>
                     
-                    <label class="style-option">
+                    <label class="style-item">
                         <input type="radio" name="textStyle" value="squared">
-                        <div class="style-content">
-                            <span class="style-preview">🅐🅑🅒</span>
+                        <span class="style-item-content">
                             <span class="style-name">Texte carré</span>
-                        </div>
+                            <span class="style-preview">🅐🅑🅒</span>
+                        </span>
                     </label>
                     
-                    <label class="style-option">
+                    <label class="style-item">
                         <input type="radio" name="textStyle" value="smallcaps">
-                        <div class="style-content">
-                            <span class="style-preview">ᴀʙᴄ</span>
+                        <span class="style-item-content">
                             <span class="style-name">Petites majuscules</span>
-                        </div>
+                            <span class="style-preview">ᴀʙᴄ</span>
+                        </span>
                     </label>
                     
-                    <label class="style-option">
+                    <label class="style-item">
                         <input type="radio" name="textStyle" value="bold">
-                        <div class="style-content">
-                            <span class="style-preview">𝐀𝐛𝐜</span>
+                        <span class="style-item-content">
                             <span class="style-name">Gras</span>
-                        </div>
-                    </label>
-                    
-                    <label class="style-option">
-                        <input type="radio" name="textStyle" value="fraktur">
-                        <div class="style-content">
-                            <span class="style-preview">𝔄𝔟𝔠</span>
-                            <span class="style-name">Vieux texte anglais</span>
-                        </div>
-                    </label>
-                    
-                    <label class="style-option">
-                        <input type="radio" name="textStyle" value="flipped">
-                        <div class="style-content">
-                            <span class="style-preview">ɐqɔ</span>
-                            <span class="style-name">Texte à l'envers</span>
-                        </div>
-                    </label>
-                    
-                    <label class="style-option">
-                        <input type="radio" name="textStyle" value="serif">
-                        <div class="style-content">
                             <span class="style-preview">𝐀𝐛𝐜</span>
+                        </span>
+                    </label>
+                    
+                    <label class="style-item">
+                        <input type="radio" name="textStyle" value="fraktur">
+                        <span class="style-item-content">
+                            <span class="style-name">Vieux texte anglais</span>
+                            <span class="style-preview">𝔄𝔟𝔠</span>
+                        </span>
+                    </label>
+                    
+                    <label class="style-item">
+                        <input type="radio" name="textStyle" value="flipped">
+                        <span class="style-item-content">
+                            <span class="style-name">Texte à l'envers</span>
+                            <span class="style-preview">ɐqɔ</span>
+                        </span>
+                    </label>
+                    
+                    <label class="style-item">
+                        <input type="radio" name="textStyle" value="serif">
+                        <span class="style-item-content">
                             <span class="style-name">Police serif</span>
-                        </div>
+                            <span class="style-preview">𝐀𝐛𝐜</span>
+                        </span>
                     </label>
                     
-                    <label class="style-option">
+                    <label class="style-item">
                         <input type="radio" name="textStyle" value="script">
-                        <div class="style-content">
-                            <span class="style-preview">𝓐𝓫𝓬</span>
+                        <span class="style-item-content">
                             <span class="style-name">Lettres cursives</span>
-                        </div>
+                            <span class="style-preview">𝓐𝓫𝓬</span>
+                        </span>
                     </label>
                     
-                    <label class="style-option">
+                    <label class="style-item">
                         <input type="radio" name="textStyle" value="superscript">
-                        <div class="style-content">
-                            <span class="style-preview">ᴬᵇᶜ</span>
+                        <span class="style-item-content">
                             <span class="style-name">Exposant</span>
-                        </div>
+                            <span class="style-preview">ᴬᵇᶜ</span>
+                        </span>
                     </label>
+                </div>
+            </div>
+            
+            <div class="styletext-output-area">
+                <textarea id="outputText" readonly class="styletext-output"></textarea>
+                <div class="output-controls">
+                    <button type="button" class="primary-btn" id="copyButton">
+                        <i class="fas fa-copy"></i> Copier dans le Presse-papiers
+                    </button>
                 </div>
             </div>
         </div>
@@ -171,96 +168,39 @@
             <p>Certains styles utilisent des caractères Unicode spéciaux qui peuvent ne pas s'afficher correctement sur tous les appareils. Ces caractères sont principalement destinés aux réseaux sociaux et à la messagerie instantanée, où leur prise en charge est généralement bonne.</p>
         </div>
     </div>
-</div>
+
+
+
+
 
 <script>
-    // Script de débogage pour le styliseur de texte
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('---- DÉBOGAGE STYLETEXT ----');
-        console.log('DOM chargé - vérification des éléments critiques');
-        
-        // Vérifier les onglets
-        const tabs = document.querySelectorAll('.styletext-tab');
-        console.log(`Nombre d'onglets trouvés : ${tabs.length}`);
-        
-        tabs.forEach((tab, index) => {
-            console.log(`Onglet ${index + 1}: target=${tab.getAttribute('data-target')}, classe=${tab.className}`);
-            
-            // Ajouter un gestionnaire d'événements robuste
-            tab.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('data-target');
-                console.log(`Clic sur onglet avec cible: ${targetId}`);
-                
-                // Retirer la classe active de tous les onglets
-                tabs.forEach(t => t.classList.remove('active'));
-                
-                // Ajouter la classe active à l'onglet cliqué
-                this.classList.add('active');
-                
-                // Désactiver tous les panneaux
-                document.querySelectorAll('.tab-pane').forEach(pane => {
-                    pane.classList.remove('active');
-                    // Force la visibilité à none
-                    pane.style.display = 'none';
-                    console.log(`Panneau désactivé: ${pane.id}`);
-                });
-                
-                // Activer le panneau cible
-                const targetPane = document.getElementById(targetId);
-                if (targetPane) {
-                    targetPane.classList.add('active');
-                    // Force la visibilité à block
-                    targetPane.style.display = 'block';
-                    console.log(`Panneau activé: ${targetId}`);
-                } else {
-                    console.error(`Panneau cible introuvable: ${targetId}`);
+// S'assurer que le module de plein écran est chargé
+(function() {
+    function initFullscreen() {
+        if (!window.fullscreenManager) {
+            import('../../js/fullscreen.js')
+            .then(() => {
+                if (!window.fullscreenManager && typeof FullscreenManager !== 'undefined') {
+                    window.fullscreenManager = new FullscreenManager();
                 }
+            })
+            .catch(error => {
+                console.error('Erreur chargement fullscreen.js:', error);
             });
-        });
-        
-        // Vérifier les panneaux
-        const panes = document.querySelectorAll('.tab-pane');
-        console.log(`Nombre de panneaux trouvés : ${panes.length}`);
-        
-        panes.forEach((pane, index) => {
-            console.log(`Panneau ${index + 1}: id=${pane.id}, classe=${pane.className}, display=${getComputedStyle(pane).display}`);
-        });
-        
-        // Force l'affichage du premier onglet après un court délai
-        setTimeout(function() {
-            const firstTab = document.querySelector('.styletext-tab');
-            if (firstTab) {
-                console.log('Activation forcée du premier onglet');
-                firstTab.click();
-            }
-        }, 500);
-        
-        // Fonction pour s'assurer que le contenu des onglets est correctement initialisé
-        function initTabsPanels() {
-            // Masquer tous les panneaux
-            document.querySelectorAll('.tab-pane').forEach(pane => {
-                pane.style.display = 'none';
-            });
-            
-            // Afficher uniquement le panneau actif
-            const activeTab = document.querySelector('.styletext-tab.active');
-            if (activeTab) {
-                const targetId = activeTab.getAttribute('data-target');
-                const targetPane = document.getElementById(targetId);
-                if (targetPane) {
-                    targetPane.style.display = 'block';
-                    console.log(`Initialisation: panneau ${targetId} affiché`);
-                }
-            }
+        } else {
+            window.fullscreenManager.initFullscreenButtons();
         }
-        
-        // Initialiser les panneaux après un court délai
-        setTimeout(initTabsPanels, 800);
-    });
-</script>
+    }
+    
+    // Exécuter immédiatement si le DOM est déjà chargé, sinon attendre l'événement
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initFullscreen);
+    } else {
+        initFullscreen();
+    }
+})();
+</script></div>
 
-<!-- Script principal du styliseur -->
 <script type="module">
     import { StyleTextManager, debugStyleText } from '/js/tools/styletext.js';
     
@@ -294,16 +234,6 @@
             
             closeHelpBtn.addEventListener('click', function() {
                 helpPanel.classList.remove('active');
-            });
-        }
-        
-        // Bouton pour effacer l'historique
-        const clearHistoryBtn = document.getElementById('clearHistoryBtn');
-        if (clearHistoryBtn) {
-            clearHistoryBtn.addEventListener('click', function() {
-                localStorage.removeItem('styletextHistory');
-                renderHistory();
-                showToast('Historique effacé', 'info');
             });
         }
         
@@ -373,67 +303,64 @@
 <style>
 :root {
     --primary-color: #4285f4;
-    --primary-dark: #3367d6;
-    --secondary-color: #34a853;
+    --primary-hover: #2b6de0;
     --accent-color: #fbbc05;
-    --danger-color: #ea4335;
+    --success-color: #34a853;
+    --error-color: #ea4335;
+    --light-gray: #f8f9fa;
+    --med-gray: #dadce0;
+    --dark-gray: #5f6368;
     --text-color: #202124;
-    --text-secondary: #5f6368;
-    --bg-color: #ffffff;
-    --bg-secondary: #f8f9fa;
-    --border-color: #dadce0;
+    --white: #ffffff;
     --shadow-sm: 0 1px 2px rgba(60, 64, 67, 0.3);
     --shadow-md: 0 2px 6px rgba(60, 64, 67, 0.15);
-    --shadow-lg: 0 4px 12px rgba(60, 64, 67, 0.2);
+    --radius: 8px;
     --transition: all 0.2s ease;
-    --radius-sm: 4px;
-    --radius-md: 8px;
-    --radius-lg: 12px;
 }
 
-.styletext-main-container {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+.styletext-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 1.5rem;
+    padding: 1rem;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 1rem;
 }
 
-.styletext-io-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-@media (min-width: 768px) {
-    .styletext-io-container {
-        flex-direction: row;
+@media (min-width: 992px) {
+    .styletext-layout {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+        grid-template-areas:
+            "input output"
+            "styles styles";
     }
     
-    .input-section, .output-section {
-        flex: 1;
+    .styletext-input-area {
+        grid-area: input;
+    }
+    
+    .styletext-output-area {
+        grid-area: output;
+    }
+    
+    .styletext-styles-area {
+        grid-area: styles;
     }
 }
 
-.input-section, .output-section {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.styletext-textarea, .styletext-output {
+.styletext-textarea, 
+.styletext-output {
     width: 100%;
-    min-height: 150px;
+    min-height: 180px;
     padding: 1rem;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
+    border: 1px solid var(--med-gray);
+    border-radius: var(--radius);
     font-size: 1rem;
     line-height: 1.5;
-    resize: vertical;
     transition: var(--transition);
-    background-color: var(--bg-color);
-    color: var(--text-color);
+    resize: vertical;
 }
 
 .styletext-textarea:focus {
@@ -443,21 +370,23 @@
 }
 
 .styletext-output {
-    background-color: var(--bg-secondary);
+    background-color: var(--light-gray);
 }
 
-.text-controls {
+.input-controls,
+.output-controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: 0.5rem;
 }
 
 .character-count {
+    color: var(--dark-gray);
     font-size: 0.875rem;
-    color: var(--text-secondary);
 }
 
-.buttons-group {
+.input-actions {
     display: flex;
     gap: 0.5rem;
 }
@@ -467,120 +396,186 @@
     align-items: center;
     gap: 0.25rem;
     padding: 0.375rem 0.75rem;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-sm);
-    background-color: var(--bg-color);
-    color: var(--text-secondary);
+    border: 1px solid var(--med-gray);
+    border-radius: var(--radius);
+    background: var(--white);
+    color: var(--dark-gray);
     font-size: 0.875rem;
     cursor: pointer;
     transition: var(--transition);
 }
 
 .control-btn:hover {
-    background-color: var(--bg-secondary);
+    background-color: var(--light-gray);
     color: var(--text-color);
 }
 
 .primary-btn {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 0.5rem;
     padding: 0.5rem 1rem;
     border: none;
-    border-radius: var(--radius-sm);
-    background-color: var(--primary-color);
-    color: white;
+    border-radius: var(--radius);
+    background: var(--primary-color);
+    color: var(--white);
     font-weight: 500;
     cursor: pointer;
     transition: var(--transition);
-    box-shadow: var(--shadow-sm);
 }
 
 .primary-btn:hover {
-    background-color: var(--primary-dark);
-    box-shadow: var(--shadow-md);
+    background: var(--primary-hover);
+    box-shadow: var(--shadow-sm);
 }
 
-.output-controls {
-    display: flex;
-    justify-content: flex-end;
-}
-
-.styles-title {
+.area-title {
     font-size: 1.25rem;
-    font-weight: 500;
     color: var(--text-color);
     margin-bottom: 1rem;
     text-align: center;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--light-gray);
 }
 
-.style-options-grid {
+.style-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: 1rem;
 }
 
-.style-option {
+.style-item {
     position: relative;
     cursor: pointer;
 }
 
-.style-option input[type="radio"] {
+.style-item input[type="radio"] {
     position: absolute;
     opacity: 0;
-    width: 0;
-    height: 0;
 }
 
-.style-content {
+.style-item-content {
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     align-items: center;
-    justify-content: center;
-    padding: 1rem;
-    border: 2px solid var(--border-color);
-    border-radius: var(--radius-md);
-    background-color: var(--bg-color);
+    padding: 1rem 0.5rem;
+    border: 2px solid var(--med-gray);
+    border-radius: var(--radius);
     transition: var(--transition);
     height: 100%;
-    min-height: 100px;
 }
 
-.style-option:hover .style-content {
+.style-item:hover .style-item-content {
     border-color: var(--primary-color);
-    box-shadow: var(--shadow-sm);
-}
-
-.style-option input[type="radio"]:checked + .style-content {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.3);
     background-color: rgba(66, 133, 244, 0.05);
+}
+
+.style-item input[type="radio"]:checked + .style-item-content {
+    border-color: var(--primary-color);
+    background-color: rgba(66, 133, 244, 0.1);
+    box-shadow: 0 0 0 1px var(--primary-color);
 }
 
 .style-preview {
     font-size: 1.5rem;
     margin-bottom: 0.75rem;
-    min-height: 40px;
+    min-height: 2rem;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .style-name {
-    font-size: 0.875rem;
-    text-align: center;
+    font-size: 0.8rem;
     color: var(--text-color);
+    text-align: center;
 }
 
-/* Animation lors du changement de style */
+/* Animation du changement de style */
 @keyframes highlight {
-    0% { background-color: var(--bg-secondary); }
-    50% { background-color: rgba(66, 133, 244, 0.1); }
-    100% { background-color: var(--bg-secondary); }
+    0% { background-color: var(--light-gray); }
+    50% { background-color: rgba(66, 133, 244, 0.2); }
+    100% { background-color: var(--light-gray); }
 }
 
 .style-changed {
-    animation: highlight 0.5s ease;
+    animation: highlight 0.6s ease;
+}
+
+/* Panel d'aide */
+.help-panel {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100vh;
+    background-color: var(--white);
+    box-shadow: var(--shadow-md);
+    z-index: 1000;
+    transition: right 0.3s ease;
+    overflow-y: auto;
+}
+
+.help-panel.active {
+    right: 0;
+}
+
+.help-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid var(--med-gray);
+}
+
+.help-panel-content {
+    padding: 1.5rem;
+}
+
+.help-panel h4 {
+    color: var(--primary-color);
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.help-panel ul, .help-panel ol {
+    padding-left: 1.5rem;
+}
+
+.help-panel li {
+    margin-bottom: 0.5rem;
+}
+
+/* Toast notifications */
+.styletext-toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    border-radius: var(--radius);
+    background-color: var(--primary-color);
+    color: white;
+    box-shadow: var(--shadow-md);
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+}
+
+.styletext-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.styletext-toast.success {
+    background-color: var(--success-color);
+}
+
+.styletext-toast.error {
+    background-color: var(--error-color);
+}
+
+.styletext-toast.info {
+    background-color: var(--primary-color);
 }
 </style> 

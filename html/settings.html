@@ -94,6 +94,7 @@
                     <li class="settings-nav-item" data-tab="appearance"><i class="fas fa-palette"></i> Apparence</li>
                     <li class="settings-nav-item" data-tab="privacy"><i class="fas fa-shield-alt"></i> Confidentialité</li>
                     <li class="settings-nav-item" data-tab="sync"><i class="fas fa-sync-alt"></i> Synchronisation</li>
+                    <li class="settings-nav-item" data-tab="advanced"><i class="fas fa-tools"></i> Avancé</li>
                     <li class="settings-nav-item" data-tab="about"><i class="fas fa-info-circle"></i> À propos</li>
                 </ul>
             </div>
@@ -210,47 +211,6 @@
                         </div>
                     </div>
                 </div>
-                <div id="accessibility" class="settings-tab">
-                    <div class="settings-header">
-                        <h1>Accessibilité</h1>
-                        <button class="settings-help-btn" data-help="accessibility"><i class="fas fa-question"></i></button>
-                    </div>
-                    <div class="settings-section">
-                        <div class="settings-section-header">
-                            <h2 class="settings-section-title">Options d'accessibilité</h2>
-                            <p class="settings-section-description">Améliorez l'accessibilité de l'application</p>
-                        </div>
-                        <div class="switch-container">
-                            <label class="switch">
-                                <input type="checkbox" id="high-contrast">
-                                <span class="slider"></span>
-                            </label>
-                            <span class="switch-label">Mode contraste élevé</span>
-                        </div>
-                        <div class="switch-container">
-                            <label class="switch">
-                                <input type="checkbox" id="reduce-motion">
-                                <span class="slider"></span>
-                            </label>
-                            <span class="switch-label">Réduire les animations</span>
-                        </div>
-                        <div class="switch-container">
-                            <label class="switch">
-                                <input type="checkbox" id="keyboard-navigation">
-                                <span class="slider"></span>
-                            </label>
-                            <span class="switch-label">Améliorer la navigation clavier</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="line-spacing" class="form-label">Espacement des lignes</label>
-                            <select id="line-spacing" class="form-select">
-                                <option value="1">Simple</option>
-                                <option value="1.5">Moyen</option>
-                                <option value="2">Double</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
                 <div id="privacy" class="settings-tab">
                     <div class="settings-header">
                         <h1>Confidentialité</h1>
@@ -306,6 +266,9 @@
                             <h2 class="settings-section-title">Sauvegarde et restauration</h2>
                             <p class="settings-section-description">Exportez ou importez vos paramètres et données</p>
                         </div>
+                        <div class="sync-status">
+                            <p>Dernière synchronisation: <span id="last-sync-date">Jamais</span></p>
+                        </div>
                         <div class="btn-group mb-3">
                             <button id="export-settings" class="settings-btn btn-secondary"><i class="fas fa-file-export"></i> Exporter les paramètres</button>
                             <button id="import-settings" class="settings-btn btn-secondary"><i class="fas fa-file-import"></i> Importer les paramètres</button>
@@ -321,6 +284,13 @@
                         <div class="settings-section-header">
                             <h2 class="settings-section-title">Mode hors ligne</h2>
                             <p class="settings-section-description">Configurez le comportement de l'application en mode hors ligne</p>
+                        </div>
+                        <div class="connection-status">
+                            <div class="connection-indicator">
+                                <span class="connection-dot online" id="connection-dot"></span>
+                                <span class="connection-text" id="connection-text">Connecté</span>
+                            </div>
+                            <button id="test-offline" class="settings-btn btn-secondary"><i class="fas fa-network-wired"></i> Tester le mode hors ligne</button>
                         </div>
                         <div class="switch-container">
                             <label class="switch">
@@ -512,16 +482,6 @@
                 <p>Personnalisez la couleur principale de l'interface. Vous pouvez sélectionner parmi les options prédéfinies ou choisir votre propre couleur.</p>
                 <h3>Mise en page</h3>
                 <p>Ajustez l'apparence globale de l'application avec le mode compact et la taille de police.</p>
-            </div>
-            <div id="help-accessibility" class="help-panel-section d-none">
-                <h3>Mode contraste élevé</h3>
-                <p>Améliore la lisibilité en augmentant le contraste entre le texte et l'arrière-plan.</p>
-                <h3>Réduire les animations</h3>
-                <p>Désactive ou réduit les animations pour améliorer l'accessibilité et réduire la distraction.</p>
-                <h3>Navigation clavier</h3>
-                <p>Améliore la navigation au clavier pour rendre l'application plus accessible aux utilisateurs qui n'utilisent pas de souris.</p>
-                <h3>Espacement des lignes</h3>
-                <p>Ajuste l'espacement entre les lignes de texte pour une meilleure lisibilité.</p>
             </div>
             <div id="help-privacy" class="help-panel-section d-none">
                 <h3>Données locales</h3>

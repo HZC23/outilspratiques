@@ -597,8 +597,262 @@
     }
 }
 
-[data-theme="dark"] .ql-editor h2 {
-    color: #fff;
+[data-theme="dark"] .notes-tool {
+    background-color: var(--card-bg);
+}
+
+[data-theme="dark"] .notes-sidebar {
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .notes-title {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .add-note-btn {
+    background-color: var(--primary-color);
+    color: var(--text-on-primary);
+}
+
+[data-theme="dark"] .add-note-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+[data-theme="dark"] .notes-search input {
+    background-color: var(--form-input-bg);
+    color: var(--form-input-text);
+    border-color: var(--form-input-border);
+}
+
+[data-theme="dark"] .notes-search i {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .note-item {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .note-item:hover {
+    background-color: var(--button-hover-bg);
+}
+
+[data-theme="dark"] .note-item.active {
+    background-color: rgba(var(--primary-color-rgb), 0.2);
+    border-left-color: var(--primary-color);
+}
+
+[data-theme="dark"] .note-item-title {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .note-item-preview {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .note-item-date {
+    color: var(--text-muted);
+}
+
+[data-theme="dark"] .editor-title input {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .editor-title input:focus {
+    border-color: var(--form-input-border);
+    background-color: var(--form-input-bg);
+}
+
+[data-theme="dark"] .editor-btn {
+    background-color: var(--button-bg);
+    color: var(--button-text);
+}
+
+[data-theme="dark"] .editor-btn:hover {
+    background-color: var(--button-hover-bg);
+}
+
+[data-theme="dark"] .editor-btn.save {
+    background-color: var(--primary-color);
+    color: var(--text-on-primary);
+}
+
+[data-theme="dark"] .editor-btn.save:hover {
+    background-color: var(--primary-hover);
+}
+
+[data-theme="dark"] .editor-btn.delete {
+    background-color: var(--danger-color);
+    color: var(--text-on-primary);
+}
+
+[data-theme="dark"] .editor-btn.delete:hover {
+    background-color: var(--danger-hover);
+}
+
+[data-theme="dark"] .toolbar-btn {
+    background-color: var(--button-bg);
+    color: var(--button-text);
+}
+
+[data-theme="dark"] .toolbar-btn:hover {
+    background-color: var(--button-hover-bg);
+}
+
+[data-theme="dark"] .toolbar-btn.active {
+    background-color: rgba(var(--primary-color-rgb), 0.2);
+}
+
+[data-theme="dark"] .toolbar-separator {
+    background-color: var(--border-color);
+}
+
+[data-theme="dark"] .editor-content {
+    background-color: var(--form-input-bg);
+    color: var(--form-input-text);
+    border-color: var(--form-input-border);
+}
+
+[data-theme="dark"] .editor-content:focus {
+    border-color: var(--primary-color);
+}
+
+[data-theme="dark"] .editor-status {
+    color: var(--text-secondary);
+}
+
+/* Support pour l'éditeur Quill */
+[data-theme="dark"] .ql-toolbar.ql-snow {
+    border-color: var(--border-color);
+    background-color: var(--tool-header-bg);
+}
+
+[data-theme="dark"] .ql-container.ql-snow {
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .ql-editor {
+    background-color: var(--form-input-bg);
+    color: var(--form-input-text);
+}
+
+[data-theme="dark"] .ql-editor:focus {
+    border-color: var(--primary-color);
+}
+
+[data-theme="dark"] .ql-editor p, 
+[data-theme="dark"] .ql-editor ol, 
+[data-theme="dark"] .ql-editor ul, 
+[data-theme="dark"] .ql-editor pre, 
+[data-theme="dark"] .ql-editor blockquote, 
+[data-theme="dark"] .ql-editor h1, 
+[data-theme="dark"] .ql-editor h2, 
+[data-theme="dark"] .ql-editor h3 {
+    color: var(--form-input-text);
+}
+
+[data-theme="dark"] .ql-snow .ql-editor pre.ql-syntax {
+    background-color: #23241f;
+    color: #f8f8f2;
+}
+
+[data-theme="dark"] .ql-snow .ql-stroke {
+    stroke: var(--text-color);
+}
+
+[data-theme="dark"] .ql-snow .ql-fill,
+[data-theme="dark"] .ql-snow .ql-stroke.ql-fill {
+    fill: var(--text-color);
+}
+
+[data-theme="dark"] .ql-snow .ql-picker {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .ql-snow .ql-picker-options {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .ql-snow .ql-tooltip {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .ql-snow a {
+    color: var(--primary-color);
+}
+
+[data-theme="dark"] .note-status-bar {
+    border-color: var(--border-color);
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .help-panel {
+    background-color: var(--help-panel-bg);
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .help-panel-header {
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .help-panel-header h3 {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .help-panel-content h4 {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .help-panel-content p, 
+[data-theme="dark"] .help-panel-content ul, 
+[data-theme="dark"] .help-panel-content ol {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .note-notification {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border-color: var(--border-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Support du mode sombre pour la version fusionnée */
+[data-theme="dark"] .note-container {
+    background-color: var(--card-bg);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .note-card {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .note-card:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .note-modal {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+[data-theme="dark"] .note-modal-content {
+    background-color: var(--card-bg);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .note-form-group input,
+[data-theme="dark"] .note-form-group textarea {
+    background-color: var(--form-input-bg);
+    color: var(--form-input-text);
+    border-color: var(--form-input-border);
+}
+
+[data-theme="dark"] .note-form-group input:focus,
+[data-theme="dark"] .note-form-group textarea:focus {
+    border-color: var(--primary-color);
 }
 
 /* ====== Début de la fusion avec note.css ====== */

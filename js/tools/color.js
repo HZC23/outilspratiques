@@ -263,37 +263,8 @@ export const ColorManager = {
             });
         }
         
-        // Gestion du mode plein écran
-        const fullscreenBtn = document.getElementById('colorFullscreenBtn');
-        const colorTool = document.getElementById('colorTool');
-        
-        if (fullscreenBtn && colorTool) {
-            fullscreenBtn.addEventListener('click', () => {
-                if (!document.fullscreenElement) {
-                    colorTool.requestFullscreen().catch(err => {
-                        console.error(`Erreur lors du passage en plein écran: ${err.message}`);
-                    });
-                } else {
-                    document.exitFullscreen();
-                }
-            });
-        }
-        
-        // Événement de changement de plein écran pour mettre à jour l'icône
-        document.addEventListener('fullscreenchange', () => {
-            if (fullscreenBtn) {
-                const icon = fullscreenBtn.querySelector('i');
-                if (icon) {
-                    if (document.fullscreenElement) {
-                        icon.classList.remove('fa-expand');
-                        icon.classList.add('fa-compress');
-                    } else {
-                        icon.classList.remove('fa-compress');
-                        icon.classList.add('fa-expand');
-                    }
-                }
-            }
-        });
+        // Note: La gestion du plein écran est maintenant assurée par le module fullscreen.js global
+        // Ne plus utiliser de gestionnaire spécifique ici
     },
 
     /**

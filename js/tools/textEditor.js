@@ -312,7 +312,7 @@ function clearContent() {
 
 function toggleFullscreen() {
     // Cette fonction est désormais gérée par le module fullscreen.js global
-    console.warn('La fonction toggleFullscreen() est déconseillée, utilisez FullscreenManager à la place');
+    console.warn('La fonction toggleFullscreen() est déconseillée, utilisez le module fullscreen.js global à la place');
 }
 
 function updateFilenameExtension() {
@@ -412,7 +412,7 @@ function init() {
     els.helpBtn = document.getElementById('textEditorHelp');
     els.helpPanel = document.getElementById('textEditorHelpPanel');
     els.closeHelpBtn = document.getElementById('closeTextEditorHelp');
-    els.fullscreenBtn = document.getElementById('textEditorFullscreen');
+    els.fullscreenBtn = document.getElementById('textEditorFullscreenBtn');
     els.toolbar = document.querySelector('.toolbar');
     els.alignBtns = document.querySelectorAll('.btn-text-left, .btn-text-center, .btn-text-right');
     els.colorBtns = document.querySelectorAll('.colors .color');
@@ -547,16 +547,14 @@ function init() {
     if (els.filename) {
         els.filename.addEventListener('input', updateFilenameExtension);
     }
-    // Plein écran
-    if (els.fullscreenBtn) {
-        els.fullscreenBtn.addEventListener('click', toggleFullscreen);
-    }
+    // Note: Le bouton de plein écran est maintenant géré par le module fullscreen.js global
+    
     // Aide
     if (els.helpBtn) {
-        els.helpBtn.addEventListener('click', showHelpPanel);
+        els.helpBtn.addEventListener('click', () => showHelpPanel());
     }
     if (els.closeHelpBtn) {
-        els.closeHelpBtn.addEventListener('click', hideHelpPanel);
+        els.closeHelpBtn.addEventListener('click', () => hideHelpPanel());
     }
     // Barre d'outils
     initToolbar();
