@@ -1,261 +1,332 @@
 <!DOCTYPE html>
 <div class="tool-container" id="percentageTool">
     <div class="tool-header">
-        <h2><i class="fas fa-percent" aria-hidden="true"></i> Calculateur de pourcentages</h2>
+        <h2><i class="fas fa-percent"></i> Calculateur de pourcentages</h2>
         <div class="tool-actions">
-            <button type="button" class="btn-icon" id="percentageHelp" aria-label="Aide">
-                <i class="fas fa-question-circle" aria-hidden="true"></i>
+            <button type="button" class="btn-icon help-button" aria-label="Aide">
+                <i class="fas fa-question-circle"></i>
             </button>
-            <button type="button" class="btn-icon fullscreen-btn" id="percentageFullscreenBtn" aria-label="Plein écran">
-                <i class="fas fa-expand" aria-hidden="true"></i>
+            <button type="button" class="btn-icon fullscreen-btn fullscreen-toggle" aria-label="Plein écran">
+                <i class="fas fa-expand"></i>
             </button>
         </div>
     </div>
-    
-    <div class="tool-content">
-        <div class="percentage-calculator">
-            <div class="calculation-tabs" role="tablist">
-                <button type="button" class="tab-button active" id="basicPercentageTab" data-tab="basicPercentage" role="tab" aria-selected="true" aria-controls="basicPercentage">Calcul de base</button>
-                <button type="button" class="tab-button" id="percentageChangeTab" data-tab="percentageChange" role="tab" aria-selected="false" aria-controls="percentageChange">Variation</button>
-                <button type="button" class="tab-button" id="percentageOfTab" data-tab="percentageOf" role="tab" aria-selected="false" aria-controls="percentageOf">Pourcentage de</button>
-                <button type="button" class="tab-button" id="percentageTipTab" data-tab="percentageTip" role="tab" aria-selected="false" aria-controls="percentageTip">Pourboire</button>
+
+    <div class="percentage-container">
+        <!-- Navigation par onglets -->
+        <div class="percentage-tabs" role="tablist" aria-label="Calculateurs de pourcentage">
+            <button class="tab-button active" data-tab="calc1" role="tab" aria-selected="true" aria-controls="calc1">
+                Valeur pourcentage
+            </button>
+            <button class="tab-button" data-tab="calc2" role="tab" aria-selected="false" aria-controls="calc2">
+                Pourcentage de
+            </button>
+            <button class="tab-button" data-tab="calc3" role="tab" aria-selected="false" aria-controls="calc3">
+                Augmentation / Réduction
+            </button>
+            <button class="tab-button" data-tab="calc4" role="tab" aria-selected="false" aria-controls="calc4">
+                Remise
+            </button>
+            <button class="tab-button" data-tab="calc5" role="tab" aria-selected="false" aria-controls="calc5">
+                TVA / Taxes
+            </button>
+            <button class="tab-button" data-tab="calc6" role="tab" aria-selected="false" aria-controls="calc6">
+                Marge
+            </button>
+        </div>
+        
+        <!-- Calcul 1: Valeur pourcentage -->
+        <div id="calc1" class="tab-content active" role="tabpanel" aria-labelledby="tab1">
+            <form class="percentage-form">
+                <div class="form-group">
+                    <label for="percent1">Pourcentage (%)</label>
+                    <input type="number" id="percent1" placeholder="25" min="0" step="any">
+                    <small class="input-help">Entrez le pourcentage à calculer</small>
+                </div>
+                <div class="form-group">
+                    <label for="total1">Valeur totale</label>
+                    <input type="number" id="total1" placeholder="100" min="0" step="any">
+                    <small class="input-help">Entrez le montant total</small>
+                </div>
+                <div class="percentage-actions">
+                    <button type="button" class="btn btn-reset" id="reset1">Réinitialiser</button>
+                    <button type="button" class="btn btn-primary" id="calculate1">Calculer</button>
+                </div>
+            </form>
+            <div class="result-container" id="result1" style="display: none;">
+                <div class="result-row">
+                    <span class="result-label">Résultat:</span>
+                    <span class="result-value" id="resultValue1">0</span>
+                </div>
             </div>
-            
-            <div class="calculation-content">
-                <!-- Calcul de base -->
-                <div class="tab-content active" id="basicPercentage" role="tabpanel" aria-labelledby="basicPercentageTab">
-                    <h3>Calculer un pourcentage</h3>
-                    <form class="percentage-form" id="basicPercentageForm" onsubmit="return false;">
-                        <div class="input-group">
-                            <label for="percentageValue">Valeur</label>
-                            <input type="number" id="percentageValue" placeholder="0" step="any" min="0" aria-describedby="percentageValueHelp">
-                            <small id="percentageValueHelp" class="input-help">Entrez la valeur sur laquelle appliquer le pourcentage</small>
-                        </div>
-                        <div class="input-group">
-                            <label for="percentageRate">Pourcentage (%)</label>
-                            <input type="number" id="percentageRate" placeholder="0" step="any" aria-describedby="percentageRateHelp">
-                            <small id="percentageRateHelp" class="input-help">Entrez le taux de pourcentage à calculer</small>
-                        </div>
-                        <button type="submit" class="btn btn-primary" id="calculatePercentage">Calculer</button>
-                    </form>
-                    
-                    <div class="result-container" aria-live="polite">
-                        <div class="result-item">
-                            <span class="result-label">Résultat:</span>
-                            <span class="result-value" id="percentageResult">0</span>
-                        </div>
-                    </div>
+        </div>
+        
+        <!-- Calcul 2: Pourcentage de -->
+        <div id="calc2" class="tab-content" role="tabpanel" aria-labelledby="tab2">
+            <form class="percentage-form">
+                <div class="form-group">
+                    <label for="part2">Valeur partielle</label>
+                    <input type="number" id="part2" placeholder="25" min="0" step="any">
+                    <small class="input-help">Entrez la partie dont vous voulez connaître le pourcentage</small>
                 </div>
-                
-                <!-- Variation en pourcentage -->
-                <div class="tab-content" id="percentageChange" role="tabpanel" aria-labelledby="percentageChangeTab">
-                    <h3>Calculer une variation</h3>
-                    <form class="percentage-form" id="percentageChangeForm" onsubmit="return false;">
-                        <div class="input-group">
-                            <label for="oldValue">Valeur initiale</label>
-                            <input type="number" id="oldValue" placeholder="0" step="any" aria-describedby="oldValueHelp">
-                            <small id="oldValueHelp" class="input-help">Entrez la valeur de départ</small>
-                        </div>
-                        <div class="input-group">
-                            <label for="newValue">Valeur finale</label>
-                            <input type="number" id="newValue" placeholder="0" step="any" aria-describedby="newValueHelp">
-                            <small id="newValueHelp" class="input-help">Entrez la valeur d'arrivée</small>
-                        </div>
-                        <button type="submit" class="btn btn-primary" id="calculateChange">Calculer</button>
-                    </form>
-                    
-                    <div class="result-container" aria-live="polite">
-                        <div class="result-item">
-                            <span class="result-label">Variation:</span>
-                            <span class="result-value" id="changeResult">0%</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Différence:</span>
-                            <span class="result-value" id="differenceResult">0</span>
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <label for="total2">Valeur totale</label>
+                    <input type="number" id="total2" placeholder="100" min="0" step="any">
+                    <small class="input-help">Entrez le montant total</small>
                 </div>
-                
-                <!-- Pourcentage de -->
-                <div class="tab-content" id="percentageOf" role="tabpanel" aria-labelledby="percentageOfTab">
-                    <h3>Quel pourcentage représente...</h3>
-                    <form class="percentage-form" id="percentageOfForm" onsubmit="return false;">
-                        <div class="input-group">
-                            <label for="partValue">Partie</label>
-                            <input type="number" id="partValue" placeholder="0" step="any" aria-describedby="partValueHelp">
-                            <small id="partValueHelp" class="input-help">Entrez la valeur partielle</small>
-                        </div>
-                        <div class="input-group">
-                            <label for="totalValue">Total</label>
-                            <input type="number" id="totalValue" placeholder="0" step="any" aria-describedby="totalValueHelp">
-                            <small id="totalValueHelp" class="input-help">Entrez la valeur totale</small>
-                        </div>
-                        <button type="submit" class="btn btn-primary" id="calculateOf">Calculer</button>
-                    </form>
-                    
-                    <div class="result-container" aria-live="polite">
-                        <div class="result-item">
-                            <span class="result-label">Pourcentage:</span>
-                            <span class="result-value" id="ofResult">0%</span>
-                        </div>
-                    </div>
+                <div class="percentage-actions">
+                    <button type="button" class="btn btn-reset" id="reset2">Réinitialiser</button>
+                    <button type="button" class="btn btn-primary" id="calculate2">Calculer</button>
                 </div>
-                
-                <!-- Calcul de pourboire -->
-                <div class="tab-content" id="percentageTip" role="tabpanel" aria-labelledby="percentageTipTab">
-                    <h3>Calculateur de pourboire</h3>
-                    <form class="percentage-form" id="percentageTipForm" onsubmit="return false;">
-                        <div class="input-group">
-                            <label for="billAmount">Montant de la facture</label>
-                            <input type="number" id="billAmount" placeholder="0" step="any" min="0" aria-describedby="billAmountHelp">
-                            <small id="billAmountHelp" class="input-help">Entrez le montant total de la facture</small>
-                        </div>
-                        <div class="input-group">
-                            <label for="tipPercentage">Pourcentage du pourboire</label>
-                            <input type="number" id="tipPercentage" placeholder="15" value="15" step="any" min="0" aria-describedby="tipPercentageHelp">
-                            <small id="tipPercentageHelp" class="input-help">Entrez le pourcentage du pourboire</small>
-                        </div>
-                        <div class="input-group">
-                            <label for="numPeople">Nombre de personnes</label>
-                            <input type="number" id="numPeople" placeholder="1" value="1" min="1" aria-describedby="numPeopleHelp">
-                            <small id="numPeopleHelp" class="input-help">Entrez le nombre de personnes pour partager l'addition</small>
-                        </div>
-                        <button type="submit" class="btn btn-primary" id="calculateTip">Calculer</button>
-                    </form>
-                    
-                    <div class="result-container" aria-live="polite">
-                        <div class="result-item">
-                            <span class="result-label">Pourboire:</span>
-                            <span class="result-value" id="tipResult">0</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Total:</span>
-                            <span class="result-value" id="totalWithTipResult">0</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Par personne:</span>
-                            <span class="result-value" id="perPersonResult">0</span>
-                        </div>
-                    </div>
+            </form>
+            <div class="result-container" id="result2" style="display: none;">
+                <div class="result-row">
+                    <span class="result-label">Résultat:</span>
+                    <span class="result-value" id="resultValue2">0%</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Calcul 3: Augmentation / Réduction -->
+        <div id="calc3" class="tab-content" role="tabpanel" aria-labelledby="tab3">
+            <form class="percentage-form">
+                <div class="form-group">
+                    <label for="original3">Valeur originale</label>
+                    <input type="number" id="original3" placeholder="100" min="0" step="any">
+                    <small class="input-help">Entrez la valeur de départ</small>
+                </div>
+                <div class="form-group">
+                    <label for="final3">Valeur finale</label>
+                    <input type="number" id="final3" placeholder="125" min="0" step="any">
+                    <small class="input-help">Entrez la valeur après changement</small>
+                </div>
+                <div class="percentage-actions">
+                    <button type="button" class="btn btn-reset" id="reset3">Réinitialiser</button>
+                    <button type="button" class="btn btn-primary" id="calculate3">Calculer</button>
+                </div>
+            </form>
+            <div class="result-container" id="result3" style="display: none;">
+                <div class="result-row">
+                    <span class="result-label">Différence:</span>
+                    <span class="result-value" id="differenceValue">0</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Pourcentage:</span>
+                    <span class="result-value" id="percentageValue">0%</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Calcul 4: Remise / Réduction -->
+        <div id="calc4" class="tab-content" role="tabpanel" aria-labelledby="tab4">
+            <form class="percentage-form">
+                <div class="form-group">
+                    <label for="original4">Prix original</label>
+                    <input type="number" id="original4" placeholder="100" min="0" step="any">
+                    <small class="input-help">Entrez le prix de départ avant remise</small>
+                </div>
+                <div class="form-group">
+                    <label for="discount4">Pourcentage de remise (%)</label>
+                    <input type="number" id="discount4" placeholder="20" min="0" max="100" step="any">
+                    <small class="input-help">Entrez le pourcentage de remise</small>
+                </div>
+                <div class="percentage-actions">
+                    <button type="button" class="btn btn-reset" id="reset4">Réinitialiser</button>
+                    <button type="button" class="btn btn-primary" id="calculate4">Calculer</button>
+                </div>
+            </form>
+            <div class="result-container" id="result4" style="display: none;">
+                <div class="result-row">
+                    <span class="result-label">Montant de la remise:</span>
+                    <span class="result-value" id="discountAmount">0</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Prix après remise:</span>
+                    <span class="result-value" id="finalPrice">0</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Économie:</span>
+                    <span class="result-value positive" id="savings">0%</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Calcul 5: TVA / Taxes -->
+        <div id="calc5" class="tab-content" role="tabpanel" aria-labelledby="tab5">
+            <form class="percentage-form">
+                <div class="form-group">
+                    <label for="taxRate">Taux de TVA/Taxe (%)</label>
+                    <input type="number" id="taxRate" placeholder="20" min="0" step="any">
+                    <small class="input-help">Entrez le taux de TVA ou de taxe</small>
+                </div>
+                <div class="form-group">
+                    <label for="priceType">Type de prix</label>
+                    <select id="priceType" class="form-select">
+                        <option value="preTax">Prix hors taxes (HT)</option>
+                        <option value="withTax">Prix toutes taxes comprises (TTC)</option>
+                    </select>
+                    <small class="input-help">Sélectionnez si le prix est HT ou TTC</small>
+                </div>
+                <div class="form-group">
+                    <label for="price5">Prix</label>
+                    <input type="number" id="price5" placeholder="100" min="0" step="any">
+                    <small class="input-help">Entrez le montant du prix</small>
+                </div>
+                <div class="percentage-actions">
+                    <button type="button" class="btn btn-reset" id="reset5">Réinitialiser</button>
+                    <button type="button" class="btn btn-primary" id="calculate5">Calculer</button>
+                </div>
+            </form>
+            <div class="result-container" id="result5" style="display: none;">
+                <div class="result-row">
+                    <span class="result-label">Prix HT:</span>
+                    <span class="result-value" id="preTaxPrice">0</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Montant de la taxe:</span>
+                    <span class="result-value" id="taxAmount">0</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Prix TTC:</span>
+                    <span class="result-value" id="withTaxPrice">0</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Calcul 6: Marge / Majoration -->
+        <div id="calc6" class="tab-content" role="tabpanel" aria-labelledby="tab6">
+            <form class="percentage-form">
+                <div class="form-group">
+                    <label for="cost6">Coût d'achat</label>
+                    <input type="number" id="cost6" placeholder="100" min="0" step="any">
+                    <small class="input-help">Entrez le coût d'achat ou de revient</small>
+                </div>
+                <div class="form-group">
+                    <label for="markup6">Pourcentage de marge (%)</label>
+                    <input type="number" id="markup6" placeholder="50" min="0" step="any">
+                    <small class="input-help">Entrez le pourcentage de marge souhaité</small>
+                </div>
+                <div class="percentage-actions">
+                    <button type="button" class="btn btn-reset" id="reset6">Réinitialiser</button>
+                    <button type="button" class="btn btn-primary" id="calculate6">Calculer</button>
+                </div>
+            </form>
+            <div class="result-container" id="result6" style="display: none;">
+                <div class="result-row">
+                    <span class="result-label">Montant de la marge:</span>
+                    <span class="result-value" id="markupAmount">0</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Prix de vente:</span>
+                    <span class="result-value" id="sellingPrice">0</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Marge brute:</span>
+                    <span class="result-value positive" id="grossMargin">0%</span>
                 </div>
             </div>
         </div>
     </div>
     
-    <div class="help-panel" id="percentageHelpPanel" aria-labelledby="helpPanelTitle">
+    <!-- Panneau d'aide -->
+    <div id="percentage-help" class="help-panel">
         <div class="help-panel-header">
-            <h3 id="helpPanelTitle">Aide - Calculateur de pourcentages</h3>
-            <button type="button" class="btn-icon" id="closePercentageHelp" aria-label="Fermer l'aide">
-                <i class="fas fa-times" aria-hidden="true"></i>
+            <h3 class="help-panel-title">Aide - Calculateur de pourcentages</h3>
+            <button class="close-help help-panel-close" data-help-close aria-label="Fermer l'aide">
+                <i class="fas fa-times"></i>
             </button>
         </div>
         <div class="help-panel-content">
-            <h4>Comment utiliser</h4>
-            <ul>
-                <li><strong>Calcul de base</strong> : Calculez un pourcentage d'une valeur</li>
-                <li><strong>Variation</strong> : Calculez le pourcentage de variation entre deux valeurs</li>
-                <li><strong>Pourcentage de</strong> : Calculez quel pourcentage une valeur représente du total</li>
-                <li><strong>Pourboire</strong> : Calculez un pourboire et partagez-le entre plusieurs personnes</li>
-            </ul>
+            <div class="help-section">
+                <h3>Comment utiliser le calculateur</h3>
+                <p>Cet outil propose plusieurs types de calculs différents :</p>
+                
+                <ul>
+                    <li><strong>Valeur pourcentage</strong> : Calcule la valeur correspondant à un pourcentage d'un nombre.
+                        <br><em>Exemple : 25% de 100 = 25</em>
+                    </li>
+                    <li><strong>Pourcentage de</strong> : Détermine quel pourcentage une valeur représente par rapport à une autre.
+                        <br><em>Exemple : 25 est 25% de 100</em>
+                    </li>
+                    <li><strong>Augmentation / Réduction</strong> : Calcule le pourcentage d'augmentation ou de réduction entre deux valeurs.
+                        <br><em>Exemple : De 100 à 125 = +25%</em>
+                    </li>
+                    <li><strong>Remise</strong> : Calcule le prix après application d'une remise en pourcentage.
+                        <br><em>Exemple : Prix 100€ avec 20% de remise = 80€</em>
+                    </li>
+                    <li><strong>TVA / Taxes</strong> : Calcule les prix HT, TTC et le montant de la taxe.
+                        <br><em>Exemple : Prix HT 100€ avec TVA 20% = 120€ TTC</em>
+                    </li>
+                    <li><strong>Marge</strong> : Calcule le prix de vente en fonction du coût et de la marge souhaitée.
+                        <br><em>Exemple : Coût 100€ avec marge 50% = 150€ prix de vente</em>
+                    </li>
+                </ul>
+            </div>
             
-            <h4>Exemples d'utilisation</h4>
-            <ul>
-                <li>Calculer une réduction sur un prix</li>
-                <li>Évaluer une augmentation salariale</li>
-                <li>Déterminer la proportion d'un budget</li>
-                <li>Partager équitablement une addition</li>
-            </ul>
+            <div class="help-section">
+                <h3>Formules utilisées</h3>
+                <ul>
+                    <li><strong>Valeur pourcentage</strong> : Valeur = (Pourcentage × Total) ÷ 100</li>
+                    <li><strong>Pourcentage de</strong> : Pourcentage = (Partie ÷ Total) × 100</li>
+                    <li><strong>Augmentation/Réduction</strong> : Pourcentage = ((Valeur finale - Valeur initiale) ÷ Valeur initiale) × 100</li>
+                    <li><strong>Remise</strong> : 
+                        <br>Montant de la remise = Prix original × (Pourcentage de remise ÷ 100)
+                        <br>Prix après remise = Prix original - Montant de la remise
+                    </li>
+                    <li><strong>TVA / Taxes</strong> :
+                        <br>Prix TTC = Prix HT × (1 + Taux de TVA ÷ 100)
+                        <br>Prix HT = Prix TTC ÷ (1 + Taux de TVA ÷ 100)
+                        <br>Montant de la taxe = Prix TTC - Prix HT
+                    </li>
+                    <li><strong>Marge</strong> :
+                        <br>Montant de la marge = Coût × (Pourcentage de marge ÷ 100)
+                        <br>Prix de vente = Coût + Montant de la marge
+                    </li>
+                </ul>
+            </div>
             
-            <h4>Raccourcis clavier</h4>
-            <ul>
-                <li><strong>Entrée</strong> : Dans un champ de saisie, lance le calcul</li>
-            </ul>
+            <div class="help-section">
+                <h3>Astuces</h3>
+                <ul>
+                    <li>Vous pouvez entrer des nombres décimaux dans tous les champs.</li>
+                    <li>Pour les réductions, la valeur du pourcentage sera négative.</li>
+                    <li>Le résultat est arrondi à 2 décimales pour plus de lisibilité.</li>
+                    <li>Appuyez sur la touche Entrée pour calculer rapidement.</li>
+                    <li>Utilisez les boutons de réinitialisation pour effacer tous les champs.</li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>
 
-<link rel="stylesheet" href="../../styles/tools/percentage.css">
 <script>
-document.write('<script src="../../js/tools/percentage.js"><\/script>');
-
-// S'assurer que le module de plein écran est chargé
-(function() {
-    console.log('Script d\'initialisation du plein écran du calculateur de pourcentages');
+// Attendre que le DOM soit complètement chargé avant de charger les scripts
+document.addEventListener('DOMContentLoaded', function() {
+    // Charger le script du calculateur de pourcentage
+    var percentageScript = document.createElement('script');
+    percentageScript.src = '../../js/tools/percentage.js';
+    document.body.appendChild(percentageScript);
     
-    // Fonction d'initialisation du plein écran
+    // S'assurer que le module de plein écran est chargé
     function initFullscreen() {
-        console.log('Initialisation du plein écran');
-        
-        // Vérifier si le gestionnaire de plein écran est déjà initialisé
         if (!window.fullscreenManager) {
-            console.log('Le gestionnaire de plein écran n\'existe pas, chargement du module');
-            
             import('../../js/fullscreen.js')
             .then(() => {
-                console.log('Module fullscreen.js chargé avec succès');
-                
-                // Vérifier à nouveau après le chargement
-                if (!window.fullscreenManager) {
-                    console.warn('Gestionnaire toujours non défini après chargement du module');
-                    
-                    // Créer manuellement une instance si nécessaire
-                    if (typeof FullscreenManager !== 'undefined') {
-                        console.log('Création manuelle d\'une instance de FullscreenManager');
-                        window.fullscreenManager = new FullscreenManager();
-                    }
-                } else {
-                    console.log('Gestionnaire de plein écran correctement initialisé');
+                if (!window.fullscreenManager && typeof FullscreenManager !== 'undefined') {
+                    window.fullscreenManager = new FullscreenManager();
                 }
             })
             .catch(error => {
-                console.error('Erreur lors du chargement du module fullscreen.js:', error);
+                console.error('Erreur chargement fullscreen.js:', error);
             });
         } else {
-            console.log('Le gestionnaire de plein écran existe déjà');
-            
-            // Réinitialiser les boutons pour être sûr
             window.fullscreenManager.initFullscreenButtons();
         }
     }
     
-    // Exécuter immédiatement si le DOM est déjà chargé, sinon attendre l'événement
-    if (document.readyState === 'loading') {
-        console.log('DOM en cours de chargement, attente de l\'événement DOMContentLoaded');
-        document.addEventListener('DOMContentLoaded', initFullscreen);
-    } else {
-        console.log('DOM déjà chargé, initialisation immédiate');
+    // Initialiser le plein écran après que le script de pourcentage a été chargé
+    percentageScript.onload = function() {
         initFullscreen();
-    }
-})();
-</script>
-<script>
-// S'assurer que l'initialisation se produit au bon moment
-(function() {
-    function initPercentageTool() {
-        console.log('Tentative d\'initialisation du calculateur de pourcentages...');
-        
-        if (window.percentageTool && typeof window.percentageTool.init === 'function') {
-            console.log('Démarrage du calculateur de pourcentages');
-            try {
-                window.percentageTool.init();
-                console.log('Calculateur de pourcentages initialisé avec succès');
-            } catch (error) {
-                console.error('Erreur lors de l\'initialisation du calculateur:', error);
-            }
-        } else {
-            console.error('Le module percentageTool n\'est pas disponible');
-        }
-    }
-    
-    // Initialiser après le chargement complet du DOM
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initPercentageTool);
-    } else {
-        // Le DOM est déjà chargé
-        initPercentageTool();
-    }
-    
-    // Tenter à nouveau après un court délai pour s'assurer que tous les scripts sont chargés
-    setTimeout(initPercentageTool, 500);
-})();
+    };
+});
 </script> 

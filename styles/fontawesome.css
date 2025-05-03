@@ -1,0 +1,287 @@
+/*!
+ * Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com
+ * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
+ * Copyright 2023 Fonticons, Inc.
+ * 
+ * Version adaptée pour utiliser uniquement des polices locales
+ */
+
+:root {
+  --fa-style-family-classic: "Font Awesome 6 Free";
+  --fa-font-solid: normal 900 1em/1 "Font Awesome 6 Free";
+  --fa-font-regular: normal 400 1em/1 "Font Awesome 6 Free";
+  --fa-font-brands: normal 400 1em/1 "Font Awesome 6 Brands";
+  --fa-font-size-base: 16px;
+  --fa-line-height-base: 1;
+  --fa-font-path: "../fonts";
+  --fa-font-display: block;
+}
+
+.fa,
+.fas,
+.fa-solid,
+.far,
+.fa-regular,
+.fab,
+.fa-brands,
+.fa-classic,
+.fa-sharp {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
+  transform: translate(0, 0);
+  -webkit-transform: translate(0, 0);
+  -webkit-font-smoothing: antialiased;
+}
+
+.fa,
+.fas,
+.fa-solid {
+  font-family: 'Font Awesome 6 Free', sans-serif;
+  font-weight: 900;
+}
+
+.far,
+.fa-regular {
+  font-family: 'Font Awesome 6 Free', sans-serif;
+  font-weight: 400;
+}
+
+.fab,
+.fa-brands {
+  font-family: 'Font Awesome 6 Brands', sans-serif;
+  font-weight: 400;
+}
+
+/* Correction de base pour tous les glyphes */
+.fa:before,
+.fas:before,
+.far:before,
+.fab:before,
+.fa-solid:before,
+.fa-regular:before,
+.fa-brands:before {
+  display: inline-block;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Définition des positions des icônes dans la police */
+/* Cela peut être un sous-ensemble des icônes utilisées dans l'application */
+
+.fa-home:before {
+  content: "\f015";
+}
+
+.fa-sliders-h:before {
+  content: "\f1de";
+}
+
+.fa-palette:before {
+  content: "\f53f";
+}
+
+.fa-shield-alt:before {
+  content: "\f3ed";
+}
+
+.fa-sync-alt:before {
+  content: "\f2f1";
+}
+
+.fa-tools:before {
+  content: "\f7d9";
+}
+
+.fa-info-circle:before {
+  content: "\f05a";
+}
+
+.fa-question:before {
+  content: "\f128";
+}
+
+.fa-times:before {
+  content: "\f00d";
+}
+
+.fa-trash-alt:before {
+  content: "\f2ed";
+}
+
+.fa-file-export:before {
+  content: "\f56e";
+}
+
+.fa-file-import:before {
+  content: "\f56f";
+}
+
+.fa-network-wired:before {
+  content: "\f6ff";
+}
+
+.fa-undo:before {
+  content: "\f0e2";
+}
+
+.fa-save:before {
+  content: "\f0c7";
+}
+
+.fa-github:before {
+  content: "\f09b";
+}
+
+.fa-file-alt:before {
+  content: "\f15c";
+}
+
+/* Ajouter d'autres icônes au besoin */
+/* Icônes additionnelles pour résoudre les problèmes de bbox */
+.fa-arrow-right:before {
+  content: "\f061";
+}
+
+.fa-arrow-left:before {
+  content: "\f060";
+}
+
+.fa-calendar:before {
+  content: "\f133";
+}
+
+.fa-check:before {
+  content: "\f00c";
+}
+
+.fa-cog:before {
+  content: "\f013";
+}
+
+.fa-download:before {
+  content: "\f019";
+}
+
+.fa-envelope:before {
+  content: "\f0e0";
+}
+
+.fa-external-link-alt:before {
+  content: "\f35d";
+}
+
+.fa-eye:before {
+  content: "\f06e";
+}
+
+.fa-eye-slash:before {
+  content: "\f070";
+}
+
+.fa-file:before {
+  content: "\f15b";
+}
+
+.fa-filter:before {
+  content: "\f0b0";
+}
+
+.fa-folder:before {
+  content: "\f07b";
+}
+
+.fa-folder-open:before {
+  content: "\f07c";
+}
+
+.fa-globe:before {
+  content: "\f0ac";
+}
+
+.fa-heart:before {
+  content: "\f004";
+}
+
+.fa-link:before {
+  content: "\f0c1";
+}
+
+.fa-list:before {
+  content: "\f03a";
+}
+
+.fa-lock:before {
+  content: "\f023";
+}
+
+.fa-pen:before {
+  content: "\f304";
+}
+
+.fa-plus:before {
+  content: "\f067";
+}
+
+.fa-search:before {
+  content: "\f002";
+}
+
+.fa-star:before {
+  content: "\f005";
+}
+
+.fa-sync:before {
+  content: "\f021";
+}
+
+.fa-user:before {
+  content: "\f007";
+}
+
+.fa-wrench:before {
+  content: "\f0ad";
+}
+
+/* Ajout des icônes Brands fréquemment utilisées */
+.fa-facebook:before {
+  content: "\f09a";
+}
+
+.fa-twitter:before {
+  content: "\f099";
+}
+
+.fa-linkedin:before {
+  content: "\f08c";
+}
+
+.fa-instagram:before {
+  content: "\f16d";
+}
+
+.fa-youtube:before {
+  content: "\f167";
+}
+
+.fa-google:before {
+  content: "\f1a0";
+}
+
+.fa-apple:before {
+  content: "\f179";
+}
+
+.fa-windows:before {
+  content: "\f17a";
+}
+
+.fa-android:before {
+  content: "\f17b";
+}

@@ -14,7 +14,80 @@
     <link rel="stylesheet" href="../styles/components/notification.css">
     <link rel="stylesheet" href="../styles/components/buttons.css">
     <link rel="stylesheet" href="../styles/components/clock.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Remplacer le CDN Font Awesome par une version locale pour éviter les erreurs de bbox -->
+    <style>
+        /* Priorité absolue : règle de correction globale pour les glyphes Font Awesome */
+        @supports (font-variation-settings: normal) {
+            * [class*="fa-"] {
+                font-feature-settings: normal;
+                font-variation-settings: normal;
+            }
+        }
+        
+        /* Font Awesome 6 - Version locale */
+        @font-face {
+            font-family: 'Font Awesome 6 Free';
+            font-style: normal;
+            font-weight: 900;
+            font-display: block;
+            src: url('../fonts/fa-solid-900.woff2') format('woff2'),
+                 url('../webfonts/fa-solid-900.woff2') format('woff2'),
+                 url('../webfonts/fa-solid-900.ttf') format('truetype');
+            font-stretch: normal;
+            font-variant: normal;
+            text-rendering: optimizeLegibility;
+        }
+        
+        @font-face {
+            font-family: 'Font Awesome 6 Free';
+            font-style: normal;
+            font-weight: 400;
+            font-display: block;
+            src: url('../fonts/fa-regular-400.woff2') format('woff2'),
+                 url('../webfonts/fa-regular-400.woff2') format('woff2');
+            font-stretch: normal;
+            font-variant: normal;
+            text-rendering: optimizeLegibility;
+        }
+        
+        @font-face {
+            font-family: 'Font Awesome 6 Brands';
+            font-style: normal;
+            font-weight: 400;
+            font-display: block;
+            src: url('../fonts/fa-brands-400.woff2') format('woff2'),
+                 url('../webfonts/fa-brands-400.woff2') format('woff2');
+            font-stretch: normal;
+            font-variant: normal;
+            text-rendering: optimizeLegibility;
+        }
+        
+        .fas, .fa-solid {
+            font-family: 'Font Awesome 6 Free', sans-serif;
+            font-weight: 900;
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: auto;
+        }
+        
+        .far, .fa-regular {
+            font-family: 'Font Awesome 6 Free', sans-serif;
+            font-weight: 400;
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: auto;
+        }
+        
+        .fab, .fa-brands {
+            font-family: 'Font Awesome 6 Brands', sans-serif;
+            font-weight: 400;
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: auto;
+        }
+    </style>
+    <!-- Définir le CSS des icônes Font Awesome -->
+    <link rel="stylesheet" href="../styles/fontawesome.css">
     <link rel="icon" href="../icons/favicon.ico" type="image/x-icon">
         <!-- JavaScript Modules -->
         <script type="module" src="../js/main.js"></script>

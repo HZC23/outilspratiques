@@ -34,9 +34,6 @@
                 <button type="button" class="btn-circle" id="resetTimer" aria-label="Réinitialiser" disabled>
                     <i class="fas fa-redo"></i>
                 </button>
-                <button type="button" class="btn-circle" id="cancelTimer" aria-label="Annuler" disabled>
-                    <i class="fas fa-times"></i>
-                </button>
             </div>
             
             <div class="timer-input">
@@ -140,35 +137,4 @@
             <button type="button" class="btn btn-primary" id="restartTimer">Redémarrer</button>
         </div>
     </div>
-
-
-
-
-
-<script>
-// S'assurer que le module de plein écran est chargé
-(function() {
-    function initFullscreen() {
-        if (!window.fullscreenManager) {
-            import('../../js/fullscreen.js')
-            .then(() => {
-                if (!window.fullscreenManager && typeof FullscreenManager !== 'undefined') {
-                    window.fullscreenManager = new FullscreenManager();
-                }
-            })
-            .catch(error => {
-                console.error('Erreur chargement fullscreen.js:', error);
-            });
-        } else {
-            window.fullscreenManager.initFullscreenButtons();
-        }
-    }
-    
-    // Exécuter immédiatement si le DOM est déjà chargé, sinon attendre l'événement
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initFullscreen);
-    } else {
-        initFullscreen();
-    }
-})();
-</script></div> 
+</div> 

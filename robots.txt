@@ -1,0 +1,12 @@
+# robots.txt pour Outils Pratiques
+
+User-agent: *
+Allow: /
+
+# Permettre à tous les robots d'explorer le site
+Disallow: /docs/  # Documentation interne
+Disallow: /.git/  # Dossier Git
+Disallow: /.vscode/  # Configuration VS Code
+
+# Sitemap
+Sitemap: https://outilspratiques.github.io/sitemap.xml 

@@ -599,3 +599,162 @@ footer {
         justify-content: center;
     }
 }
+
+/* Support du mode sombre pour la page d'accueil */
+[data-theme="dark"] .hero-banner {
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .hero-banner h2 {
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .hero-icon {
+    color: rgba(255, 255, 255, 0.3);
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.15));
+}
+
+[data-theme="dark"] .section-title {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .section-title::after {
+    background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
+}
+
+[data-theme="dark"] .tool-card {
+    background-color: var(--card-bg);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="dark"] .tool-card:hover {
+    box-shadow: 0 20px 30px rgba(0, 0, 0, 0.25);
+}
+
+[data-theme="dark"] .tool-card::before {
+    background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
+}
+
+[data-theme="dark"] .tool-card.popular::before {
+    background: linear-gradient(90deg, var(--success-color), var(--success-color-dark, #2e7d32));
+}
+
+[data-theme="dark"] .tool-card.new::before {
+    background: linear-gradient(90deg, var(--warning-color), var(--warning-color-dark, #f57c00));
+}
+
+[data-theme="dark"] .tool-card.text::before {
+    background: linear-gradient(90deg, var(--info-color), var(--info-color-dark, #0277bd));
+}
+
+[data-theme="dark"] .tool-card-header {
+    border-bottom-color: rgba(var(--border-color-rgb), 0.2);
+    background: linear-gradient(to bottom, rgba(255,255,255,0.03), transparent);
+}
+
+[data-theme="dark"] .tool-card-icon {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+}
+
+[data-theme="dark"] .tool-card-title {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .tool-card-description {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .tool-card-button {
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .tool-card-button:hover {
+    background-color: var(--button-hover-bg);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .feature-card {
+    background-color: var(--card-bg);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="dark"] .feature-card:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+}
+
+[data-theme="dark"] .feature-icon {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .feature-card h3 {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .feature-card p {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .cta-section {
+    background-color: rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .cta-section::before {
+    opacity: 0.1;
+}
+
+[data-theme="dark"] .cta-section h2 {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .cta-section p {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .cta-button {
+    background-color: var(--primary-color);
+    color: var(--text-on-primary);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+}
+
+[data-theme="dark"] .cta-button:hover {
+    background-color: var(--primary-hover);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] footer {
+    background-color: var(--footer-bg);
+    border-top-color: var(--border-color);
+}
+
+[data-theme="dark"] .footer-logo h2 {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .footer-logo p {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .footer-section h3 {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .footer-section a {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .footer-section a:hover {
+    color: var(--primary-color);
+}
+
+[data-theme="dark"] .footer-bottom {
+    border-top-color: var(--border-color);
+}
+
+[data-theme="dark"] .footer-copyright {
+    color: var(--text-muted);
+}

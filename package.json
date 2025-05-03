@@ -1,0 +1,77 @@
+{
+  "name": "outilspratiques",
+  "version": "1.0.0",
+  "description": "Collection d'outils pratiques en ligne",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "build": "node build-config.js",
+    "minify-js": "terser js/main.js -c -m -o dist/js/main.min.js",
+    "minify-css": "cleancss -o dist/styles/main.min.css styles/main.css",
+    "optimize-images": "imagemin icons/* --out-dir=dist/icons && imagemin images/* --out-dir=dist/images",
+    "lint-js": "eslint js/**/*.js",
+    "lint-css": "stylelint \"styles/**/*.css\"",
+    "lint": "npm run lint-js && npm run lint-css",
+    "test": "echo \"No tests configured yet\"",
+    "generate-sitemap": "node -e \"require('./js/utils/sitemap-generator.js').generateSampleSitemap()\" > sitemap.xml"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/outilspratiques/outilspratiques.github.io.git"
+  },
+  "keywords": [
+    "outils",
+    "calculatrice",
+    "minuteur",
+    "chronomètre",
+    "convertisseur",
+    "traducteur",
+    "PWA"
+  ],
+  "author": "Outils Pratiques",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/outilspratiques/outilspratiques.github.io/issues"
+  },
+  "homepage": "https://outilspratiques.github.io",
+  "devDependencies": {
+    "clean-css-cli": "^5.6.2",
+    "eslint": "^8.46.0",
+    "html-minifier-terser": "^7.2.0",
+    "imagemin": "^8.0.1",
+    "imagemin-cli": "^7.0.0",
+    "imagemin-gifsicle": "^7.0.0",
+    "imagemin-mozjpeg": "^10.0.0",
+    "imagemin-pngquant": "^9.0.2",
+    "imagemin-svgo": "^10.0.1",
+    "serve": "^14.2.1",
+    "stylelint": "^15.10.3",
+    "stylelint-config-standard": "^34.0.0",
+    "terser": "^5.19.2"
+  },
+  "dependencies": {},
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not IE 11"
+  ],
+  "stylelint": {
+    "extends": "stylelint-config-standard"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "es2020": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+      "ecmaVersion": 2020,
+      "sourceType": "module"
+    },
+    "rules": {
+      "no-unused-vars": "warn",
+      "no-console": "off"
+    }
+  }
+} 

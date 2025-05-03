@@ -1136,4 +1136,91 @@ footer {
 
 [data-theme="dark"] header:hover {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Styles pour le bouton home */
+.btn-home {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--primary-color);
+    color: var(--text-on-primary);
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-home:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-home:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-home i {
+    font-size: 1.2rem;
+}
+
+/* Version en mode sombre */
+[data-theme="dark"] .btn-home {
+    background-color: var(--primary-color);
+    color: var(--text-on-primary);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25);
+}
+
+[data-theme="dark"] .btn-home:hover {
+    background-color: var(--primary-hover);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Variante secondaire */
+.btn-home.secondary {
+    background-color: var(--button-bg);
+    color: var(--button-text);
+}
+
+.btn-home.secondary:hover {
+    background-color: var(--button-hover-bg);
+}
+
+[data-theme="dark"] .btn-home.secondary {
+    background-color: var(--button-bg);
+    color: var(--button-text);
+}
+
+[data-theme="dark"] .btn-home.secondary:hover {
+    background-color: var(--button-hover-bg);
+}
+
+/* Variante outline */
+.btn-home.outline {
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    box-shadow: none;
+}
+
+.btn-home.outline:hover {
+    background-color: rgba(var(--primary-color-rgb), 0.1);
+    box-shadow: 0 4px 8px rgba(var(--primary-color-rgb), 0.15);
+}
+
+[data-theme="dark"] .btn-home.outline {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+[data-theme="dark"] .btn-home.outline:hover {
+    background-color: rgba(var(--primary-color-rgb), 0.15);
 } 

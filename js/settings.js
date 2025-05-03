@@ -35,7 +35,7 @@ class SettingsManager {
                 cacheAssets: false,
                 cacheResources: {
                     pages: ['/', '/index.html', '/outils.html'],
-                    tools: ['/tools/calculator.html', '/tools/timer.html', '/tools/notes.html'],
+                    tools: ['/html/tools/calculator.html', '/html/tools/timer.html', '/html/tools/notes.html'],
                     styles: ['/styles/main.css', '/styles/variables.css'],
                     scripts: ['/js/main.js', '/js/utils.js'],
                     images: ['/icons/favicon.ico', '/icons/icon-1024x1024.png']
@@ -83,7 +83,7 @@ class SettingsManager {
         
         // Panneau d'aide
         this.elements.helpPanel = document.getElementById('help-panel');
-        this.elements.helpBtn = document.querySelector('.settings-help-btn[data-help]'); // Premier bouton d'aide
+        this.elements.helpBtns = document.querySelectorAll('.settings-help-btn[data-help]'); // Tous les boutons d'aide
         this.elements.closeHelpBtn = document.getElementById('close-help');
         
         // Général
@@ -289,7 +289,7 @@ class SettingsManager {
             item.addEventListener('click', () => this.switchTab(item.dataset.tab));
         });
         
-        // Panneau d'aide
+        // Panneau d'aide - Correction ici pour que chaque bouton ouvre la bonne section
         document.querySelectorAll('.settings-help-btn[data-help]').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const tab = btn.getAttribute('data-help');
@@ -801,10 +801,10 @@ class SettingsManager {
             tools: {
                 title: 'Outils',
                 resources: [
-                    { path: '/tools/calculator.html', name: 'Calculatrice' },
-                    { path: '/tools/timer.html', name: 'Minuteur' },
-                    { path: '/tools/notes.html', name: 'Notes' },
-                    { path: '/tools/todo.html', name: 'Todo List' }
+                    { path: 'html/tools/calculator.html', name: 'Calculatrice' },
+                    { path: 'html/tools/timer.html', name: 'Minuteur' },
+                    { path: 'html/tools/notes.html', name: 'Notes' },
+                    { path: 'html/tools/todo.html', name: 'Todo List' }
                 ]
             },
             styles: {

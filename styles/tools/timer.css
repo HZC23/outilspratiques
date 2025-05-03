@@ -346,7 +346,6 @@
 }
 
 .volume-slider {
-    -webkit-appearance: none;
     width: 100%;
     height: 6px;
     border-radius: 3px;
@@ -679,7 +678,9 @@
 }
 
 .time-input[type=number] {
+    -webkit-appearance: textfield;
     -moz-appearance: textfield;
+    appearance: textfield;
 }
 
 /* Bouton de fermeture explicite pour le mode plein écran */
