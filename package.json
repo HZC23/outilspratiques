@@ -13,7 +13,7 @@
     "lint-css": "stylelint \"styles/**/*.css\"",
     "lint": "npm run lint-js && npm run lint-css",
     "test": "echo \"No tests configured yet\"",
-    "generate-sitemap": "node -e \"require('./js/utils/sitemap-generator.js').generateSampleSitemap()\" > sitemap.xml"
+    "generate-sitemap": "node js/utils/sitemap-cli.js"
   },
   "repository": {
     "type": "git",
@@ -49,7 +49,6 @@
     "stylelint-config-standard": "^34.0.0",
     "terser": "^5.19.2"
   },
-  "dependencies": {},
   "browserslist": [
     "> 1%",
     "last 2 versions",
@@ -74,4 +73,4 @@
       "no-console": "off"
     }
   }
-} 
+}

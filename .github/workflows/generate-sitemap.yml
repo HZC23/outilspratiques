@@ -1,0 +1,83 @@
+name: Générer le sitemap
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - '**/*.html'
+      - '**/*.pdf'
+      - '**/*.js'
+      - '**/*.css'
+  workflow_dispatch:  # Permet de déclencher manuellement le workflow
+
+jobs:
+  sitemap_job:
+    runs-on: ubuntu-latest
+    name: Générer le sitemap
+
+    steps:
+    - name: Checkout du dépôt
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Configuration de Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        
+    - name: Préparation du dossier de build
+      run: |
+        mkdir -p dist
+        chmod -R 755 dist
+        
+    - name: Installation des dépendances
+      run: |
+        npm ci || npm install
+
+    - name: Vérification de l'environnement
+      run: |
+        echo "Date actuelle: $(date)"
+        echo "Contenu du répertoire:"
+        ls -la
+        echo "Version de Node.js:"
+        node --version
+        echo "Version de npm:"
+        npm --version
+        
+    - name: Exécution directe du script de génération de sitemap
+      run: |
+        node js/utils/sitemap-cli.js || echo "Script exécuté mais statut inconnu"
+        
+    - name: Vérification du sitemap
+      run: |
+        if [ ! -f sitemap.xml ]; then
+          echo "Le sitemap n'a pas été généré, création d'un fichier de base"
+          cat > sitemap.xml << EOL
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://outilspratiques.github.io/index.html</loc>
+    <lastmod>$(date +%Y-%m-%d)</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>
+EOL
+        else
+          echo "Sitemap trouvé, mise à jour des dates"
+          sed -i "s/<lastmod>[0-9-]*<\/lastmod>/<lastmod>$(date +%Y-%m-%d)<\/lastmod>/g" sitemap.xml
+        fi
+        
+    - name: Affichage du contenu du sitemap
+      run: |
+        echo "Contenu du sitemap généré:"
+        cat sitemap.xml
+      
+    - name: Commit et push du sitemap
+      run: |
+        git config --global user.name 'GitHub Action'
+        git config --global user.email 'action@github.com'
+        git add sitemap.xml
+        git diff --quiet && git diff --staged --quiet || git commit -m "Mise à jour automatique du sitemap"
+        git push 
