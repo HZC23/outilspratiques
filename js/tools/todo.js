@@ -42,7 +42,9 @@ export const TodoManager = {
         filter: 'all',
         sort: 'added',
         searchQuery: '',
-        searchResults: []
+        searchResults: [],
+        nextTaskPriority: null,
+        nextTaskDueDate: null
     },
 
     /**
@@ -107,13 +109,8 @@ export const TodoManager = {
             this.resetSearch();
         });
 
-        document.getElementById('runSearch')?.addEventListener('click', () => {
+        document.getElementById('applySearch')?.addEventListener('click', () => {
             this.performAdvancedSearch();
-        });
-
-        document.getElementById('searchDateRange')?.addEventListener('change', (e) => {
-            const customRange = document.getElementById('customDateRange');
-            customRange.style.display = e.target.value === 'custom' ? 'grid' : 'none';
         });
 
         // Le plein écran est maintenant géré par le module fullscreen.js global
@@ -158,15 +155,15 @@ export const TodoManager = {
         });
 
         // Gestion du modal nouvelle liste
-        document.getElementById('closeNewListModal')?.addEventListener('click', () => {
+        document.getElementById('closeListModal')?.addEventListener('click', () => {
             this.hideNewListModal();
         });
 
-        document.getElementById('cancelNewList')?.addEventListener('click', () => {
+        document.getElementById('cancelListForm')?.addEventListener('click', () => {
             this.hideNewListModal();
         });
 
-        document.getElementById('confirmNewList')?.addEventListener('click', () => {
+        document.getElementById('saveList')?.addEventListener('click', () => {
             this.addNewList();
         });
 
@@ -226,7 +223,7 @@ export const TodoManager = {
      */
     setupIconSelector() {
         const iconBtns = document.querySelectorAll('.icon-btn');
-        const hiddenInput = document.getElementById('newListIcon');
+        const hiddenInput = document.getElementById('listIcon');
 
         // Définir l'icône par défaut comme active
         const defaultIconBtn = document.querySelector('.icon-btn[data-icon="list"]');
@@ -253,10 +250,10 @@ export const TodoManager = {
      */
     setupColorSelector() {
         const colorBtns = document.querySelectorAll('.color-btn');
-        const hiddenInput = document.getElementById('newListColor');
+        const hiddenInput = document.getElementById('listColor');
 
         // Définir la couleur par défaut comme active
-        const defaultColorBtn = document.querySelector('.color-btn[data-color="#007bff"]');
+        const defaultColorBtn = document.querySelector('.color-btn[data-color="#4c6ef5"]');
         if (defaultColorBtn) {
             defaultColorBtn.classList.add('active');
         }
@@ -300,16 +297,138 @@ export const TodoManager = {
      * Affiche le menu rapide de priorité
      */
     toggleQuickPriorityMenu() {
-        // Implémenter un menu rapide pour définir la priorité lors de l'ajout d'une tâche
-        alert('Fonctionnalité à venir: sélection rapide de priorité');
+        const menu = document.getElementById('quickPriorityMenu');
+        if (!menu) return;
+        
+        // Afficher/Cacher le menu
+        menu.classList.toggle('active');
+        
+        // Configurer les écouteurs d'événements si le menu est actif
+        if (menu.classList.contains('active')) {
+            const options = menu.querySelectorAll('.quick-priority-option');
+            
+            options.forEach(option => {
+                option.addEventListener('click', () => {
+                    this.setQuickPriority(option.dataset.priority);
+                    menu.classList.remove('active');
+                });
+            });
+            
+            // Fermer le menu quand on clique ailleurs
+            document.addEventListener('click', this.closeQuickPriorityMenu = (e) => {
+                if (!menu.contains(e.target) && e.target.id !== 'quickPriority') {
+                    menu.classList.remove('active');
+                    document.removeEventListener('click', this.closeQuickPriorityMenu);
+                }
+            });
+        }
+    },
+
+    /**
+     * Définit la priorité rapide
+     */
+    setQuickPriority(priority) {
+        // Stocke la priorité pour la prochaine tâche
+        this.state.nextTaskPriority = priority;
+        
+        // Change l'icône du bouton selon la priorité
+        const button = document.getElementById('quickPriority');
+        if (button) {
+            // Réinitialiser les classes
+            button.className = 'btn-icon';
+            
+            // Ajouter la classe selon la priorité
+            if (priority === 'high') {
+                button.classList.add('priority-high');
+                button.querySelector('i').style.color = '#fa5252';
+            } else if (priority === 'medium') {
+                button.classList.add('priority-medium');
+                button.querySelector('i').style.color = '#fab005';
+            } else {
+                button.classList.add('priority-low');
+                button.querySelector('i').style.color = '#40c057';
+            }
+        }
     },
 
     /**
      * Affiche le menu rapide de date
      */
     toggleQuickDateMenu() {
-        // Implémenter un menu rapide pour définir la date lors de l'ajout d'une tâche
-        alert('Fonctionnalité à venir: sélection rapide de date');
+        const menu = document.getElementById('quickDateMenu');
+        if (!menu) return;
+        
+        // Afficher/Cacher le menu
+        menu.classList.toggle('active');
+        
+        // Configurer les écouteurs d'événements si le menu est actif
+        if (menu.classList.contains('active')) {
+            const options = menu.querySelectorAll('.quick-date-option');
+            
+            options.forEach(option => {
+                option.addEventListener('click', () => {
+                    this.setQuickDate(option.dataset.date);
+                    menu.classList.remove('active');
+                });
+            });
+            
+            // Configurer le bouton pour la date personnalisée
+            document.getElementById('applyCustomDate')?.addEventListener('click', () => {
+                const dateInput = document.getElementById('quickDateCustom');
+                if (dateInput && dateInput.value) {
+                    this.setQuickDate('custom', dateInput.value);
+                    menu.classList.remove('active');
+                }
+            });
+            
+            // Fermer le menu quand on clique ailleurs
+            document.addEventListener('click', this.closeQuickDateMenu = (e) => {
+                if (!menu.contains(e.target) && e.target.id !== 'quickDate') {
+                    menu.classList.remove('active');
+                    document.removeEventListener('click', this.closeQuickDateMenu);
+                }
+            });
+        }
+    },
+
+    /**
+     * Définit la date rapide
+     */
+    setQuickDate(dateType, customDate = null) {
+        let dueDate = null;
+        const now = new Date();
+        
+        switch (dateType) {
+            case 'today':
+                dueDate = new Date();
+                break;
+                
+            case 'tomorrow':
+                dueDate = new Date();
+                dueDate.setDate(dueDate.getDate() + 1);
+                break;
+                
+            case 'next-week':
+                dueDate = new Date();
+                dueDate.setDate(dueDate.getDate() + 7);
+                break;
+                
+            case 'custom':
+                dueDate = new Date(customDate);
+                break;
+        }
+        
+        // Stocke la date pour la prochaine tâche
+        if (dueDate) {
+            this.state.nextTaskDueDate = dueDate.toISOString().split('T')[0];
+            
+            // Change l'icône du bouton pour indiquer qu'une date est définie
+            const button = document.getElementById('quickDate');
+            if (button) {
+                button.classList.add('date-active');
+                button.querySelector('i').style.color = '#4c6ef5';
+            }
+        }
     },
 
     /**
@@ -325,14 +444,14 @@ export const TodoManager = {
             id: Utils.generateId(),
             title,
             completed: false,
-            priority: 'medium',
+            priority: this.state.nextTaskPriority || 'medium',
             createdAt: new Date().toISOString(),
             list: this.state.activeListId,
             notes: '',
             subtasks: [],
             tags: [],
             reminder: null,
-            dueDate: null
+            dueDate: this.state.nextTaskDueDate || null
         };
         
         // Si la liste active est spéciale, ajouter aux deux listes
@@ -358,6 +477,23 @@ export const TodoManager = {
         }
         
         input.value = '';
+        
+        // Réinitialiser les paramètres rapides
+        this.state.nextTaskPriority = null;
+        this.state.nextTaskDueDate = null;
+        
+        // Réinitialiser les boutons d'action rapide
+        const priorityBtn = document.getElementById('quickPriority');
+        if (priorityBtn) {
+            priorityBtn.className = 'btn-icon';
+            priorityBtn.querySelector('i').style = '';
+        }
+        
+        const dateBtn = document.getElementById('quickDate');
+        if (dateBtn) {
+            dateBtn.className = 'btn-icon';
+            dateBtn.querySelector('i').style = '';
+        }
         
         this.updateTaskList();
         this.updateSummary();
@@ -455,7 +591,7 @@ export const TodoManager = {
                            ${task.completed ? 'checked' : ''}>
                     <label for="task-${task.id}"></label>
                 </div>
-                <div class="todo-content" onclick="TodoManager.showTaskDetails('${task.id}')">
+                <div class="todo-content">
                     <div class="todo-title">${task.title}</div>
                     <div class="todo-meta">
                         ${task.subtasks.length > 0 ? 
@@ -513,6 +649,14 @@ export const TodoManager = {
         document.querySelectorAll('.todo-edit').forEach(button => {
             button.addEventListener('click', (e) => {
                 e.stopPropagation();
+                const taskId = e.target.closest('.todo-item').dataset.taskId;
+                this.showTaskDetails(taskId);
+            });
+        });
+        
+        // Cliquer sur l'élément de tâche pour voir les détails
+        document.querySelectorAll('.todo-content').forEach(content => {
+            content.addEventListener('click', (e) => {
                 const taskId = e.target.closest('.todo-item').dataset.taskId;
                 this.showTaskDetails(taskId);
             });
@@ -848,12 +992,12 @@ export const TodoManager = {
      * Affiche le modal pour créer une nouvelle liste
      */
     showNewListModal() {
-        const modal = document.getElementById('newListModal');
+        const modal = document.getElementById('listModal');
         if (modal) {
             modal.classList.add('active');
-            document.getElementById('newListName').value = '';
-            document.getElementById('newListIcon').value = 'list';
-            document.getElementById('newListName').focus();
+            document.getElementById('listTitle').value = '';
+            document.getElementById('listIcon').value = 'list';
+            document.getElementById('listTitle').focus();
         }
     },
 
@@ -861,7 +1005,7 @@ export const TodoManager = {
      * Cache le modal de nouvelle liste
      */
     hideNewListModal() {
-        const modal = document.getElementById('newListModal');
+        const modal = document.getElementById('listModal');
         if (modal) {
             modal.classList.remove('active');
         }
@@ -871,11 +1015,13 @@ export const TodoManager = {
      * Ajoute une nouvelle liste
      */
     addNewList() {
-        const nameInput = document.getElementById('newListName');
-        const iconSelect = document.getElementById('newListIcon');
+        const nameInput = document.getElementById('listTitle');
+        const iconInput = document.getElementById('listIcon');
+        const colorInput = document.getElementById('listColor');
         
         const name = nameInput.value.trim();
-        const icon = iconSelect.value;
+        const icon = iconInput.value;
+        const color = colorInput.value;
         
         if (!name) return;
         
@@ -884,6 +1030,7 @@ export const TodoManager = {
             id: listId,
             name,
             icon,
+            color,
             tasks: []
         };
         
@@ -1249,8 +1396,6 @@ export const TodoManager = {
     showSearchPanel() {
         const searchPanel = document.getElementById('searchPanel');
         if (searchPanel) {
-            // Pré-remplir les options de listes
-            this.updateSearchListOptions();
             searchPanel.classList.add('active');
         }
     },
@@ -1266,57 +1411,34 @@ export const TodoManager = {
     },
 
     /**
-     * Met à jour les options de listes pour la recherche
-     */
-    updateSearchListOptions() {
-        const container = document.getElementById('searchListsOptions');
-        if (!container) return;
-        
-        let htmlContent = '';
-        
-        // Ajouter les listes par défaut
-        Object.values(this.state.lists).forEach(list => {
-            htmlContent += `
-                <div class="checkbox-group-item">
-                    <label>
-                        <input type="checkbox" value="${list.id}" checked> 
-                        <i class="fas fa-${list.icon}"></i> ${list.name}
-                    </label>
-                </div>
-            `;
-        });
-        
-        // Ajouter les listes personnalisées
-        Object.values(this.state.customLists).forEach(list => {
-            htmlContent += `
-                <div class="checkbox-group-item">
-                    <label>
-                        <input type="checkbox" value="${list.id}" checked> 
-                        <i class="fas fa-${list.icon}"></i> ${list.name}
-                    </label>
-                </div>
-            `;
-        });
-        
-        container.innerHTML = htmlContent;
-    },
-
-    /**
      * Réinitialise la recherche avancée
      */
     resetSearch() {
         // Réinitialiser les champs
         document.getElementById('searchQuery').value = '';
-        document.getElementById('searchDateRange').value = 'all';
-        document.getElementById('customDateRange').style.display = 'none';
+        document.getElementById('searchTag').value = '';
+        document.getElementById('searchStartDate').value = '';
+        document.getElementById('searchEndDate').value = '';
         
-        // Cocher toutes les cases
-        document.querySelectorAll('#searchListsOptions input, .checkbox-group input').forEach(input => {
-            input.checked = true;
+        // Réinitialiser les cases à cocher
+        const checkboxes = [
+            'searchActive', 
+            'searchCompleted', 
+            'searchLow', 
+            'searchMedium', 
+            'searchHigh'
+        ];
+        
+        checkboxes.forEach(id => {
+            const checkbox = document.getElementById(id);
+            if (checkbox) checkbox.checked = true;
         });
         
         // Vider les résultats
-        document.getElementById('searchResults').innerHTML = '';
+        const resultsContainer = document.getElementById('searchResults');
+        if (resultsContainer) {
+            resultsContainer.innerHTML = '';
+        }
     },
 
     /**
@@ -1326,30 +1448,27 @@ export const TodoManager = {
         const query = document.getElementById('searchQuery').value.trim().toLowerCase();
         let results = [];
         
-        // Récupérer les listes sélectionnées
-        const selectedLists = Array.from(
-            document.querySelectorAll('#searchListsOptions input:checked')
-        ).map(input => input.value);
-        
         // Récupérer les priorités sélectionnées
-        const selectedPriorities = Array.from(
-            document.querySelectorAll('.form-group:nth-of-type(3) input:checked')
-        ).map(input => input.value);
+        const selectedPriorities = [];
+        if (document.getElementById('searchLow').checked) selectedPriorities.push('low');
+        if (document.getElementById('searchMedium').checked) selectedPriorities.push('medium');
+        if (document.getElementById('searchHigh').checked) selectedPriorities.push('high');
         
         // Récupérer les statuts sélectionnés
-        const includeCompleted = document.querySelector('input[value="completed"]').checked;
-        const includeActive = document.querySelector('input[value="active"]').checked;
+        const includeCompleted = document.getElementById('searchCompleted').checked;
+        const includeActive = document.getElementById('searchActive').checked;
         
-        // Recherche par date
-        const dateRange = document.getElementById('searchDateRange').value;
-        const dateFrom = document.getElementById('searchDateFrom').value;
-        const dateTo = document.getElementById('searchDateTo').value;
+        // Dates
+        const dateFrom = document.getElementById('searchStartDate').value;
+        const dateTo = document.getElementById('searchEndDate').value;
         
-        // Collecter les tâches des listes sélectionnées
-        selectedLists.forEach(listId => {
-            const list = this.state.lists[listId] || this.state.customLists[listId];
-            if (!list) return;
-            
+        // Tag
+        const searchTag = document.getElementById('searchTag').value.trim().toLowerCase();
+        
+        // Collecter les tâches de toutes les listes
+        const allLists = {...this.state.lists, ...this.state.customLists};
+        
+        Object.values(allLists).forEach(list => {
             list.tasks.forEach(task => {
                 // Filtrer par statut
                 if ((!includeCompleted && task.completed) || (!includeActive && !task.completed)) {
@@ -1357,62 +1476,39 @@ export const TodoManager = {
                 }
                 
                 // Filtrer par priorité
-                if (!selectedPriorities.includes(task.priority)) {
+                if (selectedPriorities.length > 0 && !selectedPriorities.includes(task.priority)) {
                     return;
                 }
                 
                 // Filtrer par texte
                 if (query && 
                     !task.title.toLowerCase().includes(query) && 
-                    !(task.notes && task.notes.toLowerCase().includes(query)) &&
-                    !(task.tags && task.tags.some(tag => tag.toLowerCase().includes(query)))) {
+                    !(task.notes && task.notes.toLowerCase().includes(query))) {
+                    return;
+                }
+                
+                // Filtrer par tag
+                if (searchTag && 
+                    (!task.tags || !task.tags.some(tag => tag.toLowerCase().includes(searchTag)))) {
                     return;
                 }
                 
                 // Filtrer par date
-                if (task.dueDate) {
+                if (dateFrom || dateTo) {
+                    if (!task.dueDate) return;
+                    
                     const dueDate = new Date(task.dueDate);
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
                     
-                    const tomorrow = new Date(today);
-                    tomorrow.setDate(tomorrow.getDate() + 1);
-                    
-                    const weekStart = new Date(today);
-                    weekStart.setDate(weekStart.getDate() - weekStart.getDay());
-                    
-                    const weekEnd = new Date(weekStart);
-                    weekEnd.setDate(weekEnd.getDate() + 7);
-                    
-                    const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-                    const monthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-                    
-                    if (dateRange === 'today' && (dueDate < today || dueDate >= tomorrow)) {
-                        return;
+                    if (dateFrom) {
+                        const fromDate = new Date(dateFrom);
+                        if (dueDate < fromDate) return;
                     }
                     
-                    if (dateRange === 'week' && (dueDate < weekStart || dueDate >= weekEnd)) {
-                        return;
+                    if (dateTo) {
+                        const toDate = new Date(dateTo);
+                        toDate.setHours(23, 59, 59);
+                        if (dueDate > toDate) return;
                     }
-                    
-                    if (dateRange === 'month' && (dueDate < monthStart || dueDate >= monthEnd)) {
-                        return;
-                    }
-                    
-                    if (dateRange === 'custom') {
-                        const fromDate = dateFrom ? new Date(dateFrom) : null;
-                        const toDate = dateTo ? new Date(dateTo) : null;
-                        
-                        if (fromDate && dueDate < fromDate) return;
-                        if (toDate) {
-                            const nextDay = new Date(toDate);
-                            nextDay.setDate(nextDay.getDate() + 1);
-                            if (dueDate >= nextDay) return;
-                        }
-                    }
-                } else if (dateRange !== 'all') {
-                    // Si pas de date d'échéance, on exclut
-                    return;
                 }
                 
                 // Ajouter à la liste des résultats si tous les filtres passent
@@ -1464,7 +1560,7 @@ export const TodoManager = {
             <div class="search-results-list">
                 ${results.map(task => `
                     <div class="search-result-item ${task.completed ? 'completed' : ''}" 
-                         onclick="TodoManager.showTaskDetails('${task.id}')">
+                         data-task-id="${task.id}">
                         <div class="search-result-title">
                             <i class="fas fa-${task.listIcon}"></i> 
                             <span>${task.title}</span>
@@ -1485,6 +1581,15 @@ export const TodoManager = {
                 `).join('')}
             </div>
         `;
+        
+        // Ajouter les écouteurs d'événements pour les résultats
+        document.querySelectorAll('.search-result-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const taskId = item.dataset.taskId;
+                this.hideSearchPanel();
+                this.showTaskDetails(taskId);
+            });
+        });
     },
 
     /**
@@ -1618,7 +1723,7 @@ export const TodoManager = {
 // Initialisation automatique lorsque le DOM est chargé
 document.addEventListener('DOMContentLoaded', () => {
     const todoTool = document.getElementById('todoTool');
-    if (todoTool && window.location.hash.includes('todoTool')) {
+    if (todoTool) {
         TodoManager.init();
     }
 }); 

@@ -2,6 +2,9 @@
  * Gestionnaire de notifications
  * Permet d'afficher des messages à l'utilisateur
  */
+
+import { PerformanceManager } from './performance.js';
+
 export const NotificationManager = {
     /**
      * Affiche une notification
@@ -22,8 +25,8 @@ export const NotificationManager = {
         
         document.body.appendChild(notification);
         
-        // Animation d'entrée
-        requestAnimationFrame(() => {
+        // Animation d'entrée optimisée
+        PerformanceManager.requestAnimationFrameOnce(() => {
             notification.style.transform = 'translateX(0)';
             notification.style.opacity = '1';
         });

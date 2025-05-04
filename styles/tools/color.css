@@ -49,33 +49,6 @@
     gap: 0.5rem;
 }
 
-.btn-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--button-bg);
-    border: none;
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: var(--transition-default);
-    position: relative;
-    overflow: hidden;
-}
-
-.btn-icon:hover {
-    background: var(--button-hover-bg);
-    color: var(--primary-color);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-sm);
-}
-
-.btn-icon:active {
-    transform: translateY(0);
-}
-
 .tool-content {
     padding: 1.5rem;
 }
@@ -169,33 +142,6 @@
 .color-value-input input.color-input:focus {
     border-color: var(--primary-color);
     box-shadow: 0 0 0 2px var(--primary-color-20, rgba(0, 102, 204, 0.2));
-}
-
-/* Boutons de copie modernisés */
-.btn-copy {
-    margin-left: 0.5rem;
-    background: var(--button-bg);
-    border: none;
-    border-radius: var(--border-radius-sm);
-    color: var(--text-color);
-    padding: 0.5rem 0.7rem;
-    cursor: pointer;
-    transition: var(--transition-default);
-    font-size: 0.95rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.btn-copy:hover {
-    background: var(--primary-color);
-    color: #fff;
-    transform: scale(1.08);
-    box-shadow: var(--shadow-sm);
-}
-
-.btn-copy:active {
-    transform: scale(1);
 }
 
 /* Historique et favoris */
@@ -310,30 +256,6 @@
     z-index: 1;
 }
 
-/* Bouton de suppression d'historique */
-.btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.6rem 1rem;
-    font-size: 0.9rem;
-    border-radius: var(--border-radius-sm);
-    cursor: pointer;
-    transition: var(--transition-default);
-}
-
-.btn.btn-outline {
-    background: transparent;
-    border: 1.5px solid var(--border-color);
-    color: var(--text-color);
-}
-
-.btn.btn-outline:hover {
-    background: var(--button-hover-bg);
-    border-color: var(--text-muted);
-}
-
 /* Notification de copie */
 .copy-notification {
     position: fixed;
@@ -395,96 +317,6 @@
 #colorThumb::-moz-color-swatch {
     border-radius: 50%;
     border: none;
-}
-
-/* Bouton favori */
-.btn-fav {
-    margin-left: 1rem;
-    background: transparent;
-    border: none;
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: var(--transition-default);
-    font-size: 1.2rem;
-    padding: 0.3rem;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.btn-fav:hover {
-    color: #FFB100;
-    transform: scale(1.1);
-}
-
-.btn-fav:active {
-    transform: scale(0.95);
-}
-
-.btn-fav i.is-favorite {
-    color: #FFB100;
-}
-
-/* Panneau d'aide */
-.help-panel {
-    position: fixed;
-    top: 0;
-    right: -400px;
-    width: 380px;
-    height: 100vh;
-    background: var(--card-bg);
-    border-left: 1px solid var(--border-color);
-    box-shadow: var(--shadow-lg);
-    z-index: 1000;
-    transition: right 0.35s ease-in-out;
-    overflow-y: auto;
-}
-
-.help-panel.show {
-    right: 0;
-}
-
-.help-panel-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid var(--border-color);
-    position: sticky;
-    top: 0;
-    background: var(--card-bg);
-    z-index: 10;
-}
-
-.help-panel-header h3 {
-    margin: 0;
-    font-size: 1.1rem;
-}
-
-.help-panel-content {
-    padding: 1.5rem;
-}
-
-.help-panel-content h4 {
-    margin: 1.5rem 0 0.8rem;
-    font-size: 1rem;
-    color: var(--primary-color);
-}
-
-.help-panel-content h4:first-child {
-    margin-top: 0;
-}
-
-.help-panel-content ol,
-.help-panel-content ul {
-    margin: 0.5rem 0;
-    padding-left: 1.5rem;
-}
-
-.help-panel-content li {
-    margin-bottom: 0.5rem;
-    line-height: 1.5;
 }
 
 /* Harmonies de couleurs */
@@ -644,15 +476,6 @@
     
     .tool-header h2 {
         font-size: 1.2rem;
-    }
-    
-    .btn-icon {
-        width: 34px;
-        height: 34px;
-    }
-    
-    .help-panel {
-        width: 320px;
     }
 }
 
@@ -828,5 +651,45 @@
     .adjustment-group input[type="range"]::-moz-range-thumb {
         width: 16px;
         height: 16px;
+    }
+}
+
+/* Mise en page horizontale pour le sélecteur de couleur */
+.color-horizontal-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+        "main"
+        "sidebar";
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 100%;
+}
+
+@media (min-width: 1200px) {
+    .color-horizontal-layout {
+        grid-template-columns: 1fr 300px;
+        grid-template-areas: "main sidebar";
+    }
+    
+    .color-main-panel {
+        grid-area: main;
+        background-color: var(--bg-light);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+    }
+    
+    .color-sidebar {
+        grid-area: sidebar;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .color-history,
+    .color-favorites {
+        background-color: var(--bg-light);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
     }
 } 

@@ -179,6 +179,9 @@
     flex-shrink: 0;
     transition: transform 0.2s var(--ease-out-back);
     will-change: transform;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .submenu-icon {
@@ -288,12 +291,13 @@
 }
 
 .submenu-item i {
-    width: 1.5rem;
+    width: var(--icon-width, 1.5rem);
     text-align: center;
-    font-size: 0.9rem;
-    flex-shrink: 0;
-    transition: transform 0.2s var(--ease-out-back);
-    will-change: transform;
+    transition: transform 0.2s ease;
+    margin-right: var(--spacing-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .submenu-item:hover i {

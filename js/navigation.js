@@ -1,4 +1,5 @@
 import { Utils } from './utils.js';
+import { PerformanceManager } from './performance.js';
 
 export const NavigationManager = {
     /**
@@ -141,12 +142,16 @@ export const NavigationManager = {
         if (tool) {
             tool.style.display = 'block';
             
-            // Animation d'apparition
+            // Animation d'apparition optimisée
             tool.style.opacity = '0';
-            requestAnimationFrame(() => {
+            
+            // Utiliser le gestionnaire de performance pour une animation plus fluide
+            const animate = (timestamp) => {
                 tool.style.transition = 'opacity 0.3s ease-in-out';
                 tool.style.opacity = '1';
-            });
+            };
+            
+            PerformanceManager.requestAnimationFrameOnce(animate);
 
             // Mettre à jour l'état
             this.state.currentTool = toolId;

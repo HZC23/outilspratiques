@@ -3,6 +3,9 @@
     <div class="tool-header">
         <h2><i class="fas fa-language"></i> Traducteur</h2>
         <div class="tool-actions">
+            <span class="connection-status" id="connectionStatus">
+                <i class="fas fa-wifi"></i> En ligne
+            </span>
             <button type="button" class="btn-icon" id="translatorHelp" aria-label="Aide">
                 <i class="fas fa-question-circle"></i>
             </button>
@@ -13,154 +16,105 @@
     </div>
     
     <div class="tool-content">
-        <div class="translator-container">
-            <div class="language-selection">
-                <div class="source-language">
-                    <select id="sourceLanguage" class="form-select">
-                        <option value="auto">Détecter la langue</option>
-                        <option value="fr">Français</option>
-                        <option value="en">Anglais</option>
-                        <option value="es">Espagnol</option>
-                        <option value="de">Allemand</option>
-                        <option value="it">Italien</option>
-                        <option value="pt">Portugais</option>
-                        <option value="ru">Russe</option>
-                        <option value="zh">Chinois</option>
-                        <option value="ja">Japonais</option>
-                        <option value="ar">Arabe</option>
-                        <!-- D'autres langues seront ajoutées dynamiquement -->
-                    </select>
-                    <div class="language-tools">
-                        <button type="button" class="btn-icon" id="sourceListenBtn" aria-label="Écouter">
-                            <i class="fas fa-volume-up"></i>
+        <div class="translator-horizontal-layout">
+            <div class="translator-main-panel">
+                <div class="translator-options">
+                    <div class="language-selector">
+                        <div class="source-language">
+                            <select id="sourceLanguage" class="form-select">
+                                <option value="auto">Détecter la langue</option>
+                                <option value="fr">Français</option>
+                                <option value="en">Anglais</option>
+                                <option value="es">Espagnol</option>
+                                <option value="de">Allemand</option>
+                                <option value="it">Italien</option>
+                                <option value="pt">Portugais</option>
+                            </select>
+                        </div>
+                        
+                        <button type="button" class="btn-icon" id="swapLanguages" aria-label="Inverser les langues" onclick="swapLanguages()">
+                            <i class="fas fa-exchange-alt"></i>
                         </button>
-                    </div>
-                </div>
-                
-                <button type="button" id="swapLanguages" class="swap-languages-btn" aria-label="Inverser les langues">
-                    <i class="fas fa-exchange-alt"></i>
-                </button>
-                
-                <div class="target-language">
-                    <select id="targetLanguage" class="form-select">
-                        <option value="en">Anglais</option>
-                        <option value="fr" selected>Français</option>
-                        <option value="es">Espagnol</option>
-                        <option value="de">Allemand</option>
-                        <option value="it">Italien</option>
-                        <option value="pt">Portugais</option>
-                        <option value="ru">Russe</option>
-                        <option value="zh">Chinois</option>
-                        <option value="ja">Japonais</option>
-                        <option value="ar">Arabe</option>
-                        <!-- D'autres langues seront ajoutées dynamiquement -->
-                    </select>
-                    <div class="language-tools">
-                        <button type="button" class="btn-icon" id="targetListenBtn" aria-label="Écouter">
-                            <i class="fas fa-volume-up"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="translation-boxes">
-                <div class="text-box source-text">
-                    <div class="text-area-wrapper">
-                        <textarea id="sourceText" placeholder="Saisissez ou collez le texte à traduire..." class="translator-textarea"></textarea>
-                        <div class="text-actions">
-                            <button type="button" class="btn-icon" id="clearSourceText" aria-label="Effacer">
-                                <i class="fas fa-times"></i>
-                            </button>
-                            <button type="button" class="btn-icon" id="copySourceText" aria-label="Copier">
-                                <i class="fas fa-copy"></i>
-                            </button>
-                            <button type="button" class="btn-icon" id="pasteSourceText" aria-label="Coller">
-                                <i class="fas fa-paste"></i>
-                            </button>
+                        
+                        <div class="target-language">
+                            <select id="targetLanguage" class="form-select">
+                                <option value="fr" selected>Français</option>
+                                <option value="en">Anglais</option>
+                                <option value="es">Espagnol</option>
+                                <option value="de">Allemand</option>
+                                <option value="it">Italien</option>
+                                <option value="pt">Portugais</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="character-count">
-                        <span id="sourceCharCount">0</span> caractères
-                    </div>
                 </div>
                 
-                <div class="text-box target-text">
-                    <div class="text-area-wrapper">
-                        <textarea id="targetText" placeholder="Traduction..." class="translator-textarea" readonly></textarea>
+                <div class="translator-text-container">
+                    <div class="source-text-container">
                         <div class="text-actions">
-                            <button type="button" class="btn-icon" id="copyTargetText" aria-label="Copier">
-                                <i class="fas fa-copy"></i>
-                            </button>
-                            <button type="button" class="btn-icon" id="downloadTranslation" aria-label="Télécharger">
-                                <i class="fas fa-download"></i>
-                            </button>
-                            <button type="button" class="btn-icon" id="shareTranslation" aria-label="Partager">
-                                <i class="fas fa-share-alt"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="translation-info">
-                        <div class="detected-language" id="detectedLanguage"></div>
-                        <div class="translation-time" id="translationTime"></div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="translator-features">
-                <div class="feature-tabs">
-                    <button type="button" class="tab-button active" data-tab="dictionary">Dictionnaire</button>
-                    <button type="button" class="tab-button" data-tab="examples">Exemples d'utilisation</button>
-                    <button type="button" class="tab-button" data-tab="alternatives">Traductions alternatives</button>
-                </div>
-                
-                <div class="tab-content">
-                    <div class="tab-pane active" id="dictionary">
-                        <div class="dictionary-results" id="dictionaryResults">
-                            <!-- Les résultats du dictionnaire seront affichés ici -->
-                            <div class="placeholder-message">
-                                Sélectionnez un mot dans le texte traduit pour voir sa définition.
+                            <span class="detected-language" id="detectedLanguage"></span>
+                            <div class="text-buttons">
+                                <button type="button" class="btn-icon" id="clearSourceText" aria-label="Effacer" onclick="clearSourceText()">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                                <button type="button" class="btn-icon" id="copySourceText" aria-label="Copier" onclick="copySourceText()">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                                <button type="button" class="btn-icon" id="listenSourceText" aria-label="Écouter" onclick="listenSourceText()">
+                                    <i class="fas fa-volume-up"></i>
+                                </button>
                             </div>
+                        </div>
+                        <textarea id="sourceText" class="translator-textarea" placeholder="Saisissez ou collez le texte à traduire..."></textarea>
+                        <div class="character-count">
+                            <span id="sourceCharCount">0/5000</span> caractères
                         </div>
                     </div>
                     
-                    <div class="tab-pane" id="examples">
-                        <div class="examples-results" id="examplesResults">
-                            <!-- Les exemples d'utilisation seront affichés ici -->
-                            <div class="placeholder-message">
-                                Sélectionnez un mot pour voir des exemples d'utilisation.
+                    <div class="target-text-container">
+                        <div class="text-actions">
+                            <div class="translation-status" id="translationStatus"></div>
+                            <div class="text-buttons">
+                                <button type="button" class="btn-icon" id="copyTranslation" aria-label="Copier" onclick="copyTranslation()">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                                <button type="button" class="btn-icon" id="listenTranslation" aria-label="Écouter" onclick="listenTranslation()">
+                                    <i class="fas fa-volume-up"></i>
+                                </button>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="tab-pane" id="alternatives">
-                        <div class="alternatives-results" id="alternativesResults">
-                            <!-- Les traductions alternatives seront affichées ici -->
-                            <div class="placeholder-message">
-                                Les traductions alternatives apparaîtront ici.
-                            </div>
+                        <textarea id="translatedText" class="translator-textarea" placeholder="Traduction..." readonly></textarea>
+                        <div class="character-count">
+                            <span id="translatedCharCount">0/5000</span> caractères
                         </div>
                     </div>
                 </div>
             </div>
             
-            <div class="translation-history">
-                <h3>Historique de traduction</h3>
-                <div class="history-list" id="translationHistory">
-                    <!-- L'historique des traductions sera affiché ici -->
+            <div class="translator-sidebar">
+                <div class="translation-history">
+                    <div class="history-header">
+                        <h3>Historique</h3>
+                        <button type="button" class="btn-icon" id="clearHistory" aria-label="Effacer l'historique" onclick="clearHistory()">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                    <div id="translationHistory" class="history-items">
+                        <!-- L'historique des traductions sera affiché ici -->
+                        <div class="empty-history">Aucune traduction récente</div>
+                    </div>
                 </div>
-                <button type="button" class="btn btn-outline" id="clearHistory">
-                    <i class="fas fa-trash-alt"></i> Effacer l'historique
-                </button>
+                
+                <div class="translation-tips">
+                    <h3>Conseils de traduction</h3>
+                    <ul class="tips-list">
+                        <li><i class="fas fa-info-circle"></i> Utilisez des phrases complètes pour une meilleure traduction</li>
+                        <li><i class="fas fa-info-circle"></i> Vérifiez les résultats pour les expressions idiomatiques</li>
+                        <li><i class="fas fa-info-circle"></i> La détection automatique fonctionne mieux avec plus de texte</li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
-    
-    <div class="offline-message" id="translatorOfflineMessage">
-        <div class="offline-icon">
-            <i class="fas fa-wifi-slash"></i>
-        </div>
-        <h3>Mode hors ligne</h3>
-        <p>Le traducteur nécessite une connexion Internet pour fonctionner. Certaines fonctionnalités peuvent être limitées en mode hors ligne.</p>
     </div>
     
     <div class="help-panel" id="translatorHelpPanel">
@@ -173,30 +127,26 @@
         <div class="help-panel-content">
             <h4>Comment utiliser</h4>
             <ol>
-                <li>Sélectionnez la langue source ou utilisez la détection automatique</li>
-                <li>Choisissez la langue cible dans laquelle vous souhaitez traduire</li>
-                <li>Saisissez ou collez votre texte dans la zone de gauche</li>
-                <li>La traduction s'affiche automatiquement dans la zone de droite</li>
-                <li>Utilisez les boutons pour copier, écouter ou partager la traduction</li>
+                <li>Sélectionnez la langue source (ou laissez la détection automatique)</li>
+                <li>Sélectionnez la langue cible</li>
+                <li>Saisissez ou collez le texte à traduire</li>
+                <li>La traduction s'affiche automatiquement</li>
+                <li>Utilisez les boutons pour copier ou écouter la traduction</li>
             </ol>
             
             <h4>Fonctionnalités</h4>
             <ul>
-                <li><strong>Traduction automatique</strong> : les traductions sont effectuées dès que vous arrêtez de taper</li>
-                <li><strong>Dictionnaire</strong> : cliquez sur un mot pour voir sa définition et ses synonymes</li>
-                <li><strong>Prononciation</strong> : écoutez la prononciation du texte source et de la traduction</li>
-                <li><strong>Exemples d'utilisation</strong> : découvrez comment les mots sont utilisés en contexte</li>
-                <li><strong>Historique</strong> : retrouvez facilement vos traductions précédentes</li>
+                <li><strong>Détection de langue améliorée</strong> : identifie automatiquement la langue du texte source avec précision</li>
+                <li><strong>Traduction en ligne</strong> : utilise l'API MyMemory pour des traductions de qualité</li>
+                <li><strong>Mode hors ligne</strong> : fonctionne aussi sans connexion internet (traduction basique)</li>
+                <li><strong>Synthèse vocale optimisée</strong> : écoutez le texte source ou traduit avec une voix claire et naturelle</li>
+                <li><strong>Historique</strong> : accédez à vos traductions récentes</li>
             </ul>
             
-            <h4>Limitations</h4>
-            <p>Cet outil utilise des API de traduction externes lorsqu'il est en ligne. La précision des traductions peut varier selon les langues et la complexité du texte. Pour les documents officiels ou les traductions professionnelles, il est recommandé de consulter un traducteur humain.</p>
+            <h4>Confidentialité</h4>
+            <p>En mode en ligne, les textes sont envoyés au service de traduction MyMemory. En mode hors ligne, vos textes ne quittent jamais votre ordinateur.</p>
         </div>
     </div>
-
-
-
-
 
 <script>
 // S'assurer que le module de plein écran est chargé
@@ -217,11 +167,32 @@
         }
     }
     
-    // Exécuter immédiatement si le DOM est déjà chargé, sinon attendre l'événement
+    // Initialiser l'aide du traducteur
+    function initTranslatorHelp() {
+        const helpBtn = document.getElementById('translatorHelp');
+        const helpPanel = document.getElementById('translatorHelpPanel');
+        const closeBtn = document.getElementById('closeTranslatorHelp');
+        
+        if (helpBtn && helpPanel && closeBtn) {
+            helpBtn.addEventListener('click', () => {
+                helpPanel.classList.toggle('visible');
+            });
+            
+            closeBtn.addEventListener('click', () => {
+                helpPanel.classList.remove('visible');
+            });
+        }
+    }
+    
+    // Exécuter les fonctions d'initialisation
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initFullscreen);
+        document.addEventListener('DOMContentLoaded', () => {
+            initFullscreen();
+            initTranslatorHelp();
+        });
     } else {
         initFullscreen();
+        initTranslatorHelp();
     }
 })();
 </script></div> 

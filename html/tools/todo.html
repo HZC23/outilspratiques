@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <div class="tool-container" id="todoTool">
+    <link rel="stylesheet" href="../../styles/tools/todo.css">
     <div class="tool-header">
         <h2><i class="fas fa-tasks"></i> Tâches</h2>
         <div class="tool-actions">
@@ -16,7 +17,7 @@
     </div>
     
     <div class="tool-content">
-        <div class="todo-container">
+        <div class="todo-horizontal-layout" id="todoContainer">
             <div class="todo-sidebar">
                 <div class="todo-header">
                     <h3>Catégories</h3>
@@ -99,6 +100,36 @@
                                     <i class="fas fa-plus"></i>
                                 </button>
                             </div>
+                            <!-- Menu de priorité rapide -->
+                            <div class="quick-priority-menu" id="quickPriorityMenu">
+                                <button type="button" class="quick-priority-option" data-priority="high">
+                                    <i class="fas fa-flag" style="color: #fa5252;"></i> Élevée
+                                </button>
+                                <button type="button" class="quick-priority-option" data-priority="medium">
+                                    <i class="fas fa-flag" style="color: #fab005;"></i> Moyenne
+                                </button>
+                                <button type="button" class="quick-priority-option" data-priority="low">
+                                    <i class="fas fa-flag" style="color: #40c057;"></i> Faible
+                                </button>
+                            </div>
+                            <!-- Menu de date rapide -->
+                            <div class="quick-date-menu" id="quickDateMenu">
+                                <button type="button" class="quick-date-option" data-date="today">
+                                    Aujourd'hui
+                                </button>
+                                <button type="button" class="quick-date-option" data-date="tomorrow">
+                                    Demain
+                                </button>
+                                <button type="button" class="quick-date-option" data-date="next-week">
+                                    Semaine prochaine
+                                </button>
+                                <div class="quick-date-custom">
+                                    <input type="date" id="quickDateCustom" class="form-input">
+                                    <button type="button" id="applyCustomDate" class="btn btn-sm btn-primary">
+                                        Appliquer
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -126,6 +157,7 @@
                 </div>
             </div>
             
+            <!-- Section de détails qui sera toujours visible sur grands écrans -->
             <div class="todo-details" id="todoDetails">
                 <div class="details-header">
                     <h3>Détails de la tâche</h3>
@@ -200,10 +232,10 @@
                 
                 <div class="details-footer">
                     <div class="details-info">
-                        <span>Créée le <span id="createdDate">01/01/2024</span></span>
+                        <p>Créée le <span id="createDate">--/--/----</span></p>
                     </div>
                     <div class="details-actions">
-                        <button type="button" class="btn btn-outline btn-danger" id="deleteTodo">
+                        <button type="button" class="btn btn-danger" id="deleteTodo">
                             <i class="fas fa-trash-alt"></i> Supprimer
                         </button>
                         <button type="button" class="btn btn-primary" id="saveTodoDetails">
@@ -213,167 +245,178 @@
                 </div>
             </div>
         </div>
-    </div>
-    
-    <!-- Dialogue pour ajouter une nouvelle liste -->
-    <div class="modal" id="newListModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Nouvelle liste</h3>
-                <button type="button" class="btn-icon" id="closeNewListModal">
+
+        <!-- Modale pour ajouter/modifier une liste -->
+        <div class="modal" id="listModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="listModalTitle">Nouvelle liste</h3>
+                    <button type="button" class="btn-icon" id="closeListModal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="listForm">
+                        <div class="form-group">
+                            <label for="listTitle">Titre</label>
+                            <input type="text" id="listTitle" placeholder="Titre de la liste" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Icône</label>
+                            <div class="icon-selector">
+                                <button type="button" class="icon-btn active" data-icon="list">
+                                    <i class="fas fa-list"></i>
+                                </button>
+                                <button type="button" class="icon-btn" data-icon="home">
+                                    <i class="fas fa-home"></i>
+                                </button>
+                                <button type="button" class="icon-btn" data-icon="briefcase">
+                                    <i class="fas fa-briefcase"></i>
+                                </button>
+                                <button type="button" class="icon-btn" data-icon="shopping-cart">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </button>
+                                <button type="button" class="icon-btn" data-icon="heart">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                                <button type="button" class="icon-btn" data-icon="book">
+                                    <i class="fas fa-book"></i>
+                                </button>
+                                <button type="button" class="icon-btn" data-icon="graduation-cap">
+                                    <i class="fas fa-graduation-cap"></i>
+                                </button>
+                                <button type="button" class="icon-btn" data-icon="users">
+                                    <i class="fas fa-users"></i>
+                                </button>
+                                <button type="button" class="icon-btn" data-icon="plane">
+                                    <i class="fas fa-plane"></i>
+                                </button>
+                            </div>
+                            <input type="hidden" id="listIcon" value="list">
+                        </div>
+                        <div class="form-group">
+                            <label>Couleur</label>
+                            <div class="color-selector">
+                                <button type="button" class="color-btn active" data-color="#4c6ef5" style="background-color: #4c6ef5;"></button>
+                                <button type="button" class="color-btn" data-color="#40c057" style="background-color: #40c057;"></button>
+                                <button type="button" class="color-btn" data-color="#fa5252" style="background-color: #fa5252;"></button>
+                                <button type="button" class="color-btn" data-color="#fab005" style="background-color: #fab005;"></button>
+                                <button type="button" class="color-btn" data-color="#15aabf" style="background-color: #15aabf;"></button>
+                                <button type="button" class="color-btn" data-color="#7950f2" style="background-color: #7950f2;"></button>
+                            </div>
+                            <input type="hidden" id="listColor" value="#4c6ef5">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelListForm">Annuler</button>
+                    <button type="button" class="btn btn-primary" id="saveList">Enregistrer</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Panneau de recherche avancée -->
+        <div class="search-panel" id="searchPanel">
+            <div class="search-panel-header">
+                <h3>Recherche avancée</h3>
+                <button type="button" class="btn-icon" id="closeSearchPanel">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="modal-body">
-                <form id="newListForm">
-                    <div class="form-group">
-                        <label for="newListName">Nom de la liste</label>
-                        <input type="text" id="newListName" placeholder="Entrez un nom..." required>
-                    </div>
-                    <div class="form-group">
-                        <label for="newListIcon">Icône</label>
-                        <div class="icon-selector" id="iconSelector">
-                            <button type="button" class="icon-btn" data-icon="list"><i class="fas fa-list"></i></button>
-                            <button type="button" class="icon-btn" data-icon="home"><i class="fas fa-home"></i></button>
-                            <button type="button" class="icon-btn" data-icon="briefcase"><i class="fas fa-briefcase"></i></button>
-                            <button type="button" class="icon-btn" data-icon="shopping-cart"><i class="fas fa-shopping-cart"></i></button>
-                            <button type="button" class="icon-btn" data-icon="dumbbell"><i class="fas fa-dumbbell"></i></button>
-                            <button type="button" class="icon-btn" data-icon="plane"><i class="fas fa-plane"></i></button>
-                            <button type="button" class="icon-btn" data-icon="book"><i class="fas fa-book"></i></button>
-                            <button type="button" class="icon-btn" data-icon="euro-sign"><i class="fas fa-euro-sign"></i></button>
-                            <button type="button" class="icon-btn" data-icon="heartbeat"><i class="fas fa-heartbeat"></i></button>
+            <div class="search-panel-content">
+                <form id="searchForm">
+                    <div class="search-form">
+                        <div class="form-group">
+                            <label for="searchQuery">Mot-clé</label>
+                            <input type="text" id="searchQuery" placeholder="Rechercher...">
                         </div>
-                        <input type="hidden" id="newListIcon" value="list">
-                    </div>
-                    <div class="form-group">
-                        <label for="newListColor">Couleur</label>
-                        <div class="color-selector">
-                            <button type="button" class="color-btn" data-color="#007bff" style="background-color: #007bff;"></button>
-                            <button type="button" class="color-btn" data-color="#28a745" style="background-color: #28a745;"></button>
-                            <button type="button" class="color-btn" data-color="#dc3545" style="background-color: #dc3545;"></button>
-                            <button type="button" class="color-btn" data-color="#ffc107" style="background-color: #ffc107;"></button>
-                            <button type="button" class="color-btn" data-color="#6610f2" style="background-color: #6610f2;"></button>
-                            <button type="button" class="color-btn" data-color="#fd7e14" style="background-color: #fd7e14;"></button>
+                        <div class="form-group">
+                            <label>Status</label>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="searchActive" checked>
+                                <label for="searchActive">Actives</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="searchCompleted" checked>
+                                <label for="searchCompleted">Terminées</label>
+                            </div>
                         </div>
-                        <input type="hidden" id="newListColor" value="#007bff">
+                        <div class="form-group">
+                            <label>Priorité</label>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="searchLow" checked>
+                                <label for="searchLow">Faible</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="searchMedium" checked>
+                                <label for="searchMedium">Moyenne</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="searchHigh" checked>
+                                <label for="searchHigh">Élevée</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Date d'échéance</label>
+                            <div class="date-range">
+                                <label for="searchStartDate">De</label>
+                                <input type="date" id="searchStartDate">
+                                <label for="searchEndDate">À</label>
+                                <input type="date" id="searchEndDate">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="searchTag">Tag</label>
+                            <input type="text" id="searchTag" placeholder="Filtrer par tag">
+                        </div>
+                    </div>
+                    <div class="search-actions">
+                        <button type="button" class="btn btn-secondary" id="resetSearch">Réinitialiser</button>
+                        <button type="button" class="btn btn-primary" id="applySearch">Rechercher</button>
                     </div>
                 </form>
+                <div class="search-results" id="searchResults">
+                    <!-- Les résultats de recherche seront affichés ici -->
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn" id="cancelNewList">Annuler</button>
-                <button type="button" class="btn btn-primary" id="confirmNewList">Créer</button>
+        </div>
+        
+        <!-- Panneau d'aide -->
+        <div class="help-panel" id="todoHelpPanel">
+            <div class="help-panel-header">
+                <h3>Aide - Gestionnaire de tâches</h3>
+                <button type="button" class="btn-icon" id="closeTodoHelp">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="help-panel-content">
+                <h4>Comment utiliser</h4>
+                <ol>
+                    <li>Créez différentes listes pour organiser vos tâches</li>
+                    <li>Ajoutez des tâches en utilisant le champ en haut de la liste</li>
+                    <li>Cliquez sur une tâche pour voir et modifier ses détails</li>
+                    <li>Cochez une tâche pour la marquer comme terminée</li>
+                </ol>
+                
+                <h4>Fonctionnalités</h4>
+                <ul>
+                    <li><strong>Sous-tâches</strong> - Décomposez vos tâches en éléments plus petits et faciles à gérer</li>
+                    <li><strong>Dates d'échéance</strong> - Définissez des dates limites pour vos tâches</li>
+                    <li><strong>Priorités</strong> - Identifiez les tâches importantes avec des niveaux de priorité</li>
+                    <li><strong>Tags</strong> - Organisez vos tâches par catégorie avec des tags personnalisés</li>
+                    <li><strong>Rappels</strong> - Configurez des rappels pour ne pas oublier vos tâches importantes</li>
+                </ul>
+                
+                <h4>Raccourcis clavier</h4>
+                <ul>
+                    <li><kbd>Entrée</kbd> : Ajouter une nouvelle tâche</li>
+                    <li><kbd>Ctrl</kbd> + <kbd>F</kbd> : Rechercher des tâches</li>
+                    <li><kbd>Échap</kbd> : Fermer les panneaux et dialogues ouverts</li>
+                </ul>
             </div>
         </div>
     </div>
-    
-    <!-- Panneau de recherche avancée -->
-    <div class="search-panel" id="searchPanel">
-        <div class="search-panel-header">
-            <h3>Recherche avancée</h3>
-            <button type="button" class="btn-icon" id="closeSearchPanel">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="search-panel-content">
-            <div class="search-form">
-                <div class="form-group">
-                    <label for="searchQuery">Texte à rechercher</label>
-                    <input type="text" id="searchQuery" placeholder="Mots-clés..." class="form-input">
-                </div>
-                <div class="form-group">
-                    <label>Listes à rechercher</label>
-                    <div id="searchListsOptions">
-                        <!-- Sera rempli dynamiquement -->
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Priorité</label>
-                    <div class="checkbox-group">
-                        <label><input type="checkbox" value="high" checked> Élevée</label>
-                        <label><input type="checkbox" value="medium" checked> Moyenne</label>
-                        <label><input type="checkbox" value="low" checked> Faible</label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Status</label>
-                    <div class="checkbox-group">
-                        <label><input type="checkbox" value="completed" checked> Terminées</label>
-                        <label><input type="checkbox" value="active" checked> Actives</label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="searchDateRange">Période</label>
-                    <select id="searchDateRange" class="form-select">
-                        <option value="all">Toutes les dates</option>
-                        <option value="today">Aujourd'hui</option>
-                        <option value="week">Cette semaine</option>
-                        <option value="month">Ce mois-ci</option>
-                        <option value="custom">Personnalisé...</option>
-                    </select>
-                </div>
-                <div class="form-group date-range" id="customDateRange" style="display: none;">
-                    <div>
-                        <label for="searchDateFrom">Du</label>
-                        <input type="date" id="searchDateFrom" class="form-input">
-                    </div>
-                    <div>
-                        <label for="searchDateTo">Au</label>
-                        <input type="date" id="searchDateTo" class="form-input">
-                    </div>
-                </div>
-            </div>
-            <div class="search-actions">
-                <button type="button" class="btn" id="resetSearch">Réinitialiser</button>
-                <button type="button" class="btn btn-primary" id="runSearch">Rechercher</button>
-            </div>
-        </div>
-        <div class="search-results" id="searchResults">
-            <!-- Résultats de recherche -->
-        </div>
-    </div>
-    
-    <div class="help-panel" id="todoHelpPanel">
-        <div class="help-panel-header">
-            <h3>Aide - Liste de tâches</h3>
-            <button type="button" class="btn-icon" id="closeTodoHelp">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="help-panel-content">
-            <h4>Comment utiliser</h4>
-            <ol>
-                <li>Organisez vos tâches en créant différentes listes (travail, personnel, etc.)</li>
-                <li>Ajoutez des tâches en utilisant le champ de saisie et la touche Entrée</li>
-                <li>Cliquez sur une tâche pour voir et modifier ses détails</li>
-                <li>Cochez une tâche pour la marquer comme terminée</li>
-                <li>Utilisez les filtres et le tri pour organiser l'affichage de vos tâches</li>
-                <li>Utilisez la recherche avancée pour retrouver facilement vos tâches</li>
-            </ol>
-            
-            <h4>Fonctionnalités</h4>
-            <ul>
-                <li><strong>Priorités</strong> : définissez l'importance de chaque tâche</li>
-                <li><strong>Dates d'échéance</strong> : ne manquez plus vos délais</li>
-                <li><strong>Sous-tâches</strong> : divisez les tâches complexes en étapes plus petites</li>
-                <li><strong>Rappels</strong> : recevez des notifications pour les tâches importantes</li>
-                <li><strong>Tags</strong> : catégorisez vos tâches pour les retrouver plus facilement</li>
-                <li><strong>Recherche avancée</strong> : filtrez vos tâches selon divers critères</li>
-                <li><strong>Export/Import</strong> : sauvegardez et partagez vos listes</li>
-            </ul>
-            
-            <h4>Astuces</h4>
-            <ul>
-                <li>Utilisez les touches rapides pour ajouter rapidement des tâches avec priorité et date</li>
-                <li>Créez des listes colorées pour mieux visualiser vos différents projets</li>
-                <li>Utilisez des tags pour regrouper des tâches similaires à travers différentes listes</li>
-                <li>Exportez régulièrement vos listes pour sauvegarder vos données</li>
-            </ul>
-        </div>
-    </div>
-
-
-
-
+</div>
 
 <script>
 // S'assurer que le module de plein écran est chargé
@@ -401,4 +444,21 @@
         initFullscreen();
     }
 })();
-</script></div> 
+
+// Initialiser le gestionnaire de tâches
+document.addEventListener('DOMContentLoaded', () => {
+    import('../../js/tools/todo.js')
+    .then(module => {
+        // Exposer le gestionnaire de tâches globalement pour les interactions HTML
+        window.TodoManager = module.TodoManager;
+        
+        // Initialiser le gestionnaire
+        if (document.getElementById('todoTool')) {
+            module.TodoManager.init();
+        }
+    })
+    .catch(error => {
+        console.error('Erreur chargement todo.js:', error);
+    });
+});
+</script>

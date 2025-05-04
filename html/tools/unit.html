@@ -13,54 +13,58 @@
     </div>
     
     <div class="tool-content">
-        <div class="unit-container">
-            <div class="conversion-category">
-                <label for="conversionCategory">Catégorie:</label>
-                <select id="conversionCategory" class="form-select">
-                    <!-- Les options seront générées par JS -->
-                </select>
-            </div>
-            
-            <div class="conversion-input">
-                <div class="input-group">
-                    <label for="fromValue">Valeur:</label>
-                    <input type="number" id="fromValue" class="form-input" value="1" step="any">
-                    <select id="fromUnit" class="form-select unit-select">
-                        <!-- Options générées dynamiquement par JS -->
+        <div class="unit-horizontal-layout">
+            <div class="unit-main-panel">
+                <div class="conversion-category">
+                    <label for="conversionCategory">Catégorie:</label>
+                    <select id="conversionCategory" class="form-select">
+                        <!-- Les options seront générées par JS -->
                     </select>
                 </div>
                 
-                <button type="button" id="swapUnits" class="swap-btn" aria-label="Échanger les unités">
-                    <i class="fas fa-exchange-alt"></i>
-                </button>
+                <div class="conversion-input">
+                    <div class="input-group">
+                        <label for="fromValue">Valeur:</label>
+                        <input type="number" id="fromValue" class="form-input" value="1" step="any">
+                        <select id="fromUnit" class="form-select unit-select">
+                            <!-- Options générées dynamiquement par JS -->
+                        </select>
+                    </div>
+                    
+                    <button type="button" id="swapUnits" class="swap-btn" aria-label="Échanger les unités">
+                        <i class="fas fa-exchange-alt"></i>
+                    </button>
+                    
+                    <div class="input-group">
+                        <label for="toValue">Résultat:</label>
+                        <input type="number" id="toValue" class="form-input" readonly>
+                        <select id="toUnit" class="form-select unit-select">
+                            <!-- Options générées dynamiquement par JS -->
+                        </select>
+                    </div>
+                </div>
                 
-                <div class="input-group">
-                    <label for="toValue">Résultat:</label>
-                    <input type="number" id="toValue" class="form-input" readonly>
-                    <select id="toUnit" class="form-select unit-select">
-                        <!-- Options générées dynamiquement par JS -->
-                    </select>
+                <div class="conversion-formula" id="conversionFormula">
+                    <!-- La formule sera générée dynamiquement -->
                 </div>
             </div>
             
-            <div class="conversion-formula" id="conversionFormula">
-                <!-- La formule sera générée dynamiquement -->
-            </div>
-            
-            <div class="conversion-history">
-                <h3>Historique de conversion</h3>
-                <div class="history-list" id="conversionHistory">
-                    <!-- L'historique sera généré dynamiquement -->
+            <div class="unit-sidebar">
+                <div class="conversion-history">
+                    <h3>Historique de conversion</h3>
+                    <div class="history-list" id="conversionHistory">
+                        <!-- L'historique sera généré dynamiquement -->
+                    </div>
+                    <button type="button" class="btn btn-outline" id="clearConversionHistory">
+                        <i class="fas fa-trash-alt"></i> Effacer l'historique
+                    </button>
                 </div>
-                <button type="button" class="btn btn-outline" id="clearConversionHistory">
-                    <i class="fas fa-trash-alt"></i> Effacer l'historique
-                </button>
-            </div>
-            
-            <div class="common-conversions">
-                <h3>Conversions courantes</h3>
-                <div class="common-conversions-grid" id="commonConversions">
-                    <!-- Les conversions courantes seront générées dynamiquement -->
+                
+                <div class="common-conversions">
+                    <h3>Conversions courantes</h3>
+                    <div class="common-conversions-grid" id="commonConversions">
+                        <!-- Les conversions courantes seront générées dynamiquement -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -104,93 +108,4 @@
             </ul>
         </div>
     </div>
-
-
-
-
-
-<script>
-// S'assurer que le module de plein écran est chargé
-(function() {
-    function initFullscreen() {
-        if (!window.fullscreenManager) {
-            import('../../js/fullscreen.js')
-            .then(() => {
-                if (!window.fullscreenManager && typeof FullscreenManager !== 'undefined') {
-                    window.fullscreenManager = new FullscreenManager();
-                }
-            })
-            .catch(error => {
-                console.error('Erreur chargement fullscreen.js:', error);
-            });
-        } else {
-            window.fullscreenManager.initFullscreenButtons();
-        }
-    }
-    
-    // Exécuter immédiatement si le DOM est déjà chargé, sinon attendre l'événement
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initFullscreen);
-    } else {
-        initFullscreen();
-    }
-})();
-</script></div>
-
-<script type="module">
-    import { UnitConverter } from '../../js/tools/unit.js';
-    
-    document.addEventListener('DOMContentLoaded', () => {
-        try {
-            // Initialisation du convertisseur
-            UnitConverter.init();
-            
-            // Fonctionnalité d'aide
-            const helpBtn = document.getElementById('unitHelp');
-            const helpPanel = document.getElementById('unitHelpPanel');
-            const closeHelpBtn = document.getElementById('closeUnitHelp');
-            
-            if (helpBtn && helpPanel && closeHelpBtn) {
-                helpBtn.addEventListener('click', () => {
-                    helpPanel.classList.add('active');
-                });
-                
-                closeHelpBtn.addEventListener('click', () => {
-                    helpPanel.classList.remove('active');
-                });
-            }
-            
-            // S'assurer que les calculs sont effectués après chargement complet
-            window.addEventListener('load', () => {
-                setTimeout(() => {
-                    // Forcer une conversion initiale en déclenchant des événements sur les éléments
-                    const categorySelect = document.getElementById('conversionCategory');
-                    const fromUnit = document.getElementById('fromUnit');
-                    const toUnit = document.getElementById('toUnit');
-                    const fromValue = document.getElementById('fromValue');
-                    
-                    // Déclencher les événements dans l'ordre pour assurer un calcul correct
-                    if (categorySelect) {
-                        categorySelect.dispatchEvent(new Event('change', { bubbles: true }));
-                    } else {
-                        // Si le sélecteur de catégorie n'est pas trouvé, déclencher directement les autres événements
-                        if (fromUnit) {
-                            fromUnit.dispatchEvent(new Event('change', { bubbles: true }));
-                        }
-                        
-                        if (toUnit) {
-                            toUnit.dispatchEvent(new Event('change', { bubbles: true }));
-                        }
-                    }
-                    
-                    // Toujours déclencher l'événement input sur la valeur d'entrée pour effectuer le calcul
-                    if (fromValue) {
-                        fromValue.dispatchEvent(new Event('input', { bubbles: true }));
-                    }
-                }, 500); // Augmenter le délai pour s'assurer que tout est bien chargé
-            });
-        } catch (error) {
-            console.error("Erreur lors de l'initialisation du convertisseur:", error);
-        }
-    });
-</script> 
+</div>

@@ -13,62 +13,80 @@
     </div>
     
     <div class="tool-content">
-        <div class="currency-converter">
-            <div class="rates-info">
-                <p>Taux de change: <span id="lastUpdate">En attente...</span></p>
-                <button type="button" class="btn btn-sm" id="refreshRates">
-                    <i class="fas fa-sync-alt"></i> Actualiser
-                </button>
-            </div>
-            
-            <div class="conversion-input">
-                <div class="input-group">
-                    <input type="number" id="fromAmount" class="form-input" value="1" step="any">
-                    <div class="currency-select-wrapper">
-                        <select id="fromCurrency" class="form-select currency-select">
-                            <option value="EUR" selected>EUR - Euro</option>
-                            <option value="USD">USD - Dollar américain</option>
-                            <option value="GBP">GBP - Livre sterling</option>
-                            <option value="JPY">JPY - Yen japonais</option>
-                            <option value="CHF">CHF - Franc suisse</option>
-                            <!-- D'autres devises seront ajoutées dynamiquement -->
-                        </select>
-                    </div>
-                </div>
-                
-                <button type="button" id="swapCurrencies" class="swap-btn">
-                    <i class="fas fa-exchange-alt"></i>
-                </button>
-                
-                <div class="input-group">
-                    <input type="number" id="toAmount" class="form-input" readonly>
-                    <div class="currency-select-wrapper">
-                        <select id="toCurrency" class="form-select currency-select">
-                            <option value="USD" selected>USD - Dollar américain</option>
-                            <option value="EUR">EUR - Euro</option>
-                            <option value="GBP">GBP - Livre sterling</option>
-                            <option value="JPY">JPY - Yen japonais</option>
-                            <option value="CHF">CHF - Franc suisse</option>
-                            <!-- D'autres devises seront ajoutées dynamiquement -->
-                        </select>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="conversion-details">
-                <p id="conversionRate">1 EUR = 1.10 USD</p>
-                <p id="inverseRate">1 USD = 0.91 EUR</p>
-            </div>
-            
-            <div class="conversion-history">
-                <div class="history-header">
-                    <h3>Historique des conversions</h3>
-                    <button type="button" class="btn btn-sm" onclick="clearCurrencyHistory()">
-                        <i class="fas fa-trash-alt"></i> Effacer
+        <div class="currency-horizontal-layout">
+            <div class="currency-main-panel">
+                <div class="rates-info">
+                    <p>Taux de change: <span id="lastUpdate">En attente...</span></p>
+                    <button type="button" class="btn btn-sm" id="refreshRates">
+                        <i class="fas fa-sync-alt"></i> Actualiser
                     </button>
                 </div>
-                <div id="currencyHistory" class="history-list">
-                    <!-- L'historique sera généré dynamiquement -->
+                
+                <div class="conversion-input">
+                    <div class="input-group">
+                        <input type="number" id="fromAmount" class="form-input" value="1" step="any">
+                        <div class="currency-select-wrapper">
+                            <select id="fromCurrency" class="form-select currency-select">
+                                <option value="EUR" selected>EUR - Euro</option>
+                                <option value="USD">USD - Dollar américain</option>
+                                <option value="GBP">GBP - Livre sterling</option>
+                                <option value="JPY">JPY - Yen japonais</option>
+                                <option value="CHF">CHF - Franc suisse</option>
+                                <!-- D'autres devises seront ajoutées dynamiquement -->
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button type="button" id="swapCurrencies" class="swap-btn">
+                        <i class="fas fa-exchange-alt"></i>
+                    </button>
+                    
+                    <div class="input-group">
+                        <input type="number" id="toAmount" class="form-input" readonly>
+                        <div class="currency-select-wrapper">
+                            <select id="toCurrency" class="form-select currency-select">
+                                <option value="USD" selected>USD - Dollar américain</option>
+                                <option value="EUR">EUR - Euro</option>
+                                <option value="GBP">GBP - Livre sterling</option>
+                                <option value="JPY">JPY - Yen japonais</option>
+                                <option value="CHF">CHF - Franc suisse</option>
+                                <!-- D'autres devises seront ajoutées dynamiquement -->
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="conversion-details">
+                    <p id="conversionRate">1 EUR = 1.10 USD</p>
+                    <p id="inverseRate">1 USD = 0.91 EUR</p>
+                </div>
+            </div>
+            
+            <div class="currency-sidebar">
+                <div class="conversion-history">
+                    <div class="history-header">
+                        <h3>Historique des conversions</h3>
+                        <button type="button" class="btn btn-sm" onclick="clearCurrencyHistory()">
+                            <i class="fas fa-trash-alt"></i> Effacer
+                        </button>
+                    </div>
+                    <div id="currencyHistory" class="history-list">
+                        <!-- L'historique sera généré dynamiquement -->
+                    </div>
+                </div>
+                
+                <div class="currency-chart">
+                    <div class="chart-header">
+                        <h3>Évolution du taux</h3>
+                        <div class="chart-controls">
+                            <button type="button" class="period-btn active" data-period="week">7j</button>
+                            <button type="button" class="period-btn" data-period="month">1m</button>
+                            <button type="button" class="period-btn" data-period="year">1a</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="currencyChart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>

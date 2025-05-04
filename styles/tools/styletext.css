@@ -6,16 +6,58 @@
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto;
-    gap: var(--styletext-gap);
-    padding: var(--styletext-padding);
+    gap: var(--styletext-gap, var(--spacing-md));
+    padding: var(--styletext-padding, var(--spacing-md));
     max-width: 1200px;
     margin: 0 auto;
 }
 
-@media (min-width: 992px) {
+/* Configuration pour la mise en page horizontale sur grands écrans */
+@media (min-width: 1200px) {
     .styletext-layout {
         grid-template-columns: 1fr 1fr;
-        grid-template-rows: auto auto;
+        grid-template-areas:
+            "input output"
+            "styles styles";
+    }
+    
+    .styletext-input-area {
+        grid-area: input;
+    }
+    
+    .styletext-output-area {
+        grid-area: output;
+    }
+    
+    .styletext-styles-area {
+        grid-area: styles;
+    }
+    
+    /* Alternative pour un écran très large */
+    @media (min-width: 1600px) {
+        .styletext-layout {
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-areas:
+                "input styles output";
+            gap: var(--spacing-lg);
+        }
+        
+        .styletext-input-area, 
+        .styletext-output-area {
+            max-height: 60vh;
+        }
+        
+        .styletext-styles-area {
+            overflow-y: auto;
+            max-height: 60vh;
+        }
+    }
+}
+
+/* Configuration pour la mise en page tablette */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .styletext-layout {
+        grid-template-columns: 1fr 1fr;
         grid-template-areas:
             "input output"
             "styles styles";
@@ -37,24 +79,24 @@
 .styletext-textarea, 
 .styletext-output {
     width: 100%;
-    min-height: var(--styletext-min-height);
-    padding: var(--styletext-padding);
-    border: 1px solid var(--med-gray);
-    border-radius: var(--styletext-border-radius);
-    font-size: var(--styletext-font-size);
-    line-height: var(--styletext-line-height);
-    transition: var(--styletext-transition);
+    min-height: var(--styletext-min-height, 200px);
+    padding: var(--styletext-padding, var(--spacing-md));
+    border: 1px solid var(--med-gray, #ccc);
+    border-radius: var(--styletext-border-radius, var(--border-radius));
+    font-size: var(--styletext-font-size, 1rem);
+    line-height: var(--styletext-line-height, 1.5);
+    transition: var(--styletext-transition, all 0.3s ease);
     resize: vertical;
 }
 
 .styletext-textarea:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: var(--styletext-shadow-sm);
+    box-shadow: var(--styletext-shadow-sm, 0 0 0 3px rgba(66, 133, 244, 0.2));
 }
 
 .styletext-output {
-    background-color: var(--light-gray);
+    background-color: var(--light-gray, #f8f9fa);
 }
 
 .input-controls,
@@ -66,7 +108,7 @@
 }
 
 .character-count {
-    color: var(--dark-gray);
+    color: var(--dark-gray, #555);
     font-size: 0.875rem;
 }
 
@@ -184,50 +226,6 @@
 
 .style-changed {
     animation: highlight var(--styletext-animation-duration) ease;
-}
-
-/* Panel d'aide */
-.help-panel {
-    position: fixed;
-    top: 0;
-    right: calc(-1 * var(--styletext-panel-width));
-    width: var(--styletext-panel-width);
-    height: 100vh;
-    background-color: var(--white);
-    box-shadow: var(--shadow-md);
-    z-index: 1000;
-    transition: right 0.3s ease;
-    overflow-y: auto;
-}
-
-.help-panel.active {
-    right: 0;
-}
-
-.help-panel-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--styletext-padding);
-    border-bottom: 1px solid var(--med-gray);
-}
-
-.help-panel-content {
-    padding: 1.5rem;
-}
-
-.help-panel h4 {
-    color: var(--primary-color);
-    margin-top: 1.5rem;
-    margin-bottom: 0.75rem;
-}
-
-.help-panel ul, .help-panel ol {
-    padding-left: 1.5rem;
-}
-
-.help-panel li {
-    margin-bottom: 0.5rem;
 }
 
 /* Toast notifications */
@@ -608,51 +606,6 @@
 
 .styletext-toast i {
     font-size: var(--styletext-font-size);
-}
-
-/* Panneau d'aide */
-.help-panel {
-    position: fixed;
-    top: 0;
-    right: -350px;
-    width: 350px;
-    height: 100vh;
-    background: var(--card-bg);
-    z-index: 1000;
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
-    transition: right 0.3s ease;
-    overflow-y: auto;
-}
-
-.help-panel.active {
-    right: 0;
-}
-
-.help-panel-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: var(--styletext-padding);
-    border-bottom: 1px solid var(--border-color);
-}
-
-.help-panel-content {
-    padding: 1.5rem;
-}
-
-.help-panel h4 {
-    margin-top: 1.5rem;
-    margin-bottom: 0.75rem;
-    color: var(--primary-color);
-}
-
-.help-panel p, .help-panel li {
-    margin-bottom: 0.5rem;
-    line-height: 1.5;
-}
-
-.help-panel ul, .help-panel ol {
-    padding-left: 1.5rem;
 }
 
 /* Améliorations pour la grille du styliseur de texte */
@@ -1098,24 +1051,6 @@
     color: var(--text-color);
 }
 
-[data-theme="dark"] .help-panel {
-    background-color: var(--help-panel-bg);
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
-}
-
-[data-theme="dark"] .help-panel-header {
-    border-bottom-color: var(--border-color);
-}
-
-[data-theme="dark"] .help-panel h4 {
-    color: var(--text-color);
-}
-
-[data-theme="dark"] .help-panel p, 
-[data-theme="dark"] .help-panel li {
-    color: var(--text-secondary);
-}
-
 /* Support pour l'historique en mode sombre */
 [data-theme="dark"] .history-item {
     background-color: var(--card-bg);
@@ -1221,4 +1156,41 @@
 
 [data-theme="dark"] .styletext-output.processing {
     animation: darkLoading 1.5s infinite;
+}
+
+/* Mise en page horizontale pour le styliseur de texte */
+.styletext-horizontal-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+        "input"
+        "output"
+        "styles";
+    gap: 1.5rem;
+    padding: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+@media (min-width: 992px) {
+    .styletext-horizontal-layout {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+        grid-template-areas:
+            "input output"
+            "styles styles";
+    }
+    
+    .styletext-input-area {
+        grid-area: input;
+    }
+    
+    .styletext-output-area {
+        grid-area: output;
+    }
+    
+    .styletext-styles-area {
+        grid-area: styles;
+    }
 } 

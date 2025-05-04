@@ -54,52 +54,6 @@
     margin: 0 1rem;
 }
 
-.btn-circle {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    border: none;
-    background: var(--primary-color);
-    color: white;
-    font-size: 1.2rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-.btn-circle:hover {
-    background: var(--primary-hover);
-    transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
-
-.btn-circle:active {
-    transform: translateY(-1px);
-}
-
-.btn-circle:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
-    opacity: 0.7;
-}
-
-.btn-circle[aria-label="Réinitialiser"] {
-    background: var(--danger-color);
-}
-
-.btn-circle[aria-label="Réinitialiser"]:hover {
-    background: var(--danger-hover);
-}
-
-.btn-circle[aria-label="Tour"] {
-    background: var(--success-color);
-}
-
 .lap-times {
     padding: 1.5rem;
     border-top: 1px solid var(--border-color);
@@ -184,37 +138,6 @@
     margin-top: 1rem;
 }
 
-.btn {
-    padding: 0.7rem 1.3rem;
-    border-radius: 10px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: all 0.3s ease;
-}
-
-.btn-outline {
-    background: transparent;
-    border: 1px solid var(--border-color);
-    color: var(--text-color);
-}
-
-.btn-outline:hover {
-    background: var(--input-bg);
-    transform: translateY(-2px);
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
-}
-
-.btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none !important;
-    box-shadow: none !important;
-}
-
 .stopwatch-stats {
     padding: 1.5rem;
     border-top: 1px solid var(--border-color);
@@ -259,57 +182,6 @@
     font-family: 'Roboto Mono', monospace;
 }
 
-.help-panel {
-    position: fixed;
-    top: 0;
-    right: -350px;
-    width: 350px;
-    height: 100vh;
-    background: var(--card-bg);
-    box-shadow: -5px 0 20px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    overflow-y: auto;
-}
-
-.help-panel.active {
-    right: 0;
-}
-
-.help-panel-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.2rem;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.help-panel-header h3 {
-    margin: 0;
-    font-size: 1.25rem;
-    color: var(--text-color);
-}
-
-.help-panel-content {
-    padding: 1.5rem;
-}
-
-.help-panel-content h4 {
-    color: var(--text-color);
-    margin: 1.5rem 0 0.75rem;
-}
-
-.help-panel-content ol,
-.help-panel-content ul {
-    color: var(--text-color);
-    padding-left: 1.5rem;
-    margin-bottom: 1.5rem;
-}
-
-.help-panel-content li {
-    margin-bottom: 0.5rem;
-}
-
 @media (max-width: 640px) {
     .stopwatch-container {
         border-radius: 12px;
@@ -327,19 +199,9 @@
         flex-wrap: wrap;
         gap: 1rem;
     }
-    
-    .btn-circle {
-        width: 50px;
-        height: 50px;
-    }
 
     .stats-grid {
         grid-template-columns: 1fr 1fr;
-    }
-
-    .help-panel {
-        width: 100%;
-        right: -100%;
     }
 }
 
@@ -380,47 +242,6 @@
     100% { transform: scale(1); }
 }
 
-/* Ajout de l'info sur les raccourcis clavier dans le panneau d'aide */
-.help-panel-content .shortcuts-list {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 1.5rem;
-}
-
-.help-panel-content .shortcuts-list li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.help-panel-content .shortcuts-list li:last-child {
-    border-bottom: none;
-}
-
-.help-panel-content .key {
-    background: var(--input-bg);
-    padding: 0.2rem 0.5rem;
-    border-radius: 4px;
-    font-family: 'Roboto Mono', monospace;
-    font-size: 0.85rem;
-    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
-}
-
-/* Amélioration pour l'état disabled des boutons */
-.btn-circle:disabled {
-    background: #999;
-    cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
-    opacity: 0.7;
-}
-
-.dark-mode .btn-circle:disabled {
-    background: #666;
-}
-
 /* Améliorations pour le mode plein écran */
 body:fullscreen .stopwatch-container,
 body:-webkit-full-screen .stopwatch-container,
@@ -432,14 +253,6 @@ body:fullscreen .time-counter,
 body:-webkit-full-screen .time-counter,
 body:-moz-full-screen .time-counter {
     font-size: 7rem;
-}
-
-body:fullscreen .btn-circle,
-body:-webkit-full-screen .btn-circle,
-body:-moz-full-screen .btn-circle {
-    width: 80px;
-    height: 80px;
-    font-size: 1.5rem;
 }
 
 /* Améliorations pour le contraste */
@@ -460,4 +273,56 @@ body:-moz-full-screen .btn-circle {
 }
 [data-theme="dark"] .tool-content {
     background: var(--tool-container-bg);
+}
+
+/* Mise en page horizontale pour le chronomètre */
+.stopwatch-horizontal-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+        "main"
+        "sidebar";
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 100%;
+}
+
+@media (min-width: 1200px) {
+    .stopwatch-horizontal-layout {
+        grid-template-columns: minmax(320px, 1fr) minmax(300px, 1fr);
+        grid-template-areas: "main sidebar";
+    }
+    
+    .stopwatch-main-panel {
+        grid-area: main;
+        background-color: var(--bg-light);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .stopwatch-sidebar {
+        grid-area: sidebar;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .lap-times,
+    .stopwatch-stats {
+        background-color: var(--bg-light);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+    }
+    
+    .stopwatch-display {
+        margin-bottom: 2rem;
+    }
+    
+    .time-counter {
+        font-size: 3.5rem;
+    }
 } 

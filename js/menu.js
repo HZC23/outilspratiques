@@ -1,4 +1,5 @@
 import { Utils } from './utils.js';
+import { PerformanceManager } from './performance.js';
 
 export const MenuManager = {
     /**
@@ -139,14 +140,40 @@ export const MenuManager = {
             }, 150);
         });
 
-        // Gestion du scroll avec requestAnimationFrame
-        let scrollTimeout;
+        // Gestion du scroll avec limiteur de FPS pour améliorer les performances
+        const handleScrollOptimized = PerformanceManager.frameRateLimiter((timestamp) => {
+            this.handleScroll();
+        }, 60);
+
+        // Ajouter l'écouteur d'événement de défilement
         window.addEventListener('scroll', () => {
-            if (!scrollTimeout) {
-                scrollTimeout = window.requestAnimationFrame(() => {
-                    this.handleScroll();
-                    scrollTimeout = null;
-                });
+            // Démarrer le traitement optimisé à chaque défilement
+            if (!this.scrollAnimationStop) {
+                this.scrollAnimationStop = handleScrollOptimized();
+                
+                // Arrêter l'animation après un délai pour éviter les fuites de mémoire
+                clearTimeout(this.scrollAnimationTimeout);
+                this.scrollAnimationTimeout = setTimeout(() => {
+                    if (this.scrollAnimationStop) {
+                        this.scrollAnimationStop();
+                        this.scrollAnimationStop = null;
+                    }
+                }, 200); // Arrêter si pas de scroll pendant 200ms
+            }
+        });
+        
+        // Nettoyer le gestionnaire lors du déchargement de la page
+        window.addEventListener('unload', () => {
+            // Arrêter l'animation de défilement si elle est en cours
+            if (this.scrollAnimationStop) {
+                this.scrollAnimationStop();
+                this.scrollAnimationStop = null;
+            }
+            
+            // Nettoyer le timeout
+            if (this.scrollAnimationTimeout) {
+                clearTimeout(this.scrollAnimationTimeout);
+                this.scrollAnimationTimeout = null;
             }
         });
     },

@@ -55,6 +55,65 @@ export const PerformanceManager = {
     },
     
     /**
+     * Limite le taux de rafraîchissement des animations à 60 FPS
+     * Particulièrement utile sur mobile pour améliorer les performances
+     * @param {Function} animationFunc - La fonction d'animation à exécuter
+     * @param {number} targetFPS - Le taux de rafraîchissement cible (défaut: 60)
+     * @returns {Function} - Fonction qui démarre l'animation limitée
+     */
+    frameRateLimiter(animationFunc, targetFPS = 60) {
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        // Si ce n'est pas un mobile, utiliser requestAnimationFrame standard
+        if (!isMobile) {
+            return () => {
+                let animationId;
+                const animate = (timestamp) => {
+                    animationFunc(timestamp);
+                    animationId = requestAnimationFrame(animate);
+                };
+                animationId = requestAnimationFrame(animate);
+                
+                // Retourner une fonction pour arrêter l'animation
+                return () => {
+                    if (animationId) {
+                        cancelAnimationFrame(animationId);
+                        animationId = null;
+                    }
+                };
+            };
+        }
+        
+        // Pour mobile, limiter à 60 FPS
+        return () => {
+            let animationId;
+            let lastTime = 0;
+            const interval = 1000 / targetFPS; // Intervalle en ms pour atteindre le FPS cible
+            
+            const animate = (timestamp) => {
+                animationId = requestAnimationFrame(animate);
+                
+                const deltaTime = timestamp - lastTime;
+                if (deltaTime >= interval) {
+                    // Ajuster le timestamp pour compenser le décalage
+                    lastTime = timestamp - (deltaTime % interval);
+                    animationFunc(timestamp);
+                }
+            };
+            
+            animationId = requestAnimationFrame(animate);
+            
+            // Retourner une fonction pour arrêter l'animation
+            return () => {
+                if (animationId) {
+                    cancelAnimationFrame(animationId);
+                    animationId = null;
+                }
+            };
+        };
+    },
+    
+    /**
      * Mesure le temps d'exécution d'une fonction
      * @param {Function} func - La fonction à mesurer
      * @param {string} label - Le libellé pour l'affichage

@@ -257,6 +257,11 @@ input[type="submit"]:hover {
 .btn.icon i {
     font-size: 1.2rem;
     margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
 }
 
 /* Bouton avec icône + texte */
@@ -266,6 +271,9 @@ button[type="button"] i,
 button[type="submit"] i {
     margin-right: var(--spacing-sm);
     font-size: 1.1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Tailles de bouton */

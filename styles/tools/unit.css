@@ -262,30 +262,6 @@
     border-radius: var(--border-radius-md);
 }
 
-.btn {
-    padding: var(--spacing-sm) var(--spacing-md);
-    border-radius: var(--border-radius-md);
-    border: none;
-    font-weight: 500;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-sm);
-    transition: all var(--transition-fast);
-}
-
-.btn-outline {
-    background: transparent;
-    border: 1px solid var(--border-color);
-    color: var(--text-color);
-}
-
-.btn-outline:hover {
-    background: var(--hover-color);
-    border-color: var(--text-secondary);
-}
-
 /* Styles pour les conversions courantes */
 .common-conversions {
     margin-top: var(--spacing-xl);
@@ -353,59 +329,6 @@
     color: var(--primary-color);
 }
 
-/* Panel d'aide */
-.help-panel {
-    position: fixed;
-    top: 0;
-    right: -400px;
-    width: 350px;
-    height: 100%;
-    background: var(--card-bg);
-    z-index: 1000;
-    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
-    transition: right 0.3s ease;
-    overflow-y: auto;
-    padding: var(--spacing-lg);
-}
-
-.help-panel.active {
-    right: 0;
-}
-
-.help-panel-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: var(--spacing-lg);
-    padding-bottom: var(--spacing-sm);
-    border-bottom: 1px solid var(--border-color);
-}
-
-.help-panel-header h3 {
-    font-size: var(--font-size-md);
-    font-weight: 600;
-    color: var(--text-color);
-}
-
-.help-panel-content h4 {
-    font-size: var(--font-size);
-    font-weight: 600;
-    margin-top: var(--spacing-lg);
-    margin-bottom: var(--spacing-sm);
-    color: var(--primary-color);
-}
-
-.help-panel-content ol,
-.help-panel-content ul {
-    padding-left: var(--spacing-lg);
-    margin-bottom: var(--spacing-md);
-}
-
-.help-panel-content li {
-    margin-bottom: var(--spacing-sm);
-    line-height: 1.5;
-}
-
 /* Responsive */
 @media (max-width: 767px) {
     .unit-container {
@@ -429,8 +352,44 @@
     .common-conversions-grid {
         grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     }
+}
 
-    .help-panel {
-        width: 300px;
+/* Mise en page horizontale pour le convertisseur d'unités */
+.unit-horizontal-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+        "main"
+        "sidebar";
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 100%;
+}
+
+@media (min-width: 1200px) {
+    .unit-horizontal-layout {
+        grid-template-columns: 1fr 350px;
+        grid-template-areas: "main sidebar";
+    }
+    
+    .unit-main-panel {
+        grid-area: main;
+        background-color: var(--bg-light);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+    }
+    
+    .unit-sidebar {
+        grid-area: sidebar;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .conversion-history,
+    .common-conversions {
+        background-color: var(--bg-light);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
     }
 }

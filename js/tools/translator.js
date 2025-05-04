@@ -11,8 +11,22 @@ let state = {
     sourceLanguage: 'auto',
     targetLanguage: 'fr',
     isTranslating: false,
-    translationTimeout: null
+    translationTimeout: null,
+    isOnline: true
 };
+
+/**
+ * Classe gestionnaire du traducteur
+ */
+export class TranslatorManager {
+    /**
+     * Initialise le gestionnaire de traduction
+     */
+    static init() {
+        console.log('Initialisation du TranslatorManager');
+        initTranslator();
+    }
+}
 
 /**
  * Initialise le traducteur
@@ -36,8 +50,23 @@ function initTranslator() {
     sourceLanguageElement.addEventListener('change', autoTranslate);
     targetLanguageElement.addEventListener('change', autoTranslate);
     
+    // S'assurer que les espaces fonctionnent correctement
+    sourceTextElement.addEventListener('keydown', (e) => {
+        // Empêcher la gestion par défaut des espaces qui pourrait interférer
+        if (e.key === ' ' || e.keyCode === 32) {
+            e.stopPropagation();
+        }
+    });
+    
     // Mettre à jour les compteurs de caractères
     updateCharCount();
+    
+    // Vérifier le statut en ligne et mettre à jour l'indicateur
+    updateConnectionStatus(navigator.onLine);
+    
+    // Écouter les changements de statut en ligne
+    window.addEventListener('online', () => updateConnectionStatus(true));
+    window.addEventListener('offline', () => updateConnectionStatus(false));
     
     console.log('Traducteur initialisé');
 }
@@ -92,30 +121,154 @@ function translateText() {
     state.isTranslating = true;
     document.getElementById('translatedText').value = 'Traduction en cours...';
     
-    // Simuler une traduction simple
-    let translatedText = state.sourceText;
+    // Vérifier si nous sommes en ligne
+    if (!navigator.onLine) {
+        useOfflineTranslation(sourceLanguage, targetLanguage);
+        return;
+    }
+    
+    // Si la langue source est 'auto', détectons d'abord la langue
+    if (sourceLanguage === 'auto') {
+        detectLanguage(state.sourceText)
+            .then(detectedLang => {
+                // Effectuer la traduction avec la langue détectée
+                performTranslation(detectedLang, targetLanguage);
+            })
+            .catch(error => {
+                console.error('Erreur lors de la détection de la langue:', error);
+                // Utiliser 'en' comme langue source par défaut en cas d'échec
+                performTranslation('en', targetLanguage);
+            });
+    } else {
+        // Langue source spécifiée, traduire directement
+        performTranslation(sourceLanguage, targetLanguage);
+    }
+}
 
+/**
+ * Détecte la langue d'un texte
+ * @param {string} text - Le texte à analyser
+ * @returns {Promise<string>} - La langue détectée
+ */
+function detectLanguage(text) {
+    // Utiliser l'API de détection de langue de MyMemory
+    const apiUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=auto|en`;
+    
+    return fetch(apiUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erreur lors de la détection de la langue');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.responseData && data.responseData.detectedLanguage) {
+                const detectedLang = data.responseData.detectedLanguage.language;
+                const confidence = Math.round(data.responseData.detectedLanguage.confidence * 100);
+                const langName = getLanguageName(detectedLang);
+                
+                // Afficher la langue détectée
+                document.getElementById('detectedLanguage').textContent = 
+                    `Langue détectée : ${langName} (${confidence}%)`;
+                
+                return detectedLang;
+            }
+            throw new Error('Langue non détectée');
+        });
+}
+
+/**
+ * Effectue la traduction avec les langues spécifiées
+ * @param {string} sourceLang - La langue source
+ * @param {string} targetLang - La langue cible
+ */
+function performTranslation(sourceLang, targetLang) {
+    // Utiliser l'API MyMemory pour la traduction
+    const langPair = `${sourceLang}|${targetLang}`;
+    const apiUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(state.sourceText)}&langpair=${langPair}`;
+    
+    fetch(apiUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erreur de réponse du service de traduction');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.responseStatus === 200) {
+                // Mettre à jour le statut en ligne
+                updateConnectionStatus(true);
+                
+                // Récupérer la traduction depuis la réponse
+                const translatedText = data.responseData.translatedText || '';
+                
+                // Mettre à jour l'état
+                state.translatedText = translatedText;
+                state.isTranslating = false;
+                
+                // Afficher la traduction
+                document.getElementById('translatedText').value = translatedText;
+                
+                // Mettre à jour le compteur de caractères
+                updateCharCount();
+                
+                // Ajouter à l'historique
+                addToTranslationHistory({
+                    sourceText: state.sourceText,
+                    translatedText: translatedText,
+                    sourceLanguage: sourceLang,
+                    targetLanguage: targetLang,
+                    timestamp: new Date().getTime()
+                });
+            } else {
+                throw new Error('La traduction a échoué');
+            }
+        })
+        .catch(error => {
+            console.error('Erreur lors de la traduction:', error);
+            
+            // Passer en mode hors ligne
+            updateConnectionStatus(false);
+            useOfflineTranslation(sourceLang, targetLang);
+        });
+}
+
+/**
+ * Utilise la traduction hors ligne
+ * @param {string} sourceLanguage - La langue source
+ * @param {string} targetLanguage - La langue cible
+ */
+function useOfflineTranslation(sourceLanguage, targetLanguage) {
+    // Traduction simple (mode hors ligne)
+    let fallbackTranslation = state.sourceText;
+    
     // Ne traduire que si la langue cible n'est pas le français
     if (targetLanguage !== 'fr') {
         if (targetLanguage === 'en') {
-            translatedText = `[EN] ${state.sourceText}`;
+            fallbackTranslation = `[EN] ${state.sourceText}`;
         } else if (targetLanguage === 'es') {
-            translatedText = `[ES] ${state.sourceText}`;
+            fallbackTranslation = `[ES] ${state.sourceText}`;
         } else if (targetLanguage === 'de') {
-            translatedText = `[DE] ${state.sourceText}`;
+            fallbackTranslation = `[DE] ${state.sourceText}`;
         } else {
-            translatedText = `[${targetLanguage.toUpperCase()}] ${state.sourceText}`;
+            fallbackTranslation = `[${targetLanguage.toUpperCase()}] ${state.sourceText}`;
         }
     }
-
-    state.translatedText = translatedText;
+    
+    state.translatedText = fallbackTranslation;
     state.isTranslating = false;
-
-    document.getElementById('translatedText').value = translatedText;
-
+    
+    document.getElementById('translatedText').value = fallbackTranslation;
+    document.getElementById('detectedLanguage').textContent = '';
+    showNotification('Mode hors ligne activé', 'warning');
+    
+    // Mettre à jour le compteur de caractères
+    updateCharCount();
+    
+    // Ajouter à l'historique
     addToTranslationHistory({
         sourceText: state.sourceText,
-        translatedText: translatedText,
+        translatedText: fallbackTranslation,
         sourceLanguage: state.sourceLanguage,
         targetLanguage: state.targetLanguage,
         timestamp: new Date().getTime()
@@ -224,7 +377,7 @@ function listenTranslation() {
 }
 
 /**
- * Lit un texte à voix haute
+ * Lit un texte à voix haute avec une meilleure qualité
  * @param {string} text - Le texte à lire
  * @param {string} language - La langue du texte
  */
@@ -235,9 +388,61 @@ function speakText(text, language) {
     }
     
     if ('speechSynthesis' in window) {
+        // Arrêter toute synthèse vocale en cours
+        window.speechSynthesis.cancel();
+        
         const utterance = new SpeechSynthesisUtterance(text);
+        
+        // Définir la langue
         utterance.lang = language;
-        window.speechSynthesis.speak(utterance);
+        
+        // Améliorer la qualité de la diction
+        utterance.rate = 0.9;  // Légèrement plus lent pour plus de clarté
+        utterance.pitch = 1.0; // Hauteur normale
+        utterance.volume = 1.0; // Volume maximum
+        
+        // Obtenir les voix disponibles
+        let voices = window.speechSynthesis.getVoices();
+        
+        // Si les voix ne sont pas encore chargées, attendre leur chargement
+        if (voices.length === 0) {
+            window.speechSynthesis.addEventListener('voiceschanged', function() {
+                voices = window.speechSynthesis.getVoices();
+                setVoice();
+            });
+        } else {
+            setVoice();
+        }
+        
+        function setVoice() {
+            // Rechercher une voix de qualité pour la langue spécifiée
+            const langPrefix = language.substring(0, 2).toLowerCase();
+            
+            // Essayer de trouver une voix premium ou de haute qualité
+            let bestVoice = voices.find(voice => 
+                voice.lang.toLowerCase().startsWith(langPrefix) && 
+                (voice.name.includes('Premium') || voice.name.includes('Enhanced'))
+            );
+            
+            // Si aucune voix premium n'est trouvée, prendre une voix standard
+            if (!bestVoice) {
+                bestVoice = voices.find(voice => 
+                    voice.lang.toLowerCase().startsWith(langPrefix)
+                );
+            }
+            
+            // Si une voix correspondante est trouvée, l'utiliser
+            if (bestVoice) {
+                utterance.voice = bestVoice;
+            }
+            
+            // Lancer la synthèse vocale
+            window.speechSynthesis.speak(utterance);
+        }
+        
+        // Notifier en cas de fin, d'erreur ou de pause
+        utterance.onend = () => console.log('Lecture terminée');
+        utterance.onerror = (event) => console.error('Erreur de synthèse vocale:', event);
     } else {
         showNotification('La synthèse vocale n\'est pas prise en charge par votre navigateur', 'error');
     }
@@ -359,12 +564,7 @@ function getLanguageName(code) {
         'es': 'Espagnol',
         'de': 'Allemand',
         'it': 'Italien',
-        'pt': 'Portugais',
-        'ru': 'Russe',
-        'ar': 'Arabe',
-        'zh': 'Chinois',
-        'ja': 'Japonais',
-        'ko': 'Coréen'
+        'pt': 'Portugais'
     };
     
     return languages[code] || code;
@@ -425,6 +625,32 @@ function showNotification(message, type = 'info') {
         window.showNotification(message, type);
     } else {
         console.log(`Notification (${type}): ${message}`);
+    }
+}
+
+/**
+ * Vérifie si le traducteur est en ligne
+ */
+function checkOnlineStatus() {
+    return navigator.onLine && state.isOnline;
+}
+
+/**
+ * Met à jour l'indicateur de statut de connexion
+ * @param {boolean} isOnline - Si le traducteur est en ligne
+ */
+function updateConnectionStatus(isOnline) {
+    const connectionStatus = document.getElementById('connectionStatus');
+    if (!connectionStatus) return;
+    
+    state.isOnline = isOnline;
+    
+    if (isOnline) {
+        connectionStatus.innerHTML = '<i class="fas fa-wifi"></i> En ligne';
+        connectionStatus.classList.remove('offline');
+    } else {
+        connectionStatus.innerHTML = '<i class="fas fa-wifi-slash"></i> Hors ligne';
+        connectionStatus.classList.add('offline');
     }
 }
 

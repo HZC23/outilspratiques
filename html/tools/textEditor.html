@@ -28,8 +28,8 @@
             </button>
         </div>
     </div>
-    <div class="tool-content">
-        <div class="text-editor-container">
+    <div class="text-editor-horizontal-layout">
+        <div class="text-editor-main-panel">
             <div class="text-editor-options">
                 <div class="filename-container">
                     <input type="text" id="textEditorFilename" placeholder="Nom du document" value="document.txt" class="filename-input">
@@ -114,7 +114,70 @@
                 </div>
             </div>
         </div>
+        
+        <div class="text-editor-sidebar">
+            <div class="tool-panel">
+                <div class="tool-panel-header">
+                    <h3>Options avancées</h3>
+                </div>
+                <div class="tool-panel-content">
+                    <div class="sidebar-section">
+                        <h4>Styles de paragraphe</h4>
+                        <select class="sidebar-select" id="paragraphStyle">
+                            <option value="p">Paragraphe normal</option>
+                            <option value="h1">Titre 1</option>
+                            <option value="h2">Titre 2</option>
+                            <option value="h3">Titre 3</option>
+                            <option value="blockquote">Citation</option>
+                            <option value="pre">Code préformaté</option>
+                        </select>
+                    </div>
+                    
+                    <div class="sidebar-section">
+                        <h4>Listes</h4>
+                        <div class="sidebar-buttons">
+                            <button class="btn btn-sm" id="insertBulletList">
+                                <span class="material-icons">format_list_bulleted</span> Liste à puces
+                            </button>
+                            <button class="btn btn-sm" id="insertNumberedList">
+                                <span class="material-icons">format_list_numbered</span> Liste numérotée
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="sidebar-section">
+                        <h4>Insérer</h4>
+                        <div class="sidebar-buttons">
+                            <button class="btn btn-sm" id="insertLink">
+                                <span class="material-icons">link</span> Lien
+                            </button>
+                            <button class="btn btn-sm" id="insertTable">
+                                <span class="material-icons">grid_on</span> Tableau
+                            </button>
+                            <button class="btn btn-sm" id="insertImage">
+                                <span class="material-icons">image</span> Image
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tool-panel mt-3">
+                <div class="tool-panel-header">
+                    <h3>Documents récents</h3>
+                    <button class="btn-icon" id="clearRecentDocs" aria-label="Effacer les documents récents">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+                <div class="tool-panel-content">
+                    <div id="recentDocList" class="recent-docs-list">
+                        <p class="empty-list">Aucun document récent</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    
     <div class="help-panel" id="textEditorHelpPanel">
         <div class="help-panel-header">
             <h3>Aide - Super éditeur de texte</h3>
@@ -150,10 +213,6 @@
             </ul>
         </div>
     </div>
-
-
-
-
 
 <script>
 // S'assurer que le module de plein écran est chargé

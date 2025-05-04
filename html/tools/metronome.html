@@ -13,125 +13,127 @@
     </div>
     
     <div class="tool-content">
-        <div class="metronome-container">
-            <h2>Métronome</h2>
-            
-            <div class="info-banner" id="audio-info-banner">
-                <i class="fas fa-info-circle"></i>
-                <span>Sur certains appareils (surtout mobiles), vous devez interagir avec la page (toucher l'écran ou cliquer) pour activer le son.</span>
-                <button class="close-banner"><i class="fas fa-times"></i></button>
-            </div>
-            
-            <div class="metronome-display">
-                <div class="tempo-display">
-                    <span id="currentTempo">120</span>
-                    <span class="tempo-unit">BPM</span>
+        <div class="metronome-horizontal-layout">
+            <div class="metronome-main-panel">
+                <div class="info-banner" id="audio-info-banner">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Sur certains appareils (surtout mobiles), vous devez interagir avec la page (toucher l'écran ou cliquer) pour activer le son.</span>
+                    <button class="close-banner"><i class="fas fa-times"></i></button>
                 </div>
-                <div class="beat-indicator" id="beatIndicator"></div>
-            </div>
-            
-            <div class="metronome-controls">
-                <button type="button" class="btn-circle" id="startMetronome" aria-label="Démarrer">
-                    <i class="fas fa-play"></i>
-                </button>
-                <button type="button" class="btn-circle" id="stopMetronome" aria-label="Arrêter" disabled>
-                    <i class="fas fa-stop"></i>
-                </button>
-            </div>
-            
-            <div class="tempo-slider-container">
-                <div class="tempo-range">
-                    <span>40</span>
-                    <input type="range" id="tempoSlider" min="40" max="240" value="120" class="tempo-slider">
-                    <span>240</span>
+                
+                <div class="metronome-display">
+                    <div class="tempo-display">
+                        <span id="currentTempo">120</span>
+                        <span class="tempo-unit">BPM</span>
+                    </div>
+                    <div class="beat-indicator" id="beatIndicator"></div>
                 </div>
-                <div class="tempo-buttons">
-                    <button type="button" class="btn" id="tempoDown" aria-label="Réduire le tempo">
-                        <i class="fas fa-minus"></i>
+                
+                <div class="metronome-controls">
+                    <button type="button" class="btn-circle" id="startMetronome" aria-label="Démarrer">
+                        <i class="fas fa-play"></i>
                     </button>
-                    <button type="button" class="btn" id="tempoUp" aria-label="Augmenter le tempo">
-                        <i class="fas fa-plus"></i>
+                    <button type="button" class="btn-circle" id="stopMetronome" aria-label="Arrêter" disabled>
+                        <i class="fas fa-stop"></i>
                     </button>
                 </div>
-            </div>
-            
-            <div class="metronome-options">
-                <div class="option-group">
-                    <label for="timeSignature">Mesure</label>
-                    <select id="timeSignature" class="form-select">
-                        <option value="2">2/4</option>
-                        <option value="3">3/4</option>
-                        <option value="4" selected>4/4</option>
-                        <option value="5">5/4</option>
-                        <option value="6">6/8</option>
-                        <option value="7">7/8</option>
-                    </select>
-                </div>
                 
-                <div class="option-group">
-                    <label for="accentFirst">Accentuation</label>
-                    <select id="accentFirst" class="form-select">
-                        <option value="true" selected>Premier temps</option>
-                        <option value="false">Aucune</option>
-                        <option value="custom">Personnalisée</option>
-                    </select>
-                </div>
-                
-                <div class="accent-pattern" id="accentPattern">
-                    <!-- Généré dynamiquement en fonction de la mesure sélectionnée -->
-                </div>
-                
-                <div class="option-group">
-                    <label for="volume">Volume</label>
-                    <input type="range" id="volume" min="0" max="100" value="80" class="volume-slider">
-                </div>
-                
-                <div class="option-group">
-                    <label class="checkbox-container">
-                        <input type="checkbox" id="visualFlash" class="checkbox-input" checked>
-                        <span class="checkbox-label">Indicateur visuel</span>
-                    </label>
-                </div>
-                
-                <div class="option-group">
-                    <label class="checkbox-container">
-                        <input type="checkbox" id="vibration" class="checkbox-input">
-                        <span class="checkbox-label">Vibration</span>
-                    </label>
+                <div class="tempo-slider-container">
+                    <div class="tempo-range">
+                        <span>40</span>
+                        <input type="range" id="tempoSlider" min="40" max="240" value="120" class="tempo-slider">
+                        <span>240</span>
+                    </div>
+                    <div class="tempo-buttons">
+                        <button type="button" class="btn" id="tempoDown" aria-label="Réduire le tempo">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn" id="tempoUp" aria-label="Augmenter le tempo">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
             
-            <div class="tempo-presets">
-                <h3>Tempos courants</h3>
-                <div class="preset-buttons">
-                    <button type="button" class="preset-btn" data-tempo="60">
-                        <span class="preset-tempo">60</span>
-                        <span class="preset-name">Largo</span>
-                    </button>
-                    <button type="button" class="preset-btn" data-tempo="76">
-                        <span class="preset-tempo">76</span>
-                        <span class="preset-name">Adagio</span>
-                    </button>
-                    <button type="button" class="preset-btn" data-tempo="108">
-                        <span class="preset-tempo">108</span>
-                        <span class="preset-name">Andante</span>
-                    </button>
-                    <button type="button" class="preset-btn" data-tempo="120">
-                        <span class="preset-tempo">120</span>
-                        <span class="preset-name">Moderato</span>
-                    </button>
-                    <button type="button" class="preset-btn" data-tempo="156">
-                        <span class="preset-tempo">156</span>
-                        <span class="preset-name">Allegro</span>
-                    </button>
-                    <button type="button" class="preset-btn" data-tempo="176">
-                        <span class="preset-tempo">176</span>
-                        <span class="preset-name">Vivace</span>
-                    </button>
-                    <button type="button" class="preset-btn" data-tempo="200">
-                        <span class="preset-tempo">200</span>
-                        <span class="preset-name">Presto</span>
-                    </button>
+            <div class="metronome-sidebar">
+                <div class="metronome-options">
+                    <div class="option-group">
+                        <label for="timeSignature">Mesure</label>
+                        <select id="timeSignature" class="form-select">
+                            <option value="2">2/4</option>
+                            <option value="3">3/4</option>
+                            <option value="4" selected>4/4</option>
+                            <option value="5">5/4</option>
+                            <option value="6">6/8</option>
+                            <option value="7">7/8</option>
+                        </select>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label for="accentFirst">Accentuation</label>
+                        <select id="accentFirst" class="form-select">
+                            <option value="true" selected>Premier temps</option>
+                            <option value="false">Aucune</option>
+                            <option value="custom">Personnalisée</option>
+                        </select>
+                    </div>
+                    
+                    <div class="accent-pattern" id="accentPattern">
+                        <!-- Généré dynamiquement en fonction de la mesure sélectionnée -->
+                    </div>
+                    
+                    <div class="option-group">
+                        <label for="volume">Volume</label>
+                        <input type="range" id="volume" min="0" max="100" value="80" class="volume-slider">
+                    </div>
+                    
+                    <div class="option-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="visualFlash" class="checkbox-input" checked>
+                            <span class="checkbox-label">Indicateur visuel</span>
+                        </label>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="vibration" class="checkbox-input">
+                            <span class="checkbox-label">Vibration</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="tempo-presets">
+                    <h3>Tempos courants</h3>
+                    <div class="preset-buttons">
+                        <button type="button" class="preset-btn" data-tempo="60">
+                            <span class="preset-tempo">60</span>
+                            <span class="preset-name">Largo</span>
+                        </button>
+                        <button type="button" class="preset-btn" data-tempo="76">
+                            <span class="preset-tempo">76</span>
+                            <span class="preset-name">Adagio</span>
+                        </button>
+                        <button type="button" class="preset-btn" data-tempo="108">
+                            <span class="preset-tempo">108</span>
+                            <span class="preset-name">Andante</span>
+                        </button>
+                        <button type="button" class="preset-btn" data-tempo="120">
+                            <span class="preset-tempo">120</span>
+                            <span class="preset-name">Moderato</span>
+                        </button>
+                        <button type="button" class="preset-btn" data-tempo="156">
+                            <span class="preset-tempo">156</span>
+                            <span class="preset-name">Allegro</span>
+                        </button>
+                        <button type="button" class="preset-btn" data-tempo="176">
+                            <span class="preset-tempo">176</span>
+                            <span class="preset-name">Vivace</span>
+                        </button>
+                        <button type="button" class="preset-btn" data-tempo="200">
+                            <span class="preset-tempo">200</span>
+                            <span class="preset-name">Presto</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -173,10 +175,7 @@
             </ul>
         </div>
     </div>
-
-
-
-
+</div>
 
 <script>
 // S'assurer que le module de plein écran est chargé
@@ -204,4 +203,4 @@
         initFullscreen();
     }
 })();
-</script></div> 
+</script> 

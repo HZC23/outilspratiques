@@ -13,8 +13,8 @@
     </div>
     
     <div class="tool-content">
-        <div class="color-picker-container">
-            <div class="color-picker-main">
+        <div class="color-horizontal-layout">
+            <div class="color-main-panel">
                 <div class="color-preview-container">
                     <div class="color-preview-fav-wrapper">
                         <input type="color" name="colorThumb" id="colorThumb" value="#0066CC">
@@ -141,14 +141,17 @@
                 </div>
             </div>
             
-            <div class="color-history">
-                <h3>Historique</h3>
-                <div class="history-colors" id="colorHistory">
-                    <!-- Historique des couleurs sera ajouté par JS -->
+            <div class="color-sidebar">
+                <div class="color-history">
+                    <h3>Historique</h3>
+                    <div class="history-colors" id="colorHistory">
+                        <!-- Historique des couleurs sera ajouté par JS -->
+                    </div>
+                    <button type="button" class="btn btn-outline" id="clearHistory" onclick="clearColorHistory()">
+                        <i class="fas fa-trash-alt"></i> Effacer l'historique
+                    </button>
                 </div>
-                <button type="button" class="btn btn-outline" id="clearHistory" onclick="clearColorHistory()">
-                    <i class="fas fa-trash-alt"></i> Effacer l'historique
-                </button>
+                
                 <div class="color-favorites">
                     <h3>Favoris</h3>
                     <div class="favorites-colors" id="colorFavorites">

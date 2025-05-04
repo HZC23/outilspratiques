@@ -1,4 +1,5 @@
 import { Utils } from '../utils.js';
+import { PerformanceManager } from '../performance.js';
 
 /**
  * Gestionnaire du minuteur et du chronomètre
@@ -292,7 +293,7 @@ export const TimerManager = {
         const endTime = this.state.timer.endTime;
         const duration = endTime - startTime;
 
-        const updateProgress = () => {
+        const updateProgress = (timestamp) => {
             if (!this.state.timer.isRunning) return;
             
             const now = Date.now();
@@ -302,12 +303,14 @@ export const TimerManager = {
             progressBar.style.width = `${progress}%`;
             progressBar.setAttribute('aria-valuenow', progress);
 
-            if (timeLeft > 0) {
-                requestAnimationFrame(updateProgress);
+            // Si le minuteur est terminé, on arrête l'animation
+            if (timeLeft <= 0) {
+                return;
             }
         };
 
-        requestAnimationFrame(updateProgress);
+        // Utiliser le limiteur de FPS pour l'animation de la barre de progression
+        this.progressAnimationStop = PerformanceManager.frameRateLimiter(updateProgress, 60)();
     },
 
     /**

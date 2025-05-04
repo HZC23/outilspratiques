@@ -16,6 +16,63 @@
     --todo-transition: all 0.3s ease;
 }
 
+/* Configuration pour la mise en page horizontale optimisée */
+@media (min-width: 1200px) {
+    .todo-horizontal-layout {
+        display: grid;
+        grid-template-columns: 250px 1fr 300px;
+        grid-template-areas: "sidebar main details";
+    }
+    
+    .todo-sidebar {
+        grid-area: sidebar;
+        background-color: var(--bg-light);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        position: sticky;
+        top: 1.5rem;
+        height: fit-content;
+    }
+    
+    .todo-main {
+        grid-area: main;
+        display: flex;
+        flex-direction: column;
+        background-color: var(--bg-light);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+    }
+    
+    .todo-details {
+        grid-area: details;
+        background-color: var(--bg-light);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        position: sticky;
+        top: 1.5rem;
+        height: fit-content;
+    }
+}
+
+@media (max-width: 1199px) {
+    .todo-details {
+        display: none;
+    }
+    .todo-details.show {
+        display: block;
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 300px;
+        background: var(--bg-light);
+        z-index: 100;
+        box-shadow: -3px 0 10px rgba(0, 0, 0, 0.1);
+        overflow-y: auto;
+        padding: 1.5rem;
+    }
+}
+
 .todo-container {
     display: grid;
     grid-template-columns: 260px 1fr;
@@ -177,25 +234,24 @@
 }
 
 .todo-input-group {
+    position: relative;
     display: flex;
-    background: var(--input-bg);
-    border: 1px solid var(--border-color);
-    border-radius: var(--todo-border-radius);
+    margin-bottom: 1rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
     overflow: hidden;
-    transition: var(--todo-transition);
-}
-
-.todo-input-group:focus-within {
-    box-shadow: 0 0 0 2px var(--todo-primary-light);
 }
 
 .todo-input {
     flex: 1;
-    padding: 0.9rem 1rem;
     border: none;
-    background: transparent;
-    color: var(--text-color);
+    padding: 0.75rem 1rem;
     font-size: 1rem;
+}
+
+.todo-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.1rem rgba(76, 110, 245, 0.25);
 }
 
 .todo-quick-actions {
@@ -204,13 +260,8 @@
     padding-right: 0.5rem;
 }
 
-.todo-quick-actions button {
-    color: var(--text-color-secondary);
-    transition: var(--todo-transition);
-}
-
-.todo-quick-actions button:hover {
-    color: var(--todo-primary);
+.todo-quick-actions .btn-icon {
+    margin-left: 0.25rem;
 }
 
 .todo-list-container {
@@ -350,31 +401,6 @@
     border-top: 1px solid var(--border-color);
 }
 
-.todo-progress {
-    margin-bottom: 1rem;
-}
-
-.progress-bar {
-    height: 6px;
-    background: var(--border-color);
-    border-radius: 3px;
-    overflow: hidden;
-    margin-bottom: 0.5rem;
-}
-
-.progress-fill {
-    height: 100%;
-    background: var(--todo-primary);
-    border-radius: 3px;
-    transition: width 0.5s ease;
-}
-
-.progress-text {
-    font-size: 0.85rem;
-    color: var(--text-color-secondary);
-    text-align: right;
-}
-
 /* Détails de la tâche */
 .todo-details {
     position: fixed;
@@ -389,6 +415,143 @@
     flex-direction: column;
     transition: var(--todo-transition);
     overflow-y: auto;
+}
+/* Styles pour les détails de tâche */
+.todo-details {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100%;
+    background: var(--card-bg);
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    transition: var(--todo-transition);
+    overflow-y: auto;
+}
+
+/* Styles pour les sélecteurs */
+.form-select {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    appearance: auto;
+}
+
+.todo-filter, .todo-sort {
+    min-width: 120px;
+    margin-left: 0.5rem;
+}
+
+/* Style pour le menu de priorité rapide */
+.quick-priority-menu {
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 100;
+    padding: 0.5rem;
+    display: none;
+    top: 100%;
+    left: 0;
+    margin-top: 0.25rem;
+    width: 150px;
+}
+
+.quick-priority-menu.active {
+    display: block;
+}
+
+.quick-priority-option {
+    display: block;
+    width: 100%;
+    padding: 0.5rem;
+    text-align: left;
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.quick-priority-option:hover {
+    background-color: #f8f9fa;
+}
+
+/* Style pour le menu de date rapide */
+.quick-date-menu {
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 100;
+    padding: 0.5rem;
+    display: none;
+    top: 100%;
+    left: 0;
+    margin-top: 0.25rem;
+    width: 250px;
+}
+
+.quick-date-menu.active {
+    display: block;
+}
+
+.quick-date-option {
+    display: block;
+    width: 100%;
+    padding: 0.5rem;
+    text-align: left;
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.quick-date-option:hover {
+    background-color: #f8f9fa;
+}
+
+.quick-date-custom {
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+}
+
+.quick-date-custom input {
+    margin-bottom: 0.5rem;
+}
+
+/* Styles pour les boutons actifs */
+.btn-icon.priority-high i {
+    color: #fa5252;
+}
+
+.btn-icon.priority-medium i {
+    color: #fab005;
+}
+
+.btn-icon.priority-low i {
+    color: #40c057;
+}
+
+.btn-icon.date-active i {
+    color: #4c6ef5;
 }
 
 .todo-details.active {
@@ -662,6 +825,14 @@
     transition: var(--todo-transition);
 }
 
+.icon-btn i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
 .icon-btn:hover {
     background: var(--hover-bg);
 }
@@ -764,52 +935,6 @@
     overflow-y: auto;
 }
 
-/* Panel d'aide */
-.help-panel {
-    position: fixed;
-    top: 0;
-    right: -400px;
-    width: 400px;
-    height: 100%;
-    background: var(--card-bg);
-    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    transition: var(--todo-transition);
-}
-
-.help-panel.active {
-    right: 0;
-}
-
-.help-panel-header {
-    padding: 1.5rem;
-    border-bottom: 1px solid var(--border-color);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.help-panel-content {
-    padding: 1.5rem;
-    overflow-y: auto;
-}
-
-.help-panel-content h4 {
-    margin-top: 1.5rem;
-    margin-bottom: 0.75rem;
-}
-
-.help-panel-content ol,
-.help-panel-content ul {
-    padding-left: 1.5rem;
-}
-
-.help-panel-content li {
-    margin-bottom: 0.5rem;
-}
-
 /* Responsive */
 @media (max-width: 768px) {
     .todo-container {
@@ -832,13 +957,6 @@
     
     .list-item {
         white-space: nowrap;
-    }
-    
-    .todo-details,
-    .search-panel,
-    .help-panel {
-        width: 100%;
-        right: -100%;
     }
     
     .todo-actions {

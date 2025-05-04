@@ -13,8 +13,9 @@
     </div>
     
     <div class="tool-content">
-        <div class="styletext-layout">
-            <div class="styletext-input-area">
+        <div class="styletext-horizontal-layout">
+            <div class="styletext-input-area tool-panel">
+                <h3 class="area-title">Texte à styliser</h3>
                 <textarea id="inputText" placeholder="Saisissez ou collez votre texte ici..." class="styletext-textarea"></textarea>
                 <div class="input-controls">
                     <div class="character-count">
@@ -31,7 +32,17 @@
                 </div>
             </div>
             
-            <div class="styletext-styles-area">
+            <div class="styletext-output-area tool-panel">
+                <h3 class="area-title">Texte stylisé</h3>
+                <textarea id="outputText" readonly class="styletext-output"></textarea>
+                <div class="output-controls">
+                    <button type="button" class="primary-btn" id="copyButton">
+                        <i class="fas fa-copy"></i> Copier dans le Presse-papiers
+                    </button>
+                </div>
+            </div>
+            
+            <div class="styletext-styles-area tool-panel-full">
                 <h3 class="area-title">Choisissez un style</h3>
                 <div class="style-list">
                     <label class="style-item">
@@ -115,15 +126,6 @@
                     </label>
                 </div>
             </div>
-            
-            <div class="styletext-output-area">
-                <textarea id="outputText" readonly class="styletext-output"></textarea>
-                <div class="output-controls">
-                    <button type="button" class="primary-btn" id="copyButton">
-                        <i class="fas fa-copy"></i> Copier dans le Presse-papiers
-                    </button>
-                </div>
-            </div>
         </div>
     </div>
     
@@ -169,10 +171,6 @@
         </div>
     </div>
 
-
-
-
-
 <script>
 // S'assurer que le module de plein écran est chargé
 (function() {
@@ -199,7 +197,7 @@
         initFullscreen();
     }
 })();
-</script></div>
+</script>
 
 <script type="module">
     import { StyleTextManager, debugStyleText } from '/js/tools/styletext.js';
@@ -318,36 +316,14 @@
     --transition: all 0.2s ease;
 }
 
-.styletext-layout {
+.styletext-horizontal-layout {
     display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
     gap: 1.5rem;
     padding: 1rem;
     max-width: 1200px;
     margin: 0 auto;
-}
-
-@media (min-width: 992px) {
-    .styletext-layout {
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: auto auto;
-        grid-template-areas:
-            "input output"
-            "styles styles";
-    }
-    
-    .styletext-input-area {
-        grid-area: input;
-    }
-    
-    .styletext-output-area {
-        grid-area: output;
-    }
-    
-    .styletext-styles-area {
-        grid-area: styles;
-    }
 }
 
 .styletext-textarea, 

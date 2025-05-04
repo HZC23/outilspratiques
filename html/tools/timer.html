@@ -14,115 +14,115 @@
     </div>
     
     <div class="tool-content">
-        <div class="timer-container">
-            <div class="timer-display">
-                <div class="time-remaining" id="timeRemaining">
-                    <span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>
-                </div>
-                <div class="progress-container">
-                    <div class="progress-bar" id="timerProgress"></div>
-                </div>
-            </div>
-            
-            <div class="timer-controls">
-                <button type="button" class="btn-circle" id="startTimer" aria-label="Démarrer">
-                    <i class="fas fa-play"></i>
-                </button>
-                <button type="button" class="btn-circle" id="pauseTimer" aria-label="Pause" disabled>
-                    <i class="fas fa-pause"></i>
-                </button>
-                <button type="button" class="btn-circle" id="resetTimer" aria-label="Réinitialiser" disabled>
-                    <i class="fas fa-redo"></i>
-                </button>
-            </div>
-            
-            <div class="timer-input">
-                <div class="time-input-group">
-                    <label for="inputHours">Heures</label>
-                    <input type="number" id="inputHours" min="0" max="23" value="0" class="time-input">
+        <div class="timer-horizontal-layout">
+            <div class="timer-main-panel">
+                <div class="timer-display">
+                    <div class="time-remaining" id="timeRemaining">
+                        <span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="timerProgress"></div>
+                    </div>
                 </div>
                 
-                <div class="time-input-group">
-                    <label for="inputMinutes">Minutes</label>
-                    <input type="number" id="inputMinutes" min="0" max="59" value="0" class="time-input">
-                </div>
-                
-                <div class="time-input-group">
-                    <label for="inputSeconds">Secondes</label>
-                    <input type="number" id="inputSeconds" min="0" max="59" value="0" class="time-input">
-                </div>
-            </div>
-            
-            <div class="timer-presets">
-                <h3>Préréglages</h3>
-                <div class="preset-buttons">
-                    <button type="button" class="preset-btn" data-time="60">1 min</button>
-                    <button type="button" class="preset-btn" data-time="300">5 min</button>
-                    <button type="button" class="preset-btn" data-time="600">10 min</button>
-                    <button type="button" class="preset-btn" data-time="1800">30 min</button>
-                    <button type="button" class="preset-btn" data-time="3600">1 h</button>
-                </div>
-            </div>
-            
-            <div class="timer-options">
-                <div class="option-group">
-                    <label for="alarmSound">Son d'alarme</label>
-                    <select id="alarmSound" class="form-select">
-                        <option value="beep">Bip</option>
-                        <option value="bell">Cloche</option>
-                        <option value="digital">Digital</option>
-                        <option value="gentle">Doux</option>
-                        <option value="notification">Notification</option>
-                        <option value="none">Aucun</option>
-                    </select>
-                    <button type="button" class="btn-icon" id="testSound" aria-label="Tester le son">
-                        <i class="fas fa-volume-up"></i>
+                <div class="timer-controls">
+                    <button type="button" class="btn-circle" id="startTimer" aria-label="Démarrer">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button type="button" class="btn-circle" id="pauseTimer" aria-label="Pause" disabled>
+                        <i class="fas fa-pause"></i>
+                    </button>
+                    <button type="button" class="btn-circle" id="resetTimer" aria-label="Réinitialiser" disabled>
+                        <i class="fas fa-redo"></i>
                     </button>
                 </div>
                 
-                <div class="option-group">
-                    <label for="alarmVolume">Volume</label>
-                    <input type="range" id="alarmVolume" min="0" max="100" value="75" class="volume-slider">
+                <div class="timer-input">
+                    <div class="time-input-group">
+                        <label for="inputHours">Heures</label>
+                        <input type="number" id="inputHours" min="0" max="23" value="0" class="time-input">
+                    </div>
+                    
+                    <div class="time-input-group">
+                        <label for="inputMinutes">Minutes</label>
+                        <input type="number" id="inputMinutes" min="0" max="59" value="0" class="time-input">
+                    </div>
+                    
+                    <div class="time-input-group">
+                        <label for="inputSeconds">Secondes</label>
+                        <input type="number" id="inputSeconds" min="0" max="59" value="0" class="time-input">
+                    </div>
                 </div>
                 
-                <div class="option-group">
-                    <label class="checkbox-container">
-                        <input type="checkbox" id="repeatTimer" class="checkbox-input">
-                        <span class="checkbox-label">Répéter automatiquement</span>
-                    </label>
-                </div>
-                
-                <div class="option-group">
-                    <label class="checkbox-container">
-                        <input type="checkbox" id="notifications" class="checkbox-input" checked>
-                        <span class="checkbox-label">Notifications</span>
-                    </label>
+                <div class="timer-presets">
+                    <h3>Préréglages</h3>
+                    <div class="preset-buttons">
+                        <button type="button" class="preset-btn" data-time="60">1 min</button>
+                        <button type="button" class="preset-btn" data-time="300">5 min</button>
+                        <button type="button" class="preset-btn" data-time="600">10 min</button>
+                        <button type="button" class="preset-btn" data-time="1800">30 min</button>
+                        <button type="button" class="preset-btn" data-time="3600">1 h</button>
+                    </div>
                 </div>
             </div>
             
-            
-        </div>
-        <div class="timer-help-section">
-            <h3>Aide - Minuteur</h3>
-            <div class="help-panel-content">
-                <h4>Comment utiliser</h4>
-                <ol>
-                    <li>Réglez la durée souhaitée en utilisant les champs heures, minutes et secondes</li>
-                    <li>Cliquez sur "Démarrer" pour lancer le minuteur</li>
-                    <li>Vous pouvez mettre en pause, réinitialiser ou annuler le minuteur à tout moment</li>
-                    <li>À la fin du minuteur, une alerte sonore sera émise et une notification s'affichera</li>
-                </ol>
+            <div class="timer-sidebar">
+                <div class="timer-options">
+                    <h3>Options</h3>
+                    <div class="option-group">
+                        <label for="alarmSound">Son d'alarme</label>
+                        <div class="sound-selector">
+                            <select id="alarmSound" class="form-select">
+                                <option value="beep">Bip</option>
+                                <option value="bell">Cloche</option>
+                                <option value="digital">Digital</option>
+                                <option value="gentle">Doux</option>
+                                <option value="notification">Notification</option>
+                                <option value="none">Aucun</option>
+                            </select>
+                            <button type="button" class="btn-icon" id="testSound" aria-label="Tester le son">
+                                <i class="fas fa-volume-up"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label for="alarmVolume">Volume</label>
+                        <input type="range" id="alarmVolume" min="0" max="100" value="75" class="volume-slider">
+                    </div>
+                    
+                    <div class="option-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="repeatTimer" class="checkbox-input">
+                            <span class="checkbox-label">Répéter automatiquement</span>
+                        </label>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="notifications" class="checkbox-input" checked>
+                            <span class="checkbox-label">Notifications</span>
+                        </label>
+                    </div>
+                </div>
                 
-                <h4>Fonctionnalités</h4>
-                <ul>
-                    <li><strong>Préréglages</strong> : durées courantes prédéfinies pour un accès rapide</li>
-                    <li><strong>Sons personnalisables</strong> : choisissez parmi différentes alarmes</li>
-                    <li><strong>Répétition automatique</strong> : redémarre automatiquement à la fin</li>
-                    <li><strong>Notifications</strong> : alerte même si le navigateur est en arrière-plan</li>
-                    <li><strong>Mode plein écran</strong> : pour une meilleure visibilité</li>
-                </ul>
-                
-                <p class="help-note">Note: Les notifications peuvent nécessiter votre permission pour s'afficher.</p>
+                <div class="timer-help-section">
+                    <h3>Aide rapide</h3>
+                    <div class="help-content">
+                        <h4>Comment utiliser</h4>
+                        <ol>
+                            <li>Réglez la durée souhaitée</li>
+                            <li>Cliquez sur "Démarrer"</li>
+                            <li>Une alerte retentira à la fin</li>
+                        </ol>
+                        
+                        <h4>Astuces</h4>
+                        <ul>
+                            <li>Utilisez les préréglages pour un accès rapide</li>
+                            <li>Activez les notifications pour être alerté même si le navigateur est en arrière-plan</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

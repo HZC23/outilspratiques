@@ -1,7 +1,114 @@
-.text-editor-container {
+.text-editor-container,
+.text-editor-horizontal-layout {
     display: flex;
     flex-direction: column;
     gap: var(--styletext-gap);
+}
+
+/* Mise en page horizontale pour les grands écrans */
+@media (min-width: 1200px) {
+    .text-editor-horizontal-layout {
+        display: grid;
+        grid-template-columns: 1fr 320px;
+        grid-template-areas: "main sidebar";
+        gap: 1.5rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    .text-editor-main-panel {
+        grid-area: main;
+    }
+    
+    .text-editor-sidebar {
+        grid-area: sidebar;
+    }
+    
+    .text-editor-sidebar .tool-panel {
+        height: auto;
+        margin-bottom: 1.5rem;
+        background-color: var(--bg-light);
+        border-radius: var(--border-radius);
+    }
+    
+    .text-editor-sidebar .tool-panel-content {
+        max-height: 300px;
+        overflow-y: auto;
+        padding: var(--spacing-md);
+    }
+    
+    .sidebar-section {
+        margin-bottom: 1.25rem;
+    }
+    
+    .sidebar-section:last-child {
+        margin-bottom: 0;
+    }
+    
+    .sidebar-section h4 {
+        font-size: 0.95rem;
+        margin-bottom: 0.75rem;
+        color: var(--text-color);
+    }
+    
+    .sidebar-select {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius-sm);
+        background-color: var(--input-bg);
+        color: var(--text-color);
+        font-size: 0.9rem;
+    }
+    
+    .sidebar-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .sidebar-buttons .btn-sm {
+        padding: 6px 10px;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+    
+    .sidebar-buttons .btn-sm .material-icons {
+        font-size: 1rem;
+    }
+    
+    .recent-docs-list {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+    
+    .empty-list {
+        color: var(--text-muted);
+        font-style: italic;
+        text-align: center;
+        padding: 1rem 0;
+    }
+}
+
+/* Pour les tablettes */
+@media (min-width: 768px) and (max-width: 1199px) {
+    .text-editor-horizontal-layout {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .text-editor-sidebar {
+        display: flex;
+        gap: 1.5rem;
+        flex-direction: row;
+    }
+    
+    .text-editor-sidebar .tool-panel {
+        flex: 1;
+    }
 }
 
 .text-editor-options {
@@ -321,38 +428,6 @@
     gap: 10px;
 }
 
-.help-panel {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(34, 40, 60, 0.3);
-    backdrop-filter: blur(3px);
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
-}
-.help-panel.show {
-    display: flex;
-}
-.help-panel-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-bottom: 1em;
-    border-bottom: 1px solid var(--border-color);
-}
-.help-panel-content {
-    padding: 1.5em 0 0 0;
-}
-.help-panel > div {
-    background: var(--card-bg);
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--hover-shadow);
-    padding: 2.5em 3em;
-    min-width: 380px;
-    max-width: 95vw;
-}
-
 .text-editor-notification {
     position: fixed;
     bottom: var(--styletext-toast-bottom);
@@ -392,9 +467,6 @@
         font-size: var(--font-size);
         padding: var(--spacing-md) var(--spacing-sm);
         min-height: 200px;
-    }
-    .help-panel > div {
-        padding: 1.5em 1em;
     }
     .toolbar, .text-editor-options {
         padding: var(--spacing-sm);

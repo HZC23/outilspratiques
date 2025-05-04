@@ -6,6 +6,10 @@
  * - Interface utilisateur avancée 
  * - Initialisation et vérification de compatibilité
  */
+
+// Importer le gestionnaire de performance
+import { PerformanceManager } from '../performance.js';
+
 class Metronome {
     constructor() {
         // État initial
@@ -444,16 +448,16 @@ class Metronome {
     }
     
     scheduleVisualFeedback(delay, isAccented) {
-            setTimeout(() => {
+        setTimeout(() => {
             if (!this.beatIndicator) return;
             
             // Appliquer une classe différente selon l'accentuation
-                this.beatIndicator.classList.add('active');
+            this.beatIndicator.classList.add('active');
             if (isAccented) {
                 this.beatIndicator.classList.add('accented');
             }
             
-            // Utiliser requestAnimationFrame pour l'animation
+            // Utiliser le limiteur de FPS pour optimiser l'animation
             const startTime = performance.now();
             const duration = 100; // durée de l'animation en ms
             
@@ -469,11 +473,18 @@ class Metronome {
                 const intensity = 1 - (elapsed / duration);
                 this.beatIndicator.style.transform = `scale(${1 + 0.2 * intensity})`;
                 this.beatIndicator.style.opacity = 0.5 + 0.5 * intensity;
-                
-                this.animationFrameId = requestAnimationFrame(animate);
             };
             
-            this.animationFrameId = requestAnimationFrame(animate);
+            // Utiliser le gestionnaire de performance pour limiter le taux de rafraîchissement
+            const stopAnimation = PerformanceManager.frameRateLimiter(animate, 60)();
+            
+            // Arrêter l'animation après la durée spécifiée
+            setTimeout(() => {
+                stopAnimation();
+                this.beatIndicator.classList.remove('active', 'accented');
+                this.beatIndicator.style.transform = '';
+                this.beatIndicator.style.opacity = '';
+            }, duration);
         }, delay);
     }
     

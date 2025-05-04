@@ -13,237 +13,239 @@
     </div>
     
     <div class="tool-content">
-        <div class="qrcode-container">
-            <div class="qrcode-tabs">
-                <button type="button" class="tab-btn active" data-tab="url">URL</button>
-                <button type="button" class="tab-btn" data-tab="text">Texte</button>
-                <button type="button" class="tab-btn" data-tab="contact">Contact</button>
-                <button type="button" class="tab-btn" data-tab="wifi">Wi-Fi</button>
-            </div>
-            
-            <div class="qrcode-tab-content">
-                <!-- Onglet URL -->
-                <div class="tab-pane active" id="urlTab">
-                    <div class="form-group">
-                        <label for="urlInput">Adresse URL</label>
-                        <input type="url" id="urlInput" class="form-input" placeholder="https://exemple.com" autocomplete="url" spellcheck="false">
-                        <p class="form-hint">Entrez l'adresse web que vous souhaitez partager dans votre QR code.</p>
-                    </div>
+        <div class="qrcode-horizontal-layout">
+            <div class="qrcode-main-panel">
+                <div class="qrcode-tabs">
+                    <button type="button" class="tab-btn active" data-tab="url">URL</button>
+                    <button type="button" class="tab-btn" data-tab="text">Texte</button>
+                    <button type="button" class="tab-btn" data-tab="contact">Contact</button>
+                    <button type="button" class="tab-btn" data-tab="wifi">Wi-Fi</button>
                 </div>
                 
-                <!-- Onglet Texte -->
-                <div class="tab-pane" id="textTab">
-                    <div class="form-group">
-                        <label for="textInput">Texte</label>
-                        <textarea id="textInput" class="form-textarea" placeholder="Saisissez votre texte ici..." rows="4"></textarea>
-                        <p class="form-hint">Vous pouvez saisir n'importe quel texte, message ou information.</p>
-                    </div>
-                </div>
-                
-                <!-- Onglet Contact -->
-                <div class="tab-pane" id="contactTab">
-                    <div class="contact-form">
+                <div class="qrcode-tab-content">
+                    <!-- Onglet URL -->
+                    <div class="tab-pane active" id="urlTab">
                         <div class="form-group">
-                            <label for="contactName">Nom <span class="required">*</span></label>
-                            <input type="text" id="contactName" class="form-input" placeholder="Nom Prénom" required>
+                            <label for="urlInput">Adresse URL</label>
+                            <input type="url" id="urlInput" class="form-input" placeholder="https://exemple.com" autocomplete="url" spellcheck="false">
+                            <p class="form-hint">Entrez l'adresse web que vous souhaitez partager dans votre QR code.</p>
                         </div>
-                        <div class="form-row">
+                    </div>
+                    
+                    <!-- Onglet Texte -->
+                    <div class="tab-pane" id="textTab">
+                        <div class="form-group">
+                            <label for="textInput">Texte</label>
+                            <textarea id="textInput" class="form-textarea" placeholder="Saisissez votre texte ici..." rows="4"></textarea>
+                            <p class="form-hint">Vous pouvez saisir n'importe quel texte, message ou information.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Onglet Contact -->
+                    <div class="tab-pane" id="contactTab">
+                        <div class="contact-form">
                             <div class="form-group">
-                                <label for="contactPhone">Téléphone</label>
-                                <input type="tel" id="contactPhone" class="form-input" placeholder="+33 6 12 34 56 78">
+                                <label for="contactName">Nom <span class="required">*</span></label>
+                                <input type="text" id="contactName" class="form-input" placeholder="Nom Prénom" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="contactPhone">Téléphone</label>
+                                    <input type="tel" id="contactPhone" class="form-input" placeholder="+33 6 12 34 56 78">
+                                </div>
+                                <div class="form-group">
+                                    <label for="contactEmail">Email</label>
+                                    <input type="email" id="contactEmail" class="form-input" placeholder="nom@exemple.com">
+                                </div>
                             </div>
                             <div class="form-group">
-                                <label for="contactEmail">Email</label>
-                                <input type="email" id="contactEmail" class="form-input" placeholder="nom@exemple.com">
+                                <label for="contactAddress">Adresse</label>
+                                <textarea id="contactAddress" class="form-textarea" placeholder="Numéro, rue, code postal, ville, pays" rows="2"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="contactWebsite">Site web</label>
+                                <input type="url" id="contactWebsite" class="form-input" placeholder="https://exemple.com">
+                            </div>
+                            <p class="form-hint">Créez une carte de contact numérique qui pourra être ajoutée aux contacts d'un smartphone.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Onglet Wi-Fi -->
+                    <div class="tab-pane" id="wifiTab">
+                        <div class="form-group">
+                            <label for="wifiSsid">Nom du réseau (SSID) <span class="required">*</span></label>
+                            <input type="text" id="wifiSsid" class="form-input" placeholder="Nom de votre réseau Wi-Fi" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="wifiPassword">Mot de passe</label>
+                            <div class="password-input">
+                                <input type="password" id="wifiPassword" class="form-input" placeholder="Mot de passe Wi-Fi">
+                                <button type="button" class="btn-toggle-password" id="toggleWifiPassword" aria-label="Afficher/masquer le mot de passe">
+                                    <i class="fas fa-eye"></i>
+                                </button>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="contactAddress">Adresse</label>
-                            <textarea id="contactAddress" class="form-textarea" placeholder="Numéro, rue, code postal, ville, pays" rows="2"></textarea>
+                            <label for="wifiEncryption">Type de sécurité</label>
+                            <select id="wifiEncryption" class="form-select">
+                                <option value="WPA">WPA/WPA2/WPA3</option>
+                                <option value="WEP">WEP</option>
+                                <option value="nopass">Aucun (réseau ouvert)</option>
+                            </select>
                         </div>
                         <div class="form-group">
-                            <label for="contactWebsite">Site web</label>
-                            <input type="url" id="contactWebsite" class="form-input" placeholder="https://exemple.com">
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="wifiHidden" class="checkbox-input">
+                                <span class="checkbox-label">Réseau caché</span>
+                            </label>
                         </div>
-                        <p class="form-hint">Créez une carte de contact numérique qui pourra être ajoutée aux contacts d'un smartphone.</p>
+                        <p class="form-hint">Partagez facilement les informations de connexion Wi-Fi sans avoir à saisir le mot de passe.</p>
                     </div>
                 </div>
                 
-                <!-- Onglet Wi-Fi -->
-                <div class="tab-pane" id="wifiTab">
+                <div class="qrcode-options">
+                    <h3>Options</h3>
+                    
                     <div class="form-group">
-                        <label for="wifiSsid">Nom du réseau (SSID) <span class="required">*</span></label>
-                        <input type="text" id="wifiSsid" class="form-input" placeholder="Nom de votre réseau Wi-Fi" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="wifiPassword">Mot de passe</label>
-                        <div class="password-input">
-                            <input type="password" id="wifiPassword" class="form-input" placeholder="Mot de passe Wi-Fi">
-                            <button type="button" class="btn-toggle-password" id="toggleWifiPassword" aria-label="Afficher/masquer le mot de passe">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="wifiEncryption">Type de sécurité</label>
-                        <select id="wifiEncryption" class="form-select">
-                            <option value="WPA">WPA/WPA2/WPA3</option>
-                            <option value="WEP">WEP</option>
-                            <option value="nopass">Aucun (réseau ouvert)</option>
+                        <label for="errorCorrectionLevel">Niveau de correction d'erreur</label>
+                        <select id="errorCorrectionLevel" class="form-select">
+                            <option value="L">Faible (7%)</option>
+                            <option value="M" selected>Standard (15%)</option>
+                            <option value="Q">Élevé (25%)</option>
+                            <option value="H">Maximum (30%)</option>
                         </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="checkbox-container">
-                            <input type="checkbox" id="wifiHidden" class="checkbox-input">
-                            <span class="checkbox-label">Réseau caché</span>
-                        </label>
-                    </div>
-                    <p class="form-hint">Partagez facilement les informations de connexion Wi-Fi sans avoir à saisir le mot de passe.</p>
-                </div>
-            </div>
-            
-            <div class="qrcode-options">
-                <h3>Options</h3>
-                
-                <div class="form-group">
-                    <label for="errorCorrectionLevel">Niveau de correction d'erreur</label>
-                    <select id="errorCorrectionLevel" class="form-select">
-                        <option value="L">Faible (7%)</option>
-                        <option value="M" selected>Standard (15%)</option>
-                        <option value="Q">Élevé (25%)</option>
-                        <option value="H">Maximum (30%)</option>
-                    </select>
-                    <p class="form-hint">Plus le niveau est élevé, plus le QR code pourra être endommagé tout en restant lisible.</p>
-                </div>
-                
-                <div class="form-group">
-                    <label for="qrSize">Taille</label>
-                    <div class="range-container">
-                        <input type="range" id="qrSize" class="form-range" min="100" max="500" step="10" value="200">
-                        <output for="qrSize" id="qrSizeValue">200 px</output>
-                    </div>
-                </div>
-                
-                <div class="colors-container">
-                    <div class="form-group">
-                        <label for="foregroundColor">Couleur du QR code</label>
-                        <div class="color-picker">
-                            <input type="color" id="foregroundColor" class="form-color" value="#000000">
-                            <input type="text" id="foregroundColorText" class="form-input color-text" value="#000000" pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$">
-                        </div>
+                        <p class="form-hint">Plus le niveau est élevé, plus le QR code pourra être endommagé tout en restant lisible.</p>
                     </div>
                     
                     <div class="form-group">
-                        <label for="backgroundColor">Couleur de fond</label>
-                        <div class="color-picker">
-                            <input type="color" id="backgroundColor" class="form-color" value="#FFFFFF">
-                            <input type="text" id="backgroundColorText" class="form-input color-text" value="#FFFFFF" pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$">
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="logoUpload">Logo (optionnel)</label>
-                    <input type="file" id="logoUpload" class="form-file" accept="image/*">
-                    <div class="file-preview" id="logoPreview"></div>
-                    <p class="form-hint">Ajoutez votre logo au centre du QR code. Préférez un logo simple avec un fond transparent.</p>
-                </div>
-                
-                <div class="form-group logo-options" id="logoOptions" style="display: none;">
-                    <div class="form-group">
-                        <label for="logoSize">Taille du logo</label>
+                        <label for="qrSize">Taille</label>
                         <div class="range-container">
-                            <input type="range" id="logoSize" class="form-range" min="10" max="30" step="1" value="20">
-                            <output for="logoSize" id="logoSizeValue">20%</output>
+                            <input type="range" id="qrSize" class="form-range" min="100" max="500" step="10" value="200">
+                            <output for="qrSize" id="qrSizeValue">200 px</output>
+                        </div>
+                    </div>
+                    
+                    <div class="colors-container">
+                        <div class="form-group">
+                            <label for="foregroundColor">Couleur du QR code</label>
+                            <div class="color-picker">
+                                <input type="color" id="foregroundColor" class="form-color" value="#000000">
+                                <input type="text" id="foregroundColorText" class="form-input color-text" value="#000000" pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="backgroundColor">Couleur de fond</label>
+                            <div class="color-picker">
+                                <input type="color" id="backgroundColor" class="form-color" value="#FFFFFF">
+                                <input type="text" id="backgroundColorText" class="form-input color-text" value="#FFFFFF" pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$">
+                            </div>
                         </div>
                     </div>
                     
                     <div class="form-group">
-                        <label class="checkbox-container">
-                            <input type="checkbox" id="logoBorder" class="checkbox-input" checked>
-                            <span class="checkbox-label">Ajouter une bordure blanche</span>
-                        </label>
+                        <label for="logoUpload">Logo (optionnel)</label>
+                        <input type="file" id="logoUpload" class="form-file" accept="image/*">
+                        <div class="file-preview" id="logoPreview"></div>
+                        <p class="form-hint">Ajoutez votre logo au centre du QR code. Préférez un logo simple avec un fond transparent.</p>
                     </div>
-                </div>
-            </div>
-            
-            <div class="qrcode-preview">
-                <h3>Aperçu</h3>
-                <div class="qrcode-output" id="qrcodeOutput">
-                    <!-- QR code sera généré ici -->
-                    <div class="empty-state">
-                        <i class="fas fa-qrcode"></i>
-                        <p>Votre QR code apparaîtra ici</p>
+                    
+                    <div class="form-group logo-options" id="logoOptions" style="display: none;">
+                        <div class="form-group">
+                            <label for="logoSize">Taille du logo</label>
+                            <div class="range-container">
+                                <input type="range" id="logoSize" class="form-range" min="10" max="30" step="1" value="20">
+                                <output for="logoSize" id="logoSizeValue">20%</output>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="logoBorder" class="checkbox-input" checked>
+                                <span class="checkbox-label">Ajouter une bordure blanche</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="qrcode-actions">
-                    <button type="button" class="btn btn-primary" id="generateQrCode">
-                        <i class="fas fa-sync-alt"></i> Générer
-                    </button>
-                    
-                    <div class="dropdown">
-                        <button type="button" class="btn btn-secondary" id="downloadQrCode">
-                            <i class="fas fa-download"></i> Télécharger
-                        </button>
-                        <div class="dropdown-menu" id="downloadOptions">
-                            <button type="button" class="dropdown-item" data-format="png">PNG</button>
-                            <button type="button" class="dropdown-item" data-format="jpg">JPG</button>
-                            <button type="button" class="dropdown-item" data-format="svg">SVG</button>
-                            <button type="button" class="dropdown-item" data-format="pdf">PDF</button>
+                <div class="qrcode-preview">
+                    <h3>Aperçu</h3>
+                    <div class="qrcode-output" id="qrcodeOutput">
+                        <!-- QR code sera généré ici -->
+                        <div class="empty-state">
+                            <i class="fas fa-qrcode"></i>
+                            <p>Votre QR code apparaîtra ici</p>
                         </div>
                     </div>
                     
-                    <button type="button" class="btn" id="printQrCode">
-                        <i class="fas fa-print"></i> Imprimer
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Historique des QR codes -->
-            <div class="qrcode-history" id="qrcodeHistory">
-                <!-- L'historique sera généré ici -->
-            </div>
-            
-            <div class="qrcode-scanner-section">
-                <h3>Scanner un QR code</h3>
-                <p>Vous pouvez également scanner un QR code avec votre webcam ou en téléchargeant une image.</p>
-                
-                <div class="scanner-options">
-                    <button type="button" class="btn" id="startWebcam">
-                        <i class="fas fa-camera"></i> Utiliser la webcam
-                    </button>
-                    
-                    <div class="or-divider">ou</div>
-                    
-                    <div class="form-group">
-                        <label for="qrImageUpload">Importer une image</label>
-                        <input type="file" id="qrImageUpload" class="form-file" accept="image/*">
-                    </div>
-                </div>
-                
-                <div class="scanner-container" id="scannerContainer" style="display: none;">
-                    <div class="webcam-container" id="webcamContainer" style="display: none;">
-                        <video id="webcamVideo" playsinline autoplay></video>
-                        <canvas id="webcamCanvas" style="display: none;"></canvas>
-                        <div class="scanner-overlay">
-                            <div class="scanner-marker"></div>
+                    <div class="qrcode-actions">
+                        <button type="button" class="btn btn-primary" id="generateQrCode">
+                            <i class="fas fa-sync-alt"></i> Générer
+                        </button>
+                        
+                        <div class="dropdown">
+                            <button type="button" class="btn btn-secondary" id="downloadQrCode">
+                                <i class="fas fa-download"></i> Télécharger
+                            </button>
+                            <div class="dropdown-menu" id="downloadOptions">
+                                <button type="button" class="dropdown-item" data-format="png">PNG</button>
+                                <button type="button" class="dropdown-item" data-format="jpg">JPG</button>
+                                <button type="button" class="dropdown-item" data-format="svg">SVG</button>
+                                <button type="button" class="dropdown-item" data-format="pdf">PDF</button>
+                            </div>
                         </div>
-                        <button type="button" class="btn-icon" id="stopWebcam" aria-label="Arrêter la caméra">
-                            <i class="fas fa-times"></i>
+                        
+                        <button type="button" class="btn" id="printQrCode">
+                            <i class="fas fa-print"></i> Imprimer
                         </button>
                     </div>
+                </div>
+                
+                <!-- Historique des QR codes -->
+                <div class="qrcode-history" id="qrcodeHistory">
+                    <!-- L'historique sera généré ici -->
+                </div>
+                
+                <div class="qrcode-scanner-section">
+                    <h3>Scanner un QR code</h3>
+                    <p>Vous pouvez également scanner un QR code avec votre webcam ou en téléchargeant une image.</p>
                     
-                    <div class="scan-result" id="scanResult" style="display: none;">
-                        <h4>Résultat du scan</h4>
-                        <div class="result-content" id="scanResultContent"></div>
-                        <div class="result-actions">
-                            <button type="button" class="btn" id="copyScanResult">
-                                <i class="fas fa-copy"></i> Copier
+                    <div class="scanner-options">
+                        <button type="button" class="btn" id="startWebcam">
+                            <i class="fas fa-camera"></i> Utiliser la webcam
+                        </button>
+                        
+                        <div class="or-divider">ou</div>
+                        
+                        <div class="form-group">
+                            <label for="qrImageUpload">Importer une image</label>
+                            <input type="file" id="qrImageUpload" class="form-file" accept="image/*">
+                        </div>
+                    </div>
+                    
+                    <div class="scanner-container" id="scannerContainer" style="display: none;">
+                        <div class="webcam-container" id="webcamContainer" style="display: none;">
+                            <video id="webcamVideo" playsinline autoplay></video>
+                            <canvas id="webcamCanvas" style="display: none;"></canvas>
+                            <div class="scanner-overlay">
+                                <div class="scanner-marker"></div>
+                            </div>
+                            <button type="button" class="btn-icon" id="stopWebcam" aria-label="Arrêter la caméra">
+                                <i class="fas fa-times"></i>
                             </button>
-                            <button type="button" class="btn" id="openScanResult">
-                                <i class="fas fa-external-link-alt"></i> Ouvrir
-                            </button>
+                        </div>
+                        
+                        <div class="scan-result" id="scanResult" style="display: none;">
+                            <h4>Résultat du scan</h4>
+                            <div class="result-content" id="scanResultContent"></div>
+                            <div class="result-actions">
+                                <button type="button" class="btn" id="copyScanResult">
+                                    <i class="fas fa-copy"></i> Copier
+                                </button>
+                                <button type="button" class="btn" id="openScanResult">
+                                    <i class="fas fa-external-link-alt"></i> Ouvrir
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -302,10 +304,7 @@
             </ul>
         </div>
     </div>
-
-
-
-
+</div>
 
 <script>
 // S'assurer que le module de plein écran est chargé
@@ -333,4 +332,4 @@
         initFullscreen();
     }
 })();
-</script></div> 
+</script> 
