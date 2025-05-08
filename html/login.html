@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - Outils Pratiques</title>
+    
+    <!-- Preload des ressources critiques -->
+    <link rel="preload" href="../styles/variables.css" as="style">
+    <link rel="preload" href="../styles/main.css" as="style">
+    
+    <!-- CSS principal -->
+    <link rel="stylesheet" href="../styles/variables.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/components/header.css">
+    <link rel="stylesheet" href="../styles/components/theme-switch.css">
+    <link rel="stylesheet" href="../styles/components/notification.css">
+    <link rel="stylesheet" href="../styles/login.css">
+    
+    <!-- Fonts et icons avec chargement différé -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" 
+          media="print" 
+          onload="this.media='all'" 
+          crossorigin="anonymous"
+          integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+          referrerpolicy="no-referrer">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" 
+          rel="stylesheet" 
+          media="print" 
+          onload="this.media='all'"
+          crossorigin="anonymous">
+    
+    <!-- Noscript fallback -->
+    <noscript>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    </noscript>
+    
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <!-- Bouton de thème en haut à gauche -->
+            <div class="theme-switch-wrapper">
+                <!-- From Uiverse.io by Galahhad --> 
+                <label class="theme-switch">
+                    <input type="checkbox" class="theme-switch__checkbox" aria-label="Basculer entre le mode clair et sombre">
+                    <div class="theme-switch__container">
+                        <div class="theme-switch__clouds"></div>
+                        <div class="theme-switch__stars-container">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144 55" fill="none">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M135.831 3.00688C135.055 3.85027 134.111 4.29946 133 4.35447C134.111 4.40947 135.055 4.85867 135.831 5.71123C136.607 6.55462 136.996 7.56303 136.996 8.72727C136.996 7.95722 137.172 7.25134 137.525 6.59129C137.886 5.93124 138.372 5.39954 138.98 5.00535C139.598 4.60199 140.268 4.39114 141 4.35447C139.88 4.2903 138.936 3.85027 138.16 3.00688C137.384 2.16348 136.996 1.16425 136.996 0C136.996 1.16425 136.607 2.16348 135.831 3.00688ZM31 23.3545C32.1114 23.2995 33.0551 22.8503 33.8313 22.0069C34.6075 21.1635 34.9956 20.1642 34.9956 19C34.9956 20.1642 35.3837 21.1635 36.1599 22.0069C36.9361 22.8503 37.8798 23.2903 39 23.3545C38.2679 23.3911 37.5976 23.602 36.9802 24.0053C36.3716 24.3995 35.8864 24.9312 35.5248 25.5913C35.172 26.2513 34.9956 26.9572 34.9956 27.7273C34.9956 26.563 34.6075 25.5546 33.8313 24.7112C33.0551 23.8587 32.1114 23.4095 31 23.3545ZM0 36.3545C1.11136 36.2995 2.05513 35.8503 2.83131 35.0069C3.6075 34.1635 3.99559 33.1642 3.99559 32C3.99559 33.1642 4.38368 34.1635 5.15987 35.0069C5.93605 35.8503 6.87982 36.2903 8 36.3545C7.26792 36.3911 6.59757 36.602 5.98015 37.0053C5.37155 37.3995 4.88644 37.9312 4.52481 38.5913C4.172 39.2513 3.99559 39.9572 3.99559 40.7273C3.99559 39.563 3.6075 38.5546 2.83131 37.7112C2.05513 36.8587 1.11136 36.4095 0 36.3545ZM56.8313 24.0069C56.0551 24.8503 55.1114 25.2995 54 25.3545C55.1114 25.4095 56.0551 25.8587 56.8313 26.7112C57.6075 27.5546 57.9956 28.563 57.9956 29.7273C57.9956 28.9572 58.172 28.2513 58.5248 27.5913C58.8864 26.9312 59.3716 26.3995 59.9802 26.0053C60.5976 25.602 61.2679 25.3911 62 25.3545C60.8798 25.2903 59.9361 24.8503 59.1599 24.0069C58.3837 23.1635 57.9956 22.1642 57.9956 21C57.9956 22.1642 57.6075 23.1635 56.8313 24.0069ZM81 25.3545C82.1114 25.2995 83.0551 24.8503 83.8313 24.0069C84.6075 23.1635 84.9956 22.1642 84.9956 21C84.9956 22.1642 85.3837 23.1635 86.1599 24.0069C86.9361 24.8503 87.8798 25.2903 89 25.3545C88.2679 25.3911 87.5976 25.602 86.9802 26.0053C86.3716 26.3995 85.8864 26.9312 85.5248 27.5913C85.172 28.2513 84.9956 28.9572 84.9956 29.7273C84.9956 28.563 84.6075 27.5546 83.8313 26.7112C83.0551 25.8587 82.1114 25.4095 81 25.3545ZM136 36.3545C137.111 36.2995 138.055 35.8503 138.831 35.0069C139.607 34.1635 139.996 33.1642 139.996 32C139.996 33.1642 140.384 34.1635 141.16 35.0069C141.936 35.8503 142.88 36.2903 144 36.3545C143.268 36.3911 142.598 36.602 141.98 37.0053C141.372 37.3995 140.886 37.9312 140.525 38.5913C140.172 39.2513 139.996 39.9572 139.996 40.7273C139.996 39.563 139.607 38.5546 138.831 37.7112C138.055 36.8587 137.111 36.4095 136 36.3545ZM101.831 49.0069C101.055 49.8503 100.111 50.2995 99 50.3545C100.111 50.4095 101.055 50.8587 101.831 51.7112C102.607 52.5546 102.996 53.563 102.996 54.7273C102.996 53.9572 103.172 53.2513 103.525 52.5913C103.886 51.9312 104.372 51.3995 104.98 51.0053C105.598 50.602 106.268 50.3911 107 50.3545C105.88 50.2903 104.936 49.8503 104.16 49.0069C103.384 48.1635 102.996 47.1642 102.996 46C102.996 47.1642 102.607 48.1635 101.831 49.0069Z" fill="currentColor"></path>
+                            </svg>
+                        </div>
+                        <div class="theme-switch__circle-container">
+                            <div class="theme-switch__sun-moon-container">
+                                <div class="theme-switch__moon">
+                                    <div class="theme-switch__spot"></div>
+                                    <div class="theme-switch__spot"></div>
+                                    <div class="theme-switch__spot"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </label>
+            </div>
+            <h1>Outils Pratiques</h1>
+            
+            <div class="header-actions">
+                <!-- Horloge en haut à droite -->
+                <div class="top-clock" role="complementary" aria-label="Horloge">
+                    <div class="time" id="topTime">00:00:00</div>
+                    <div class="date" id="topDate">01 Janvier 2024</div>
+                </div>
+                
+                <button id="homeButton" class="btn-icon" aria-label="Accueil" onclick="window.location.href='../index.html'">
+                    <i class="fas fa-home"></i>
+                </button>
+                <button id="menuToggle" class="menu-toggle" aria-label="Ouvrir le menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+    
+    <main class="login-container">
+        <div class="login-card">
+            <div class="card-header">
+                <h2>Bienvenue</h2>
+                <p class="card-subtitle">Connectez-vous pour accéder à tous les outils</p>
+            </div>
+            
+            <!-- Notification Template (Hidden by default) -->
+            <div id="notification" style="display: none;">
+                <i class="fas fa-info-circle"></i>
+                <div class="notification-content">
+                    <div class="notification-title">Titre</div>
+                    <div class="notification-message">Message</div>
+                </div>
+                <button class="close-notification">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- Section utilisateur connecté (Hidden by default) -->
+            <div id="user-info" style="display: none;">
+                <div class="notification success" style="display: flex;">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="notification-content">
+                        <div class="notification-title">Connecté</div>
+                        <div class="notification-message" id="user-email">Vous êtes connecté</div>
+                    </div>
+                </div>
+                
+                <button id="logout-btn" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Se déconnecter
+                </button>
+                
+                <button class="btn-login" onclick="window.history.back()">
+                    Retour à la page précédente
+                </button>
+            </div>
+            
+            <!-- Tabs -->
+            <div id="auth-tabs" class="tab-container">
+                <input type="radio" name="tab" id="login-tab" class="tab" checked>
+                <input type="radio" name="tab" id="register-tab" class="tab">
+                <label for="login-tab" class="tab-btn">Connexion</label>
+                <label for="register-tab" class="tab-btn">Inscription</label>
+                <div class="tab-selector"></div>
+            </div>
+            
+            <!-- Login Form -->
+            <form id="login-form" class="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" name="email" placeholder="Votre adresse email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="login-password">Mot de passe</label>
+                    <input type="password" id="login-password" name="password" placeholder="Votre mot de passe" required>
+                </div>
+                
+                <div class="remember-forgot">
+                    <div class="remember-me">
+                        <input type="checkbox" id="remember-me" name="remember">
+                        <label for="remember-me">Se souvenir de moi</label>
+                    </div>
+                    
+                    <a href="#" class="forgot-password" id="forgot-password">Mot de passe oublié ?</a>
+                </div>
+                
+                <button type="submit" class="btn-login" id="login-btn">Se connecter</button>
+                
+                <div class="social-login">
+                    <div class="social-text">ou continuer avec</div>
+                    <div class="social-btns">
+                        <button type="button" class="social-btn google" id="google-login">
+                            <i class="fab fa-google"></i>
+                        </button>
+                        <button type="button" class="social-btn facebook" id="facebook-login">
+                            <i class="fab fa-facebook-f"></i>
+                        </button>
+                        <button type="button" class="social-btn github" id="github-login">
+                            <i class="fab fa-github"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+            
+            <!-- Register Form -->
+            <form id="register-form" class="register-form">
+                <div class="form-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" name="email" placeholder="Votre adresse email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="register-password">Mot de passe</label>
+                    <input type="password" id="register-password" name="password" placeholder="Votre mot de passe" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="register-confirm-password">Confirmer le mot de passe</label>
+                    <input type="password" id="register-confirm-password" name="confirm-password" placeholder="Confirmez votre mot de passe" required>
+                </div>
+                
+                <button type="submit" class="btn-login" id="register-btn">S'inscrire</button>
+                
+                <div class="social-login">
+                    <div class="social-text">ou s'inscrire avec</div>
+                    <div class="social-btns">
+                        <button type="button" class="social-btn google" id="google-register">
+                            <i class="fab fa-google"></i>
+                        </button>
+                        <button type="button" class="social-btn facebook" id="facebook-register">
+                            <i class="fab fa-facebook-f"></i>
+                        </button>
+                        <button type="button" class="social-btn github" id="github-register">
+                            <i class="fab fa-github"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+    
+    <script type="module">
+        // Importer le module supabase.js
+        import { initSupabase } from '../js/supabase.js';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sélectionner les éléments du DOM
+            const loginTab = document.getElementById('login-tab');
+            const registerTab = document.getElementById('register-tab');
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const notification = document.getElementById('notification');
+            const closeNotification = notification.querySelector('.close-notification');
+            const userInfo = document.getElementById('user-info');
+            const userEmail = document.getElementById('user-email');
+            const authTabs = document.getElementById('auth-tabs');
+            const logoutBtn = document.getElementById('logout-btn');
+            
+            // Initialisation de Supabase
+            let supabase;
+            
+            // Fonction pour initialiser Supabase
+            async function setupSupabase() {
+                try {
+                    supabase = initSupabase();
+                    
+                    // Vérifier si l'utilisateur est déjà connecté
+                    await checkUser();
+                } catch (error) {
+                    console.error("Erreur lors de l'initialisation de Supabase:", error);
+                    showNotification('error', 'Erreur de connexion', 'Impossible de se connecter au service d\'authentification');
+                }
+            }
+            
+            // Appeler la fonction d'initialisation
+            setupSupabase();
+            
+            // Gérer l'affichage des formulaires en fonction des onglets
+            loginTab.addEventListener('change', function() {
+                if (this.checked) {
+                    loginForm.style.display = 'block';
+                    registerForm.style.display = 'none';
+                }
+            });
+            
+            registerTab.addEventListener('change', function() {
+                if (this.checked) {
+                    registerForm.style.display = 'block';
+                    loginForm.style.display = 'none';
+                }
+            });
+            
+            // S'assurer que les formulaires sont visibles au chargement
+            if (loginTab.checked) {
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+            } else if (registerTab.checked) {
+                registerForm.style.display = 'block';
+                loginForm.style.display = 'none';
+            }
+            
+            // Fonction pour afficher les notifications
+            function showNotification(type, title, message) {
+                notification.className = `notification ${type}`;
+                notification.querySelector('.notification-title').textContent = title;
+                notification.querySelector('.notification-message').textContent = message;
+                notification.querySelector('i').className = `fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}`;
+                notification.style.display = 'flex';
+                
+                // Masquer automatiquement après 5 secondes
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 5000);
+            }
+            
+            // Fermer la notification
+            closeNotification.addEventListener('click', () => {
+                notification.style.display = 'none';
+            });
+            
+            // Gestion de la connexion
+            loginForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                if (!supabase) {
+                    showNotification('error', 'Erreur', 'Service d\'authentification non disponible');
+                    return;
+                }
+                
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                
+                try {
+                    const { data, error } = await supabase.auth.signInWithPassword({
+                        email: email,
+                        password: password
+                    });
+                    
+                    if (error) throw error;
+                    
+                    showNotification('success', 'Connexion réussie', 'Vous êtes maintenant connecté');
+                    
+                    // Afficher les informations utilisateur
+                    await checkUser();
+                    
+                } catch (error) {
+                    showNotification('error', 'Erreur de connexion', error.message);
+                }
+            });
+            
+            // Gestion de l'inscription
+            registerForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                if (!supabase) {
+                    showNotification('error', 'Erreur', 'Service d\'authentification non disponible');
+                    return;
+                }
+                
+                const email = document.getElementById('register-email').value;
+                const password = document.getElementById('register-password').value;
+                const confirmPassword = document.getElementById('register-confirm-password').value;
+                
+                if (password !== confirmPassword) {
+                    showNotification('error', 'Erreur', 'Les mots de passe ne correspondent pas');
+                    return;
+                }
+                
+                try {
+                    const { data, error } = await supabase.auth.signUp({
+                        email: email,
+                        password: password
+                    });
+                    
+                    if (error) throw error;
+                    
+                    showNotification('success', 'Inscription réussie', 'Vérifiez votre email pour confirmer votre compte');
+                    
+                    // Basculer vers l'onglet de connexion
+                    loginTab.checked = true;
+                    loginForm.style.display = 'block';
+                    registerForm.style.display = 'none';
+                    
+                } catch (error) {
+                    showNotification('error', 'Erreur d\'inscription', error.message);
+                }
+            });
+            
+            // Mot de passe oublié
+            document.getElementById('forgot-password').addEventListener('click', async function(e) {
+                e.preventDefault();
+                
+                if (!supabase) {
+                    showNotification('error', 'Erreur', 'Service d\'authentification non disponible');
+                    return;
+                }
+                
+                const email = document.getElementById('login-email').value;
+                
+                if (!email) {
+                    showNotification('error', 'Email requis', 'Veuillez entrer votre adresse email');
+                    return;
+                }
+                
+                try {
+                    const { error } = await supabase.auth.resetPasswordForEmail(email);
+                    
+                    if (error) throw error;
+                    
+                    showNotification('success', 'Email envoyé', 'Vérifiez votre boîte mail pour réinitialiser votre mot de passe');
+                    
+                } catch (error) {
+                    showNotification('error', 'Erreur', error.message);
+                }
+            });
+            
+            // Connexion avec Google
+            document.getElementById('google-login').addEventListener('click', async function() {
+                if (!supabase) {
+                    showNotification('error', 'Erreur', 'Service d\'authentification non disponible');
+                    return;
+                }
+                
+                try {
+                    const { data, error } = await supabase.auth.signInWithOAuth({
+                        provider: 'google',
+                        options: {
+                            redirectTo: `${window.location.origin}/html/supabase-redirect.html`
+                        }
+                    });
+                    
+                    if (error) throw error;
+                    
+                } catch (error) {
+                    showNotification('error', 'Erreur', error.message);
+                }
+            });
+            
+            // Connexion avec Facebook
+            document.getElementById('facebook-login').addEventListener('click', async function() {
+                if (!supabase) {
+                    showNotification('error', 'Erreur', 'Service d\'authentification non disponible');
+                    return;
+                }
+                
+                try {
+                    const { data, error } = await supabase.auth.signInWithOAuth({
+                        provider: 'facebook',
+                        options: {
+                            redirectTo: `${window.location.origin}/html/supabase-redirect.html`
+                        }
+                    });
+                    
+                    if (error) throw error;
+                    
+                } catch (error) {
+                    showNotification('error', 'Erreur', error.message);
+                }
+            });
+            
+            // Connexion avec GitHub
+            document.getElementById('github-login').addEventListener('click', async function() {
+                if (!supabase) {
+                    showNotification('error', 'Erreur', 'Service d\'authentification non disponible');
+                    return;
+                }
+                
+                try {
+                    const { data, error } = await supabase.auth.signInWithOAuth({
+                        provider: 'github',
+                        options: {
+                            redirectTo: `${window.location.origin}/html/supabase-redirect.html`
+                        }
+                    });
+                    
+                    if (error) throw error;
+                    
+                } catch (error) {
+                    showNotification('error', 'Erreur', error.message);
+                }
+            });
+            
+            // Boutons d'inscription sociale
+            document.getElementById('google-register').addEventListener('click', async function() {
+                if (!supabase) {
+                    showNotification('error', 'Erreur', 'Service d\'authentification non disponible');
+                    return;
+                }
+                
+                try {
+                    const { data, error } = await supabase.auth.signInWithOAuth({
+                        provider: 'google',
+                        options: {
+                            redirectTo: `${window.location.origin}/html/supabase-redirect.html`
+                        }
+                    });
+                    
+                    if (error) throw error;
+                    
+                } catch (error) {
+                    showNotification('error', 'Erreur', error.message);
+                }
+            });
+            
+            document.getElementById('facebook-register').addEventListener('click', async function() {
+                if (!supabase) {
+                    showNotification('error', 'Erreur', 'Service d\'authentification non disponible');
+                    return;
+                }
+                
+                try {
+                    const { data, error } = await supabase.auth.signInWithOAuth({
+                        provider: 'facebook',
+                        options: {
+                            redirectTo: `${window.location.origin}/html/supabase-redirect.html`
+                        }
+                    });
+                    
+                    if (error) throw error;
+                    
+                } catch (error) {
+                    showNotification('error', 'Erreur', error.message);
+                }
+            });
+            
+            document.getElementById('github-register').addEventListener('click', async function() {
+                if (!supabase) {
+                    showNotification('error', 'Erreur', 'Service d\'authentification non disponible');
+                    return;
+                }
+                
+                try {
+                    const { data, error } = await supabase.auth.signInWithOAuth({
+                        provider: 'github',
+                        options: {
+                            redirectTo: `${window.location.origin}/html/supabase-redirect.html`
+                        }
+                    });
+                    
+                    if (error) throw error;
+                    
+                } catch (error) {
+                    showNotification('error', 'Erreur', error.message);
+                }
+            });
+            
+            // Déconnexion
+            logoutBtn.addEventListener('click', async function() {
+                if (!supabase) {
+                    showNotification('error', 'Erreur', 'Service d\'authentification non disponible');
+                    return;
+                }
+                
+                try {
+                    const { error } = await supabase.auth.signOut();
+                    
+                    if (error) throw error;
+                    
+                    // Afficher les formulaires d'authentification
+                    userInfo.style.display = 'none';
+                    authTabs.style.display = 'flex';
+                    loginForm.style.display = 'block';
+                    
+                    showNotification('success', 'Déconnexion réussie', 'Vous êtes maintenant déconnecté');
+                    
+                } catch (error) {
+                    showNotification('error', 'Erreur de déconnexion', error.message);
+                }
+            });
+            
+            // Vérifier si l'utilisateur est déjà connecté
+            async function checkUser() {
+                if (!supabase) return;
+                
+                try {
+                    const { data: { user } } = await supabase.auth.getUser();
+                    
+                    if (user) {
+                        // Afficher les informations utilisateur
+                        userEmail.textContent = user.email;
+                        userInfo.style.display = 'block';
+                        authTabs.style.display = 'none';
+                        loginForm.style.display = 'none';
+                        registerForm.style.display = 'none';
+                    } else {
+                        // Afficher les formulaires d'authentification
+                        userInfo.style.display = 'none';
+                        authTabs.style.display = 'flex';
+                        if (loginTab.checked) {
+                            loginForm.style.display = 'block';
+                        } else {
+                            registerForm.style.display = 'block';
+                        }
+                    }
+                } catch (error) {
+                    console.error("Erreur lors de la vérification de l'utilisateur:", error);
+                    userInfo.style.display = 'none';
+                    authTabs.style.display = 'flex';
+                }
+            }
+            
+            // Mettre à jour l'horloge
+            function updateClock() {
+                const now = new Date();
+                const timeElement = document.getElementById('topTime');
+                const dateElement = document.getElementById('topDate');
+                
+                if (timeElement && dateElement) {
+                    timeElement.textContent = now.toLocaleTimeString('fr-FR');
+                    dateElement.textContent = now.toLocaleDateString('fr-FR', { 
+                        day: '2-digit', 
+                        month: 'long', 
+                        year: 'numeric' 
+                    });
+                }
+            }
+            
+            // Mettre à jour l'horloge toutes les secondes
+            updateClock();
+            setInterval(updateClock, 1000);
+        });
+    </script>
+</body>
+</html> 

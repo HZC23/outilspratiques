@@ -88,11 +88,7 @@ export const Utils = {
     saveToStorage(key, value) {
         try {
             const data = JSON.stringify(value);
-            if (window.isSecureContext) {
-                localStorage.setItem(key, data);
-            } else {
-                sessionStorage.setItem(key, data);
-            }
+            localStorage.setItem(key, data);
         } catch (error) {
             console.warn(`Erreur lors de la sauvegarde de ${key}:`, error);
         }
@@ -106,7 +102,7 @@ export const Utils = {
      */
     loadFromStorage(key, defaultValue = null) {
         try {
-            const storage = window.isSecureContext ? localStorage : sessionStorage;
+            const storage = localStorage;
             const data = storage.getItem(key);
             return data ? JSON.parse(data) : defaultValue;
         } catch (error) {

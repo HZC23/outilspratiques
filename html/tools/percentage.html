@@ -331,34 +331,7 @@
     </div>
 </div>
 
-<script>
-// Attendre que le DOM soit complètement chargé avant de charger les scripts
-document.addEventListener('DOMContentLoaded', function() {
-    // Charger le script du calculateur de pourcentage
-    var percentageScript = document.createElement('script');
-    percentageScript.src = '../../js/tools/percentage.js';
-    document.body.appendChild(percentageScript);
-    
-    // S'assurer que le module de plein écran est chargé
-    function initFullscreen() {
-        if (!window.fullscreenManager) {
-            import('../../js/fullscreen.js')
-            .then(() => {
-                if (!window.fullscreenManager && typeof FullscreenManager !== 'undefined') {
-                    window.fullscreenManager = new FullscreenManager();
-                }
-            })
-            .catch(error => {
-                console.error('Erreur chargement fullscreen.js:', error);
-            });
-        } else {
-            window.fullscreenManager.initFullscreenButtons();
-        }
-    }
-    
-    // Initialiser le plein écran après que le script de pourcentage a été chargé
-    percentageScript.onload = function() {
-        initFullscreen();
-    };
-});
-</script> 
+<script src="../../js/fullscreen.js"></script>
+<script src="../../js/tools/percentage.js"></script>
+</body>
+</html> 

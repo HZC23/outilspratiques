@@ -8,7 +8,8 @@ export const CONFIG = {
         CALCULATOR_HISTORY: 'calculatorHistory',
         NOTES: 'notes',
         STYLE_HISTORY: 'styleHistory',
-        TODO_LIST: 'todoList'
+        TODO_LIST: 'todoList',
+        LAST_SYNC: 'lastSync'
     },
     THEMES: {
         LIGHT: 'light',
@@ -17,5 +18,9 @@ export const CONFIG = {
     API: {
         TRANSLATE_URL: 'https://translation.googleapis.com/language/translate/v2',
         WEATHER_URL: 'https://api.openweathermap.org/data/2.5/weather'
+    },
+    SYNC: {
+        AUTO_SYNC: true,
+        INTERVAL: 60000
     }
 }; 

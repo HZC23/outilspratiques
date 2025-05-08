@@ -692,7 +692,10 @@ export const TodoManager = {
      */
     showTaskDetails(taskId) {
         const todoDetails = document.getElementById('todoDetails');
-        if (!todoDetails) return;
+        if (!todoDetails) {
+            console.warn('Élément todoDetails non trouvé.');
+            return;
+        }
         
         // Trouver la tâche
         let task = this.findTask(taskId);
@@ -702,30 +705,37 @@ export const TodoManager = {
         this.state.activeTaskId = taskId;
         
         // Remplir les champs
-        document.getElementById('detailsTitle').value = task.title;
+        const detailsTitle = document.getElementById('detailsTitle');
+        if (detailsTitle) detailsTitle.value = task.title;
         
         // Mettre à jour la sélection de priorité
         const priorityBtns = document.querySelectorAll('.priority-btn');
-        priorityBtns.forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.priority === task.priority);
-        });
-        document.getElementById('detailsPriority').value = task.priority;
+        if (priorityBtns) {
+            priorityBtns.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.priority === task.priority);
+            });
+        }
+        const detailsPriority = document.getElementById('detailsPriority');
+        if (detailsPriority) detailsPriority.value = task.priority;
         
         // Dates
-        document.getElementById('detailsDueDate').value = task.dueDate ? new Date(task.dueDate).toISOString().split('T')[0] : '';
-        document.getElementById('createdDate').textContent = new Date(task.createdAt).toLocaleDateString();
+        const detailsDueDate = document.getElementById('detailsDueDate');
+        if (detailsDueDate) detailsDueDate.value = task.dueDate ? new Date(task.dueDate).toISOString().split('T')[0] : '';
+        const createdDate = document.getElementById('createdDate');
+        if (createdDate) createdDate.textContent = new Date(task.createdAt).toLocaleDateString();
         
         // Notes
-        document.getElementById('detailsNotes').value = task.notes || '';
+        const detailsNotes = document.getElementById('detailsNotes');
+        if (detailsNotes) detailsNotes.value = task.notes || '';
         
         // Gérer le rappel
         const reminderCheckbox = document.getElementById('detailsReminder');
         const reminderOptions = document.getElementById('reminderOptions');
         const reminderDateTime = document.getElementById('reminderDateTime');
         
-        reminderCheckbox.checked = !!task.reminder;
-        reminderOptions.style.display = task.reminder ? 'block' : 'none';
-        reminderDateTime.value = task.reminder || '';
+        if (reminderCheckbox) reminderCheckbox.checked = !!task.reminder;
+        if (reminderOptions) reminderOptions.style.display = task.reminder ? 'block' : 'none';
+        if (reminderDateTime) reminderDateTime.value = task.reminder || '';
         
         // Gérer les sous-tâches
         this.updateSubtasksList(task.subtasks);
@@ -742,25 +752,27 @@ export const TodoManager = {
      */
     updateSubtasksList(subtasks) {
         const subtasksList = document.getElementById('subtasksList');
-        if (!subtasksList) return;
-        
-        if (subtasks.length === 0) {
-            subtasksList.innerHTML = '<div class="empty-hint">Aucune sous-tâche</div>';
+        if (!subtasksList) {
+            console.warn('Élément subtasksList non trouvé.');
             return;
         }
         
-        subtasksList.innerHTML = subtasks.map(subtask => `
-            <div class="subtask-item ${subtask.completed ? 'completed' : ''}" data-subtask-id="${subtask.id}">
-                <div class="subtask-checkbox">
-                    <input type="checkbox" id="subtask-${subtask.id}" ${subtask.completed ? 'checked' : ''}>
-                    <label for="subtask-${subtask.id}"></label>
+        if (subtasks.length === 0) {
+            subtasksList.innerHTML = '<div class="empty-hint">Aucune sous-tâche</div>';
+        } else {
+            subtasksList.innerHTML = subtasks.map(subtask => `
+                <div class="subtask-item ${subtask.completed ? 'completed' : ''}" data-subtask-id="${subtask.id}">
+                    <div class="subtask-checkbox">
+                        <input type="checkbox" id="subtask-${subtask.id}" ${subtask.completed ? 'checked' : ''}>
+                        <label for="subtask-${subtask.id}"></label>
+                    </div>
+                    <div class="subtask-title">${subtask.title}</div>
+                    <button class="btn-icon subtask-delete">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
-                <div class="subtask-title">${subtask.title}</div>
-                <button class="btn-icon subtask-delete">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-        `).join('');
+            `).join('');
+        }
         
         // Ajouter les écouteurs d'événements
         subtasksList.querySelectorAll('.subtask-checkbox input').forEach(checkbox => {
@@ -822,7 +834,7 @@ export const TodoManager = {
             document.querySelector(`.subtask-item[data-subtask-id="${subtaskId}"]`)
                 ?.classList.toggle('completed', completed);
             
-            // Suggérer de marquer la tâche comme complétée
+            // Suggérer de marquer la tâche principale comme terminée
             if (allCompleted && !task.completed && task.subtasks.length > 0) {
                 if (confirm('Toutes les sous-tâches sont terminées. Marquer la tâche principale comme terminée ?')) {
                     this.toggleTaskCompletion(task.id, true);
@@ -1320,29 +1332,21 @@ export const TodoManager = {
      */
     updateTagsList(tags) {
         const tagsList = document.getElementById('tagsList');
-        if (!tagsList) return;
-        
-        if (tags.length === 0) {
-            tagsList.innerHTML = '<div class="empty-hint">Aucun tag</div>';
+        if (!tagsList) {
+            console.warn('Élément tagsList non trouvé.');
             return;
         }
         
-        tagsList.innerHTML = tags.map(tag => `
-            <div class="tag-item" data-tag="${tag}">
-                ${tag}
-                <button class="btn-icon tag-delete">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-        `).join('');
+        tagsList.innerHTML = '';
         
-        // Ajouter les écouteurs d'événements
-        tagsList.querySelectorAll('.tag-delete').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const tag = e.target.closest('.tag-item').dataset.tag;
-                this.deleteTag(tag);
+        if (tags.length > 0) {
+            tags.forEach(tag => {
+                const tagElement = document.createElement('span');
+                tagElement.classList.add('tag');
+                tagElement.textContent = tag;
+                tagsList.appendChild(tagElement);
             });
-        });
+        }
     },
 
     /**

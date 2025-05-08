@@ -58,6 +58,7 @@
     <link rel="stylesheet" href="styles/components/clock.css">
     <link rel="stylesheet" href="styles/components/theme-switch.css">
     <link rel="stylesheet" href="styles/components/tools-cards.css">
+    <link rel="stylesheet" href="styles/components/auth-button.css">
     
     <!-- Ajout du CSS pour les panneaux d'aide -->
     <link rel="stylesheet" href="styles/components/help-panel.css">
@@ -83,6 +84,7 @@
     <!-- JavaScript Modules -->
     <script type="module" src="js/main.js"></script>
     <script type="module" src="js/theme.js"></script>
+    <script type="module" src="js/auth-status.js"></script>
     
     <!-- Ajout du gestionnaire des panneaux d'aide -->
     <script type="module" src="js/help-panels.js"></script>
@@ -131,6 +133,10 @@
             <div class="header-actions">
                 <button class="help-button" data-help-target="home-help" aria-label="Aide sur le site">
                     <i class="fas fa-question-circle" aria-hidden="true"></i>
+                </button>
+                <!-- Bouton de compte -->
+                <button id="account-btn" class="btn-icon" aria-label="Compte utilisateur" title="Compte utilisateur" onclick="window.location.href='html/login.html'">
+                    <i class="fas fa-user-circle"></i>
                 </button>
                 
                 <!-- Horloge en haut à droite -->
@@ -487,21 +493,22 @@
                     </a>
                 </div>
             </div>
-            <div class="tool-card utility">
+
+            <div class="tool-card text">
                 <div class="tool-card-header">
                     <div class="tool-card-title-wrapper">
                         <div class="tool-card-icon">
-                            <i class="fas fa-qrcode"></i>
+                            <i class="fas fa-book"></i>
                         </div>
-                        <h3 class="tool-card-title">Générateur de QR code</h3>
+                        <h3 class="tool-card-title">Dictionnaire</h3>
                     </div>
-                    <span class="tool-badge beta-badge"></span>
+                    <span class="tool-badge new-badge">Nouveau</span>
                 </div>
                 <div class="tool-card-body">
-                    <p class="tool-card-description">Créez facilement des QR codes personnalisés pour vos liens, textes ou contacts.</p>
+                    <p class="tool-card-description">Recherchez définitions, synonymes et exemples en français et en anglais.</p>
                 </div>
                 <div class="tool-card-footer">
-                    <a href="outils.html#qrcodeTool" class="tool-card-button" data-tool-id="qrcodeTool">
+                    <a href="outils.html#dictionaryTool" class="tool-card-button" data-tool-id="dictionaryTool">
                         <span>Utiliser</span>
                         <i class="fas fa-arrow-right"></i>
                     </a>

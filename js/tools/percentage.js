@@ -3,7 +3,7 @@
  * Script pour gérer les différents types de calculs de pourcentages
  */
 
-document.addEventListener('DOMContentLoaded', function() {
+function initPercentageTool() {
     // Sélection des éléments DOM
     const tabButtons = document.querySelectorAll('.tab-button');
     const tabContents = document.querySelectorAll('.tab-content');
@@ -11,7 +11,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const helpPanel = document.getElementById('percentage-help');
     const closeHelpButton = document.querySelector('.close-help');
 
-    // Initialisation des calculs
+    // Vérifier si les éléments critiques sont présents avant d'initialiser
+    if (!tabButtons.length || !tabContents.length || !helpButton || !helpPanel || !closeHelpButton) {
+        console.error("Les éléments DOM nécessaires à l'outil de pourcentage ne sont pas trouvés.");
+        // Ne pas retourner ici, car initCalculatorX pourrait être appelé par un autre script
+        // Et nous voulons que les fonctions d'initialisation existent même si les éléments ne sont pas trouvés immédiatement.
+        // Le problème est plus probablement dans la sélection des éléments à l'intérieur de chaque initCalculatorX.
+    }
+
+    // Initialisation des calculs - Ces fonctions sélectionnent leurs propres éléments
     initCalculator1(); // Valeur pourcentage
     initCalculator2(); // Pourcentage de
     initCalculator3(); // Augmentation / Réduction
@@ -19,43 +27,47 @@ document.addEventListener('DOMContentLoaded', function() {
     initCalculator5(); // TVA / Taxes
     initCalculator6(); // Marge
 
-    // Gestion des onglets
-    tabButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const tabId = button.getAttribute('data-tab');
-            
-            // Masquer tous les contenus et désactiver tous les boutons
-            tabContents.forEach(content => content.classList.remove('active'));
-            tabButtons.forEach(btn => btn.classList.remove('active'));
-            
-            // Afficher le contenu sélectionné et activer le bouton
-            document.getElementById(tabId).classList.add('active');
-            button.classList.add('active');
-            
-            // Mettre à jour le rôle ARIA
-            tabButtons.forEach(btn => btn.setAttribute('aria-selected', 'false'));
-            button.setAttribute('aria-selected', 'true');
+    // Gestion des onglets - À ne faire que si les éléments existent
+    if (tabButtons.length && tabContents.length) {
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.getAttribute('data-tab');
+                
+                // Masquer tous les contenus et désactiver tous les boutons
+                tabContents.forEach(content => content.classList.remove('active'));
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Afficher le contenu sélectionné et activer le bouton
+                document.getElementById(tabId).classList.add('active');
+                button.classList.add('active');
+                
+                // Mettre à jour le rôle ARIA
+                tabButtons.forEach(btn => btn.setAttribute('aria-selected', 'false'));
+                button.setAttribute('aria-selected', 'true');
+            });
         });
-    });
+    }
 
-    // Gestion du panneau d'aide
-    helpButton.addEventListener('click', () => {
-        helpPanel.classList.add('active');
-    });
+    // Gestion du panneau d'aide - À ne faire que si les éléments existent
+    if (helpButton && helpPanel && closeHelpButton) {
+        helpButton.addEventListener('click', () => {
+            helpPanel.classList.add('active');
+        });
 
-    closeHelpButton.addEventListener('click', () => {
-        helpPanel.classList.remove('active');
-    });
-
-    // Cliquer en dehors du panneau d'aide le ferme
-    document.addEventListener('click', (e) => {
-        if (helpPanel.classList.contains('active') && 
-            !helpPanel.contains(e.target) && 
-            e.target !== helpButton) {
+        closeHelpButton.addEventListener('click', () => {
             helpPanel.classList.remove('active');
-        }
-    });
-});
+        });
+
+        // Cliquer en dehors du panneau d'aide le ferme
+        document.addEventListener('click', (e) => {
+            if (helpPanel.classList.contains('active') && 
+                !helpPanel.contains(e.target) && 
+                e.target !== helpButton) {
+                helpPanel.classList.remove('active');
+            }
+        });
+    }
+}
 
 // Fonctions communes
 function formatNumber(num) {
@@ -64,11 +76,13 @@ function formatNumber(num) {
 
 function showResult(resultId) {
     const resultContainer = document.getElementById(resultId);
-    resultContainer.style.display = 'block';
-    resultContainer.classList.add('pulse');
-    setTimeout(() => {
-        resultContainer.classList.remove('pulse');
-    }, 500);
+    if (resultContainer) {
+        resultContainer.style.display = 'block';
+        resultContainer.classList.add('pulse');
+        setTimeout(() => {
+            resultContainer.classList.remove('pulse');
+        }, 500);
+    }
 }
 
 function validateInputs(inputs) {
@@ -87,10 +101,15 @@ function validateInputs(inputs) {
 
 function resetForm(formId, resultId) {
     const form = document.querySelector(`#${formId} form`);
-    form.reset();
-    const inputs = form.querySelectorAll('input');
-    inputs.forEach(input => input.classList.remove('error'));
-    document.getElementById(resultId).style.display = 'none';
+    const resultContainer = document.getElementById(resultId);
+    if (form) {
+        form.reset();
+        const inputs = form.querySelectorAll('input');
+        inputs.forEach(input => input.classList.remove('error'));
+    }
+    if (resultContainer) {
+        resultContainer.style.display = 'none';
+    }
 }
 
 // Calculateur 1: Valeur pourcentage
@@ -101,6 +120,12 @@ function initCalculator1() {
     const reset1 = document.getElementById('reset1');
     const resultValue1 = document.getElementById('resultValue1');
     
+    // Vérifier si tous les éléments nécessaires pour ce calculateur sont présents
+    if (!percent1 || !total1 || !calculate1 || !reset1 || !resultValue1) {
+        console.error("Éléments DOM pour Calculateur 1 introuvables.");
+        return;
+    }
+
     function calculateValue() {
         if (!validateInputs([percent1, total1])) return;
         
@@ -131,6 +156,11 @@ function initCalculator2() {
     const reset2 = document.getElementById('reset2');
     const resultValue2 = document.getElementById('resultValue2');
     
+    if (!part2 || !total2 || !calculate2 || !reset2 || !resultValue2) {
+        console.error("Éléments DOM pour Calculateur 2 introuvables.");
+        return;
+    }
+
     function calculatePercentage() {
         if (!validateInputs([part2, total2])) return;
         
@@ -167,6 +197,11 @@ function initCalculator3() {
     const reset3 = document.getElementById('reset3');
     const differenceValue = document.getElementById('differenceValue');
     const percentageValue = document.getElementById('percentageValue');
+
+     if (!original3 || !final3 || !calculate3 || !reset3 || !differenceValue || !percentageValue) {
+        console.error("Éléments DOM pour Calculateur 3 introuvables.");
+        return;
+    }
     
     function calculateChange() {
         if (!validateInputs([original3, final3])) return;
@@ -220,6 +255,11 @@ function initCalculator4() {
     const discountAmount = document.getElementById('discountAmount');
     const finalPrice = document.getElementById('finalPrice');
     const savings = document.getElementById('savings');
+
+    if (!original4 || !discount4 || !calculate4 || !reset4 || !discountAmount || !finalPrice || !savings) {
+        console.error("Éléments DOM pour Calculateur 4 introuvables.");
+        return;
+    }
     
     function calculateDiscount() {
         if (!validateInputs([original4, discount4])) return;
@@ -263,6 +303,11 @@ function initCalculator5() {
     const preTaxPrice = document.getElementById('preTaxPrice');
     const taxAmount = document.getElementById('taxAmount');
     const withTaxPrice = document.getElementById('withTaxPrice');
+
+     if (!taxRate || !priceType || !price5 || !calculate5 || !reset5 || !preTaxPrice || !taxAmount || !withTaxPrice) {
+        console.error("Éléments DOM pour Calculateur 5 introuvables.");
+        return;
+    }
     
     function calculateTax() {
         if (!validateInputs([taxRate, price5])) return;
@@ -313,6 +358,11 @@ function initCalculator6() {
     const markupAmount = document.getElementById('markupAmount');
     const sellingPrice = document.getElementById('sellingPrice');
     const grossMargin = document.getElementById('grossMargin');
+
+     if (!cost6 || !markup6 || !calculate6 || !reset6 || !markupAmount || !sellingPrice || !grossMargin) {
+        console.error("Éléments DOM pour Calculateur 6 introuvables.");
+        return;
+    }
     
     function calculateMargin() {
         if (!validateInputs([cost6, markup6])) return;

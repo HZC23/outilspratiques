@@ -470,27 +470,6 @@
 .connection-status.offline i {
     color: var(--warning-color);
 }
-
-/* Helper Icons */
-.btn-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background-color: transparent;
-    border: none;
-    color: var(--text-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.btn-icon:hover {
-    background-color: var(--hover-color);
-    color: var(--primary-color);
-}
-
 /* Help Panel */
 .help-panel {
     position: fixed;

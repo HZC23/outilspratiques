@@ -1,0 +1,407 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Styles généraux */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 80px);
+    width: 100%;
+    padding: 20px;
+    background: url('../assets/images/background-login.jpg') no-repeat;
+    background-position: center;
+    background-size: cover;
+    position: relative;
+}
+.remember-me {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+label {
+    color: #fff;
+}
+
+.login-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    z-index: 1;
+}
+
+.login-card {
+    position: relative;
+    width: 450px;
+    max-width: 100%;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    display: flex;
+    flex-direction: column;
+    padding: 35px;
+    z-index: 2;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+}
+
+.card-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.card-header h2 {
+    font-size: 2.2em;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.card-subtitle {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1em;
+}
+
+/* Onglets */
+.tab-container {
+    position: relative;
+    display: flex;
+    margin-bottom: 30px;
+    border-radius: 30px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.tab {
+    display: none;
+}
+
+.tab-btn {
+    flex: 1;
+    text-align: center;
+    padding: 14px;
+    cursor: pointer;
+    color: #fff;
+    font-weight: 500;
+    font-size: 1.05em;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+}
+.tab-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.tab-selector {
+    position: absolute;
+    height: 100%;
+    width: 50%;
+    left: 0;
+    top: 0;
+    background: var(--color-primary, #3a86ff);
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    z-index: 1;
+}
+
+#register-tab:checked ~ .tab-selector {
+    left: 50%;
+}
+
+/* Formulaires */
+.login-form, .register-form {
+    display: none;
+}
+
+#login-tab:checked ~ .login-form,
+#register-tab:checked ~ .register-form {
+    display: block;
+}
+
+.form-group {
+    position: relative;
+    margin: 35px 0;
+}
+
+.form-group label {
+    position: absolute;
+    top: -12px;
+    left: 15px;
+    padding: 0 8px;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: #fff;
+    font-size: 0.95em;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+}
+
+.form-group input {
+    width: 100%;
+    height: 55px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 12px;
+    outline: none;
+    font-size: 1.1em;
+    padding: 0 20px;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    border-color: var(--color-primary, #3a86ff);
+    box-shadow: 0 0 15px rgba(58, 134, 255, 0.3);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Options de connexion */
+.remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+    color: #fff;
+    font-size: 0.95em;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+}
+
+.remember-me input {
+    margin-right: 8px;
+    width: 18px;
+    height: 18px;
+}
+
+.forgot-password {
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.forgot-password:hover {
+    color: var(--color-primary, #3a86ff);
+    text-decoration: underline;
+}
+
+/* Bouton de connexion */
+.btn-login {
+    width: 100%;
+    height: 50px;
+    border-radius: 30px;
+    background: var(--color-primary, #3a86ff);
+    color: #fff;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-login::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: all 0.6s;
+}
+
+.btn-login:hover::before {
+    left: 100%;
+}
+
+.btn-login:hover {
+    background: var(--color-primary-hover, #2a75ee);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(58, 134, 255, 0.4);
+}
+
+/* Connexion sociale */
+.social-login {
+    margin-top: 25px;
+    text-align: center;
+}
+
+.social-text {
+    color: #fff;
+    margin-bottom: 20px;
+    position: relative;
+    font-size: 1em;
+}
+
+.social-text::before,
+.social-text::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 30%;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.social-text::before {
+    left: 0;
+}
+
+.social-text::after {
+    right: 0;
+}
+
+.social-btns {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.social-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background: transparent;
+    color: #fff;
+    font-size: 1.3em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.social-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.social-btn.google:hover {
+    background-color: #DB4437;
+    border-color: #DB4437;
+}
+
+.social-btn.facebook:hover {
+    background-color: #4267B2;
+    border-color: #4267B2;
+}
+
+.social-btn.github:hover {
+    background-color: #333;
+    border-color: #333;
+}
+
+/* Bouton de déconnexion */
+.logout-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: rgba(255, 59, 48, 0.2);
+    border-color: rgba(255, 59, 48, 0.5);
+}
+
+/* Notification */
+.notification {
+    display: flex;
+    align-items: center;
+    padding: 15px 18px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.notification i {
+    font-size: 1.3em;
+    margin-right: 12px;
+}
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+    font-size: 1em;
+}
+
+.notification-message {
+    font-size: 0.95em;
+    opacity: 0.9;
+}
+
+.notification.success {
+    border-left: 4px solid #4CAF50;
+}
+
+.notification.error {
+    border-left: 4px solid #F44336;
+}
+
+.close-notification {
+    background: transparent;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    font-size: 1.1em;
+}
+
+.close-notification:hover {
+    opacity: 1;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .login-card {
+        width: 100%;
+        padding: 25px 15px;
+    }
+    
+    .card-header h2 {
+        font-size: 1.8em;
+    }
+    
+    .remember-forgot {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .form-group input {
+        height: 50px;
+        font-size: 1em;
+    }
+} 

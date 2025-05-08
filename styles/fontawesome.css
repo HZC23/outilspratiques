@@ -75,9 +75,6 @@
 /* Définition des positions des icônes dans la police */
 /* Cela peut être un sous-ensemble des icônes utilisées dans l'application */
 
-.fa-home:before {
-  content: "\f015";
-}
 
 .fa-sliders-h:before {
   content: "\f1de";

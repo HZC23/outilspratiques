@@ -145,5 +145,13 @@ export const PerformanceManager = {
         } else {
             setTimeout(func, 1);
         }
+    },
+    
+    /**
+     * Initialise le gestionnaire de performance
+     */
+    init() {
+        console.log('Initialisation du gestionnaire de performance');
+        // Pas d'étapes d'initialisation spécifiques nécessaires pour ce gestionnaire pour l'instant.
     }
 }; 

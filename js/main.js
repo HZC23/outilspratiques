@@ -10,6 +10,8 @@ import { ColorManager } from './tools/color.js';
 import { QRCodeManager } from './tools/qrcode.js';
 import { TodoManager } from './tools/todo.js';
 import { StopwatchManager } from './tools/stopwatch.js';
+import { DataSyncManager } from './data-sync.js';
+import { isAuthenticated } from './supabase.js';
 
 /**
  * Classe principale de l'application
@@ -31,6 +33,10 @@ class App {
         // Initialiser le service worker selon le paramètre offlineMode
         this.initServiceWorkerBySettings();
         
+        // Initialiser les gestionnaires essentiels (cache, performance)
+        CacheManager.init();
+        PerformanceManager.init();
+        
         // Initialiser le gestionnaire de thème
         ThemeManager.init();
         
@@ -45,6 +51,20 @@ class App {
         
         // Initialiser les gestionnaires d'événements
         this.initEventHandlers();
+        
+        // Ajouter un écouteur pour l'état d'authentification pour initialiser DataSyncManager
+        document.addEventListener('auth:state-change', (event) => {
+            if (event.detail.isAuthenticated) {
+                console.log('Authentification réussie, initialisation de DataSyncManager');
+                DataSyncManager.init();
+            }
+        });
+        
+        // Vérifier l'état d'authentification initial et initialiser DataSyncManager si déjà connecté
+        if (isAuthenticated()) {
+            console.log('Utilisateur déjà authentifié au démarrage, initialisation de DataSyncManager');
+            DataSyncManager.init();
+        }
         
         // Vérifier si une ancre est présente dans l'URL
         this.checkUrlHash();
@@ -465,6 +485,7 @@ class App {
                 Utils.showNotification(`L'outil "${toolId}" n'existe pas.`, 'error');
             },
             'textEditorTool': () => import('./tools/textEditor.js').then(module => module.init()),
+            'dictionaryTool': () => import('./tools/dictionary.js').then(module => module.initDictionary())
         };
 
         // Charger le gestionnaire correspondant

@@ -1,0 +1,136 @@
+<!-- Outil Dictionnaire -->
+<div id="dictionaryTool" class="tool-container">
+    <div class="tool-header">
+        <h2><i class="fas fa-book"></i> Dictionnaire</h2>
+        <div class="tool-actions">
+            <button class="btn-icon" id="dictionaryHelpBtn" aria-label="Aide">
+                <i class="fas fa-question-circle"></i>
+            </button>
+            <button class="btn-icon" id="dictionaryFullscreenBtn" aria-label="Plein écran">
+                <i class="fas fa-expand"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="tool-content">
+        <div class="dictionary-container">
+            <div class="dictionary-search-container">
+                <div class="input-group">
+                    <label for="dictionaryInput" class="visually-hidden">Rechercher un mot</label>
+                    <input type="text" id="dictionaryInput" class="dictionary-input" placeholder="Entrez un mot..." autocomplete="off">
+                    <button id="dictionarySearchBtn" class="dictionary-search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <div class="dictionary-options">
+                    <div class="dictionary-language-selector">
+                        <label for="dictionaryLanguage">Langue:</label>
+                        <select id="dictionaryLanguage" class="dictionary-language">
+                            <option value="fr">Français</option>
+                            <option value="en">Anglais</option>
+                            <option value="es">Espagnol</option>
+                            <option value="de">Allemand</option>
+                            <option value="la">Latin</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dictionary-results">
+                <div id="dictionaryLoading" class="dictionary-loading hidden">
+                    <div class="spinner"></div>
+                    <p>Recherche en cours...</p>
+                </div>
+                
+                <div id="dictionaryError" class="dictionary-error hidden">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <p id="dictionaryErrorText">Mot non trouvé. Veuillez vérifier l'orthographe.</p>
+                </div>
+                
+                <div id="dictionaryContent" class="dictionary-content">
+                    <div id="dictionaryWelcome" class="dictionary-welcome">
+                        <i class="fas fa-book"></i>
+                        <h3>Bienvenue dans le dictionnaire</h3>
+                        <p>Recherchez un mot pour afficher sa définition, son étymologie et ses synonymes.</p>
+                    </div>
+
+                    <div id="dictionaryResult" class="dictionary-result hidden"></div>
+                </div>
+            </div>
+
+            <div class="dictionary-history">
+                <h4>Historique de recherche</h4>
+                <ul id="dictionaryHistoryList" class="dictionary-history-list"></ul>
+                <button id="clearDictionaryHistory" class="btn-secondary btn-sm">Effacer l'historique</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Panneau d'aide -->
+    <div id="dictionaryHelp" class="help-panel hidden">
+        <div class="help-panel-header">
+            <h3>Aide - Dictionnaire</h3>
+            <button class="help-panel-close" aria-label="Fermer l'aide">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="help-panel-content">
+            <div class="help-section">
+                <h4>Comment utiliser le dictionnaire</h4>
+                <ol>
+                    <li>Tapez un mot dans la barre de recherche</li>
+                    <li>Sélectionnez la langue souhaitée</li>
+                    <li>Cliquez sur le bouton de recherche ou appuyez sur Entrée</li>
+                    <li>Le résultat affichera les définitions, synonymes et exemples</li>
+                </ol>
+            </div>
+            <div class="help-section">
+                <h4>Fonctionnalités</h4>
+                <ul>
+                    <li>Recherche de définitions via l'API DicoLink (français)</li>
+                    <li>Recherche de définitions en anglais via Free Dictionary API</li>
+                    <li>Dictionnaire local de secours en cas d'échec des API</li>
+                    <li>Historique des recherches récentes</li>
+                </ul>
+            </div>
+            <div class="help-section">
+                <h4>Sources de données</h4>
+                <ul>
+                    <li><strong>DicoLink API</strong> : API principale utilisée pour le français</li>
+                    <li><strong>Free Dictionary API</strong> : API secondaire pour les définitions en anglais</li>
+                    <li><strong>Dictionnaire local</strong> : Utilisé uniquement en cas d'échec des API externes</li>
+                </ul>
+            </div>
+            <div class="help-section">
+                <h4>Langues supportées</h4>
+                <ul>
+                    <li>Français (fr)</li>
+                    <li>Anglais (en)</li>
+                    <li>Espagnol (es)</li>
+                    <li>Allemand (de)</li>
+                    <li>Latin (la)</li>
+                </ul>
+            </div>
+            <div class="help-section">
+                <h4>Mots disponibles dans le dictionnaire local</h4>
+                <p>Le dictionnaire local contient un nombre limité de mots :</p>
+                <ul>
+                    <li><strong>Français</strong> : bonjour</li>
+                    <li><strong>Latin</strong> : salve</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    // Import de la fonction initDictionary du module dictionary.js
+    import { initDictionary } from '../../js/tools/dictionary.js';
+    
+    // Initialisation du dictionnaire
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initDictionary);
+    } else {
+        initDictionary();
+    }
+</script> 

@@ -30,7 +30,7 @@ export const ThemeManager = {
      */
     init() {
         // Récupérer le thème stocké ou utiliser le thème par défaut
-        const savedTheme = localStorage.getItem('theme');
+        const savedTheme = localStorage.getItem(CONFIG.STORAGE_KEYS.THEME);
         
         if (savedTheme) {
             this.state.theme = savedTheme;
@@ -159,7 +159,7 @@ export const ThemeManager = {
         this.applyTheme(theme);
         
         // Sauvegarder le thème
-        localStorage.setItem('theme', theme);
+        localStorage.setItem(CONFIG.STORAGE_KEYS.THEME, theme);
         
         // Mettre à jour le switch si nécessaire
         if (!newTheme) {
@@ -176,7 +176,7 @@ export const ThemeManager = {
         this.state.theme = theme;
         this.applyTheme(theme);
         this.updateThemeSwitch();
-        localStorage.removeItem('theme');
+        localStorage.removeItem(CONFIG.STORAGE_KEYS.THEME);
     },
     
     /**
