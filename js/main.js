@@ -12,6 +12,7 @@ import { TodoManager } from './tools/todo.js';
 import { StopwatchManager } from './tools/stopwatch.js';
 import { DataSyncManager } from './data-sync.js';
 import { isAuthenticated } from './supabase.js';
+import { dataSyncManager } from './data-sync.js';
 
 /**
  * Classe principale de l'application
@@ -55,15 +56,13 @@ class App {
         // Ajouter un écouteur pour l'état d'authentification pour initialiser DataSyncManager
         document.addEventListener('auth:state-change', (event) => {
             if (event.detail.isAuthenticated) {
-                console.log('Authentification réussie, initialisation de DataSyncManager');
-                DataSyncManager.init();
+                console.log('Authentification réussie. La synchronisation est gérée par supabase.js.');
             }
         });
         
         // Vérifier l'état d'authentification initial et initialiser DataSyncManager si déjà connecté
         if (isAuthenticated()) {
-            console.log('Utilisateur déjà authentifié au démarrage, initialisation de DataSyncManager');
-            DataSyncManager.init();
+            console.log('Utilisateur déjà authentifié au démarrage. La synchronisation est gérée par supabase.js.');
         }
         
         // Vérifier si une ancre est présente dans l'URL

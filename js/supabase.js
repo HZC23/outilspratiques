@@ -1,3 +1,4 @@
+import { dataSyncManager } from './data-sync.js';
 // Importation via CDN au lieu de package npm
 
 // Configurations de Supabase à remplacer par vos propres informations
@@ -8,82 +9,9 @@ const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 let supabaseInstance = null;
 let initialized = false;
 
-// Fonction pour créer un client factice complet qui ne génère pas d'erreurs
-function createCompleteFallbackClient() {
-    console.log("Création d'un client Supabase factice complet");
-    
-    // Créer un objet qui simule toutes les méthodes de Supabase
-    const authMethods = {
-        getSession: () => Promise.resolve({ data: { session: null }, error: null }),
-        getUser: () => Promise.resolve({ data: { user: null }, error: null }),
-        onAuthStateChange: (callback) => {
-            // Retourner un objet avec une méthode unsubscribe
-            return { data: { subscription: { unsubscribe: () => {} } }, error: null };
-        },
-        signUp: () => Promise.resolve({ data: null, error: null }),
-        signInWithPassword: () => Promise.resolve({ data: null, error: null }),
-        signInWithOAuth: () => Promise.resolve({ data: null, error: null }),
-        signOut: () => Promise.resolve({ error: null }),
-        resetPasswordForEmail: () => Promise.resolve({ error: null }),
-        updateUser: () => Promise.resolve({ data: null, error: null })
-    };
-    
-    // Méthodes de base de données
-    const createDatabaseHandler = () => {
-        return {
-            select: (columns) => ({
-                eq: (column, value) => Promise.resolve({ data: [], error: null }),
-                neq: (column, value) => Promise.resolve({ data: [], error: null }),
-                match: (obj) => Promise.resolve({ data: [], error: null }),
-                or: (query, query2) => Promise.resolve({ data: [], error: null }),
-                in: (column, values) => Promise.resolve({ data: [], error: null }),
-                order: () => ({ limit: () => Promise.resolve({ data: [], error: null }) }),
-                limit: () => Promise.resolve({ data: [], error: null }),
-                single: () => Promise.resolve({ data: null, error: null }),
-                maybeSingle: () => Promise.resolve({ data: null, error: null }),
-                then: (onfulfilled) => Promise.resolve({ data: [], error: null }).then(onfulfilled)
-            }),
-            insert: (data) => Promise.resolve({ data: null, error: null }),
-            update: (data) => ({
-                eq: (column, value) => Promise.resolve({ data: null, error: null }),
-                neq: (column, value) => Promise.resolve({ data: null, error: null }),
-                match: (obj) => Promise.resolve({ data: null, error: null }),
-                in: (column, values) => Promise.resolve({ data: null, error: null }),
-                is: (column, value) => Promise.resolve({ data: null, error: null }),
-                then: (onfulfilled) => Promise.resolve({ data: null, error: null }).then(onfulfilled)
-            }),
-            delete: () => ({
-                eq: (column, value) => Promise.resolve({ data: null, error: null }),
-                neq: (column, value) => Promise.resolve({ data: null, error: null }),
-                match: (obj) => Promise.resolve({ data: null, error: null }),
-                in: (column, values) => Promise.resolve({ data: null, error: null }),
-                is: (column, value) => Promise.resolve({ data: null, error: null }),
-                then: (onfulfilled) => Promise.resolve({ data: null, error: null }).then(onfulfilled)
-            }),
-            upsert: (data) => Promise.resolve({ data: null, error: null })
-        };
-    };
-    
-    // Créer un proxy pour intercepter toutes les méthodes
-    return {
-        auth: authMethods,
-        from: (table) => createDatabaseHandler(),
-        storage: {
-            from: (bucket) => ({
-                upload: () => Promise.resolve({ data: null, error: null }),
-                download: () => Promise.resolve({ data: null, error: null }),
-                getPublicUrl: () => ({ data: { publicUrl: '' }, error: null }),
-                list: () => Promise.resolve({ data: [], error: null }),
-                remove: () => Promise.resolve({ data: null, error: null }),
-            })
-        },
-        rpc: (func, params) => Promise.resolve({ data: null, error: null }),
-    };
-}
-
 // Fonction pour vérifier la validité des données Supabase dans localStorage
 function checkSupabaseCache() {
-    console.log("Vérification du cache Supabase");
+    console.log("Vérification du cache Supabase - Début sur", window.location.pathname);
     
     try {
         // Vérifier les clés principales
@@ -119,16 +47,20 @@ function checkSupabaseCache() {
                     
                     // Essayer de parser le JSON pour vérifier qu'il est valide
                     JSON.parse(value);
+                    console.log(`checkSupabaseCache: Clé "${key}" trouvée et JSON valide.`);
                 } catch (e) {
-                    console.warn(`Format de cache invalide pour la clé "${key}". Suppression.`);
+                    console.warn(`checkSupabaseCache: Format de cache invalide détecté pour la clé "${key}". Tentative de suppression.`);
+                    console.error("checkSupabaseCache: Erreur de parsing JSON pour la clé:", key, e);
                     localStorage.removeItem(key);
+                    console.log(`checkSupabaseCache: Clé "${key}" supprimée.`);
                 }
             }
         }
         
+        console.log("Vérification du cache Supabase - Fin sur", window.location.pathname);
         return true;
     } catch (error) {
-        console.error("Erreur lors de la vérification du cache Supabase:", error);
+        console.error("checkSupabaseCache: Erreur générale lors de la vérification du cache Supabase:", error);
         return false;
     }
 }
@@ -222,10 +154,22 @@ export const initAuth = async () => {
         // Mettre à jour le statut
         updateAuthStatus(!!session, session?.user || null);
         
+        // Si une session existe lors de l'initialisation, déclencher la synchronisation
+        if (session) {
+            console.log("Session trouvée à l'initialisation. Lancement de la synchronisation.");
+            dataSyncManager.syncLocalWithDatabase();
+        }
+
         // Souscrire aux changements d'authentification
         const { data: authListener } = supabaseClient.auth.onAuthStateChange((_event, session) => {
             updateAuthStatus(!!session, session?.user || null);
             
+            // Si l'utilisateur se connecte, déclencher la synchronisation
+            if (_event === 'SIGNED_IN' && session) {
+                console.log("Événement SIGINED_IN détecté. Lancement de la synchronisation.");
+                dataSyncManager.syncLocalWithDatabase();
+            }
+
             // Déclencher un événement pour informer les autres composants
             document.dispatchEvent(new CustomEvent('auth:state-change', { 
                 detail: { isAuthenticated: !!session, user: session?.user || null }

@@ -1,3 +1,8 @@
+import { dataSyncManager } from './data-sync.js';
+import { Utils } from '../utils.js';
+import { CONFIG } from '../config.js';
+import { isAuthenticated } from './supabase.js';
+
 /**
  * @file settings.js
  * @description Gestionnaire des paramètres globaux pour Outils Pratiques
@@ -71,6 +76,28 @@ class SettingsManager {
         this.applySettings();
         this.initCacheManagement();
         this.updateConnectionStatus();
+
+        // Lancer la synchronisation au démarrage si l'utilisateur est potentiellement connecté
+        dataSyncManager.syncLocalWithDatabase();
+
+        // Écouter les changements d'état d'authentification pour déclencher la synchronisation
+        document.addEventListener('auth:state-change', (event) => {
+            console.log('auth:state-change event received', event.detail);
+            if (event.detail.isAuthenticated) {
+                console.log('Utilisateur connecté, déclenchement de la synchronisation...');
+                dataSyncManager.syncLocalWithDatabase();
+            } else {
+                console.log('Utilisateur déconnecté. La synchronisation automatique est désactivée jusqu\'à la prochaine connexion.');
+            }
+        });
+
+        // Écouter l'événement de mise à jour des paramètres synchronisés
+        document.addEventListener('data-sync:settings-updated', () => {
+            console.log('Événement data-sync:settings-updated reçu. Rafraîchissement de l\'UI des paramètres...');
+            this.settings = this.loadSettings(); // Recharger les paramètres depuis localStorage
+            this.loadSettingsToUI(); // Mettre à jour l'UI avec les nouveaux paramètres
+            this.applySettings(); // Appliquer les paramètres (thème, taille police, etc.)
+        });
     }
 
     /**
@@ -155,7 +182,10 @@ class SettingsManager {
         try {
             const savedSettings = localStorage.getItem('appSettings');
             if (savedSettings) {
-                return JSON.parse(savedSettings);
+                // Fusionner avec les paramètres par défaut pour les nouveaux paramètres non présents dans la sauvegarde
+                const loadedSettings = JSON.parse(savedSettings);
+                // Fusion récursive simple ou utiliser une fonction utilitaire si nécessaire
+                return { ...this.defaultSettings, ...loadedSettings };
             }
         } catch (error) {
             console.error("Erreur lors du chargement des paramètres:", error);
@@ -1038,11 +1068,9 @@ class SettingsManager {
      * Gère le changement de statut en ligne
      */
     handleOnlineStatus() {
+        console.log('Connexion rétablie. Déclenchement de la synchronisation...');
         this.updateConnectionStatus(true);
-        this.notify('Connexion Internet rétablie');
-        if (this.settings.sync && this.settings.sync.offlineMode) {
-            this.updateCache();
-        }
+        dataSyncManager.syncLocalWithDatabase();
     }
 
     /**
@@ -1145,10 +1173,51 @@ class SettingsManager {
             console.error("Erreur lors de la mise à jour des infos de stockage:", error);
         }
     }
+
+    /**
+     * Sauvegarde les paramètres dans localStorage
+     */
+    saveSettings() {
+        try {
+            // Ajouter ou mettre à jour la date de dernière modification avant de sauvegarder
+            if (!this.settings.sync) {
+                this.settings.sync = {};
+            }
+            this.settings.sync.lastSyncDate = new Date().toISOString();
+
+            localStorage.setItem('appSettings', JSON.stringify(this.settings));
+            console.log("Paramètres sauvegardés localement");
+
+            // Déclencher la synchronisation après la sauvegarde des paramètres si l'utilisateur est connecté
+            if (isAuthenticated()) {
+                console.log("Paramètres sauvegardés localement. Déclenchement de la synchronisation...");
+                dataSyncManager.syncLocalWithDatabase();
+            }
+
+        } catch (error) {
+            console.error("Erreur lors de la sauvegarde des paramètres:", error);
+        }
+    }
 }
 
-// Initialiser le gestionnaire de paramètres lorsque le DOM est chargé
+// Initialisation automatique lorsque le DOM est chargé
 document.addEventListener('DOMContentLoaded', () => {
-    const settingsManager = new SettingsManager();
-    settingsManager.init();
+    console.log('DOM fully loaded and parsed. Initializing SettingsManager.');
+    if (document.getElementById('settings')) {
+         const settingsManager = new SettingsManager();
+         settingsManager.init();
+         // Exposer l'instance si d'autres modules (comme data-sync si nécessaire pour getSettingsManagerInstance) en ont besoin
+         window.settingsManagerInstance = settingsManager; // Exemple d'exposition globale
+    } else {
+         console.log('Settings element not found. SettingsManager not initialized.');
+         // On pourrait vouloir initialiser le dataSyncManager même si l'élément settings n'est pas là
+         // si d'autres parties de l'app ont besoin de la synchro.
+         // Étant donné que settings.js est le point d'entrée pour la synchro auto via init(),
+         // il est préférable d'initialiser dataSyncManager via SettingsManager.init().
+         // Si settings.js n'est pas chargé sur une page qui utilise data-sync, la synchro auto ne démarrera pas.
+         // Il faudrait alors trouver un autre point d'entrée global pour dataSyncManager si nécessaire.
+    }
 });
+
+// Expose SettingsManager if needed globally (optional)
+// window.SettingsManager = new SettingsManager(); // Si vous voulez l'exposer globalement (ancien style)

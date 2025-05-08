@@ -38,6 +38,12 @@
     
     <!-- Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/clock.js" type="module"></script>
+    <script src="../js/main.js" type="module"></script>
+    <script src="../js/supabase.js" type="module"></script>
+    <script src="../js/config.js" type="module"></script>
+    <script src="../js/theme.js" type="module"></script>
+    <script src="../js/cache.js" type="module"></script>
 </head>
 <body>
     <header>
@@ -161,9 +167,6 @@
                         <button type="button" class="social-btn google" id="google-login">
                             <i class="fab fa-google"></i>
                         </button>
-                        <button type="button" class="social-btn facebook" id="facebook-login">
-                            <i class="fab fa-facebook-f"></i>
-                        </button>
                         <button type="button" class="social-btn github" id="github-login">
                             <i class="fab fa-github"></i>
                         </button>
@@ -195,9 +198,6 @@
                     <div class="social-btns">
                         <button type="button" class="social-btn google" id="google-register">
                             <i class="fab fa-google"></i>
-                        </button>
-                        <button type="button" class="social-btn facebook" id="facebook-register">
-                            <i class="fab fa-facebook-f"></i>
                         </button>
                         <button type="button" class="social-btn github" id="github-register">
                             <i class="fab fa-github"></i>
@@ -298,11 +298,15 @@
                 
                 const email = document.getElementById('login-email').value;
                 const password = document.getElementById('login-password').value;
+                const rememberMe = document.getElementById('remember-me').checked;
                 
                 try {
                     const { data, error } = await supabase.auth.signInWithPassword({
                         email: email,
-                        password: password
+                        password: password,
+                        options: {
+                            shouldRefreshToken: rememberMe
+                        }
                     });
                     
                     if (error) throw error;
@@ -405,28 +409,6 @@
                 }
             });
             
-            // Connexion avec Facebook
-            document.getElementById('facebook-login').addEventListener('click', async function() {
-                if (!supabase) {
-                    showNotification('error', 'Erreur', 'Service d\'authentification non disponible');
-                    return;
-                }
-                
-                try {
-                    const { data, error } = await supabase.auth.signInWithOAuth({
-                        provider: 'facebook',
-                        options: {
-                            redirectTo: `${window.location.origin}/html/supabase-redirect.html`
-                        }
-                    });
-                    
-                    if (error) throw error;
-                    
-                } catch (error) {
-                    showNotification('error', 'Erreur', error.message);
-                }
-            });
-            
             // Connexion avec GitHub
             document.getElementById('github-login').addEventListener('click', async function() {
                 if (!supabase) {
@@ -459,27 +441,6 @@
                 try {
                     const { data, error } = await supabase.auth.signInWithOAuth({
                         provider: 'google',
-                        options: {
-                            redirectTo: `${window.location.origin}/html/supabase-redirect.html`
-                        }
-                    });
-                    
-                    if (error) throw error;
-                    
-                } catch (error) {
-                    showNotification('error', 'Erreur', error.message);
-                }
-            });
-            
-            document.getElementById('facebook-register').addEventListener('click', async function() {
-                if (!supabase) {
-                    showNotification('error', 'Erreur', 'Service d\'authentification non disponible');
-                    return;
-                }
-                
-                try {
-                    const { data, error } = await supabase.auth.signInWithOAuth({
-                        provider: 'facebook',
                         options: {
                             redirectTo: `${window.location.origin}/html/supabase-redirect.html`
                         }

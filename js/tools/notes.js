@@ -1,4 +1,22 @@
 // Gestionnaire de notes avec éditeur de texte riche (fusionné)
+import { dataSyncManager } from '../data-sync.js'; // Importation de dataSyncManager
+import { isAuthenticated } from '../supabase.js'; // Importation de isAuthenticated
+
+// Fonction pour générer un UUID compatible
+function generateUUID() {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+        return crypto.randomUUID();
+    } else {
+        // Fallback pour les environnements qui ne supportent pas crypto.randomUUID
+        // Note: Cette méthode est moins robuste du point de vue cryptographique, mais suffisante pour des identifiants non critiques.
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            const r = Math.random() * 16 | 0;
+            const v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
+}
+
 export class NotesManager {
     constructor() {
         this.notes = [];
@@ -18,6 +36,27 @@ export class NotesManager {
             instance.renderNotesList();
             instance.setupEventListeners();
             console.log('Application de notes initialisée avec succès');
+
+            // Écouter l'événement de mise à jour des notes synchronisées
+            document.addEventListener('data-sync:notes-updated', () => {
+                console.log('Événement data-sync:notes-updated reçu. Rafraîchissement de l\'UI des notes...');
+                instance.loadNotes(); // Recharger les notes depuis localStorage
+                instance.renderNotesList(); // Rafraîchir la liste des notes
+                 // Optionnel: essayer de réafficher la note active si elle existe toujours
+                 if (instance.currentNoteId) {
+                     const activeNote = instance.notes.find(note => note.id === instance.currentNoteId);
+                     if (activeNote) {
+                          instance.displayNote(activeNote);
+                     } else { // Si la note active a été supprimée/n'existe plus après synchro
+                          instance.clearEditor(); // Nettoyer l'éditeur
+                          instance.currentNoteId = null;
+                     }
+                 } else if (instance.notes.length > 0) {
+                      // Si aucune note n'était active, afficher la première si des notes existent après synchro
+                      instance.selectNote(instance.notes[0].id);
+                 }
+            });
+
         } else {
             console.error('Élément noteTool non trouvé dans la page');
         }
@@ -81,6 +120,8 @@ export class NotesManager {
         if (exportAllBtn) exportAllBtn.addEventListener('click', () => this.exportAllNotes());
         const deleteAllBtn = document.getElementById('deleteAllNotes');
         if (deleteAllBtn) deleteAllBtn.addEventListener('click', () => this.deleteAllNotes());
+        const deleteNoteBtn = document.getElementById('deleteNote');
+        if (deleteNoteBtn) deleteNoteBtn.addEventListener('click', () => this.deleteCurrentNote());
         document.addEventListener('keydown', (e) => {
             if (e.ctrlKey && e.key === 's') {
                 e.preventDefault();
@@ -90,7 +131,7 @@ export class NotesManager {
     }
 
     createNewNote() {
-        const noteId = Date.now().toString();
+        const noteId = generateUUID();
         const newNote = {
             id: noteId,
             title: 'Nouvelle note',
@@ -106,6 +147,13 @@ export class NotesManager {
         this.saveNotes();
         this.renderNotesList();
         this.displayNote(newNote);
+
+        // Déclencher la synchronisation après la création d'une note si l'utilisateur est connecté
+        console.log("isAuthenticated() status before sync trigger in createNewNote:", isAuthenticated());
+        if (isAuthenticated()) {
+            console.log("Nouvelle note créée localement. Déclenchement de la synchronisation...");
+            dataSyncManager.syncLocalWithDatabase();
+        }
     }
 
     loadNotes() {
@@ -115,6 +163,13 @@ export class NotesManager {
 
     saveNotes() {
         localStorage.setItem('notes', JSON.stringify(this.notes));
+
+        // Déclencher la synchronisation après la sauvegarde de l'état si l'utilisateur est connecté
+        console.log("isAuthenticated() status before sync trigger in saveNotes:", isAuthenticated());
+        if (isAuthenticated()) {
+            console.log("Notes sauvegardées localement. Déclenchement de la synchronisation...");
+            dataSyncManager.syncLocalWithDatabase();
+        }
     }
 
     searchNotes(query) {
@@ -246,14 +301,24 @@ export class NotesManager {
         if (lastSavedElement) {
             lastSavedElement.textContent = `Dernière sauvegarde: ${this.formatDate(this.notes[noteIndex].updated)}`;
         }
-        this.showNotification('Note sauvegardée');
+        this.showNotification('Note sauvegardée!');
+
+        // Déclencher la synchronisation après la sauvegarde manuelle si l'utilisateur est connecté
+        if (isAuthenticated()) {
+            console.log("Note sauvegardée manuellement localement. Déclenchement de la synchronisation...");
+            dataSyncManager.syncLocalWithDatabase();
+        }
     }
 
     autoSaveNote() {
-        clearTimeout(window.autoSaveTimeout);
-        window.autoSaveTimeout = setTimeout(() => {
-            this.saveCurrentNote();
-        }, 2000);
+        // On peut ajouter un délai ici pour ne pas spammer les sauvegardes/synchros
+        if (this.autoSaveTimeout) {
+            clearTimeout(this.autoSaveTimeout);
+        }
+        this.autoSaveTimeout = setTimeout(() => {
+            this.saveCurrentNote(); // saveCurrentNote inclut déjà saveNotes() et la synchro
+            console.log('Auto-sauvegarde...');
+        }, 2000); // Sauvegarde 2 secondes après la dernière modification
     }
 
     clearCurrentNote() {
@@ -270,6 +335,26 @@ export class NotesManager {
         this.updateWordCount();
         this.renderNotesList();
         this.showNotification('Contenu de la note effacé');
+    }
+
+    deleteCurrentNote() {
+        if (!this.currentNoteId) return;
+        if (!confirm('Êtes-vous sûr de vouloir supprimer cette note ? Cette action est irréversible.')) return;
+
+        const initialNoteCount = this.notes.length;
+        this.notes = this.notes.filter(note => note.id !== this.currentNoteId);
+        
+        if (this.notes.length < initialNoteCount) { // Vérifie si une note a bien été supprimée
+            console.log(`Note avec ID ${this.currentNoteId} supprimée localement.`);
+            this.saveNotes(); // saveNotes déclenchera la synchro si connecté
+            this.currentNoteId = null; // Réinitialiser l'ID de la note courante
+            this.renderNotesList();
+            this.clearEditor(); // Nettoyer l'éditeur
+            this.showNotification('Note supprimée');
+        } else {
+            console.warn(`Note avec ID ${this.currentNoteId} non trouvée pour suppression.`);
+            this.showNotification('Erreur: Note non trouvée pour suppression');
+        }
     }
 
     downloadCurrentNote() {
@@ -317,6 +402,12 @@ export class NotesManager {
         this.renderNotesList();
         this.clearEditor();
         this.showNotification('Toutes les notes ont été supprimées');
+
+        // Déclencher la synchronisation après la suppression de toutes les notes si l'utilisateur est connecté
+        if (isAuthenticated()) {
+            console.log("Toutes les notes supprimées localement. Déclenchement de la synchronisation...");
+            dataSyncManager.syncLocalWithDatabase();
+        }
     }
 
     clearEditor() {

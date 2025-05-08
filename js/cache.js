@@ -80,16 +80,15 @@ export const CacheManager = {
      * Nettoie les entrées expirées du cache
      */
     cleanup() {
-        const keysToIgnore = [CONFIG.STORAGE_KEYS.THEME]; // Liste des clés à ignorer par le nettoyage du cache
+        const keysToIgnore = [CONFIG.STORAGE_KEYS.THEME, CONFIG.STORAGE_KEYS.AUTH_TOKEN];
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
             
-            // Ignorer les clés qui ne sont pas gérées par ce cache
             if (keysToIgnore.includes(key)) {
                 continue;
             }
 
-            this.get(key); // Appeler get supprimera l'entrée si elle est expirée ou invalide au format cache
+            this.get(key);
         }
     },
     

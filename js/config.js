@@ -9,7 +9,8 @@ export const CONFIG = {
         NOTES: 'notes',
         STYLE_HISTORY: 'styleHistory',
         TODO_LIST: 'todoList',
-        LAST_SYNC: 'lastSync'
+        LAST_SYNC: 'lastSync',
+        AUTH_TOKEN: 'sb-brrwkmcokfrlcsyduoxq-auth-token'
     },
     THEMES: {
         LIGHT: 'light',

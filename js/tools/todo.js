@@ -1,5 +1,7 @@
 import { Utils } from '../utils.js';
 import { CONFIG } from '../config.js';
+import { dataSyncManager } from '../data-sync.js';
+import { isAuthenticated } from '../supabase.js';
 
 /**
  * Gestionnaire de liste de tâches avancé
@@ -58,6 +60,17 @@ export const TodoManager = {
         this.updateSummary();
         this.checkDueTasks();
         this.autoSyncTodayList();
+
+        // Écouter l'événement de mise à jour des tâches synchronisées
+        document.addEventListener('data-sync:todos-updated', () => {
+            console.log('Événement data-sync:todos-updated reçu. Rafraîchissement de l\'UI des tâches...');
+            this.loadState(); // Recharger l'état depuis localStorage (qui a été mis à jour par data-sync.js)
+            this.updateListView();
+            this.updateTaskList();
+            this.updateSummary();
+            this.checkDueTasks(); // Vérifier à nouveau les tâches dues après synchro
+            this.autoSyncTodayList(); // Resynchroniser la liste Aujourd'hui
+        });
     },
 
     /**
@@ -75,6 +88,12 @@ export const TodoManager = {
      */
     saveState() {
         Utils.saveToStorage(CONFIG.STORAGE_KEYS.TODO_LIST, this.state);
+
+        // Déclencher la synchronisation après la sauvegarde de l'état si l'utilisateur est connecté
+        if (isAuthenticated()) {
+            console.log("État sauvegardé localement. Déclenchement de la synchronisation...");
+            dataSyncManager.syncLocalWithDatabase();
+        }
     },
 
     /**
@@ -501,6 +520,12 @@ export const TodoManager = {
         this.saveState();
         
         Utils.showNotification('Tâche ajoutée avec succès', 'success');
+
+        // Déclencher la synchronisation après l'ajout d'une tâche si l'utilisateur est connecté
+        if (isAuthenticated()) {
+            console.log("Tâche ajoutée localement. Déclenchement de la synchronisation...");
+            dataSyncManager.syncLocalWithDatabase();
+        }
     },
 
     /**
@@ -814,6 +839,12 @@ export const TodoManager = {
         this.updateSubtasksList(task.subtasks);
         this.updateTaskList();
         this.saveState();
+
+        // Déclencher la synchronisation après l'ajout d'une sous-tâche si l'utilisateur est connecté
+        if (isAuthenticated()) {
+            console.log("Sous-tâche ajoutée localement. Déclenchement de la synchronisation...");
+            dataSyncManager.syncLocalWithDatabase();
+        }
     },
 
     /**
@@ -844,6 +875,12 @@ export const TodoManager = {
             this.updateTaskList();
             this.saveState();
         }
+
+        // Déclencher la synchronisation après le changement d'état de complétion de la sous-tâche si l'utilisateur est connecté
+        if (isAuthenticated()) {
+            console.log("État de complétion de sous-tâche modifié localement. Déclenchement de la synchronisation...");
+            dataSyncManager.syncLocalWithDatabase();
+        }
     },
 
     /**
@@ -857,6 +894,12 @@ export const TodoManager = {
         this.updateSubtasksList(task.subtasks);
         this.updateTaskList();
         this.saveState();
+
+        // Déclencher la synchronisation après la suppression d'une sous-tâche si l'utilisateur est connecté
+        if (isAuthenticated()) {
+            console.log("Sous-tâche supprimée localement. Déclenchement de la synchronisation...");
+            dataSyncManager.syncLocalWithDatabase();
+        }
     },
 
     /**
@@ -889,6 +932,12 @@ export const TodoManager = {
         this.saveState();
         
         Utils.showNotification('Tâche mise à jour', 'success');
+
+        // Déclencher la synchronisation après la sauvegarde des détails si l'utilisateur est connecté
+        if (isAuthenticated()) {
+            console.log("Détails de tâche sauvegardés localement. Déclenchement de la synchronisation...");
+            dataSyncManager.syncLocalWithDatabase();
+        }
     },
 
     /**
@@ -928,6 +977,12 @@ export const TodoManager = {
             this.updateListView();
             this.saveState();
         }
+
+        // Déclencher la synchronisation après le changement d'état de complétion si l'utilisateur est connecté
+        if (isAuthenticated()) {
+            console.log("État de complétion de tâche modifié localement. Déclenchement de la synchronisation...");
+            dataSyncManager.syncLocalWithDatabase();
+        }
     },
 
     /**
@@ -961,6 +1016,12 @@ export const TodoManager = {
         this.updateSummary();
         this.updateListView();
         this.saveState();
+
+        // Déclencher la synchronisation après la suppression d'une tâche si l'utilisateur est connecté
+        if (isAuthenticated()) {
+            console.log("Tâche supprimée localement. Déclenchement de la synchronisation...");
+            dataSyncManager.syncLocalWithDatabase();
+        }
         
         Utils.showNotification('Tâche supprimée', 'success');
     },
@@ -996,6 +1057,12 @@ export const TodoManager = {
         this.updateSummary();
         this.updateListView();
         this.saveState();
+
+        // Déclencher la synchronisation après la suppression des tâches terminées si l'utilisateur est connecté
+        if (isAuthenticated()) {
+            console.log("Tâches terminées supprimées localement. Déclenchement de la synchronisation...");
+            dataSyncManager.syncLocalWithDatabase();
+        }
         
         Utils.showNotification('Tâches terminées supprimées', 'success');
     },
@@ -1052,6 +1119,12 @@ export const TodoManager = {
         this.updateListView();
         this.changeActiveList(listId);
         this.saveState();
+
+        // Déclencher la synchronisation après l'ajout d'une liste si l'utilisateur est connecté
+        if (isAuthenticated()) {
+            console.log("Nouvelle liste ajoutée localement. Déclenchement de la synchronisation...");
+            dataSyncManager.syncLocalWithDatabase();
+        }
         
         Utils.showNotification('Liste ajoutée avec succès', 'success');
     },
@@ -1140,6 +1213,16 @@ export const TodoManager = {
         }
         
         this.saveState();
+        this.updateListView();
+        this.updateTaskList(); // Mettre à jour l'affichage des tâches au cas où la liste active est supprimée
+        this.updateSummary();
+
+        // Déclencher la synchronisation après la suppression d'une liste si l'utilisateur est connecté
+        if (isAuthenticated()) {
+            console.log("Liste supprimée localement. Déclenchement de la synchronisation...");
+            dataSyncManager.syncLocalWithDatabase();
+        }
+        
         Utils.showNotification('Liste supprimée', 'success');
     },
 
@@ -1379,6 +1462,12 @@ export const TodoManager = {
         this.updateTagsList(task.tags);
         this.updateTaskList();
         this.saveState();
+
+        // Déclencher la synchronisation après l'ajout d'un tag si l'utilisateur est connecté
+        if (isAuthenticated()) {
+            console.log("Tag ajouté localement. Déclenchement de la synchronisation...");
+            dataSyncManager.syncLocalWithDatabase();
+        }
     },
 
     /**
@@ -1392,6 +1481,12 @@ export const TodoManager = {
         this.updateTagsList(task.tags);
         this.updateTaskList();
         this.saveState();
+
+        // Déclencher la synchronisation après la suppression d'un tag si l'utilisateur est connecté
+        if (isAuthenticated()) {
+            console.log("Tag supprimé localement. Déclenchement de la synchronisation...");
+            dataSyncManager.syncLocalWithDatabase();
+        }
     },
 
     /**
