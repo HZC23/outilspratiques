@@ -67,7 +67,7 @@ const RESOURCES_TO_CACHE = [
     `${BASE_PATH}/html/tools/metronome.html`,
     `${BASE_PATH}/html/tools/percentage.html`,
     // Icônes
-    `${BASE_PATH}/icons/favicon.ico`,
+    `${BASE_PATH}/favicon.ico`,
     `${BASE_PATH}/icons/icon-1024x1024.png`,
     `${BASE_PATH}/icons/icon-192x192.png`,
     `${BASE_PATH}/icons/icon-1024x1024.png`

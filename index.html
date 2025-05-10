@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' https: data:; font-src 'self' https: data:; connect-src 'self' https:;">
-<meta name="google-site-verification" content="91HEDpPOhNjeHunYuLDNuLfZYUavQ8rvNANruwmSoFQ" />
+    <meta name="google-site-verification" content="jyrnVh9qQqq84GUK2CR3KwyHQ15moRmcM25brUySLs8" />
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
     <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
@@ -35,7 +35,7 @@
     <title>Accueil - Outils Pratiques - Collection d'outils en ligne gratuits</title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="icons/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="icon" type="image/png" sizes="1024x1024" href="icons/icon-1024x1024.png">
     <link rel="apple-touch-icon" sizes="1024x1024" href="icons/icon-1024x1024.png">
     
@@ -58,7 +58,13 @@
     <link rel="stylesheet" href="styles/components/clock.css">
     <link rel="stylesheet" href="styles/components/theme-switch.css">
     <link rel="stylesheet" href="styles/components/tools-cards.css">
+    <link rel="stylesheet" href="styles/home.css">
+    
     <link rel="stylesheet" href="styles/components/auth-button.css">
+    <link rel="stylesheet" href="styles/components/color-picker.css">
+    <link rel="stylesheet" href="styles/components/tooltip.css">
+    <link rel="stylesheet" href="styles/components/modal.css">
+    <link rel="stylesheet" href="styles/components/notification.css">
     
     <!-- Ajout du CSS pour les panneaux d'aide -->
     <link rel="stylesheet" href="styles/components/help-panel.css">
@@ -81,10 +87,10 @@
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     </noscript>
     
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- JavaScript Modules -->
     <script type="module" src="js/main.js"></script>
     <script type="module" src="js/theme.js"></script>
-    <script type="module" src="js/auth-status.js"></script>
     
     <!-- Ajout du gestionnaire des panneaux d'aide -->
     <script type="module" src="js/help-panels.js"></script>
@@ -176,7 +182,7 @@
             </form>
           </div>
         <!-- Grille d'outils (mise à jour pour mettre en avant les outils populaires) -->
-            <h2 class="section-title">Nos outils</h2>
+            <h2 class="section-title">Outils</h2>
         <div class="tools-grid" role="region" aria-label="Liste des outils disponibles">
             <!-- Outils populaires -->
             <div class="tool-card popular">

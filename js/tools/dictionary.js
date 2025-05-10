@@ -1,88 +1,13 @@
-const DICTIONARY_CONFIG = {
-    apis: {
-        en: {
-            url: word => `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`,
-            parseResponse: response => response[0]
-        },
-        fr: {
-            url: word => `https://api.dicolink.com/v1/mot/${word}?limite=5&api_key=`,
-            parseResponse: response => ({
-                word: response[0]?.mot || '',
-                phonetic: '',
-                meanings: [{
-                    partOfSpeech: '',
-                    definitions: response.map(entry => ({
-                        definition: entry.definition,
-                        example: entry.citation || ''
-                    }))
-                }]
-            })
-        },
-        es: {
-            url: word => `https://api.dictionaryapi.dev/api/v2/entries/es/${word}`,
-            parseResponse: response => response[0]
-        },
-        de: {
-            url: word => `https://api.dictionaryapi.dev/api/v2/entries/de/${word}`,
-            parseResponse: response => response[0]
-        },
-        la: {
-            url: word => `https://latin-dictionary-api.vercel.app/?word=${word}`,
-            parseResponse: response => ({
-                word: word,
-                phonetic: '',
-                meanings: [{
-                    partOfSpeech: '',
-                    definitions: response.map(entry => ({
-                        definition: entry.definition,
-                        example: ''
-                    }))
-                }]
-            })
-        }
-    },
-    localStorageKey: 'dictionaryHistory',
-    localDictionary: {
-        fr: {
-            bonjour: {
-                meanings: [
-                    {
-                        partOfSpeech: 'interjection',
-                        definitions: [
-                            {
-                                definition: 'Salutation utilisée en français pour dire bonjour.',
-                                example: 'Bonjour, comment allez-vous ?'
-                            }
-                        ]
-                    }
-                ]
-            }
-        },
-        la: {
-            salve: {
-                meanings: [
-                    {
-                        partOfSpeech: 'interjection',
-                        definitions: [
-                            {
-                                definition: 'Formule de salut en latin, équivalent à "bonjour".',
-                                example: 'Salve, amice!'
-                            }
-                        ]
-                    }
-                ]
-            }
-        }
-    }
-};
-
-let dictionaryState = {
+ let localStorageKey = 'dictionarySearchHistory'; // Définir la clé pour le stockage local
+ let dictionaryState = {
     currentLanguage: 'fr',
     currentWord: '',
     currentResult: null,
     isLoading: false,
-    searchHistory: JSON.parse(localStorage.getItem(DICTIONARY_CONFIG.localStorageKey)) || []
+    searchHistory: JSON.parse(localStorage.getItem(localStorageKey)) || []
 };
+
+let historyStack = []; // Pour stocker l'historique des pages
 
 function initDictionary() {
     const searchInput = document.getElementById('dictionaryInput');
@@ -206,89 +131,51 @@ function displayResult(result) {
     if (!container) return;
 
     container.innerHTML = `<h3 id="dictionaryWord" class="dictionary-word">${result.word}</h3>`;
-
-    if (result.phonetic) {
-        container.innerHTML += `<div id="dictionaryPhonetic" class="dictionary-phonetic">${result.phonetic}</div>`;
-    }
-
-    const sectionsDiv = document.createElement('div');
-    sectionsDiv.className = 'dictionary-sections';
-
-    // Définitions
-    const definitionsSection = document.createElement('div');
-    definitionsSection.className = 'dictionary-section';
-    definitionsSection.innerHTML = '<h4>Définitions</h4>';
     
-    const definitionsDiv = document.createElement('div');
-    definitionsDiv.id = 'dictionaryDefinitions';
-    definitionsDiv.className = 'dictionary-definitions';
-
-    result.meanings.forEach(meaning => {
-        meaning.definitions.forEach((def, index) => {
-            const definitionDiv = document.createElement('div');
-            definitionDiv.className = 'dictionary-definition';
-            
-            const numberSpan = document.createElement('span');
-            numberSpan.className = 'definition-number';
-            numberSpan.textContent = `${index + 1}.`;
-            
-            const textDiv = document.createElement('div');
-            textDiv.className = 'definition-text';
-            
-            if (meaning.partOfSpeech) {
-                const posSpan = document.createElement('span');
-                posSpan.className = 'part-of-speech';
-                posSpan.textContent = meaning.partOfSpeech;
-                textDiv.appendChild(posSpan);
-            }
-            
-            const defText = document.createElement('span');
-            defText.textContent = def.definition;
-            textDiv.appendChild(defText);
-            
-            if (def.example) {
-                const exampleDiv = document.createElement('div');
-                exampleDiv.className = 'dictionary-example';
-                exampleDiv.textContent = def.example;
-                textDiv.appendChild(exampleDiv);
-            }
-            
-            definitionDiv.appendChild(numberSpan);
-            definitionDiv.appendChild(textDiv);
-            definitionsDiv.appendChild(definitionDiv);
-        });
+    // Remplacer les URLs d'images HTTP par HTTPS
+    const contentWithHttps = result.content.replace(/http:\/\/(upload\.wikimedia\.org)/g, 'https://$1');
+    
+    container.innerHTML += `<div class="dictionary-content">${contentWithHttps}</div>`;
+    
+    // Ajouter un bouton retour
+    const backButton = document.createElement('button');
+    backButton.textContent = 'Retour';
+    backButton.className = 'btn-back';
+    backButton.addEventListener('click', () => {
+        if (historyStack.length > 0) {
+            const previousPage = historyStack.pop(); // Récupérer la dernière page
+            displayResult(previousPage); // Afficher la page précédente
+        }
     });
     
-    definitionsSection.appendChild(definitionsDiv);
-    sectionsDiv.appendChild(definitionsSection);
-    
-    // Exemples
-    if (result.meanings.some(m => m.definitions.some(d => d.example))) {
-        const examplesSection = document.createElement('div');
-        examplesSection.className = 'dictionary-section';
-        examplesSection.innerHTML = '<h4>Exemples</h4>';
-        
-        const examplesDiv = document.createElement('div');
-        examplesDiv.id = 'dictionaryExamples';
-        examplesDiv.className = 'dictionary-examples';
-        
-        result.meanings.forEach(meaning => {
-            meaning.definitions.forEach(def => {
-                if (def.example) {
-                    const exampleDiv = document.createElement('div');
-                    exampleDiv.className = 'dictionary-example';
-                    exampleDiv.textContent = def.example;
-                    examplesDiv.appendChild(exampleDiv);
-                }
-            });
-        });
-        
-        examplesSection.appendChild(examplesDiv);
-        sectionsDiv.appendChild(examplesSection);
-    }
-
-    container.appendChild(sectionsDiv);
+    container.appendChild(backButton);
     container.classList.remove('hidden');
+}
+
+function addLinkClickHandler() {
+    const contentElement = document.querySelector('.dictionary-content');
+    if (!contentElement) return;
+
+    contentElement.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', (event) => {
+            event.preventDefault(); // Empêche le comportement par défaut du lien
+            const url = link.getAttribute('href');
+            fetch(`https://fr.wikipedia.org/w/api.php?action=parse&page=${encodeURIComponent(url)}&format=json&origin=*`)
+                .then(response => {
+                    if (!response.ok) throw new Error('Page non trouvée');
+                    return response.json();
+                })
+                .then(data => {
+                    const page = data.parse;
+                    const content = page.text['*'];
+                    historyStack.push({ word: url, content }); // Ajouter la page actuelle à l'historique
+                    displayResult({ word: url, content }); // Affiche le contenu de la nouvelle page
+                })
+                .catch(err => {
+                    showError(err.message);
+                });
+        });
+    });
 }
 
 function searchWord() {
@@ -309,30 +196,16 @@ function searchWord() {
     hideResult();
     setLoadingState(true);
 
-    const localResult = checkLocalDictionary(word, language);
-    if (localResult) {
-        dictionaryState.currentResult = { word, ...localResult };
-        displayResult(dictionaryState.currentResult);
-        setLoadingState(false);
-        saveToHistory(word, language);
-        return;
-    }
-
-    const api = DICTIONARY_CONFIG.apis[language];
-    if (!api) {
-        showError('Langue non prise en charge.');
-        setLoadingState(false);
-        return;
-    }
-
-    fetch(api.url(word))
+    fetch(`https://fr.wikipedia.org/w/api.php?action=parse&page=${encodeURIComponent(word)}&format=json&origin=*`)
         .then(response => {
             if (!response.ok) throw new Error('Mot non trouvé');
             return response.json();
         })
         .then(data => {
-            dictionaryState.currentResult = api.parseResponse(data);
-            displayResult(dictionaryState.currentResult);
+            const page = data.parse;
+            const content = page.text['*'];
+            historyStack.push({ word, content }); // Ajouter la page actuelle à l'historique
+            displayResult({ word, content });
             saveToHistory(word, language);
         })
         .catch(err => {

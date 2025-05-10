@@ -79,7 +79,7 @@
     border: 2px solid var(--border-color);
     border-radius: var(--border-radius);
     background-color: var(--bg-input);
-    color: var(--text-primary);
+    color: var(--text-on-primary);
 }
 
 /* Toggle pour Wiktionnaire */

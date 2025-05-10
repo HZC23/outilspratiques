@@ -699,7 +699,8 @@ footer {
 
 .footer-section p, 
 .footer-section address {
-    color: var(--text-on-primary, #fff);
+    color: var(--text-color);
+    font-weight: bold; /* Met le texte en gras */
     line-height: var(--line-height-relaxed);
     margin-bottom: var(--spacing-md);
     font-size: var(--font-size-sm);

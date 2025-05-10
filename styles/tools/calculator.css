@@ -14,7 +14,72 @@
     box-sizing: border-box;
     width: 100%;
 }
+/* ----- RESPONSIVE ----- */
+@media (max-width: 480px) {
+    .calculator-container {
+        padding: var(--spacing-xs);
+        max-width: 100%;
+        width: 100%;
+        margin: 0;
+        border-radius: 0;
+    }
+    
+    .calculator-grid {
+        gap: 4px;
+    }
+    
+    .calculator-current {
+        font-size: 24px;
+    }
+    
+    .calculator-previous {
+        font-size: 12px;
+    }
+    
+    .calculator-display {
+        padding: 12px;
+        min-height: 80px;
+        margin-bottom: 16px;
+    }
+    
+    .scientific-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+    
+    .mobile-small {
+        font-size: 11px !important;
+        letter-spacing: -0.5px;
+    }
+    
+    .clear-history-btn {
+        font-size: 12px;
+        padding: 4px 8px;
+    }
+    
+    .calculator-history h3 {
+        font-size: 14px;
+    }
+}
 
+/* Styles spécifiques pour les très petits écrans */
+@media (max-width: 350px) {
+    .calculator-container {
+        padding: 8px;
+    }
+    
+    .calculator-grid {
+        gap: 2px;
+    }
+    
+    .mobile-small {
+        font-size: 9px !important;
+        letter-spacing: -0.7px;
+    }
+    
+    .calculator-current {
+        font-size: 20px;
+    }
+}
 /* Améliorations pour la mise en page horizontale sur grands écrans */
 @media (min-width: 1200px) {
     .calculator-tool-layout {
@@ -37,6 +102,11 @@
     /* Plus large pour l'écran scientifique */
     .scientific-layout .calculator-main {
         flex: 0 0 450px;
+    }
+    
+    .calculator-grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 16px;
     }
 }
 
@@ -231,73 +301,6 @@
 .history-result {
     font-weight: 500;
     color: var(--text-color);
-}
-
-/* ----- RESPONSIVE ----- */
-@media (max-width: 480px) {
-    .calculator-container {
-        padding: var(--spacing-xs);
-        max-width: 100%;
-        width: 100%;
-        margin: 0;
-        border-radius: 0;
-    }
-    
-    .calculator-grid {
-        gap: 4px;
-    }
-    
-    .calculator-current {
-        font-size: 24px;
-    }
-    
-    .calculator-previous {
-        font-size: 12px;
-    }
-    
-    .calculator-display {
-        padding: 12px;
-        min-height: 80px;
-        margin-bottom: 16px;
-    }
-    
-    .scientific-grid {
-        grid-template-columns: repeat(5, 1fr);
-    }
-    
-    .mobile-small {
-        font-size: 11px !important;
-        letter-spacing: -0.5px;
-    }
-    
-    .clear-history-btn {
-        font-size: 12px;
-        padding: 4px 8px;
-    }
-    
-    .calculator-history h3 {
-        font-size: 14px;
-    }
-}
-
-/* Styles spécifiques pour les très petits écrans */
-@media (max-width: 350px) {
-    .calculator-container {
-        padding: 8px;
-    }
-    
-    .calculator-grid {
-        gap: 2px;
-    }
-    
-    .mobile-small {
-        font-size: 9px !important;
-        letter-spacing: -0.7px;
-    }
-    
-    .calculator-current {
-        font-size: 20px;
-    }
 }
 
 /* ----- DARK THEME ----- */

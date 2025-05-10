@@ -1,5 +1,10 @@
 <!DOCTYPE html>
-<script src="js/timer.js"></script>
+<script src="../../js/tools/timer.js"></script>
+<audio id="timerAlarm" src="../../sounds/alarm.mp3" preload="auto"></audio>
+<audio id="timerBeep" src="../../sounds/beep.mp3" preload="auto"></audio>
+<audio id="timerBell" src="../../sounds/bell.mp3" preload="auto"></audio>
+<audio id="timerChime" src="../../sounds/chime.mp3" preload="auto"></audio>
+<audio id="timerNotification" src="../../sounds/notification.mp3" preload="auto"></audio>
 <div class="tool-container" id="timerTool">
     <div class="tool-header">
         <h2><i class="fas fa-hourglass-start"></i> Minuteur</h2>
@@ -74,11 +79,11 @@
                         <div class="sound-selector">
                             <select id="alarmSound" class="form-select">
                                 <option value="beep">Bip</option>
+                                <option value="alarm">Alarme</option>
                                 <option value="bell">Cloche</option>
-                                <option value="digital">Digital</option>
-                                <option value="gentle">Doux</option>
+                                <option value="chime">Chime</option>
                                 <option value="notification">Notification</option>
-                                <option value="none">Aucun</option>
+                                <option value="digital-online">Digital</option>
                             </select>
                             <button type="button" class="btn-icon" id="testSound" aria-label="Tester le son">
                                 <i class="fas fa-volume-up"></i>

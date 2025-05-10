@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="../styles/variables.css">
     <link rel="stylesheet" href="../styles/components/text.css">
     <link rel="stylesheet" href="../styles/components/theme-switch.css">
+    <link rel="stylesheet" href="../styles/home.css">
     <link rel="stylesheet" href="../styles/components/notification.css">
     <link rel="stylesheet" href="../styles/components/buttons.css">
     <link rel="stylesheet" href="../styles/components/clock.css">
@@ -85,17 +86,22 @@
             -webkit-font-smoothing: antialiased;
             text-rendering: auto;
         }
+        /* Remplacez .menu-btn par la classe ou l'ID réel du bouton menu */
+        .menu-toggle {
+            display: none !important;
+        }
     </style>
     <!-- Définir le CSS des icônes Font Awesome -->
     <link rel="stylesheet" href="../styles/fontawesome.css">
-    <link rel="icon" href="../icons/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
         <!-- JavaScript Modules -->
         <script type="module" src="../js/main.js"></script>
         <script type="module" src="../js/clock.js"></script>
-        <script type="module" src="../js/menu.js"></script>
-        <script type="module" src="../js/texteditor-init.js"></script>
         <script type="module" src="../js/theme.js"></script>
         <script type="module" src="../js/settings.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script type="module" src="../js/supabase.js"></script>
 </head>
 <body class="preload">
     <header>

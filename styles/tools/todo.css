@@ -3,19 +3,6 @@
  * Design moderne et expérience utilisateur améliorée
  */
 
-:root {
-    --todo-primary: #4c6ef5;
-    --todo-primary-light: #748ffc;
-    --todo-primary-dark: #3b5bdb;
-    --todo-secondary: #ff922b;
-    --todo-danger: #fa5252;
-    --todo-success: #40c057;
-    --todo-warning: #fab005;
-    --todo-info: #15aabf;
-    --todo-border-radius: 10px;
-    --todo-transition: all 0.3s ease;
-}
-
 /* Configuration pour la mise en page horizontale optimisée */
 @media (min-width: 1200px) {
     .todo-horizontal-layout {

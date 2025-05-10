@@ -1,6 +1,6 @@
 import { dataSyncManager } from './data-sync.js';
-import { Utils } from '../utils.js';
-import { CONFIG } from '../config.js';
+import { Utils } from '../js/utils.js';
+import { CONFIG } from '../js/config.js';
 import { isAuthenticated } from './supabase.js';
 
 /**

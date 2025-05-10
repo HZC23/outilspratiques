@@ -1,17 +1,6 @@
 /* styles/components/color.css */
 /* Styles pour le composant de sélecteur de couleur */
 
-:root {
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.09);
-    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
-    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
-    --transition-default: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --border-radius-sm: 6px;
-    --border-radius-md: 8px;
-    --border-radius-lg: 12px;
-    --border-radius-xl: 16px;
-}
-
 .tool-container {
     max-width: 1100px;
     margin: 1rem auto;

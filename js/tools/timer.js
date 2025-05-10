@@ -830,12 +830,8 @@ export const TimerManager = {
             'digital': 'sounds/alarm.mp3',
             'gentle': 'sounds/chime.mp3',
             'notification': 'sounds/notification.mp3',
-            // Sons en ligne
-            'beep-online': 'https://assets.mixkit.co/active_storage/sfx/1867/1867-preview.mp3',
-            'bell-online': 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3',
+            // Sons en ligne    
             'digital-online': 'https://assets.mixkit.co/active_storage/sfx/2310/2310-preview.mp3',
-            'gentle-online': 'https://assets.mixkit.co/active_storage/sfx/1862/1862-preview.mp3',
-            'none': '' // Aucun son
         };
         
         const sound = document.getElementById('timerAlarm');
