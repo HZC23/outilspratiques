@@ -1,4 +1,4 @@
-# Outils Pratiques
+# Outils Pratiques https://hzc23.github.io/outilspratiques/
 
 Suite d'outils web pratiques et gratuits 
 
