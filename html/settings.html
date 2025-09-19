@@ -166,7 +166,7 @@
                     </header>
     
     <main>
-        <div class="settings-container">
+        <div class="settings-container" id="settings">
             <div class="settings-sidebar">
                 <ul class="settings-nav">
                     <li class="settings-nav-item active" data-tab="general"><i class="fas fa-sliders-h"></i> Général</li>
@@ -181,7 +181,21 @@
                 <div id="general" class="settings-tab active">
                     <div class="settings-header">
                         <h1>Paramètres généraux</h1>
-                        <button class="settings-help-btn" data-help="general"><i class="fas fa-question"></i></button>
+                        <button class="settings-help-btn" data-help="general" aria-label="Aide sur les paramètres généraux"><i class="fas fa-question"></i></button>
+                    </div>
+                    <div class="settings-section">
+                        <div class="settings-section-header">
+                            <h2 class="settings-section-title">Langue</h2>
+                            <p class="settings-section-description">Changez la langue d'affichage de l'application.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="language-select" class="form-label">Langue de l'interface</label>
+                            <select id="language-select" class="form-select">
+                                <option value="fr">Français</option>
+                                <option value="en">English</option>
+                                <!-- Ajoutez d'autres langues si nécessaire -->
+                            </select>
+                        </div>
                     </div>
                     <div class="settings-section">
                         <div class="settings-section-header">
@@ -197,11 +211,13 @@
                                 <option value="converter">Convertisseur</option>
                                 <option value="notepad">Bloc-notes</option>
                                 <option value="timer">Minuteur</option>
+                                <option value="todo">Liste To-do</option>
+                                <!-- Assurez-vous que toutes les options d'outils sont ici -->
                             </select>
                         </div>
                         <div class="switch-container">
                             <label class="switch">
-                                <input type="checkbox" id="restore-session">
+                                <input type="checkbox" id="restore-session" aria-label="Restaurer la session précédente au démarrage">
                                 <span class="slider"></span>
                             </label>
                             <span class="switch-label">Restaurer la session précédente au démarrage</span>
@@ -214,21 +230,21 @@
                         </div>
                         <div class="switch-container">
                             <label class="switch">
-                                <input type="checkbox" id="auto-save">
+                                <input type="checkbox" id="auto-save" aria-label="Activer la sauvegarde automatique" checked>
                                 <span class="slider"></span>
                             </label>
                             <span class="switch-label">Activer la sauvegarde automatique</span>
                         </div>
                         <div class="form-group">
                             <label for="auto-save-interval" class="form-label">Intervalle de sauvegarde (secondes)</label>
-                            <input type="number" id="auto-save-interval" class="form-control" min="5" max="600" value="30">
+                            <input type="number" id="auto-save-interval" class="form-control" min="15" max="600" value="60" aria-label="Intervalle de sauvegarde automatique en secondes">
                         </div>
                     </div>
                 </div>
                 <div id="appearance" class="settings-tab">
                     <div class="settings-header">
                         <h1>Apparence</h1>
-                        <button class="settings-help-btn" data-help="appearance"><i class="fas fa-question"></i></button>
+                        <button class="settings-help-btn" data-help="appearance" aria-label="Aide sur les paramètres d'apparence"><i class="fas fa-question"></i></button>
                     </div>
                     <div class="settings-section">
                         <div class="settings-section-header">
@@ -236,15 +252,15 @@
                             <p class="settings-section-description">Choisissez le thème visuel de l'application</p>
                         </div>
                         <div class="theme-option" data-theme="system">
-                            <input type="radio" name="theme" id="theme-system" value="system">
+                            <input type="radio" name="theme" id="theme-system" value="system" aria-label="Suivre le thème du système">
                             <label for="theme-system">Système (suivre les préférences du système)</label>
                         </div>
                         <div class="theme-option" data-theme="light">
-                            <input type="radio" name="theme" id="theme-light" value="light">
+                            <input type="radio" name="theme" id="theme-light" value="light" aria-label="Thème clair">
                             <label for="theme-light">Clair</label>
                         </div>
                         <div class="theme-option" data-theme="dark">
-                            <input type="radio" name="theme" id="theme-dark" value="dark">
+                            <input type="radio" name="theme" id="theme-dark" value="dark" aria-label="Thème sombre">
                             <label for="theme-dark">Sombre</label>
                         </div>
                     </div>
@@ -254,16 +270,16 @@
                             <p class="settings-section-description">Personnalisez la couleur principale de l'interface</p>
                         </div>
                         <div class="color-options">
-                            <div class="color-option" data-color="#4a90e2" style="background-color: #4a90e2;"></div>
-                            <div class="color-option" data-color="#50b83c" style="background-color: #50b83c;"></div>
-                            <div class="color-option" data-color="#f25c54" style="background-color: #f25c54;"></div>
-                            <div class="color-option" data-color="#9c27b0" style="background-color: #9c27b0;"></div>
-                            <div class="color-option" data-color="#f7b538" style="background-color: #f7b538;"></div>
-                            <div class="color-option" data-color="#00bcd4" style="background-color: #00bcd4;"></div>
-                            <div class="color-option custom" data-color="custom"></div>
+                            <div class="color-option" data-color="#4a90e2" style="background-color: #4a90e2;" aria-label="Couleur bleue"></div>
+                            <div class="color-option" data-color="#50b83c" style="background-color: #50b83c;" aria-label="Couleur verte"></div>
+                            <div class="color-option" data-color="#f25c54" style="background-color: #f25c54;" aria-label="Couleur rouge"></div>
+                            <div class="color-option" data-color="#9c27b0" style="background-color: #9c27b0;" aria-label="Couleur violette"></div>
+                            <div class="color-option" data-color="#f7b538" style="background-color: #f7b538;" aria-label="Couleur jaune"></div>
+                            <div class="color-option" data-color="#00bcd4" style="background-color: #00bcd4;" aria-label="Couleur cyan"></div>
+                            <div class="color-option custom" data-color="custom" aria-label="Couleur personnalisée"></div>
                         </div>
                         <div class="custom-color-picker d-none">
-                            <input type="color" id="custom-color" value="#4a90e2">
+                            <input type="color" id="custom-color" value="#4a90e2" aria-label="Sélecteur de couleur personnalisée">
                             <span>Choisir une couleur personnalisée</span>
                         </div>
                     </div>
@@ -274,14 +290,14 @@
                         </div>
                         <div class="switch-container">
                             <label class="switch">
-                                <input type="checkbox" id="compact-mode">
+                                <input type="checkbox" id="compact-mode" aria-label="Activer le mode compact">
                                 <span class="slider"></span>
                             </label>
                             <span class="switch-label">Mode compact</span>
                         </div>
                         <div class="form-group">
                             <label for="font-size" class="form-label">Taille de police</label>
-                            <select id="font-size" class="form-select">
+                            <select id="font-size" class="form-select" aria-label="Taille de police de l'interface">
                                 <option value="small">Petite</option>
                                 <option value="medium">Moyenne</option>
                                 <option value="large">Grande</option>
@@ -293,7 +309,7 @@
                 <div id="privacy" class="settings-tab">
                     <div class="settings-header">
                         <h1>Confidentialité</h1>
-                        <button class="settings-help-btn" data-help="privacy"><i class="fas fa-question"></i></button>
+                        <button class="settings-help-btn" data-help="privacy" aria-label="Aide sur les paramètres de confidentialité"><i class="fas fa-question"></i></button>
                     </div>
                     <div class="settings-section">
                         <div class="settings-section-header">
@@ -302,21 +318,21 @@
                         </div>
                         <div class="switch-container">
                             <label class="switch">
-                                <input type="checkbox" id="save-history">
+                                <input type="checkbox" id="save-history" aria-label="Enregistrer l'historique des outils utilisés">
                                 <span class="slider"></span>
                             </label>
                             <span class="switch-label">Enregistrer l'historique des outils utilisés</span>
                         </div>
                         <div class="switch-container">
                             <label class="switch">
-                                <input type="checkbox" id="local-storage">
+                                <input type="checkbox" id="local-storage" aria-label="Autoriser le stockage local">
                                 <span class="slider"></span>
                             </label>
                             <span class="switch-label">Autoriser le stockage local</span>
                         </div>
                         <div class="btn-group">
-                            <button id="clear-history" class="settings-btn btn-danger"><i class="fas fa-trash-alt"></i> Effacer l'historique</button>
-                            <button id="clear-all-data" class="settings-btn btn-danger"><i class="fas fa-trash-alt"></i> Effacer toutes les données</button>
+                            <button id="clear-history" class="settings-btn btn-danger" aria-label="Effacer l'historique"><i class="fas fa-trash-alt"></i> Effacer l'historique</button>
+                            <button id="clear-all-data" class="settings-btn btn-danger" aria-label="Effacer toutes les données"><i class="fas fa-trash-alt"></i> Effacer toutes les données</button>
                         </div>
                     </div>
                     <div class="settings-section">
@@ -326,11 +342,11 @@
                         </div>
                         <div class="storage-info">
                             <div class="storage-bar-container">
-                                <div class="storage-bar" style="width: 25%;"></div>
+                                <div class="storage-bar" style="width: 0%;"></div> <!-- Initialisé à 0% par défaut -->
                             </div>
                             <div class="storage-details">
-                                <span>Utilisé: <span id="storage-used">0.5 MB</span></span>
-                                <span>Disponible: <span id="storage-available">5 MB</span></span>
+                                <span>Utilisé: <span id="storage-used">0 Ko</span></span> <!-- Initialisé -->
+                                <span>Disponible: <span id="storage-available">5 Mo</span></span> <!-- Typiquement 5Mo pour localStorage -->
                             </div>
                         </div>
                     </div>
@@ -338,24 +354,27 @@
                 <div id="sync" class="settings-tab">
                     <div class="settings-header">
                         <h1>Synchronisation</h1>
-                        <button class="settings-help-btn" data-help="sync"><i class="fas fa-question"></i></button>
+                        <button class="settings-help-btn" data-help="sync" aria-label="Aide sur les paramètres de synchronisation"><i class="fas fa-question"></i></button>
                     </div>
                     <div class="settings-section">
-                        <div class="settings-section-header">
+                         <div class="settings-section-header">
                             <h2 class="settings-section-title">Sauvegarde et restauration</h2>
                             <p class="settings-section-description">Exportez ou importez vos paramètres et données</p>
+                        </div>
+                         <div class="sync-status">
+                            <p>Statut de connexion: <span id="connection-text">Vérification...</span> <span class="connection-dot" id="connection-dot"></span></p>
                         </div>
                         <div class="sync-status">
                             <p>Dernière synchronisation: <span id="last-sync-date">Jamais</span></p>
                         </div>
                         <div class="btn-group mb-3">
-                            <button id="export-settings" class="settings-btn btn-secondary"><i class="fas fa-file-export"></i> Exporter les paramètres</button>
-                            <button id="import-settings" class="settings-btn btn-secondary"><i class="fas fa-file-import"></i> Importer les paramètres</button>
+                            <button id="export-settings" class="settings-btn btn-secondary" aria-label="Exporter les paramètres"><i class="fas fa-file-export"></i> Exporter les paramètres</button>
+                            <button id="import-settings" class="settings-btn btn-secondary" aria-label="Importer les paramètres"><i class="fas fa-file-import"></i> Importer les paramètres</button>
                             <input type="file" id="import-file" class="input-file" accept=".json">
                         </div>
                         <div class="btn-group">
-                            <button id="export-all-data" class="settings-btn btn-secondary"><i class="fas fa-file-export"></i> Exporter toutes les données</button>
-                            <button id="import-all-data" class="settings-btn btn-secondary"><i class="fas fa-file-import"></i> Importer toutes les données</button>
+                            <button id="export-all-data" class="settings-btn btn-secondary" aria-label="Exporter toutes les données"><i class="fas fa-file-export"></i> Exporter toutes les données</button>
+                            <button id="import-all-data" class="settings-btn btn-secondary" aria-label="Importer toutes les données"><i class="fas fa-file-import"></i> Importer toutes les données</button>
                             <input type="file" id="import-all-file" class="input-file" accept=".json">
                         </div>
                     </div>
@@ -364,28 +383,23 @@
                             <h2 class="settings-section-title">Mode hors ligne</h2>
                             <p class="settings-section-description">Configurez le comportement de l'application en mode hors ligne</p>
                         </div>
-                        <div class="connection-status">
-                            <div class="connection-indicator">
-                                <span class="connection-dot online" id="connection-dot"></span>
-                                <span class="connection-text" id="connection-text">Connecté</span>
-                            </div>
-                            <button id="test-offline" class="settings-btn btn-secondary"><i class="fas fa-network-wired"></i> Tester le mode hors ligne</button>
-                        </div>
+
                         <div class="switch-container">
                             <label class="switch">
-                                <input type="checkbox" id="offline-mode">
+                                <input type="checkbox" id="offline-mode" aria-label="Activer le mode hors ligne">
                                 <span class="slider"></span>
                             </label>
                             <span class="switch-label">Activer le mode hors ligne</span>
                         </div>
-                        <div class="switch-container">
+                         <div class="switch-container">
                             <label class="switch">
-                                <input type="checkbox" id="cache-assets">
+                                <input type="checkbox" id="cache-assets" aria-label="Mettre en cache les ressources pour utilisation hors ligne">
                                 <span class="slider"></span>
                             </label>
                             <span class="switch-label">Mettre en cache les ressources pour utilisation hors ligne</span>
                         </div>
-                        <button id="update-cache" class="settings-btn btn-primary mt-3"><i class="fas fa-sync-alt"></i> Mettre à jour le cache</button>
+                        <button id="update-cache" class="settings-btn btn-primary mt-3" aria-label="Mettre à jour le cache"><i class="fas fa-sync-alt"></i> Mettre à jour le cache</button>
+                        <button id="test-offline" class="settings-btn btn-secondary mt-3" aria-label="Tester le mode hors ligne"><i class="fas fa-network-wired"></i> Tester le mode hors ligne</button>
                     </div>
                     <div class="settings-section">
                         <div class="settings-section-header">
@@ -393,85 +407,34 @@
                             <p class="settings-section-description">Sélectionnez précisément les ressources à mettre en cache pour le mode hors ligne.</p>
                         </div>
                         <div class="form-group">
-                            <input type="search" id="cache-resource-search" class="form-control" placeholder="Rechercher une ressource...">
+                            <input type="search" id="cache-resource-search" class="form-control" placeholder="Rechercher une ressource..." aria-label="Rechercher une ressource à mettre en cache">
                         </div>
+                         <div class="cache-summary">
+                             <div class="cache-progress-container">
+                                 <svg width="60" height="60" viewBox="0 0 60 60">
+                                     <!-- Cercle de fond gris -->
+                                     <circle cx="30" cy="30" r="25" fill="none" stroke="#eee" stroke-width="5"/>
+                                     <!-- Cercle de progression (stroke-dashoffset sera modifié par JS) -->
+                                     <circle cx="30" cy="30" r="25" fill="none" stroke="var(--primary-color)" stroke-width="5" stroke-dasharray="157.08" stroke-dashoffset="157.08" id="cache-progress-circle"/> <!-- Ajout ID -->
+                                 </svg>
+                                 <div class="cache-progress-label" id="cache-progress-label">0%</div> <!-- Ajout ID -->
+                             </div>
+                             <div class="cache-info">
+                                <div class="cache-count"><span id="cache-selected-count">0 ressource(s)</span> sélectionnée(s)</div> <!-- Ajout ID et texte -->
+                                <div class="cache-size">Taille totale estimée: <span id="cache-total-size">0 Ko</span></div> <!-- Ajout ID et texte -->
+                                 <div class="cache-status">Statut: <span id="cache-status-text">Inconnu</span></div> <!-- Ajout ID -->
+                             </div>
+                         </div>
                         <div class="cache-categories">
-                            <div class="cache-category">
-                                <div class="cache-category-header">
-                                    <label class="cache-category-checkbox">
-                                        <input type="checkbox" data-category="pages" checked>
-                                        Pages
-                                    </label>
-                                </div>
-                                <div class="cache-resources-list" data-category="pages">
-                                    <!-- Les ressources seront ajoutées dynamiquement -->
-                                </div>
-                            </div>
-                            <div class="cache-category">
-                                <div class="cache-category-header">
-                                    <label class="cache-category-checkbox">
-                                        <input type="checkbox" data-category="tools" checked>
-                                        Outils
-                                    </label>
-                                </div>
-                                <div class="cache-resources-list" data-category="tools">
-                                    <!-- Les ressources seront ajoutées dynamiquement -->
-                                </div>
-                            </div>
-                            <div class="cache-category">
-                                <div class="cache-category-header">
-                                    <label class="cache-category-checkbox">
-                                        <input type="checkbox" data-category="styles" checked>
-                                        Styles
-                                    </label>
-                                </div>
-                                <div class="cache-resources-list" data-category="styles">
-                                    <!-- Les ressources seront ajoutées dynamiquement -->
-                                </div>
-                            </div>
-                            <div class="cache-category">
-                                <div class="cache-category-header">
-                                    <label class="cache-category-checkbox">
-                                        <input type="checkbox" data-category="scripts" checked>
-                                        Scripts
-                                    </label>
-                                </div>
-                                <div class="cache-resources-list" data-category="scripts">
-                                    <!-- Les ressources seront ajoutées dynamiquement -->
-                                </div>
-                            </div>
-                            <div class="cache-category">
-                                <div class="cache-category-header">
-                                    <label class="cache-category-checkbox">
-                                        <input type="checkbox" data-category="images" checked>
-                                        Images
-                                    </label>
-                                </div>
-                                <div class="cache-resources-list" data-category="images">
-                                    <!-- Les ressources seront ajoutées dynamiquement -->
-                                </div>
-                            </div>
+                             <!-- Les catégories et ressources seront générées dynamiquement par JS -->
                         </div>
-                        <div class="cache-summary">
-                            <div class="cache-progress-container">
-                                <svg width="60" height="60" viewBox="0 0 60 60">
-                                    <circle cx="30" cy="30" r="25" fill="none" stroke="#eee" stroke-width="5"/>
-                                    <circle cx="30" cy="30" r="25" fill="none" stroke="var(--primary-color)" stroke-width="5" stroke-dasharray="157" stroke-dashoffset="0"/>
-                                </svg>
-                                <div class="cache-progress-label">0%</div>
-                            </div>
-                            <div class="cache-info">
-                                <div class="cache-size">Taille totale: <span>0 MB</span></div>
-                                <div class="cache-status">Statut: <span>À jour</span></div>
-                            </div>
-                        </div>
-                        <button id="apply-cache-selection" class="settings-btn btn-primary mt-3"><i class="fas fa-save"></i> Appliquer la sélection</button>
+                        <button id="apply-cache-selection" class="settings-btn btn-primary mt-3" aria-label="Appliquer la sélection de cache"><i class="fas fa-save"></i> Appliquer la sélection</button>
                     </div>
                 </div>
                 <div id="advanced" class="settings-tab">
                     <div class="settings-header">
                         <h1>Paramètres avancés</h1>
-                        <button class="settings-help-btn" data-help="advanced"><i class="fas fa-question"></i></button>
+                        <button class="settings-help-btn" data-help="advanced" aria-label="Aide sur les paramètres avancés"><i class="fas fa-question"></i></button>
                     </div>
                     <div class="settings-section">
                         <div class="settings-section-header">
@@ -480,55 +443,51 @@
                         </div>
                         <div class="switch-container">
                             <label class="switch">
-                                <input type="checkbox" id="developer-mode">
+                                <input type="checkbox" id="developer-mode" aria-label="Activer le mode développeur">
                                 <span class="slider"></span>
                             </label>
                             <span class="switch-label">Mode développeur</span>
                         </div>
                         <div class="switch-container">
                             <label class="switch">
-                                <input type="checkbox" id="debug-logging">
+                                <input type="checkbox" id="debug-logging" aria-label="Activer la journalisation des erreurs">
                                 <span class="slider"></span>
                             </label>
                             <span class="switch-label">Journalisation des erreurs</span>
                         </div>
-                        <div class="form-group">
-                            <label for="api-endpoint" class="form-label">Point de terminaison de l'API</label>
-                            <input type="text" id="api-endpoint" class="form-control" value="https://api.outilspratiques.com/v1">
-                        </div>
-                        <button id="reset-advanced" class="settings-btn btn-danger mt-3"><i class="fas fa-undo"></i> Réinitialiser les paramètres avancés</button>
-                    </div>
-                    <div class="settings-section">
-                        <div class="settings-section-header">
-                            <h2 class="settings-section-title">Performance</h2>
-                            <p class="settings-section-description">Optimisez les performances de l'application</p>
-                        </div>
-                        <div class="switch-container">
+                         <div class="switch-container">
                             <label class="switch">
-                                <input type="checkbox" id="hardware-acceleration">
+                                <input type="checkbox" id="hardware-acceleration" aria-label="Utiliser l'accélération matérielle">
                                 <span class="slider"></span>
                             </label>
                             <span class="switch-label">Utiliser l'accélération matérielle</span>
                         </div>
                         <div class="form-group">
-                            <label for="cache-limit" class="form-label">Limite de cache (MB)</label>
-                            <input type="number" id="cache-limit" class="form-control" min="1" max="100" value="50">
+                            <label for="api-endpoint" class="form-label">Point de terminaison de l'API</label>
+                            <input type="text" id="api-endpoint" class="form-control" value="" placeholder="https://api.outilspratiques.com/v1" aria-label="Point de terminaison de l'API">
                         </div>
+                         <div class="form-group">
+                            <label for="cache-limit" class="form-label">Limite de cache hors ligne recommandée (Mo)</label>
+                            <input type="number" id="cache-limit" class="form-control" min="1" max="500" value="50" aria-label="Limite de cache hors ligne en Mo">
+                             <p class="settings-section-description mt-1 mb-0">Ceci est une indication pour l'utilisateur, la limite réelle dépend du navigateur.</p>
+                        </div>
+                        <button id="reset-advanced" class="settings-btn btn-danger mt-3" aria-label="Réinitialiser les paramètres avancés"><i class="fas fa-undo"></i> Réinitialiser les paramètres avancés</button>
                     </div>
                 </div>
                 <div id="about" class="settings-tab">
                     <div class="settings-header">
                         <h1>À propos</h1>
+                        <!-- Pas de bouton d'aide spécifique pour 'À propos' dans cette conception -->
                     </div>
                     <div class="settings-section">
                         <div class="settings-section-header">
                             <h2 class="settings-section-title">Outils Pratiques</h2>
                             <p class="settings-section-description">Informations sur l'application</p>
                         </div>
-                        <p><strong>Version:</strong> <span class="version-badge">0.8.0</span></p>
+                        <p><strong>Version:</strong> <span class="version-badge">0.8.0</span></p> <!-- Mettez à jour la version si nécessaire -->
                         <p><strong>Auteur:</strong> HZC23</p>
                         <p><strong>Site Web:</strong> <a href="https://outilspratiques.com" target="_blank">outilspratiques.com</a></p>
-                        <p><strong>Contact:</strong> <a href="mailto:contact@outilspratiques.com">contact@outilspratiques.com</a></p>
+                        <p><strong>Contact:</strong> <a href="mailto:outilspratiques23@gmail.com">outilspratiques23@gmail.com</a></p> <!-- Assurez-vous que l'adresse email est correcte -->
                         <p class="mt-4">Outils Pratiques est une collection d'outils web utiles au quotidien, conçue pour être simple, rapide et accessible. Tous les outils fonctionnent hors ligne et vos données restent sur votre appareil.</p>
                         <div class="btn-group mt-4">
                             <a href="https://github.com/HZC23/outilspratiques.github.io" target="_blank" class="settings-btn btn-secondary"><i class="fab fa-github"></i> GitHub</a>
@@ -540,10 +499,10 @@
             </div>
         </div>
     </main>
-    <div class="help-panel" id="help-panel">
+    <div class="help-panel" id="help-panel" role="dialog" aria-labelledby="help-panel-title" aria-hidden="true">
         <div class="help-panel-header">
-            <h2 class="help-panel-title">Aide - <span id="help-title">Général</span></h2>
-            <button class="close-help-btn" id="close-help"><i class="fas fa-times"></i></button>
+            <h2 class="help-panel-title" id="help-panel-title">Aide - <span id="help-title"></span></h2>
+            <button class="close-help-btn" id="close-help" aria-label="Fermer l'aide"><i class="fas fa-times"></i></button>
         </div>
         <div class="help-panel-content">
             <div id="help-general" class="help-panel-section">
@@ -575,16 +534,20 @@
                 <p>Exportez vos paramètres et données pour les sauvegarder ou les transférer sur un autre appareil. Vous pouvez importer des fichiers précédemment exportés.</p>
                 <h3>Mode hors ligne</h3>
                 <p>Configurez l'application pour qu'elle fonctionne sans connexion internet. Activez la mise en cache des ressources pour un fonctionnement optimal hors ligne.</p>
+                <h3>Gestion du cache</h3>
+                <p>Sélectionnez spécifiquement les fichiers (pages, outils, styles, scripts, images) que vous souhaitez rendre disponibles hors ligne. L'application essaiera de calculer une taille estimée du cache.</p>
             </div>
             <div id="help-advanced" class="help-panel-section d-none">
                 <h3>Mode développeur</h3>
                 <p>Active des fonctionnalités supplémentaires pour les développeurs, comme l'inspection des données et le débogage.</p>
                 <h3>Journalisation des erreurs</h3>
                 <p>Enregistre les erreurs et les avertissements dans la console pour faciliter le dépannage.</p>
+                 <h3>Accélération matérielle</h3>
+                <p>Utilise le processeur graphique (GPU) de votre appareil pour améliorer les performances visuelles de l'application, si disponible.</p>
                 <h3>Point de terminaison de l'API</h3>
-                <p>Modifiez l'URL de l'API utilisée par l'application (uniquement pour les utilisateurs avancés).</p>
-                <h3>Performance</h3>
-                <p>Optimisez les performances de l'application en ajustant l'utilisation de l'accélération matérielle et les limites de cache.</p>
+                <p>Modifiez l'URL de l'API utilisée par l'application (uniquement pour les utilisateurs avancés et nécessite un serveur backend). Utilisez cette option avec précaution.</p>
+                 <h3>Limite de cache hors ligne recommandée</h3>
+                <p>Indique la limite de stockage recommandée à utiliser pour le cache hors ligne. Dépasser cette limite peut entraîner la suppression automatique de données par le navigateur.</p>
             </div>
         </div>
     </div>

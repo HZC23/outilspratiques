@@ -1,0 +1,312 @@
+/* Styles améliorés pour l'outil Générateur Aléatoire */
+
+#randomTool {
+    margin: 30px auto;
+    max-width: 750px;
+    padding: 30px;
+    border: none;
+    border-radius: 12px;
+    background-color: #f8f9fa;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+}
+
+#randomTool h2 {
+    text-align: center;
+    color: #0056b3;
+    margin-top: 0;
+    margin-bottom: 30px;
+    font-size: 2.2em;
+    font-weight: 700;
+    position: relative;
+    padding-bottom: 15px;
+    letter-spacing: -0.5px;
+}
+
+#randomTool h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background-color: #007bff;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 2px;
+}
+
+/* Section globale des options */
+.random-options {
+    margin-bottom: 25px;
+}
+
+/* Masque les groupes d'options par défaut */
+.random-options-group {
+    display: none; /* Caché par défaut */
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Animation fade-in */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+}
+
+/* Afficher le groupe actif */
+.random-options-group.active {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    align-items: stretch;
+    padding: 10px;
+}
+
+/* Styles pour les groupes de formulaires (Inputs, Selects, Textareas) */
+.form-group {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 0;
+    padding: 18px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fdfdfd;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: flex-start;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.form-group:hover {
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    border-color: #c0c0c0;
+}
+
+.form-group label {
+    margin-bottom: 0;
+    font-weight: 600;
+    color: #444;
+    font-size: 1em;
+    flex-shrink: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    transition: color 0.2s ease;
+    line-height: 1.5;
+}
+
+.form-group label:hover {
+    color: #000;
+}
+
+.form-control {
+    flex-grow: 1;
+    padding: 10px 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    background-color: #ffffff;
+    min-width: 150px;
+    line-height: 1.5;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    color: #333;
+}
+
+.form-control:hover {
+    border-color: #909090;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12);
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    background-color: #fff;
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.6;
+}
+
+/* Styles spécifiques pour les checkboxes */
+.form-check {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+    cursor: pointer;
+    user-select: none;
+    padding: 18px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fdfdfd;
+    flex-wrap: nowrap;
+    gap: 12px;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.form-check:hover {
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    border-color: #c0c0c0;
+}
+
+.form-check-input {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    accent-color: #007bff;
+    border: 1px solid #ccc;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    margin: 0;
+}
+
+.form-check-input:checked {
+    border-color: #007bff;
+}
+
+.form-check-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+.form-check-label {
+    margin-bottom: 0;
+    font-weight: normal;
+    color: #333;
+    font-size: 1em;
+    cursor: pointer;
+    flex-grow: 1;
+    line-height: 1.5;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+/* Groupe de boutons */
+.button-group {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+
+/* Style pour le bouton Copier si le résultat est vide */
+#copyRandom:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+/* Section résultat */
+#randomOutput {
+    margin-top: 20px;
+    padding: 18px;
+    border: 1px solid #d0d0d0;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    font-family: 'Courier New', Courier, monospace;
+    word-break: break-all;
+    white-space: pre-wrap;
+    line-height: 1.6;
+    min-height: 150px;
+    color: #000;
+    font-size: 1em;
+    overflow-x: auto;
+}
+
+/* Section historique */
+.history-section {
+    margin-top: 40px;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 25px;
+}
+
+.history-section h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+    font-size: 1.6em;
+    font-weight: 600;
+}
+
+.history-container {
+    max-height: 350px;
+    overflow-y: auto;
+    border: 1px solid #d0d0d0;
+    border-radius: 6px;
+    padding: 0;
+    background-color: #ffffff;
+}
+
+.history-item {
+    padding: 15px 18px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.history-item:last-child {
+    border-bottom: none;
+}
+
+.history-item:hover {
+    background-color: #f0f8ff;
+}
+
+.history-result {
+    font-family: 'Courier New', Courier, monospace;
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin-bottom: 10px;
+    color: #000;
+    line-height: 1.5;
+    font-size: 0.95em;
+}
+
+.history-meta {
+    font-size: 0.85em;
+    color: #555;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.history-type {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.history-date {
+    font-style: italic;
+    color: #777;
+}
+
+/* Scrollbar customisée (peut varier selon le navigateur) */
+.history-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.history-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.history-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.history-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+} 

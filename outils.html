@@ -30,7 +30,7 @@
     <meta name="twitter:title" content="Outils Pratiques - Collection d'outils en ligne gratuits">
     <meta name="twitter:description" content="Collection d'outils pratiques gratuits pour le calcul, la gestion du temps, l'organisation et plus encore.">
     <meta name="twitter:image" content=" /icons/icon-1024x1024.png">
-    <link rel="canonical" href=" /">
+    <link rel="canonical" href="/outils.html">
     <title>Outils Pratiques</title>
     
     <!-- Favicon -->
@@ -74,9 +74,9 @@
     <link rel="stylesheet" href="styles/tools/stopwatch.css">
     <link rel="stylesheet" href="styles/tools/notes.css">
     <link rel="stylesheet" href="styles/tools/translator.css">
-    <link rel="stylesheet" href="styles/tools/scheduler.css">
     <link rel="stylesheet" href="styles/tools/metronome.css">
     <link rel="stylesheet" href="styles/tools/qrcode.css">
+    <link rel="stylesheet" href="styles/tools/random.css">
     <link rel="stylesheet" href="styles/tools/todo.css">
     <link rel="stylesheet" href="styles/tools/password.css">
     <link rel="stylesheet" href="styles/tools/currency.css">
@@ -131,17 +131,17 @@
     <script type="module" src="js/tools/stopwatch.js"></script>
     <script type="module" src="js/tools/notes.js"></script>
     <script type="module" src="js/tools/translator.js"></script>
-    <script type="module" src="js/tools/scheduler.js"></script>
     <script type="module" src="js/tools/metronome.js"></script>
     <script type="module" src="js/tools/password.js"></script>
     <script type="module" src="js/tools/qrcode.js"></script>
     <script type="module" src="js/tools/currency.js"></script>
-    <script type="module" src="js/tools/texteditor.js"></script>
+    <script type="module" src="js/tools/text-editor.js"></script>
     <script type="module" src="js/texteditor-init.js"></script>
     <script type="module" src="js/theme.js"></script>
     <script type="module" src="js/tools/color.js"></script>
     <script type="module" src="js/tools/percentage.js"></script>
     <script type="module" src="js/tools/dictionary.js"></script>
+    <script type="module" src="js/tools/random.js"></script>
 </head>
 <body>
 
@@ -363,6 +363,10 @@
                     <button type="button" data-tool-id="qrcodeTool" data-tooltip="Générateur de QR codes personnalisés" class="submenu-item" role="menuitem">
                         <i class="fas fa-qrcode" aria-hidden="true"></i>
                         <span>Générateur de QR code</span>
+                    </button>
+                    <button type="button" data-tool-id="randomTool" class="submenu-item" role="menuitem">
+                        <i class="fas fa-dice" aria-hidden="true"></i>
+                        <span>Générateur aléatoire</span>
                     </button>
                 </div>
             <button type="button" onclick="window.location.href='./html/settings.html'" data-tool-id="parameterTool" data-tooltip="Outil de paramètres" class="submenu-item" role="menuitem">

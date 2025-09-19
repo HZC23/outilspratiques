@@ -238,6 +238,11 @@ window.addEventListener('supabase-loaded', () => {
  * Inscrit un nouvel utilisateur
  */
 export const signUp = async (email, password) => {
+    if (!email || !password) {
+        console.error('Email ou mot de passe manquant');
+        return { success: false, error: 'Email ou mot de passe manquant' };
+    }
+
     try {
         const supabaseClient = getSupabase();
         const { data, error } = await supabaseClient.auth.signUp({
@@ -245,7 +250,10 @@ export const signUp = async (email, password) => {
             password
         });
         
-        if (error) throw error;
+        if (error) {
+            console.error('Erreur de Supabase:', error);
+            throw error;
+        }
         
         console.log('Inscription réussie, vérifiez votre email pour confirmer votre compte');
         return { success: true, user: data.user };

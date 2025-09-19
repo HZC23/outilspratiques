@@ -8,16 +8,12 @@
 /* Mise en page horizontale pour les grands écrans */
 @media (min-width: 1200px) {
     .text-editor-horizontal-layout {
-        display: grid;
-        grid-template-columns: 1fr 320px;
-        grid-template-areas: "main sidebar";
-        gap: 1.5rem;
-        max-width: 1200px;
+        display: block;
+        max-width: 900px;
         margin: 0 auto;
     }
-    
     .text-editor-main-panel {
-        grid-area: main;
+        width: 100%;
     }
     
     .text-editor-sidebar {
@@ -424,8 +420,36 @@
 
 .text-actions {
     display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.2rem;
+    margin-top: 0.5rem;
     flex-wrap: wrap;
-    gap: 10px;
+}
+
+.text-actions {
+    min-width: 120px;
+    min-height: 44px;
+    font-size: 1rem;
+    border-radius: 8px;
+    box-shadow: var(--inset-shadow);
+    transition: box-shadow 0.2s, background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+}
+
+.text-actions {
+    color: #fff !important;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+}
+
+.text-actions .btn:hover,
+.text-actions .btn:focus {
+    box-shadow: 0 4px 16px rgba(25, 118, 210, 0.12);
+    background: var(--hover-color, #e3f2fd);
 }
 
 .text-editor-notification {
@@ -477,8 +501,17 @@
         align-items: flex-start;
     }
     .text-actions {
-        margin-top: 10px;
-        width: 100%;
-        justify-content: space-between;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.7rem;
     }
+    .text-actions .btn {
+        width: 100%;
+        min-width: unset;
+    }
+}
+
+/* Forcer la couleur des icônes en mode light */
+.btn-icon-text {
+    color: var(--text-color, #222) !important;
 } 

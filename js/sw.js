@@ -20,7 +20,6 @@ const CONFIG = {
             '/styles/variables.css',
             '/styles/main.css',
             '/styles/menu.css',
-            '/styles/tools-cards.css',
             '/styles/home.css',
             '/styles/notification.css',
             '/styles/theme-switch.css',

@@ -10,7 +10,6 @@ const RESOURCES_TO_CACHE = [
     `${BASE_PATH}/styles/variables.css`,
     `${BASE_PATH}/styles/main.css`,
     `${BASE_PATH}/styles/menu.css`,
-    `${BASE_PATH}/styles/tools-cards.css`,
     `${BASE_PATH}/styles/home.css`,
     `${BASE_PATH}/styles/notification.css`,
     `${BASE_PATH}/styles/theme-switch.css`,
@@ -23,7 +22,6 @@ const RESOURCES_TO_CACHE = [
     `${BASE_PATH}/styles/components/stopwatch.css`,
     `${BASE_PATH}/styles/components/notes.css`,
     `${BASE_PATH}/styles/components/translator.css`,
-    `${BASE_PATH}/styles/components/scheduler.css`,
     `${BASE_PATH}/styles/components/metronome.css`,
     `${BASE_PATH}/styles/components/qrcode.css`,
     // Scripts principaux

@@ -1,5 +1,5 @@
 // Importer la fonction d'initialisation de l'éditeur de texte
-import { init, clearContent, downloadContent, copyToClipboard, importFile } from './tools/textEditor.js';
+import { init, clearContent, downloadContent, copyToClipboard, importFile, insertTextAtCursor } from './tools/text-editor.js';
 
 // Variable globale pour l'instance de l'éditeur
 let textEditorInstance = null;
@@ -78,6 +78,58 @@ document.addEventListener('DOMContentLoaded', () => {
         // Initialiser l'éditeur
         textEditorInstance = init();
         console.log('Gestionnaire d\'éditeur de texte initialisé avec succès');
+
+        // === Gestion des boutons de la barre latérale ===
+        // Liste à puces
+        const bulletBtn = document.getElementById('insertBulletList');
+        if (bulletBtn) {
+            bulletBtn.addEventListener('click', () => {
+                insertTextAtCursor('<ul><li>Nouvel élément</li></ul>');
+            });
+        }
+        // Liste numérotée
+        const numberedBtn = document.getElementById('insertNumberedList');
+        if (numberedBtn) {
+            numberedBtn.addEventListener('click', () => {
+                insertTextAtCursor('<ol><li>Nouvel élément</li></ol>');
+            });
+        }
+        // Lien
+        const linkBtn = document.getElementById('insertLink');
+        if (linkBtn) {
+            linkBtn.addEventListener('click', () => {
+                const url = prompt('Adresse du lien :', 'https://');
+                if (url) insertTextAtCursor(`<a href="${url}" target="_blank">Nouveau lien</a>`);
+            });
+        }
+        // Tableau
+        const tableBtn = document.getElementById('insertTable');
+        if (tableBtn) {
+            tableBtn.addEventListener('click', () => {
+                insertTextAtCursor('<table border="1" style="border-collapse:collapse;width:100%"><tr><th>Colonne 1</th><th>Colonne 2</th></tr><tr><td>Cellule 1</td><td>Cellule 2</td></tr></table>');
+            });
+        }
+        // Image
+        const imageBtn = document.getElementById('insertImage');
+        if (imageBtn) {
+            imageBtn.addEventListener('click', () => {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*';
+                input.onchange = (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (evt) => {
+                            insertTextAtCursor(`<img src="${evt.target.result}" alt="Image" style="max-width:100%">`);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                };
+                input.click();
+            });
+        }
+        // === Fin gestion boutons barre latérale ===
     }
 });
 

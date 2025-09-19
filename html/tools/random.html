@@ -1,0 +1,135 @@
+<!-- Insère ce bloc là où tu veux placer l'outil dans ta page -->
+<div id="randomTool" class="tool-section">
+    <h2>Générateur Aléatoire</h2>
+
+    <div class="form-group">
+        <label for="randomType">Type de génération :</label>
+        <select id="randomType" class="form-control">
+            <option value="integer">Entier</option>
+            <option value="float">Décimal</option>
+            <option value="sequence">Séquence</option>
+            <option value="dice">Dés</option>
+            <option value="card">Cartes</option>
+            <option value="uuid">UUID</option>
+            <option value="bytes">Octets</option>
+        </select>
+    </div>
+
+    <div class="random-options">
+        <!-- Options communes ou spécifiques à plusieurs types -->
+        <div class="form-group">
+            <label for="randomCount">Nombre de résultats :</label>
+            <input type="number" id="randomCount" class="form-control" value="1" min="1">
+        </div>
+
+        <div class="form-group form-check">
+            <input type="checkbox" id="randomUnique" class="form-check-input">
+            <label for="randomUnique" class="form-check-label">Résultats uniques</label>
+        </div>
+
+        <div class="form-group form-check">
+            <input type="checkbox" id="randomSorted" class="form-check-input">
+            <label for="randomSorted" class="form-check-label">Résultats triés</label>
+        </div>
+
+        <div class="form-group">
+            <label for="randomSeparator">Séparateur :</label>
+            <select id="randomSeparator" class="form-control">
+                <option value="\n">Nouvelle ligne</option>
+                <option value=", ">Virgule + espace</option>
+                <option value=" ">Espace</option>
+                <option value=";">Point-virgule</option>
+            </select>
+        </div>
+
+        <!-- Groupes d'options spécifiques à chaque type -->
+        <!-- Ajoute la classe 'hidden' par défaut et utilise JS pour afficher le groupe approprié -->
+        <div class="random-options-group" data-type="integer">
+             <div class="form-group">
+                <label for="randomMin">Minimum :</label>
+                <input type="number" id="randomMin" class="form-control" value="1">
+            </div>
+            <div class="form-group">
+                <label for="randomMax">Maximum :</label>
+                <input type="number" id="randomMax" class="form-control" value="100">
+            </div>
+            <div class="form-group">
+                <label for="randomFormat">Format :</label>
+                 <select id="randomFormat" class="form-control">
+                    <option value="decimal">Décimal</option>
+                    <option value="binary">Binaire</option>
+                    <option value="octal">Octal</option>
+                    <option value="hexadecimal">Hexadécimal</option>
+                </select>
+            </div>
+        </div>
+
+         <div class="random-options-group" data-type="float">
+             <div class="form-group">
+                <label for="randomMin">Minimum :</label>
+                <input type="number" id="randomMin" class="form-control" value="0.0">
+            </div>
+            <div class="form-group">
+                <label for="randomMax">Maximum :</label>
+                <input type="number" id="randomMax" class="form-control" value="1.0">
+            </div>
+            <div class="form-group">
+                <label for="randomPrecision">Précision (décimales) :</label>
+                <input type="number" id="randomPrecision" class="form-control" value="2" min="0">
+            </div>
+        </div>
+
+         <div class="random-options-group" data-type="sequence">
+              <div class="form-group">
+                <label for="randomMin">Début de séquence :</label>
+                <input type="number" id="randomMin" class="form-control" value="1">
+            </div>
+            <div class="form-group">
+                <label for="randomMax">Fin de séquence :</label>
+                <input type="number" id="randomMax" class="form-control" value="10">
+            </div>
+             <!-- Count, Unique, Sorted, Separator sont gérés par les options communes -->
+        </div>
+
+        <div class="random-options-group" data-type="dice">
+             <div class="form-group">
+                <label for="randomCustomDice">Expression (ex: 2d6+3) :</label>
+                <input type="text" id="randomCustomDice" class="form-control" value="1d6">
+            </div>
+            <!-- Format est géré par les options communes -->
+        </div>
+
+         <div class="random-options-group" data-type="card">
+             <div class="form-group">
+                <label for="randomCustomCards">Cartes personnalisées (séparées par virgule ou nouvelle ligne) :</label>
+                <textarea id="randomCustomCards" class="form-control" rows="3" placeholder="Ex: As♥, Roi♠, 7♦"></textarea>
+            </div>
+             <!-- Count et Separator sont gérés par les options communes -->
+        </div>
+
+         <div class="random-options-group" data-type="uuid">
+              <!-- Count et Separator sont gérés par les options communes -->
+        </div>
+
+         <div class="random-options-group" data-type="bytes">
+              <!-- Count, Format et Separator sont gérés par les options communes -->
+        </div>
+    </div>
+
+    <div class="form-group button-group">
+        <button id="generateRandom" class="btn btn-primary">Générer</button>
+        <button id="copyRandom" class="btn btn-secondary">Copier le résultat</button>
+    </div>
+
+    <div class="form-group">
+        <label for="randomOutput">Résultat :</label>
+        <textarea id="randomOutput" class="form-control" rows="5" readonly></textarea>
+    </div>
+
+    <div class="history-section">
+        <h3>Historique</h3>
+        <div id="randomHistory" class="history-container">
+            <!-- L'historique sera ajouté ici par JavaScript -->
+        </div>
+    </div>
+</div>

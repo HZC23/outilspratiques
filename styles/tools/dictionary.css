@@ -79,7 +79,7 @@
     border: 2px solid var(--border-color);
     border-radius: var(--border-radius);
     background-color: var(--bg-input);
-    color: var(--text-on-primary);
+    color: var(--text-primary);
 }
 
 /* Toggle pour Wiktionnaire */
@@ -386,4 +386,9 @@
     .dictionary-word {
         font-size: 1.5rem;
     }
-} 
+}
+
+.dictionary-language select option {
+    background-color: var(--bg-input);
+    color: var(--text-primary);
+}

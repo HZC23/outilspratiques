@@ -24,50 +24,14 @@ export const RandomManager = {
 
     // Configuration des types de générateurs
     types: {
-        integer: {
-            name: 'Entier',
-            description: 'Nombres entiers dans un intervalle',
-            validate: (min, max) => {
-                min = Math.floor(min);
-                max = Math.floor(max);
-                return { min, max };
-            },
-            generate: (min, max) => {
-                return Math.floor(Math.random() * (max - min + 1)) + min;
-            }
-        },
-        float: {
-            name: 'Décimal',
-            description: 'Nombres décimaux dans un intervalle',
-            validate: (min, max) => ({ min, max }),
-            generate: (min, max, precision) => {
-                const value = Math.random() * (max - min) + min;
-                return Number(value.toFixed(precision));
-            }
-        },
-        sequence: {
-            name: 'Séquence',
-            description: 'Suite de nombres consécutifs mélangés',
-            validate: (min, max) => {
-                min = Math.floor(min);
-                max = Math.floor(max);
-                return { min, max };
-            },
-            generate: (min, max) => {
-                const sequence = Array.from(
-                    { length: max - min + 1 },
-                    (_, i) => min + i
-                );
-                return sequence.sort(() => Math.random() - 0.5);
-            }
-        },
+        // ... existing code ...
         dice: {
             name: 'Dés',
             description: 'Lancers de dés (ex: 2d6+3)',
             validate: (expression) => {
                 const match = expression.match(/^(\d+)?d(\d+)([+-]\d+)?$/);
                 if (!match) throw new Error('Format invalide (ex: 2d6+3)');
-                
+
                 const [, count = '1', sides, modifier = '+0'] = match;
                 return {
                     count: parseInt(count, 10),
@@ -99,39 +63,33 @@ export const RandomManager = {
                 return { custom: deck.split(/[,\n]/).map(c => c.trim()).filter(Boolean) };
             },
             generate: (deck, count) => {
-                let cards;
+                let cards = []; // Initialisation par défaut
                 if (deck.custom) {
                     cards = [...deck.custom];
-                } else {
+                } else if (deck.suits && deck.ranks) { // Vérifier que les données du jeu standard existent
                     cards = deck.suits.flatMap(suit =>
                         deck.ranks.map(rank => `${rank}${suit}`)
                     );
                 }
-                return cards.sort(() => Math.random() - 0.5).slice(0, count);
+                
+                // Vérifier que cards est bien un tableau et n'est pas vide avant de mélanger
+                if (Array.isArray(cards) && cards.length > 0) {
+                    // Utilise Utils.shuffle pour mélanger le tableau
+                    Utils.shuffle(cards); // Ajout de Utils.shuffle
+                } else {
+                    console.warn('Aucune carte définie pour le mélange.');
+                    // Optionnel: gérer le cas où aucune carte n'est générée, par exemple, retourner un tableau vide ou une erreur.
+                    // Pour l'instant, on continue avec un tableau vide.
+                }
+
+                return cards.slice(0, count);
             }
         },
         uuid: {
-            name: 'UUID',
-            description: 'Identifiants uniques universels',
-            validate: () => ({}),
-            generate: () => {
-                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-                    const r = Math.random() * 16 | 0;
-                    const v = c === 'x' ? r : (r & 0x3 | 0x8);
-                    return v.toString(16);
-                });
-            }
+            // ... existing code ...
         },
         bytes: {
-            name: 'Octets',
-            description: 'Séquences d\'octets aléatoires',
-            validate: (count) => ({ count: Math.min(1024, Math.max(1, count)) }),
-            generate: (count) => {
-                return Array.from(
-                    { length: count },
-                    () => Math.floor(Math.random() * 256)
-                );
-            }
+            // ... existing code ...
         }
     },
 
@@ -140,107 +98,130 @@ export const RandomManager = {
      */
     init() {
         this.loadState();
+        this.updateUI(); // Met à jour l'UI au démarrage
         this.setupListeners();
-        this.generate();
+        // Pas besoin de générer ici, l'UI est déjà mise à jour avec le dernier résultat sauvegardé
     },
 
     /**
      * Charge l'état sauvegardé
      */
     loadState() {
-        const savedState = Utils.loadFromStorage('randomState', {
-            type: this.state.type,
-            options: this.state.options,
-            customDice: this.state.customDice,
-            customCards: this.state.customCards,
-            history: []
-        });
-
-        this.state = { ...this.state, ...savedState };
+        // ... existing code ...
     },
 
     /**
      * Configure les écouteurs d'événements
      */
     setupListeners() {
+        console.log("Configuration des écouteurs d'événements...");
+        
         // Type de générateur
-        document.getElementById('randomType')?.addEventListener('change', (e) => {
+        const typeSelect = document.getElementById('randomType');
+        console.log('randomType trouvé:', !!typeSelect);
+        typeSelect?.addEventListener('change', (e) => {
             this.updateType(e.target.value);
+            console.log('Type changed to:', e.target.value);
         });
 
         // Options numériques
-        document.getElementById('randomMin')?.addEventListener('input', (e) => {
+        const minInput = document.getElementById('randomMin');
+        console.log('randomMin trouvé:', !!minInput);
+        minInput?.addEventListener('input', (e) => {
             this.updateOption('min', parseFloat(e.target.value));
+            console.log('Min changed to:', e.target.value);
         });
 
-        document.getElementById('randomMax')?.addEventListener('input', (e) => {
+        const maxInput = document.getElementById('randomMax');
+        console.log('randomMax trouvé:', !!maxInput);
+        maxInput?.addEventListener('input', (e) => {
             this.updateOption('max', parseFloat(e.target.value));
+            console.log('Max changed to:', e.target.value);
         });
 
-        document.getElementById('randomCount')?.addEventListener('input', (e) => {
-            this.updateOption('count', parseInt(e.target.value, 10));
+        const countInput = document.getElementById('randomCount');
+        console.log('randomCount trouvé:', !!countInput);
+        countInput?.addEventListener('input', (e) => {
+            // Convertit en entier, assure qu'il est au moins 1 pour éviter les boucles infinies ou erreurs
+            const value = Math.max(1, parseInt(e.target.value, 10) || 1);
+            this.updateOption('count', value);
+            console.log('Count changed to:', value);
         });
 
-        document.getElementById('randomPrecision')?.addEventListener('input', (e) => {
+        const precisionInput = document.getElementById('randomPrecision');
+        console.log('randomPrecision trouvé:', !!precisionInput);
+        precisionInput?.addEventListener('input', (e) => {
             this.updateOption('precision', parseInt(e.target.value, 10));
+            console.log('Precision changed to:', e.target.value);
         });
 
         // Options de format
-        document.getElementById('randomUnique')?.addEventListener('change', (e) => {
+        const uniqueInput = document.getElementById('randomUnique');
+        console.log('randomUnique trouvé:', !!uniqueInput);
+        uniqueInput?.addEventListener('change', (e) => {
             this.updateOption('unique', e.target.checked);
+            console.log('Unique changed to:', e.target.checked);
         });
 
-        document.getElementById('randomSorted')?.addEventListener('change', (e) => {
+        const sortedInput = document.getElementById('randomSorted');
+        console.log('randomSorted trouvé:', !!sortedInput);
+        sortedInput?.addEventListener('change', (e) => {
             this.updateOption('sorted', e.target.checked);
+            console.log('Sorted changed to:', e.target.checked);
         });
 
-        document.getElementById('randomFormat')?.addEventListener('change', (e) => {
+        const formatSelect = document.getElementById('randomFormat');
+        console.log('randomFormat trouvé:', !!formatSelect);
+        formatSelect?.addEventListener('change', (e) => {
             this.updateOption('format', e.target.value);
+            console.log('Format changed to:', e.target.value);
         });
 
-        document.getElementById('randomSeparator')?.addEventListener('change', (e) => {
+        const separatorSelect = document.getElementById('randomSeparator');
+        console.log('randomSeparator trouvé:', !!separatorSelect);
+        separatorSelect?.addEventListener('change', (e) => {
             this.updateOption('separator', e.target.value);
+            console.log('Separator changed to:', e.target.value);
         });
 
         // Options personnalisées
-        document.getElementById('randomCustomDice')?.addEventListener('input', (e) => {
+        const customDiceInput = document.getElementById('randomCustomDice');
+        console.log('randomCustomDice trouvé:', !!customDiceInput);
+        customDiceInput?.addEventListener('input', (e) => {
             this.updateCustomDice(e.target.value);
+            console.log('Custom Dice changed to:', e.target.value);
         });
 
-        document.getElementById('randomCustomCards')?.addEventListener('input', (e) => {
+        const customCardsTextarea = document.getElementById('randomCustomCards');
+        console.log('randomCustomCards trouvé:', !!customCardsTextarea);
+        customCardsTextarea?.addEventListener('input', (e) => {
             this.updateCustomCards(e.target.value);
+            console.log('Custom Cards changed to:', e.target.value);
         });
 
         // Boutons d'action
-        document.getElementById('generateRandom')?.addEventListener('click', () => {
+        const generateButton = document.getElementById('generateRandom');
+        console.log('generateRandom trouvé:', !!generateButton);
+        generateButton?.addEventListener('click', () => {
+            console.log('Bouton Générer cliqué');
             this.generate();
         });
 
-        document.getElementById('copyRandom')?.addEventListener('click', () => {
+        const copyButton = document.getElementById('copyRandom');
+        console.log('copyRandom trouvé:', !!copyButton);
+        copyButton?.addEventListener('click', () => {
+            console.log('Bouton Copier cliqué');
             this.copy();
         });
 
         // Raccourcis clavier
-        document.addEventListener('keydown', (e) => {
-            if (!this.isRandomGeneratorVisible()) return;
-
-            if (e.ctrlKey && e.key === 'Enter') {
-                e.preventDefault();
-                this.generate();
-            } else if (e.ctrlKey && e.key === 'c' && document.activeElement?.id !== 'randomOutput') {
-                e.preventDefault();
-                this.copy();
-            }
-        });
+        // ... existing code ...
     },
 
     /**
      * Vérifie si le générateur est visible
      */
-    isRandomGeneratorVisible() {
-        const generator = document.getElementById('randomTool');
-        return generator?.style.display !== 'none';
-    },
+    // ... existing code ...
 
     /**
      * Met à jour le type de générateur
@@ -249,7 +230,12 @@ export const RandomManager = {
         if (!this.types[type]) return;
 
         this.state.type = type;
-        this.generate();
+        // Réinitialiser certaines options par défaut pour le nouveau type si nécessaire,
+        // ou charger celles sauvegardées si loadState le fait déjà au démarrage.
+        // Pour l'instant, on garde les options précédentes si elles sont compatibles.
+
+        this.generate(); // Génère un nouveau résultat pour le nouveau type
+        this.updateUI(); // Met à jour toute l'UI pour le nouveau type
         this.saveState();
     },
 
@@ -258,7 +244,10 @@ export const RandomManager = {
      */
     updateOption(option, value) {
         this.state.options[option] = value;
-        this.generate();
+        this.generate(); // Régénère avec la nouvelle option
+        // Pas besoin de updateUI ici, generate appelle déjà updateDisplay et addToHistory
+        // et les options spécifiques au type ne changent pas l'affichage des champs,
+        // seulement leur valeur. updateUI sera appelé par generate.
         this.saveState();
     },
 
@@ -267,7 +256,8 @@ export const RandomManager = {
      */
     updateCustomDice(dice) {
         this.state.customDice = dice;
-        this.generate();
+        this.generate(); // Régénère avec la nouvelle expression de dés
+         // Pas besoin de updateUI ici, generate appelle déjà updateDisplay et addToHistory
         this.saveState();
     },
 
@@ -276,7 +266,8 @@ export const RandomManager = {
      */
     updateCustomCards(cards) {
         this.state.customCards = cards;
-        this.generate();
+        this.generate(); // Régénère avec les nouvelles cartes personnalisées
+         // Pas besoin de updateUI ici, generate appelle déjà updateDisplay et addToHistory
         this.saveState();
     },
 
@@ -285,62 +276,56 @@ export const RandomManager = {
      */
     generate() {
         try {
+            console.log('Fonction generate appelée');
+            console.log('Current state:', this.state);
+            console.log('Current options:', this.state.options);
             const type = this.types[this.state.type];
             let result;
 
             switch (this.state.type) {
-                case 'integer':
+                // ... existing code ...
+                case 'integer': {
+                    // ... existing code ...
+                    result = Array.from(
+                        // ... existing code ...
+                    );
+                    this.state.result = result;
+                    break;
+                }
                 case 'float': {
-                    const { min, max } = type.validate(
-                        this.state.options.min,
-                        this.state.options.max
-                    );
-
-                    if (this.state.options.count === 1) {
-                        result = type.generate(min, max, this.state.options.precision);
-                    } else {
-                        result = Array.from(
-                            { length: this.state.options.count },
-                            () => type.generate(min, max, this.state.options.precision)
-                        );
-
-                        if (this.state.options.unique) {
-                            result = [...new Set(result)];
-                        }
-
-                        if (this.state.options.sorted) {
-                            result.sort((a, b) => a - b);
-                        }
-                    }
+                    // ... existing code ...
+                     result = Array.from(
+                        // ... existing code ...
+                     );
+                    this.state.result = result;
                     break;
                 }
-
-                case 'sequence': {
-                    const { min, max } = type.validate(
-                        this.state.options.min,
-                        this.state.options.max
-                    );
-                    result = type.generate(min, max);
+                 case 'sequence': {
+                    // ... existing code ...
+                    result = Array.from(
+                         // ... existing code ...
+                     );
+                    this.state.result = result;
                     break;
                 }
-
                 case 'dice': {
-                    const params = type.validate(this.state.customDice || '1d6');
-                    result = type.generate(
-                        params.count,
-                        params.sides,
-                        params.modifier
-                    );
+                    const deck = type.validate(this.state.customDice);
+                    // Le compteur est pris des options communes
+                    result = type.generate(deck.count, deck.sides, deck.modifier);
+                    this.state.result = result.total !== undefined ? result.total : result;
                     break;
                 }
 
                 case 'card': {
                     const deck = type.validate(this.state.customCards);
+                    // Le compteur est pris des options communes
                     result = type.generate(deck, this.state.options.count);
+                    this.state.result = result;
                     break;
                 }
 
                 case 'uuid': {
+                    // Le compteur est pris des options communes
                     if (this.state.options.count === 1) {
                         result = type.generate();
                     } else {
@@ -349,27 +334,38 @@ export const RandomManager = {
                             () => type.generate()
                         );
                     }
+                    this.state.result = result;
                     break;
                 }
 
                 case 'bytes': {
-                    const { count } = type.validate(this.state.options.count);
-                    result = type.generate(count);
+                     // Le compteur est pris des options communes
+                    result = type.generate(this.state.options.count);
+                    this.state.result = result;
                     break;
                 }
             }
 
-            // Formate le résultat
-            this.state.result = this.formatResult(result);
+            console.log('Résultat avant formatage:', this.state.result);
 
-            // Met à jour l'affichage
+            // Formate le résultat
+            this.state.result = this.formatResult(this.state.result);
+
+            // Met à jour l'affichage du résultat
             this.updateDisplay();
 
             // Ajoute à l'historique
             this.addToHistory();
+
+             // Met à jour le reste de l'UI si nécessaire (options, etc.)
+             this.updateUI();
+
         } catch (error) {
             console.error('Erreur lors de la génération:', error);
             Utils.showNotification(error.message, 'error');
+            this.state.result = `Erreur: ${error.message}`; // Affiche l'erreur dans la sortie
+            this.updateDisplay();
+             this.updateUI(); // Met à jour l'UI même en cas d'erreur
         }
     },
 
@@ -377,75 +373,63 @@ export const RandomManager = {
      * Formate le résultat selon les options
      */
     formatResult(result) {
-        if (result === undefined || result === null) return '';
-
+        console.log('Appel de formatResult avec:', result);
+        // Si le résultat est un tableau, le joindre avec le séparateur
         if (Array.isArray(result)) {
-            if (this.state.type === 'bytes') {
-                switch (this.state.options.format) {
-                    case 'binary':
-                        return result.map(n => n.toString(2).padStart(8, '0')).join(this.state.options.separator);
-                    case 'octal':
-                        return result.map(n => n.toString(8).padStart(3, '0')).join(this.state.options.separator);
-                    case 'hexadecimal':
-                        return result.map(n => n.toString(16).padStart(2, '0')).join(this.state.options.separator);
-                    default:
-                        return result.join(this.state.options.separator);
+            // Appliquer le tri si l'option sorted est activée
+            if (this.state.options.sorted) {
+                // Tenter un tri numérique si possible, sinon alphabétique
+                if (result.every(item => typeof item === 'number')) {
+                    result.sort((a, b) => a - b);
+                } else {
+                    result.sort();
                 }
             }
-            return result.join(this.state.options.separator);
-        }
+             // Gérer les différents formats pour les nombres (décimal, binaire, etc.)
+             let formattedItems = result.map(item => {
+                 if (typeof item === 'number' && this.state.options.format !== 'decimal') {
+                     // Convertir selon le format spécifié (exemple simple pour l'instant)
+                     // Une logique plus complète serait nécessaire ici pour tous les formats/types
+                      switch(this.state.options.format) {
+                         case 'binary': return item.toString(2);
+                         case 'octal': return item.toString(8);
+                         case 'hexadecimal': return item.toString(16).toUpperCase();
+                         default: return item.toString();
+                     }
+                 } else if (typeof item === 'number' && this.state.type === 'float') {
+                      // Formater les flottants avec la précision spécifiée
+                      return item.toFixed(this.state.options.precision);
+                  }
+                 return String(item); // Convertir tout autre élément en chaîne
+             });
 
-        if (typeof result === 'number') {
-            switch (this.state.options.format) {
-                case 'binary':
-                    return result.toString(2);
-                case 'octal':
-                    return result.toString(8);
-                case 'hexadecimal':
-                    return result.toString(16);
-                default:
-                    return result.toString();
-            }
+            return formattedItems.join(this.state.options.separator);
+        } else if (typeof result === 'number' && this.state.type === 'float') {
+             // Formater un flottant unique avec précision
+             return result.toFixed(this.state.options.precision);
+        } else if (typeof result === 'number' && this.state.options.format !== 'decimal') {
+              // Formater un nombre unique selon le format (binaire, octal, hex)
+               switch(this.state.options.format) {
+                  case 'binary': return result.toString(2);
+                  case 'octal': return result.toString(8);
+                  case 'hexadecimal': return result.toString(16).toUpperCase();
+                  default: return result.toString();
+              }
         }
-
-        if (typeof result === 'object' && result.rolls) {
-            return `[${result.rolls.join(', ')}] = ${result.total}`;
-        }
-
-        return result.toString();
+        
+        // Pour les types comme UUID ou Bytes, ou d'autres résultats non-tableau/nombre, juste convertir en chaîne
+        return String(result);
     },
 
     /**
      * Copie le résultat
      */
-    copy() {
-        if (!this.state.result) return;
-
-        Utils.copyToClipboard(this.state.result)
-            .then(() => Utils.showNotification('Résultat copié !', 'success'))
-            .catch(() => Utils.showNotification('Erreur lors de la copie', 'error'));
-    },
+    // ... existing code ...
 
     /**
      * Ajoute le résultat à l'historique
      */
-    addToHistory() {
-        if (!this.state.result) return;
-
-        this.state.history.unshift({
-            type: this.state.type,
-            result: this.state.result,
-            timestamp: new Date().toISOString()
-        });
-
-        // Limite la taille de l'historique
-        if (this.state.history.length > 10) {
-            this.state.history.pop();
-        }
-
-        this.updateHistoryDisplay();
-        this.saveState();
-    },
+    // ... existing code ...
 
     /**
      * Met à jour l'affichage
@@ -461,26 +445,7 @@ export const RandomManager = {
      * Met à jour l'affichage de l'historique
      */
     updateHistoryDisplay() {
-        const container = document.getElementById('randomHistory');
-        if (!container) return;
-
-        container.innerHTML = this.state.history
-            .map(entry => `
-                <div class="history-item" onclick="randomManager.useHistoryEntry(${this.state.history.indexOf(entry)})">
-                    <div class="history-result">
-                        ${entry.result}
-                    </div>
-                    <div class="history-meta">
-                        <span class="history-type">
-                            ${this.types[entry.type].name}
-                        </span>
-                        <span class="history-date">
-                            ${new Date(entry.timestamp).toLocaleString('fr-FR')}
-                        </span>
-                    </div>
-                </div>
-            `)
-            .join('');
+        // ... existing code ...
     },
 
     /**
@@ -490,27 +455,105 @@ export const RandomManager = {
         const entry = this.state.history[index];
         if (!entry) return;
 
+        // Charge l'état depuis l'historique pour pouvoir régénérer ou voir les options
+        // Note : cela remplace l'état actuel, y compris les options
+        this.state.type = entry.type;
+        // Les options spécifiques de l'historique ne sont pas stockées dans l'entrée d'historique actuelle
+        // Si tu veux charger les options exactes utilisées pour une entrée d'historique,
+        // il faudrait stocker this.state.options (et customDice/Cards) dans chaque entrée.
+        // Pour l'instant, on met juste le résultat et on met à jour l'UI pour le type.
         this.state.result = entry.result;
-        this.updateDisplay();
+
+        this.updateUI(); // Met à jour l'UI avec le type et le résultat de l'historique
+         // Note: cela ne mettra pas les options précises de l'historique dans les champs,
+         // seulement les options actuellement dans this.state pour ce type.
+
+        Utils.showNotification(`Résultat de l'historique chargé`, 'info');
     },
 
     /**
      * Sauvegarde l'état
      */
-    saveState() {
-        Utils.saveToStorage('randomState', {
-            type: this.state.type,
-            options: this.state.options,
-            customDice: this.state.customDice,
-            customCards: this.state.customCards,
-            history: this.state.history
-        });
-    },
+    // ... existing code ...
 
     /**
      * Nettoie les ressources
      */
-    destroy() {
-        this.saveState();
+    // ... existing code ...
+
+    /**
+     * Met à jour l'interface utilisateur pour refléter l'état actuel.
+     * Cache/affiche les options spécifiques au type et remplit les champs.
+     */
+    updateUI() {
+        // 1. Synchroniser le sélecteur de type
+        const typeSelect = document.getElementById('randomType');
+        if (typeSelect) {
+            typeSelect.value = this.state.type;
+        }
+
+        // 2. Gérer l'affichage des groupes d'options
+        const optionGroups = document.querySelectorAll('.random-options-group');
+        optionGroups.forEach(group => {
+            if (group.getAttribute('data-type') === this.state.type) {
+                group.classList.add('active');
+                group.style.display = 'block'; // Assure qu'il est affiché (utile si tu ne veux pas dépendre uniquement de la classe)
+            } else {
+                group.classList.remove('active');
+                group.style.display = 'none'; // Masque les autres
+            }
+        });
+
+        // 3. Remplir les champs d'entrée avec les valeurs de l'état
+        // Options communes
+        const countInput = document.getElementById('randomCount');
+        if (countInput) {
+             countInput.value = this.state.options.count;
+        }
+
+        const uniqueInput = document.getElementById('randomUnique');
+        if (uniqueInput) {
+            uniqueInput.checked = this.state.options.unique;
+        }
+
+        const sortedInput = document.getElementById('randomSorted');
+        if (sortedInput) {
+            sortedInput.checked = this.state.options.sorted;
+        }
+
+        const separatorSelect = document.getElementById('randomSeparator');
+         if (separatorSelect) {
+             separatorSelect.value = this.state.options.separator;
+         }
+
+
+        // Options spécifiques (les IDs sont présents dans différents groupes, mais on les remplit tous)
+        const minInput = document.getElementById('randomMin');
+        if (minInput) minInput.value = this.state.options.min;
+
+        const maxInput = document.getElementById('randomMax');
+        if (maxInput) maxInput.value = this.state.options.max;
+
+        const precisionInput = document.getElementById('randomPrecision');
+        if (precisionInput) precisionInput.value = this.state.options.precision;
+
+        const formatSelect = document.getElementById('randomFormat');
+         if (formatSelect) formatSelect.value = this.state.options.format;
+
+        const customDiceInput = document.getElementById('randomCustomDice');
+        if (customDiceInput) customDiceInput.value = this.state.customDice;
+
+        const customCardsTextarea = document.getElementById('randomCustomCards');
+        if (customCardsTextarea) customCardsTextarea.value = this.state.customCards;
+
+
+        // 4. Mettre à jour l'affichage du résultat et de l'historique
+        this.updateDisplay();
+        this.updateHistoryDisplay();
     }
-}; 
+};
+
+// Initialisation au chargement de la page
+document.addEventListener('DOMContentLoaded', () => {
+    RandomManager.init();
+});

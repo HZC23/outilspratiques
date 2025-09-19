@@ -12,7 +12,8 @@
     "lint-css": "stylelint \"styles/**/*.css\"",
     "lint": "npm run lint-js && npm run lint-css",
     "test": "echo \"No tests configured yet\"",
-    "generate-sitemap": "node js/utils/sitemap-cli.js"
+    "generate-sitemap": "node js/utils/sitemap-cli.js",
+    "clean-duplicate-styles": "node scripts/clean-duplicate-styles.js"
   },
   "repository": {
     "type": "git",

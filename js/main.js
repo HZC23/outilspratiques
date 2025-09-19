@@ -5,7 +5,6 @@ import { NotificationManager } from './notification.js';
 import { CacheManager } from './cache.js';
 import { PerformanceManager } from './performance.js';
 import { Utils } from './utils.js';
-import { SchedulerManager } from './tools/scheduler.js';
 import { ColorManager } from './tools/color.js';
 import { QRCodeManager } from './tools/qrcode.js';
 import { TodoManager } from './tools/todo.js';
@@ -13,6 +12,9 @@ import { StopwatchManager } from './tools/stopwatch.js';
 import { DataSyncManager } from './data-sync.js';
 import { isAuthenticated } from './supabase.js';
 import { dataSyncManager } from './data-sync.js';
+import { RandomManager } from './tools/random.js';
+import { UnitConverter } from './tools/unit.js';
+import { init, clearContent, downloadContent, copyToClipboard, importFile } from './tools/text-editor.js';
 
 /**
  * Classe principale de l'application
@@ -467,6 +469,15 @@ class App {
             'styletext': () => import('./tools/styletext.js').then(module => module.StyleTextManager.init()),
             'metronomeTool': () => import('./tools/metronome.js').then(module => module.MetronomeManager.init()),
             'currencyTool': () => import('./tools/currency.js').then(module => module.CurrencyManager.init()),
+            'randomTool': () => import('./tools/random.js').then(module => {
+                console.log('Module randomTool chargé:', module);
+                if (module.RandomManager && typeof module.RandomManager.init === 'function') {
+                    console.log('Initialisation du générateur aléatoire avec RandomManager.init');
+                    module.RandomManager.init();
+                } else {
+                    console.error('Impossible de trouver la méthode d\'initialisation pour le générateur aléatoire');
+                }
+            }),
             'unitTool': () => import('./tools/unit.js').then(module => {
                 console.log('Module unitTool chargé:', module);
                 if (typeof module.initUnitConverter === 'function') {
@@ -483,7 +494,7 @@ class App {
                 console.error(`Erreur lors du chargement de l'outil: L'outil "${toolId}" n'existe pas.`);
                 Utils.showNotification(`L'outil "${toolId}" n'existe pas.`, 'error');
             },
-            'textEditorTool': () => import('./tools/textEditor.js').then(module => module.init()),
+            'textEditorTool': () => import('./tools/text-editor.js').then(module => module.init()),
             'dictionaryTool': () => import('./tools/dictionary.js').then(module => module.initDictionary())
         };
 

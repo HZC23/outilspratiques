@@ -179,7 +179,7 @@ function cleanToolFile(toolFilePath, selectorCategory) {
 function main() {
   try {
     // Vérifier que les fichiers de composants existent
-    const requiredComponents = ['buttons.css', 'text.css', 'tools-cards.css', 'accessibility.css', 'notification.css', 'fullscreen.css', 'help-panel.css'];
+    const requiredComponents = ['buttons.css', 'text.css', 'accessibility.css', 'notification.css', 'fullscreen.css', 'help-panel.css'];
     for (const component of requiredComponents) {
       const componentPath = path.join(componentsDir, component);
       if (!fs.existsSync(componentPath)) {

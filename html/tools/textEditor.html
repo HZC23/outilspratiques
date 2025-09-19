@@ -18,7 +18,7 @@
 <body>
 <div class="tool-container" id="textEditorTool">
     <div class="tool-header">
-        <h2 class="editor-title"><i class="fas fa-file-word"></i> Traitement de texte</h2>
+        <h2 class="editor-title"><i class="fas fa-file-word"></i> Éditeur de texte</h2>
         <div class="tool-actions">
             <button type="button" class="btn-icon" id="textEditorHelp" aria-label="Aide">
                 <i class="fas fa-question-circle"></i>
@@ -51,13 +51,13 @@
             </div>
             <div class="toolbar">
                 <div class="toolbar-group alignments" aria-label="Alignement du texte">
-                    <button class="btn btn-icon btn-text-left active" title="Aligner à gauche" aria-label="Aligner à gauche">
+                    <button class="btn btn-icon-text btn-text-left active" title="Aligner à gauche" aria-label="Aligner à gauche">
                         <span class="material-icons">format_align_left</span>
                     </button>
-                    <button class="btn btn-icon btn-text-center" title="Centrer" aria-label="Centrer">
+                    <button class="btn btn-icon-text btn-text-center" title="Centrer" aria-label="Centrer">
                         <span class="material-icons">format_align_center</span>
                     </button>
-                    <button class="btn btn-icon btn-text-right" title="Aligner à droite" aria-label="Aligner à droite">
+                    <button class="btn btn-icon-text btn-text-right" title="Aligner à droite" aria-label="Aligner à droite">
                         <span class="material-icons">format_align_right</span>
                     </button>
                 </div>
@@ -76,10 +76,10 @@
                     </select>
                 </div>
                 <div class="toolbar-group font-decoration" aria-label="Décoration de police">
-                    <button class="btn btn-icon btn-bold" title="Gras (Ctrl+B)" aria-label="Gras">
+                    <button class="btn btn-icon-text btn-bold" title="Gras (Ctrl+B)" aria-label="Gras">
                         <span class="material-icons">format_bold</span>
                     </button>
-                    <button class="btn btn-icon btn-italic" title="Italique (Ctrl+I)" aria-label="Italique">
+                    <button class="btn btn-icon-text btn-italic" title="Italique (Ctrl+I)" aria-label="Italique">
                         <span class="material-icons">format_italic</span>
                     </button>
                 </div>
@@ -114,73 +114,11 @@
                 </div>
             </div>
         </div>
-        
-        <div class="text-editor-sidebar">
-            <div class="tool-panel">
-                <div class="tool-panel-header">
-                    <h3>Options avancées</h3>
-                </div>
-                <div class="tool-panel-content">
-                    <div class="sidebar-section">
-                        <h4>Styles de paragraphe</h4>
-                        <select class="sidebar-select" id="paragraphStyle">
-                            <option value="p">Paragraphe normal</option>
-                            <option value="h1">Titre 1</option>
-                            <option value="h2">Titre 2</option>
-                            <option value="h3">Titre 3</option>
-                            <option value="blockquote">Citation</option>
-                            <option value="pre">Code préformaté</option>
-                        </select>
-                    </div>
-                    
-                    <div class="sidebar-section">
-                        <h4>Listes</h4>
-                        <div class="sidebar-buttons">
-                            <button class="btn btn-sm" id="insertBulletList">
-                                <span class="material-icons">format_list_bulleted</span> Liste à puces
-                            </button>
-                            <button class="btn btn-sm" id="insertNumberedList">
-                                <span class="material-icons">format_list_numbered</span> Liste numérotée
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="sidebar-section">
-                        <h4>Insérer</h4>
-                        <div class="sidebar-buttons">
-                            <button class="btn btn-sm" id="insertLink">
-                                <span class="material-icons">link</span> Lien
-                            </button>
-                            <button class="btn btn-sm" id="insertTable">
-                                <span class="material-icons">grid_on</span> Tableau
-                            </button>
-                            <button class="btn btn-sm" id="insertImage">
-                                <span class="material-icons">image</span> Image
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="tool-panel mt-3">
-                <div class="tool-panel-header">
-                    <h3>Documents récents</h3>
-                    <button class="btn-icon" id="clearRecentDocs" aria-label="Effacer les documents récents">
-                        <i class="fas fa-trash-alt"></i>
-                    </button>
-                </div>
-                <div class="tool-panel-content">
-                    <div id="recentDocList" class="recent-docs-list">
-                        <p class="empty-list">Aucun document récent</p>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
     
     <div class="help-panel" id="textEditorHelpPanel">
         <div class="help-panel-header">
-            <h3>Aide - Super éditeur de texte</h3>
+            <h3>Aide - Éditeur de texte</h3>
             <button type="button" class="btn-icon" id="closeTextEditorHelp">
                 <span class="material-icons">close</span>
             </button>
