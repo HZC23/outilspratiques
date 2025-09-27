@@ -1,4 +1,4 @@
-# Outils Pratiques
+# Outils Pratiques https://hzc23.github.io/outilspratiques/
 
 [![Licence: MIT](https://img.shields.io/badge/Licence-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live-brightgreen)](https://outilspratiques.github.io/)
